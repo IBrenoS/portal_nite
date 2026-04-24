@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import HomePage from "@/app/page";
 
 describe("HomePage", () => {
-  it("renderiza a homepage bootstrap do M1", () => {
+  it("renderiza a homepage bootstrap do M2", () => {
     render(<HomePage />);
 
     expect(
@@ -14,7 +14,7 @@ describe("HomePage", () => {
       }),
     ).toBeInTheDocument();
 
-    expect(screen.getByText("Scripts de qualidade")).toBeInTheDocument();
-    expect(screen.getByText("Pronto para M2")).toBeInTheDocument();
+    expect(screen.getAllByText("M2 - branding e design system")).toHaveLength(2);
+    expect(screen.getByText("Base visual pronta para M3")).toBeInTheDocument();
   });
 });

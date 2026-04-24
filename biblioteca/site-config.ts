@@ -4,7 +4,7 @@ export const siteConfig = {
   locale: "pt-BR",
   description:
     "O NITE e o nucleo que conecta universidade, inovacao, pratica e desenvolvimento tecnologico em experiencias e projetos reais.",
-  status: "M1 - fundacao tecnica",
+  status: "M2 - branding e design system",
   placeholders: {
     foundationDate:
       "TODO(nite-content): registrar data oficial de fundacao do NITE no repositorio",

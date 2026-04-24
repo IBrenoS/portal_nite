@@ -1,199 +1,208 @@
-import { ArrowDownIcon, ArrowRightIcon, CheckCircle2Icon, RocketIcon, ShieldCheckIcon } from "lucide-react";
+import {
+  ArrowDownIcon,
+  ArrowRightIcon,
+  CheckCircle2Icon,
+  CircuitBoardIcon,
+  FocusIcon,
+  Layers3Icon,
+  SmartphoneIcon,
+} from "lucide-react";
 
+import { brandAssets, brandDirection } from "@/biblioteca/brand";
 import { siteConfig } from "@/biblioteca/site-config";
-import { Badge } from "@/components/ui/badge";
-import { buttonVariants } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
+import { Container } from "@/components/layout/container";
+import { SiteFooter } from "@/components/layout/site-footer";
+import { SiteHeader } from "@/components/layout/site-header";
+import { ProjectCard } from "@/components/sections/project-card";
+import { SectionHeader } from "@/components/sections/section-header";
+import { TimelineItem } from "@/components/sections/timeline-item";
+import { BrandMark } from "@/components/ui/brand-mark";
+import { ButtonPrimaryLink, ButtonSecondaryLink } from "@/components/ui/brand-button";
+import { Chip } from "@/components/ui/chip";
+import { EmptyState } from "@/components/ui/empty-state";
 
-const foundationTracks = [
+const visualTokens = [
+  { name: "Ink", value: "#030507", role: "Base OLED e profundidade institucional" },
+  { name: "Circuit", value: "#1687FF", role: "Linhas, estados ativos e links" },
+  { name: "Signal", value: "#33D4FF", role: "Foco, acao primaria e brilho controlado" },
+  { name: "Metal", value: "#F2F5F7", role: "Tipografia de destaque e contraste maximo" },
+] as const;
+
+const componentPrinciples = [
   {
-    title: "Arquitetura pronta para crescer",
-    description:
-      "Next.js com App Router, TypeScript estrito, aliases e estrutura inicial de diretorios para layout, secoes, conteudo e utilitarios.",
+    icon: Layers3Icon,
+    title: "Superficies tecnicas",
+    description: "Bordas finas, raio contido e paineis escuros que deixam a logo respirar sem copiar o efeito 3D.",
   },
   {
-    title: "Qualidade automatizada",
-    description:
-      "Lint, typecheck, testes unitarios com Vitest e smoke e2e com Playwright configurados desde a fundacao do projeto.",
+    icon: CircuitBoardIcon,
+    title: "Detalhe de circuito",
+    description: "Linhas discretas entram como textura estrutural, nao como decoracao solta.",
   },
   {
-    title: "Base UI reutilizavel",
-    description:
-      "shadcn/ui inicializado com componentes-base para acelerar M2 e manter a interface consistente desde os primeiros incrementos.",
+    icon: FocusIcon,
+    title: "Foco visivel",
+    description: "Estados de teclado usam anel ciano forte para manter a interface navegavel e clara.",
   },
 ] as const;
 
-const milestoneChecklist = [
-  "Projeto Next.js configurado com TypeScript e Tailwind CSS.",
-  "Layout global semantico com base dark responsiva e acessivel.",
-  "Pagina bootstrap temporaria para validar o estado do M1.",
-  "Scripts obrigatorios de desenvolvimento, build e qualidade.",
+const validationItems = [
+  "Tokens globais de cor, raio, sombra, espaco e tipografia foram centralizados.",
+  "Componentes base renderizam com estados de hover, foco e toque mobile.",
+  "A identidade visual conversa com a logo sem reproduzir seu 3D em excesso.",
+  "Movimento nao essencial respeita preferencias de reducao de animacao.",
 ] as const;
-
-const qualityScripts = ["npm run lint", "npm run typecheck", "npm run test", "npm run test:e2e", "npm run build"] as const;
 
 export default function HomePage() {
   return (
-    <main id="conteudo-principal" className="relative isolate overflow-hidden">
-      <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-80 bg-[radial-gradient(circle_at_top,rgba(41,174,255,0.24),transparent_58%)]" />
-      <div className="pointer-events-none absolute inset-y-24 right-[-10rem] -z-10 size-80 rounded-full bg-primary/10 blur-3xl" />
-
-      <div className="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-6 pb-16 pt-8 sm:px-8 lg:px-12">
-        <header className="flex flex-col gap-6 rounded-[28px] border border-border/70 bg-background/75 px-6 py-6 backdrop-blur sm:px-8">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-            <div className="flex flex-col gap-3">
+    <>
+      <SiteHeader />
+      <main id="conteudo-principal" className="overflow-hidden">
+        <section className="relative border-b border-border">
+          <div className="brand-scanline pointer-events-none absolute inset-0 opacity-35" />
+          <Container className="relative grid min-h-[calc(86svh-4rem)] items-center gap-8 py-12 sm:py-20 lg:grid-cols-[1fr_0.82fr] lg:py-24">
+            <div className="relative z-10 flex flex-col gap-8 animate-brand-rise">
               <div className="flex flex-wrap items-center gap-3">
-                <Badge>Base em evolucao</Badge>
-                <Badge variant="outline">{siteConfig.status}</Badge>
+                <Chip>{siteConfig.status}</Chip>
+                <Chip variant="metal">{brandDirection.name}</Chip>
               </div>
-              <div className="flex flex-col gap-4">
-                <p className="text-sm uppercase tracking-[0.28em] text-muted-foreground">{siteConfig.institution}</p>
-                <h1 className="max-w-3xl font-heading text-4xl leading-tight sm:text-5xl lg:text-6xl">
-                  {siteConfig.name}
+
+              <div className="flex flex-col gap-5">
+                <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-circuit-bright">
+                  {siteConfig.institution}
+                </p>
+                <h1 className="max-w-4xl font-heading text-5xl font-semibold leading-[0.95] text-foreground sm:text-6xl lg:text-7xl">
+                  <span className="brand-metal-text">{siteConfig.name}</span>
                 </h1>
-                <p className="max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">
+                <p className="max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl">
                   {siteConfig.description}
                 </p>
               </div>
+
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <ButtonPrimaryLink href="#identidade">
+                  Ver identidade
+                  <ArrowRightIcon data-icon="inline-end" />
+                </ButtonPrimaryLink>
+                <ButtonSecondaryLink href="#componentes">
+                  Componentes base
+                  <ArrowDownIcon data-icon="inline-end" />
+                </ButtonSecondaryLink>
+              </div>
             </div>
 
-            <div className="grid gap-3 rounded-2xl border border-border/60 bg-card/70 p-4 text-sm text-muted-foreground sm:max-w-xs">
-              <p className="font-heading text-base text-foreground">Escopo atual</p>
-              <p>
-                Estrutura tecnica pronta para destravar M2, M3 e a homepage institucional sem inventar conteudo final antes da hora.
-              </p>
+            <div className="pointer-events-none absolute bottom-4 right-[-3rem] z-0 flex w-56 items-center justify-center opacity-55 sm:right-0 sm:w-72 lg:relative lg:bottom-auto lg:right-auto lg:z-auto lg:mx-auto lg:w-full lg:max-w-md lg:opacity-100">
+              <div className="absolute inset-4 border border-brand-circuit-bright/20 brand-circuit-lines sm:inset-6" />
+              <BrandMark className="relative size-52 shadow-[0_0_80px_rgb(51_212_255_/_0.2)] sm:size-64 lg:size-80" priority />
             </div>
-          </div>
+          </Container>
+        </section>
 
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <a href="#fundacao" className={cn(buttonVariants({ size: "lg" }), "w-full sm:w-auto")}>
-              Ver fundacao tecnica
-              <ArrowRightIcon data-icon="inline-end" />
-            </a>
-            <a
-              href="#qualidade"
-              className={cn(buttonVariants({ variant: "outline", size: "lg" }), "w-full sm:w-auto")}
-            >
-              Conferir validacoes
-              <ArrowDownIcon data-icon="inline-end" />
-            </a>
-          </div>
-        </header>
+        <section id="identidade" className="border-b border-border bg-background py-16 sm:py-24 lg:py-28">
+          <Container className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr]">
+            <SectionHeader
+              eyebrow="Sistema visual"
+              title="A marca vira estrutura, nao ornamento."
+              description={brandDirection.summary}
+            />
 
-        <section id="fundacao" className="mt-10 grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-          <Card className="border border-border/70 bg-card/80">
-            <CardHeader>
-              <CardTitle role="heading" aria-level={2}>
-                O que o M1 entrega
-              </CardTitle>
-              <CardDescription>
-                Uma fundacao previsivel, validavel e pronta para receber design system, conteudo estruturado e rotas dinamicas.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex flex-col gap-4">
-                {foundationTracks.map((track) => (
-                  <div key={track.title} className="rounded-2xl border border-border/60 bg-background/60 px-4 py-4">
-                    <p className="font-heading text-base text-foreground">{track.title}</p>
-                    <p className="mt-2 text-sm leading-6 text-muted-foreground">{track.description}</p>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {visualTokens.map((token) => (
+                <article key={token.name} className="brand-panel rounded-lg border border-border p-5">
+                  <div className="flex items-center justify-between gap-4">
+                    <div>
+                      <p className="font-heading text-lg font-semibold text-foreground">{token.name}</p>
+                      <p className="mt-1 font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground">
+                        {token.value}
+                      </p>
+                    </div>
+                    <span
+                      className="size-12 rounded-md border border-border"
+                      style={{ backgroundColor: token.value }}
+                      aria-hidden="true"
+                    />
                   </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border border-border/70 bg-card/80">
-            <CardHeader>
-              <CardTitle role="heading" aria-level={2}>
-                Checkpoint da milestone
-              </CardTitle>
-              <CardDescription>
-                Base temporaria publicada com foco em clareza, sem inventar dados institucionais.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ul className="flex flex-col gap-3">
-                {milestoneChecklist.map((item) => (
-                  <li
-                    key={item}
-                    className="flex items-start gap-3 rounded-2xl border border-border/50 bg-background/50 px-4 py-3"
-                  >
-                    <CheckCircle2Icon className="mt-0.5 text-primary" aria-hidden="true" />
-                    <span className="text-sm leading-6 text-muted-foreground">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
+                  <p className="mt-5 text-sm leading-6 text-muted-foreground">{token.role}</p>
+                </article>
+              ))}
+            </div>
+          </Container>
         </section>
 
-        <section id="qualidade" className="mt-10 grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
-          <Card className="border border-border/70 bg-card/80">
-            <CardHeader>
-              <CardTitle role="heading" aria-level={2}>
-                Scripts de qualidade
-              </CardTitle>
-              <CardDescription>
-                Esses scripts sustentam o gate de saida do M1 e viram rotina para as proximas milestones.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ul className="flex flex-col gap-3">
-                {qualityScripts.map((script) => (
-                  <li
-                    key={script}
-                    className="rounded-2xl border border-border/60 bg-background/60 px-4 py-3 font-mono text-sm text-foreground"
-                  >
-                    {script}
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
+        <section id="componentes" className="border-b border-border py-16 sm:py-24 lg:py-28">
+          <Container className="flex flex-col gap-10">
+            <SectionHeader
+              eyebrow="Componentes"
+              title="Base reutilizavel para home, projetos e timeline."
+              description="O M2 entrega blocos visuais prontos para receber conteudo estruturado no M3 sem redesenhar a interface."
+            />
 
-          <Card className="border border-border/70 bg-card/80">
-            <CardHeader>
-              <CardTitle role="heading" aria-level={2}>
-                Proximo desbloqueio natural
-              </CardTitle>
-              <CardDescription>
-                A fundacao ja suporta a proxima etapa de branding e design system sem retrabalhar estrutura, rotas ou tooling.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid gap-4 sm:grid-cols-3">
-                <div className="rounded-2xl border border-border/60 bg-background/60 px-4 py-4">
-                  <ShieldCheckIcon className="text-primary" aria-hidden="true" />
-                  <p className="mt-4 font-heading text-base text-foreground">Design tokens</p>
-                  <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                    Os tokens globais ja podem ser refinados no M2 sem reconfigurar a aplicacao inteira.
-                  </p>
-                </div>
-                <div className="rounded-2xl border border-border/60 bg-background/60 px-4 py-4">
-                  <RocketIcon className="text-primary" aria-hidden="true" />
-                  <p className="mt-4 font-heading text-base text-foreground">Rotas e conteudo</p>
-                  <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                    A base de App Router esta preparada para home, projetos e timeline estruturados.
-                  </p>
-                </div>
-                <div className="rounded-2xl border border-border/60 bg-background/60 px-4 py-4">
-                  <CheckCircle2Icon className="text-primary" aria-hidden="true" />
-                  <p className="mt-4 font-heading text-base text-foreground">Validacao continua</p>
-                  <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                    Lint, typecheck e testes ajudam a manter cada incremento pequeno e seguro.
-                  </p>
-                </div>
+            <div className="grid gap-5 lg:grid-cols-3">
+              {componentPrinciples.map((principle) => {
+                const Icon = principle.icon;
+
+                return (
+                  <article key={principle.title} className="brand-panel rounded-lg border border-border p-5">
+                    <Icon className="text-brand-circuit-bright" aria-hidden="true" />
+                    <h3 className="mt-5 font-heading text-lg font-semibold text-foreground">{principle.title}</h3>
+                    <p className="mt-3 text-sm leading-6 text-muted-foreground">{principle.description}</p>
+                  </article>
+                );
+              })}
+            </div>
+
+            <div className="grid gap-5 lg:grid-cols-[1fr_0.72fr]">
+              <ProjectCard
+                title="Projeto em curadoria institucional"
+                summary="Preview visual preparado para receber slug, resumo, categoria, ano, status e imagem oficial no M3."
+                category="Vitrine"
+                status="Placeholder"
+                href="#componentes"
+                image={{
+                  src: brandAssets.instagramReference,
+                  alt: "Referencia visual do perfil institucional do NITE no Instagram.",
+                }}
+              />
+
+              <div className="grid gap-5">
+                <TimelineItem
+                  year="M2"
+                  title="Identidade visual consolidada"
+                  description="Tokens, componentes e estados de interacao foram preparados para sustentar as proximas telas."
+                />
+                <EmptyState
+                  title="Conteudo oficial pendente"
+                  description="Projetos e eventos finais entram no M3 a partir do inventario aprovado, mantendo placeholders rastreaveis."
+                />
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </Container>
         </section>
 
-        <footer className="mt-10 flex flex-col gap-3 rounded-[28px] border border-border/70 bg-background/70 px-6 py-5 text-sm text-muted-foreground backdrop-blur sm:flex-row sm:items-center sm:justify-between">
-          <p>{siteConfig.name} permanece em construcao guiada por milestones, validacoes objetivas e placeholders rastreaveis.</p>
-          <Badge variant="secondary">Pronto para M2</Badge>
-        </footer>
-      </div>
-    </main>
+        <section id="validacao" className="py-16 sm:py-24 lg:py-28">
+          <Container className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
+            <SectionHeader
+              eyebrow="Validacao"
+              title="Pronto para crescer sem perder contraste, foco e ritmo mobile."
+              description="A interface foi desenhada para leitura rapida, toque confortavel e composicao responsiva em celulares e desktop."
+            />
+
+            <div className="grid gap-3">
+              {validationItems.map((item) => (
+                <div key={item} className="flex items-start gap-3 rounded-lg border border-border bg-card p-4">
+                  <CheckCircle2Icon className="mt-0.5 text-brand-circuit-bright" aria-hidden="true" />
+                  <p className="text-sm leading-6 text-muted-foreground">{item}</p>
+                </div>
+              ))}
+              <div className="mt-3 flex items-center gap-3 rounded-lg border border-border bg-muted p-4 text-sm text-muted-foreground">
+                <SmartphoneIcon className="text-brand-circuit-bright" aria-hidden="true" />
+                <p>Alvos interativos mantem altura minima de 44px e espacamento confortavel para toque.</p>
+              </div>
+            </div>
+          </Container>
+        </section>
+      </main>
+      <SiteFooter />
+    </>
   );
 }

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Sora } from "next/font/google";
+import { Geist, Geist_Mono, Sora } from "next/font/google";
 
 import "@/app/globals.css";
 import { buildPageTitle, defaultMetadata } from "@/biblioteca/seo";
@@ -11,8 +11,14 @@ const headingFont = Sora({
   subsets: ["latin"],
 });
 
-const bodyFont = Inter({
-  variable: "--font-inter",
+const bodyFont = Geist({
+  variable: "--font-geist",
+  display: "swap",
+  subsets: ["latin"],
+});
+
+const monoFont = Geist_Mono({
+  variable: "--font-geist-mono",
   display: "swap",
   subsets: ["latin"],
 });
@@ -35,7 +41,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html
       lang={siteConfig.locale}
-      className={`dark ${headingFont.variable} ${bodyFont.variable}`}
+      className={`dark ${headingFont.variable} ${bodyFont.variable} ${monoFont.variable}`}
       suppressHydrationWarning
     >
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
