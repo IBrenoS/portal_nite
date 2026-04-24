@@ -1,5 +1,5 @@
 export const brandAssets = {
-  logoReference: "/images/brand/referencia/nite-logo-instagram-reference.jpeg",
+  logoReference: "/images/brand/referencia/nite-logo-instagram-reference.png",
   instagramReference: "/images/brand/referencia/nite-instagram-profile-reference.jpeg",
 } as const;
 

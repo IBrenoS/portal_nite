@@ -4,9 +4,10 @@ import { BrandMark } from "@/components/ui/brand-mark";
 import { Chip } from "@/components/ui/chip";
 
 const navItems = [
-  { href: "#identidade", label: "Identidade" },
-  { href: "#componentes", label: "Componentes" },
-  { href: "#validacao", label: "Validacao" },
+  { href: "/#sobre", label: "Sobre" },
+  { href: "/#projetos", label: "Projetos" },
+  { href: "/#timeline", label: "Timeline" },
+  { href: "/#contato", label: "Contato" },
 ] as const;
 
 export function SiteHeader() {

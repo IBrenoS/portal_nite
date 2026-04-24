@@ -1,14 +1,19 @@
 import {
   ArrowDownIcon,
   ArrowRightIcon,
+  AtSignIcon,
   CheckCircle2Icon,
   CircuitBoardIcon,
-  FocusIcon,
-  Layers3Icon,
-  SmartphoneIcon,
+  CompassIcon,
+  GraduationCapIcon,
+  HandshakeIcon,
+  MailIcon,
+  MessageCircleIcon,
+  ShieldAlertIcon,
+  ShieldCheckIcon,
 } from "lucide-react";
 
-import { brandAssets, brandDirection } from "@/biblioteca/brand";
+import { getFeaturedProjects, getProjectStatusLabel, getTimelineEvents } from "@/biblioteca/conteudo";
 import { siteConfig } from "@/biblioteca/site-config";
 import { Container } from "@/components/layout/container";
 import { SiteFooter } from "@/components/layout/site-footer";
@@ -19,162 +24,228 @@ import { TimelineItem } from "@/components/sections/timeline-item";
 import { BrandMark } from "@/components/ui/brand-mark";
 import { ButtonPrimaryLink, ButtonSecondaryLink } from "@/components/ui/brand-button";
 import { Chip } from "@/components/ui/chip";
-import { EmptyState } from "@/components/ui/empty-state";
 
-const visualTokens = [
-  { name: "Ink", value: "#030507", role: "Base OLED e profundidade institucional" },
-  { name: "Circuit", value: "#1687FF", role: "Linhas, estados ativos e links" },
-  { name: "Signal", value: "#33D4FF", role: "Foco, acao primaria e brilho controlado" },
-  { name: "Metal", value: "#F2F5F7", role: "Tipografia de destaque e contraste maximo" },
-] as const;
-
-const componentPrinciples = [
+const workFronts = [
   {
-    icon: Layers3Icon,
-    title: "Superficies tecnicas",
-    description: "Bordas finas, raio contido e paineis escuros que deixam a logo respirar sem copiar o efeito 3D.",
+    icon: GraduationCapIcon,
+    title: "Aprendizado aplicado",
+    description: "Um espaco para aproximar estudantes de problemas, ferramentas e entregas com contexto real.",
   },
   {
     icon: CircuitBoardIcon,
-    title: "Detalhe de circuito",
-    description: "Linhas discretas entram como textura estrutural, nao como decoracao solta.",
+    title: "Tecnologia em pratica",
+    description: "Projetos orientados por desenvolvimento, inovacao e experimentacao responsavel.",
   },
   {
-    icon: FocusIcon,
-    title: "Foco visivel",
-    description: "Estados de teclado usam anel ciano forte para manter a interface navegavel e clara.",
+    icon: HandshakeIcon,
+    title: "Ponte institucional",
+    description: "Uma vitrine para conectar gestores, professores, alunos e parceiros em torno das iniciativas do nucleo.",
   },
 ] as const;
 
-const validationItems = [
-  "Tokens globais de cor, raio, sombra, espaco e tipografia foram centralizados.",
-  "Componentes base renderizam com estados de hover, foco e toque mobile.",
-  "A identidade visual conversa com a logo sem reproduzir seu 3D em excesso.",
-  "Movimento nao essencial respeita preferencias de reducao de animacao.",
+const proofPoints = [
+  "Copy em pt-BR, clara e sem promessas nao validadas.",
+  "Projetos e timeline continuam ligados ao conteudo estruturado do M3.",
+  "Canais publicos aparecem sem inventar URL, e-mail ou numero.",
+  "CTAs mantem altura minima de 44px para toque confortavel.",
 ] as const;
 
+const contactIcons = [AtSignIcon, MailIcon, MessageCircleIcon] as const;
+
 export default function HomePage() {
+  const featuredProjects = getFeaturedProjects();
+  const timelineEvents = getTimelineEvents();
+
   return (
     <>
       <SiteHeader />
       <main id="conteudo-principal" className="overflow-hidden">
         <section className="relative border-b border-border">
           <div className="brand-scanline pointer-events-none absolute inset-0 opacity-35" />
-          <Container className="relative grid min-h-[calc(86svh-4rem)] items-center gap-8 py-12 sm:py-20 lg:grid-cols-[1fr_0.82fr] lg:py-24">
+          <Container className="relative grid min-h-[calc(88svh-4rem)] items-center gap-10 py-12 sm:py-20 lg:grid-cols-[1.08fr_0.92fr] lg:py-24">
             <div className="relative z-10 flex flex-col gap-8 animate-brand-rise">
               <div className="flex flex-wrap items-center gap-3">
                 <Chip>{siteConfig.status}</Chip>
-                <Chip variant="metal">{brandDirection.name}</Chip>
+                <Chip variant="metal">Landing institucional</Chip>
               </div>
 
-              <div className="flex flex-col gap-5">
+              <div className="flex flex-col gap-6">
                 <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-circuit-bright">
-                  {siteConfig.institution}
+                  {siteConfig.institution} / nucleo de inovacao, tecnologia e experiencia
                 </p>
-                <h1 className="max-w-4xl font-heading text-5xl font-semibold leading-[0.95] text-foreground sm:text-6xl lg:text-7xl">
-                  <span className="brand-metal-text">{siteConfig.name}</span>
+                <h1 className="max-w-5xl font-heading text-4xl font-semibold leading-[0.98] text-foreground sm:text-6xl lg:text-7xl">
+                  <span className="brand-metal-text">NITE transforma ideias em projetos, aprendizado em pratica e tecnologia em impacto.</span>
                 </h1>
-                <p className="max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl">
-                  {siteConfig.description}
+                <p className="max-w-2xl text-base leading-8 text-muted-foreground sm:text-xl">
+                  {siteConfig.description} Esta homepage organiza a narrativa, os caminhos de exploracao e a base visual
+                  para validacao institucional.
                 </p>
               </div>
 
               <div className="flex flex-col gap-3 sm:flex-row">
-                <ButtonPrimaryLink href="#identidade">
-                  Ver identidade
+                <ButtonPrimaryLink href="#projetos">
+                  Ver projetos
                   <ArrowRightIcon data-icon="inline-end" />
                 </ButtonPrimaryLink>
-                <ButtonSecondaryLink href="#componentes">
-                  Componentes base
+                <ButtonSecondaryLink href="#sobre">
+                  Conhecer o NITE
                   <ArrowDownIcon data-icon="inline-end" />
                 </ButtonSecondaryLink>
               </div>
             </div>
 
-            <div className="pointer-events-none absolute bottom-4 right-[-3rem] z-0 flex w-56 items-center justify-center opacity-55 sm:right-0 sm:w-72 lg:relative lg:bottom-auto lg:right-auto lg:z-auto lg:mx-auto lg:w-full lg:max-w-md lg:opacity-100">
-              <div className="absolute inset-4 border border-brand-circuit-bright/20 brand-circuit-lines sm:inset-6" />
-              <BrandMark className="relative size-52 shadow-[0_0_80px_rgb(51_212_255_/_0.2)] sm:size-64 lg:size-80" priority />
+            <div className="relative min-h-72 lg:min-h-[34rem]">
+              <div className="absolute -right-12 top-6 h-56 w-56 rounded-full bg-brand-circuit-bright/10 blur-3xl sm:h-72 sm:w-72" />
+              <div className="brand-panel absolute inset-x-0 bottom-0 rounded-lg border border-border p-4 sm:p-6 lg:inset-y-10 lg:left-10 lg:right-0">
+                <div className="brand-circuit-lines absolute inset-4 rounded-md border border-brand-circuit-bright/15" />
+                <div className="relative flex h-full min-h-64 flex-col justify-between gap-8">
+                  <div className="flex items-center justify-between gap-4">
+                    <Chip variant="metal">Tech institucional premium</Chip>
+                    <CompassIcon className="text-brand-circuit-bright" aria-hidden="true" />
+                  </div>
+                  <BrandMark className="mx-auto size-48 shadow-[0_0_80px_rgb(51_212_255_/_0.2)] sm:size-64 lg:size-72" priority />
+                  <p className="max-w-sm text-sm leading-6 text-muted-foreground">
+                    Direcao visual escura, metalica e precisa: tecnologia como linguagem, nao como enfeite.
+                  </p>
+                </div>
+              </div>
             </div>
           </Container>
         </section>
 
-        <section id="identidade" className="border-b border-border bg-background py-16 sm:py-24 lg:py-28">
-          <Container className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr]">
+        <section id="sobre" className="border-b border-border bg-background py-16 sm:py-24 lg:py-28">
+          <Container className="grid gap-10 lg:grid-cols-[0.82fr_1.18fr]">
             <SectionHeader
-              eyebrow="Sistema visual"
-              title="A marca vira estrutura, nao ornamento."
-              description={brandDirection.summary}
+              eyebrow="O que e o NITE"
+              title="Um nucleo para tirar tecnologia do discurso e colocar em movimento."
+              description="A homepage apresenta o NITE como ponto de encontro entre universidade, pratica aplicada e desenvolvimento tecnologico."
             />
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              {visualTokens.map((token) => (
-                <article key={token.name} className="brand-panel rounded-lg border border-border p-5">
-                  <div className="flex items-center justify-between gap-4">
-                    <div>
-                      <p className="font-heading text-lg font-semibold text-foreground">{token.name}</p>
-                      <p className="mt-1 font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground">
-                        {token.value}
-                      </p>
-                    </div>
-                    <span
-                      className="size-12 rounded-md border border-border"
-                      style={{ backgroundColor: token.value }}
-                      aria-hidden="true"
-                    />
-                  </div>
-                  <p className="mt-5 text-sm leading-6 text-muted-foreground">{token.role}</p>
-                </article>
+            <div className="grid gap-5">
+              <article className="brand-panel rounded-lg border border-border p-6 sm:p-8">
+                <p className="font-heading text-2xl font-semibold leading-tight text-foreground sm:text-3xl">
+                  O NITE transforma ideias em projetos, aprendizado em pratica e tecnologia em impacto.
+                </p>
+                <p className="mt-5 max-w-2xl text-base leading-8 text-muted-foreground">
+                  Essa e a mensagem central do v1: uma presenca digital clara para explicar o nucleo, exibir iniciativas
+                  e preparar o site para crescer sem perder consistencia.
+                </p>
+              </article>
+
+              <div className="grid gap-5 sm:grid-cols-3">
+                {workFronts.map((front) => {
+                  const Icon = front.icon;
+
+                  return (
+                    <article key={front.title} className="rounded-lg border border-border bg-card p-5">
+                      <Icon className="text-brand-circuit-bright" aria-hidden="true" />
+                      <h3 className="mt-5 font-heading text-lg font-semibold text-foreground">{front.title}</h3>
+                      <p className="mt-3 text-sm leading-6 text-muted-foreground">{front.description}</p>
+                    </article>
+                  );
+                })}
+              </div>
+            </div>
+          </Container>
+        </section>
+
+        <section id="projetos" className="border-b border-border py-16 sm:py-24 lg:py-28">
+          <Container className="flex flex-col gap-10">
+            <SectionHeader
+              eyebrow="Projetos"
+              title="Cards com cara de vitrine, sem perder rastreabilidade editorial."
+              description="O M5 transforma a lista de projetos em uma experiencia navegavel: imagem, categoria, status, tecnologias e pagina interna por slug."
+            />
+
+            <div className="flex items-start gap-3 rounded-lg border border-brand-circuit-bright/30 bg-brand-circuit-bright/10 p-4 text-sm text-muted-foreground">
+              <ShieldAlertIcon className="mt-0.5 shrink-0 text-brand-circuit-bright" aria-hidden="true" />
+              <p>
+                Conteudo demonstrativo para validar a vitrine. A publicacao final depende da transcricao dos projetos
+                autorizados.
+              </p>
+            </div>
+
+            <div className="grid gap-5 lg:grid-cols-3">
+              {featuredProjects.map((project) => (
+                <ProjectCard
+                  key={project.slug}
+                  title={project.title}
+                  summary={project.summary}
+                  category={project.category}
+                  status={getProjectStatusLabel(project.status)}
+                  href={`/projetos/${project.slug}`}
+                  year={project.year}
+                  technologies={project.technologies}
+                  notice={project.contentNotice}
+                  image={{
+                    src: project.coverImage,
+                    alt: project.alt,
+                  }}
+                />
               ))}
             </div>
           </Container>
         </section>
 
-        <section id="componentes" className="border-b border-border py-16 sm:py-24 lg:py-28">
-          <Container className="flex flex-col gap-10">
+        <section id="timeline" className="border-b border-border bg-background py-16 sm:py-24 lg:py-28">
+          <Container className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
             <SectionHeader
-              eyebrow="Componentes"
-              title="Base reutilizavel para home, projetos e timeline."
-              description="O M2 entrega blocos visuais prontos para receber conteudo estruturado no M3 sem redesenhar a interface."
+              eyebrow="Timeline"
+              title="A trajetoria do NITE ganha uma linha narrativa."
+              description="A timeline ja nasce orientada por dados estruturados para receber marcos institucionais confirmados."
             />
 
-            <div className="grid gap-5 lg:grid-cols-3">
-              {componentPrinciples.map((principle) => {
-                const Icon = principle.icon;
+            <div className="grid gap-5">
+              {timelineEvents.map((event) => (
+                <TimelineItem
+                  key={`${event.year}-${event.title}`}
+                  year={String(event.year)}
+                  title={event.title}
+                  description={event.description}
+                />
+              ))}
+            </div>
+          </Container>
+        </section>
+
+        <section id="contato" className="relative border-b border-border py-16 sm:py-24 lg:py-28">
+          <Container className="grid gap-8 lg:grid-cols-[1fr_0.9fr] lg:items-center">
+            <div className="brand-panel rounded-lg border border-border p-6 sm:p-8">
+              <ShieldCheckIcon className="text-brand-circuit-bright" aria-hidden="true" />
+              <h2 className="mt-6 max-w-3xl font-heading text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
+                Quer acompanhar a evolucao do NITE?
+              </h2>
+              <p className="mt-5 max-w-2xl text-base leading-8 text-muted-foreground">
+                Comece pelos projetos e pela timeline. Os canais publicos ja foram confirmados, mas os valores concretos
+                ainda precisam ser transcritos antes de publicacao.
+              </p>
+              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+                <ButtonPrimaryLink href="#projetos">
+                  Explorar projetos
+                  <ArrowRightIcon data-icon="inline-end" />
+                </ButtonPrimaryLink>
+                <ButtonSecondaryLink href="#timeline">Ver timeline</ButtonSecondaryLink>
+              </div>
+            </div>
+
+            <div className="grid gap-4">
+              {siteConfig.publicChannels.map((channel, index) => {
+                const Icon = contactIcons[index] ?? CheckCircle2Icon;
 
                 return (
-                  <article key={principle.title} className="brand-panel rounded-lg border border-border p-5">
-                    <Icon className="text-brand-circuit-bright" aria-hidden="true" />
-                    <h3 className="mt-5 font-heading text-lg font-semibold text-foreground">{principle.title}</h3>
-                    <p className="mt-3 text-sm leading-6 text-muted-foreground">{principle.description}</p>
+                  <article key={channel.label} className="rounded-lg border border-border bg-card p-5">
+                    <div className="flex items-start gap-4">
+                      <span className="inline-flex size-11 shrink-0 items-center justify-center rounded-md border border-brand-circuit-bright/30 bg-brand-circuit-bright/10 text-brand-circuit-bright">
+                        <Icon aria-hidden="true" />
+                      </span>
+                      <div>
+                        <h3 className="font-heading text-lg font-semibold text-foreground">{channel.label}</h3>
+                        <p className="mt-2 text-sm leading-6 text-muted-foreground">{channel.displayValue}</p>
+                      </div>
+                    </div>
                   </article>
                 );
               })}
-            </div>
-
-            <div className="grid gap-5 lg:grid-cols-[1fr_0.72fr]">
-              <ProjectCard
-                title="Projeto em curadoria institucional"
-                summary="Preview visual preparado para receber slug, resumo, categoria, ano, status e imagem oficial no M3."
-                category="Vitrine"
-                status="Placeholder"
-                href="#componentes"
-                image={{
-                  src: brandAssets.instagramReference,
-                  alt: "Referencia visual do perfil institucional do NITE no Instagram.",
-                }}
-              />
-
-              <div className="grid gap-5">
-                <TimelineItem
-                  year="M2"
-                  title="Identidade visual consolidada"
-                  description="Tokens, componentes e estados de interacao foram preparados para sustentar as proximas telas."
-                />
-                <EmptyState
-                  title="Conteudo oficial pendente"
-                  description="Projetos e eventos finais entram no M3 a partir do inventario aprovado, mantendo placeholders rastreaveis."
-                />
-              </div>
             </div>
           </Container>
         </section>
@@ -183,21 +254,17 @@ export default function HomePage() {
           <Container className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
             <SectionHeader
               eyebrow="Validacao"
-              title="Pronto para crescer sem perder contraste, foco e ritmo mobile."
-              description="A interface foi desenhada para leitura rapida, toque confortavel e composicao responsiva em celulares e desktop."
+              title="Homepage pronta para avaliacao visual sem mascarar pendencias."
+              description="O M4 organiza a narrativa institucional e deixa claro o que ainda depende de transcricao oficial."
             />
 
             <div className="grid gap-3">
-              {validationItems.map((item) => (
+              {proofPoints.map((item) => (
                 <div key={item} className="flex items-start gap-3 rounded-lg border border-border bg-card p-4">
                   <CheckCircle2Icon className="mt-0.5 text-brand-circuit-bright" aria-hidden="true" />
                   <p className="text-sm leading-6 text-muted-foreground">{item}</p>
                 </div>
               ))}
-              <div className="mt-3 flex items-center gap-3 rounded-lg border border-border bg-muted p-4 text-sm text-muted-foreground">
-                <SmartphoneIcon className="text-brand-circuit-bright" aria-hidden="true" />
-                <p>Alvos interativos mantem altura minima de 44px e espacamento confortavel para toque.</p>
-              </div>
             </div>
           </Container>
         </section>

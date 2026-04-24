@@ -4,7 +4,24 @@ export const siteConfig = {
   locale: "pt-BR",
   description:
     "O NITE e o nucleo que conecta universidade, inovacao, pratica e desenvolvimento tecnologico em experiencias e projetos reais.",
-  status: "M2 - branding e design system",
+  status: "M5 - experiencia de projetos",
+  publicChannels: [
+    {
+      label: "Instagram",
+      value: "TODO(nite-content): transcrever URL publica do Instagram",
+      displayValue: "URL pendente",
+    },
+    {
+      label: "E-mail",
+      value: "TODO(nite-content): transcrever endereco de e-mail publico",
+      displayValue: "Endereco pendente",
+    },
+    {
+      label: "WhatsApp",
+      value: "TODO(nite-content): transcrever numero publico de WhatsApp",
+      displayValue: "Numero pendente",
+    },
+  ],
   placeholders: {
     foundationDate:
       "TODO(nite-content): registrar data oficial de fundacao do NITE no repositorio",
