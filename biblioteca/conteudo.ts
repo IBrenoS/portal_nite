@@ -4,17 +4,8 @@ import {
   projectCollectionSchema,
   timelineCollectionSchema,
   type Project,
-  type ProjectStatus,
   type TimelineEvent,
 } from "@/biblioteca/esquemas";
-
-const projectStatusLabels: Record<ProjectStatus, string> = {
-  placeholder: "Placeholder",
-  planejado: "Planejado",
-  "em-andamento": "Em andamento",
-  ativo: "Ativo",
-  concluido: "Concluido",
-};
 
 function parseContent<T>(label: string, parser: { parse: (input: unknown) => T }, input: unknown) {
   try {
@@ -50,10 +41,6 @@ export function getRelatedProjects(slug: string, limit = 2): Project[] {
 
 export function getIndexableProjects(): Project[] {
   return getProjects().filter((project) => project.status !== "placeholder");
-}
-
-export function getProjectStatusLabel(status: ProjectStatus) {
-  return projectStatusLabels[status];
 }
 
 export function getTimelineEvents(): TimelineEvent[] {

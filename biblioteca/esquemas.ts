@@ -30,7 +30,7 @@ export const projectSchema = z.object({
   coverImage: z.string().min(1).describe("Imagem principal do projeto."),
   alt: z.string().min(12).describe("Texto alternativo da imagem principal."),
   featured: z.boolean().default(true).describe("Controla se o projeto aparece na vitrine da home."),
-  contentNotice: z.string().min(24).optional().describe("Aviso editorial para placeholders ou dados pendentes."),
+  contentNotice: z.string().min(24).optional().describe("Nota interna opcional sobre revisão do conteúdo."),
   technologies: z.array(z.string().min(1)).default([]).describe("Tecnologias relacionadas ao projeto."),
   gallery: z.array(imageSchema).default([]).describe("Galeria opcional de imagens do projeto."),
   highlights: z.array(z.string().min(12)).default([]).describe("Pontos de destaque para leitura rapida."),
@@ -61,8 +61,8 @@ export const timelineEventSchema = z.object({
   sourceStatus: z
     .enum(timelineSourceStatusValues)
     .default("placeholder")
-    .describe("Indica se o marco e demonstrativo ou confirmado para publicacao."),
-  contentNotice: z.string().min(24).optional().describe("Aviso editorial para marcos demonstrativos ou pendentes."),
+    .describe("Indica o estado de revisão do marco."),
+  contentNotice: z.string().min(24).optional().describe("Nota interna opcional sobre revisão do marco."),
   image: z.string().min(1).optional().describe("Imagem opcional relacionada ao evento."),
   alt: z.string().min(12).optional().describe("Texto alternativo da imagem opcional."),
   projectSlug: slugSchema.optional().describe("Slug de projeto relacionado, quando existir."),

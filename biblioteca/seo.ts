@@ -7,9 +7,9 @@ const fallbackSiteUrl = "http://localhost:3000";
 const configuredSiteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? fallbackSiteUrl;
 const siteUrl = new URL(configuredSiteUrl).origin;
 const siteName = `${siteConfig.name} | ${siteConfig.institution}`;
-const homeTitle = "NITE UNIJORGE | Inovacao, tecnologia e projetos aplicados";
+const homeTitle = "NITE UNIJORGE | Inovação, tecnologia e projetos aplicados";
 const homeDescription =
-  "Conheca o NITE da UNIJORGE, nucleo de inovacao e tecnologia que organiza projetos aplicados, aprendizado pratico e experiencias institucionais.";
+  "Conheça o NITE da UNIJORGE, núcleo de inovação e tecnologia que organiza projetos aplicados, aprendizado prático e experiências institucionais.";
 const socialImage = "/opengraph-image";
 
 export function buildPageTitle(pageTitle?: string) {
@@ -48,9 +48,11 @@ export function buildHomeMetadata(): Metadata {
       siteConfig.name,
       siteConfig.institution,
       "inovacao",
+      "inovação",
       "tecnologia",
       "projetos aplicados",
       "educacao tecnologica",
+      "educação tecnológica",
     ],
     alternates: {
       canonical: absoluteUrl("/"),
@@ -67,7 +69,7 @@ export function buildHomeMetadata(): Metadata {
           url: absoluteUrl(socialImage),
           width: 1200,
           height: 630,
-          alt: "NITE UNIJORGE com visual tecnologico azul e fundo escuro.",
+          alt: "NITE UNIJORGE com visual tecnológico azul e fundo escuro.",
         },
       ],
     },

@@ -11,11 +11,9 @@ type ProjectCardProps = {
   title: string;
   summary: string;
   category: string;
-  status: string;
   href: string;
   year?: number;
   technologies?: readonly string[];
-  notice?: string;
   image?: {
     src: string;
     alt: string;
@@ -27,11 +25,9 @@ export function ProjectCard({
   title,
   summary,
   category,
-  status,
   href,
   year,
   technologies = [],
-  notice,
   image,
   className,
 }: ProjectCardProps) {
@@ -55,13 +51,12 @@ export function ProjectCard({
         </div>
       ) : (
         <div className="brand-circuit-lines flex aspect-[16/9] items-end border-b border-border bg-muted p-4">
-          <Chip variant="metal">Imagem pendente</Chip>
+          <Chip variant="metal">Projeto NITE</Chip>
         </div>
       )}
       <CardHeader>
         <div className="flex flex-wrap gap-2">
           <Chip>{category}</Chip>
-          <Chip variant="quiet">{status}</Chip>
         </div>
         <CardTitle>{title}</CardTitle>
       </CardHeader>
@@ -76,7 +71,6 @@ export function ProjectCard({
             ))}
           </div>
         ) : null}
-        {notice ? <p className="text-xs leading-5 text-muted-foreground">{notice}</p> : null}
       </CardContent>
       <CardFooter>
         <Link

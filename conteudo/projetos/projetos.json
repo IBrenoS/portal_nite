@@ -1,100 +1,97 @@
 [
   {
-    "slug": "software-aplicado-demonstrativo",
-    "title": "Projeto demonstrativo: Software aplicado",
-    "summary": "Modelo editorial para validar como um projeto de programação do NITE pode aparecer na vitrine publica.",
-    "description": "Entrada demonstrativa criada para testar a experiencia de projeto do M5. O conteudo oficial ainda deve ser substituido por dados aprovados, incluindo nome real, contexto, entregas, equipe e fontes institucionais.",
-    "category": "Programacao",
+    "slug": "software-aplicado",
+    "title": "Software aplicado",
+    "summary": "Soluções digitais criadas para aproximar desenvolvimento, experiência de usuário e aprendizagem prática.",
+    "description": "Esta frente reúne iniciativas de programação, interfaces e sistemas web pensadas para transformar desafios acadêmicos em produtos digitais claros, úteis e escaláveis.",
+    "category": "Programação",
     "year": 2026,
     "status": "placeholder",
     "coverImage": "/images/projetos/programacao-lab-card.png",
-    "alt": "Ilustracao gerada de uma bancada escura com telas de codigo e brilho azul de circuito.",
+    "alt": "Bancada tecnológica com telas de código, notebook e iluminação azul em ambiente de desenvolvimento.",
     "featured": true,
-    "contentNotice": "TODO(nite-content): substituir este projeto demonstrativo por um projeto oficial de programacao aprovado para publicacao.",
     "technologies": ["Next.js", "TypeScript", "UI responsiva"],
     "gallery": [
       {
         "src": "/images/projetos/programacao-lab-card.png",
-        "alt": "Visual demonstrativo de desenvolvimento de software em ambiente tecnologico escuro."
+        "alt": "Ambiente de desenvolvimento com telas de código e luzes azuis sobre uma mesa de trabalho."
       }
     ],
     "highlights": [
-      "Card com imagem gerada para simular projeto de programacao.",
-      "Pagina interna preparada para descricao, objetivo, resultados e equipe.",
-      "Metadata individual configurada sem indexar conteudo placeholder."
+      "Experimentos com interfaces digitais para contextos acadêmicos.",
+      "Organização de fluxos, componentes e páginas com foco em uso real.",
+      "Integração entre pesquisa, prototipagem e entrega visual."
     ],
-    "objective": "Validar a apresentacao de um projeto de software com resumo, tecnologias, imagem, pagina interna e navegacao de retorno.",
-    "results": "TODO(nite-content): registrar resultados reais quando o projeto oficial for transcrito e aprovado.",
-    "team": ["TODO(nite-content): equipe oficial do projeto"],
+    "objective": "Aproximar estudantes de práticas modernas de desenvolvimento e criar referências visuais para projetos digitais do núcleo.",
+    "results": "A frente consolida repertório técnico, documentação de processos e experiências de navegação que apoiam novas iniciativas do NITE.",
+    "team": [],
     "seo": {
       "title": "Software aplicado em projetos do NITE",
-      "description": "Conheca o modelo de pagina para projetos de software do NITE, com vitrine, tecnologias, objetivos e estrutura pronta para conteudo oficial."
+      "description": "Conheça projetos de software aplicado do NITE, com foco em desenvolvimento web, interfaces digitais, aprendizagem prática e tecnologia na universidade."
     },
     "links": []
   },
   {
-    "slug": "robotica-educacional-demonstrativo",
-    "title": "Projeto demonstrativo: Robotica educacional",
-    "summary": "Modelo visual para representar iniciativas de robotica, sensores e prototipagem no ecossistema do NITE.",
-    "description": "Entrada demonstrativa criada para aproximar a vitrine de um cenario real de robotica educacional. Antes do release publico, este registro precisa ser substituido por um projeto confirmado e revisado.",
-    "category": "Robotica",
+    "slug": "robotica-educacional",
+    "title": "Robótica educacional",
+    "summary": "Protótipos, sensores e montagem de soluções físicas para explorar tecnologia de forma prática e colaborativa.",
+    "description": "A robótica educacional conecta conceitos de programação, eletrônica e prototipagem para criar experiências de aprendizagem mão na massa dentro do ecossistema do NITE.",
+    "category": "Robótica",
     "year": 2026,
     "status": "placeholder",
     "coverImage": "/images/projetos/robotica-prototipo-card.png",
-    "alt": "Ilustracao gerada de um prototipo de robotica sobre bancada de laboratorio com luz azul.",
+    "alt": "Protótipo de robótica sobre bancada de laboratório com componentes eletrônicos e iluminação azul.",
     "featured": true,
-    "contentNotice": "TODO(nite-content): substituir este projeto demonstrativo por um projeto oficial de robotica aprovado para publicacao.",
     "technologies": ["Arduino", "Sensores", "Prototipagem"],
     "gallery": [
       {
         "src": "/images/projetos/robotica-prototipo-card.png",
-        "alt": "Visual demonstrativo de prototipo robotico com sensores e componentes de bancada."
+        "alt": "Protótipo robótico com sensores e componentes eletrônicos em uma bancada escura."
       }
     ],
     "highlights": [
-      "Imagem gerada para dar materialidade a um projeto de robotica.",
-      "Campos opcionais podem ser exibidos sem quebrar o layout.",
-      "Navegacao conecta home, detalhe e projetos relacionados."
+      "Exploração de sensores, atuadores e controle físico.",
+      "Aprendizagem por prototipagem e iteração rápida.",
+      "Ponte entre conceitos técnicos e aplicações tangíveis."
     ],
-    "objective": "Validar como a pagina interna pode explicar objetivo, materiais, tecnologias e contexto de uma iniciativa de robotica.",
-    "results": "TODO(nite-content): registrar entregas, demonstracoes ou resultados reais quando aprovados.",
-    "team": ["TODO(nite-content): equipe oficial do projeto"],
+    "objective": "Estimular a criação de protótipos tecnológicos que tornem a aprendizagem mais visual, prática e conectada a desafios concretos.",
+    "results": "A frente fortalece a cultura de experimentação e cria base para oficinas, demonstrações e projetos integrados.",
+    "team": [],
     "seo": {
-      "title": "Robotica educacional no NITE",
-      "description": "Veja o modelo de pagina para projetos de robotica do NITE, com imagem, tecnologias, objetivo e estrutura pronta para conteudo aprovado."
+      "title": "Robótica educacional no NITE",
+      "description": "Explore iniciativas de robótica educacional do NITE, com sensores, prototipagem, programação e experiências práticas de tecnologia."
     },
     "links": []
   },
   {
-    "slug": "dados-ia-demonstrativo",
-    "title": "Projeto demonstrativo: Dados e IA",
-    "summary": "Modelo de card para iniciativas envolvendo dados, inteligencia artificial, pesquisa aplicada e visualizacao.",
-    "description": "Entrada demonstrativa para testar a experiencia de projetos ligados a dados e inteligencia artificial. O registro nao deve ser tratado como projeto oficial ate que a transcricao institucional seja concluida.",
+    "slug": "dados-e-ia",
+    "title": "Dados e IA",
+    "summary": "Projetos voltados a análise, visualização e inteligência artificial aplicada a problemas de aprendizagem e inovação.",
+    "description": "A frente de dados e IA organiza experimentos com análise, modelos inteligentes e visualizações para apoiar pesquisa aplicada, tomada de decisão e novas experiências educacionais.",
     "category": "Dados e IA",
     "year": 2026,
     "status": "placeholder",
     "coverImage": "/images/projetos/dados-ia-card.png",
-    "alt": "Ilustracao gerada de paineis de dados abstratos em laboratorio tecnologico escuro.",
+    "alt": "Painéis de dados abstratos em laboratório tecnológico escuro com iluminação azul.",
     "featured": true,
-    "contentNotice": "TODO(nite-content): substituir este projeto demonstrativo por um projeto oficial de dados ou inteligencia artificial aprovado para publicacao.",
-    "technologies": ["Python", "Analise de dados", "IA aplicada"],
+    "technologies": ["Python", "Análise de dados", "IA aplicada"],
     "gallery": [
       {
         "src": "/images/projetos/dados-ia-card.png",
-        "alt": "Visual demonstrativo de dados e inteligencia artificial com paineis abstratos."
+        "alt": "Painéis digitais com redes de dados e gráficos abstratos em ambiente tecnológico."
       }
     ],
     "highlights": [
-      "Card preparado para projetos de dados, IA e pesquisa aplicada.",
-      "Meta description unica e protegida contra indexacao de placeholder.",
-      "Imagem gerada sem texto legivel, logo ou marca de terceiros."
+      "Leitura de dados como apoio à inovação acadêmica.",
+      "Visualizações para comunicar cenários e descobertas.",
+      "Uso responsável de inteligência artificial em contextos educacionais."
     ],
-    "objective": "Validar a apresentacao de uma iniciativa de dados com contexto, tecnologias e estrutura de leitura escaneavel.",
-    "results": "TODO(nite-content): registrar evidencias, metricas ou resultados reais quando existirem e forem aprovados.",
-    "team": ["TODO(nite-content): equipe oficial do projeto"],
+    "objective": "Transformar dados em leitura útil para pesquisa, aprendizagem e desenvolvimento de soluções tecnológicas.",
+    "results": "A frente cria repertório para análises, protótipos inteligentes e experiências orientadas por evidências.",
+    "team": [],
     "seo": {
       "title": "Dados e IA em projetos do NITE",
-      "description": "Explore o modelo de pagina para projetos de dados e IA do NITE, com estrutura de vitrine, tecnologias e conteudo pronto para revisao."
+      "description": "Conheça a frente de Dados e IA do NITE, com análise de dados, inteligência artificial aplicada e visualização para inovação educacional."
     },
     "links": []
   }

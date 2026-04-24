@@ -15,13 +15,11 @@ describe("conteudo estruturado", () => {
 
     expect(projects).toHaveLength(3);
     expect(getProjectSlugs()).toEqual([
-      { slug: "software-aplicado-demonstrativo" },
-      { slug: "robotica-educacional-demonstrativo" },
-      { slug: "dados-ia-demonstrativo" },
+      { slug: "software-aplicado" },
+      { slug: "robotica-educacional" },
+      { slug: "dados-e-ia" },
     ]);
-    expect(getProjectBySlug("software-aplicado-demonstrativo")?.title).toBe(
-      "Projeto demonstrativo: Software aplicado",
-    );
+    expect(getProjectBySlug("software-aplicado")?.title).toBe("Software aplicado");
   });
 
   it("ordena eventos da timeline por ano e sequencia editorial", () => {
@@ -29,7 +27,13 @@ describe("conteudo estruturado", () => {
 
     expect(events.map((event) => event.sequence)).toEqual([1, 2, 3]);
     expect(events.map((event) => event.year)).toEqual([2026, 2026, 2026]);
+    expect(events.map((event) => event.title)).toEqual([
+      "Estruturação do NITE",
+      "Primeiros projetos aplicados",
+      "Vitrine para a comunidade",
+    ]);
     expect(events.map((event) => event.sourceStatus)).toEqual(["placeholder", "placeholder", "placeholder"]);
+    expect(events.map((event) => event.contentNotice)).toEqual([undefined, undefined, undefined]);
   });
 
   it("remove placeholders do conjunto indexavel para sitemap", () => {

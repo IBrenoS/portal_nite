@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-test("carrega a homepage com hardening M7", async ({ page }) => {
+test("carrega a home pública sem rótulos internos", async ({ page }) => {
   await page.goto("/");
 
   await expect(
@@ -10,12 +10,14 @@ test("carrega a homepage com hardening M7", async ({ page }) => {
     }),
   ).toBeVisible();
 
-  await expect(page.getByText("M7 - SEO, acessibilidade e performance").first()).toBeVisible();
-  await expect(page.getByText("Um nucleo para tirar tecnologia do discurso e colocar em movimento.")).toBeVisible();
-  await expect(page.getByText("Cards com cara de vitrine, sem perder rastreabilidade editorial.")).toBeVisible();
-  await expect(page.getByText("A evolucao do NITE vira uma narrativa visual.")).toBeVisible();
-  await expect(page.getByText("Marco demonstrativo: vitrine para comunidade")).toBeVisible();
-  await expect(page.getByText("Quer acompanhar a evolucao do NITE?")).toBeVisible();
+  await expect(page.getByText("M7 - SEO, acessibilidade e performance")).toHaveCount(0);
+  await expect(page.getByText("Landing institucional")).toHaveCount(0);
+  await expect(page.getByText("Um núcleo para tirar tecnologia do discurso e colocar em movimento.")).toBeVisible();
+  await expect(page.getByText("Projetos em destaque para explorar tecnologia em movimento.")).toBeVisible();
+  await expect(page.getByText("A evolução do NITE em uma narrativa visual.")).toBeVisible();
+  await expect(page.getByText("Vitrine para a comunidade")).toBeVisible();
+  await expect(page.getByText("Quer acompanhar a evolução do NITE?")).toBeVisible();
+  await expect(page.getByRole("link", { name: "Acompanhar o NITE no Instagram" }).first()).toHaveText(/@nite\.uj/);
 });
 
 test("mantem layout mobile sem scroll horizontal e com alvos de toque acessiveis", async ({ page }) => {
@@ -41,7 +43,7 @@ test("mantem layout mobile sem scroll horizontal e com alvos de toque acessiveis
 
   const secondaryBox = await secondaryCta.boundingBox();
   const brandPanelBox = await page
-    .getByText("Tech institucional premium")
+    .getByText("Tecnologia aplicada", { exact: true })
     .locator("xpath=ancestor::div[contains(@class,'brand-panel')][1]")
     .boundingBox();
 
@@ -51,12 +53,12 @@ test("mantem layout mobile sem scroll horizontal e com alvos de toque acessiveis
 });
 
 test("abre uma pagina interna de projeto a partir do slug estruturado", async ({ page }) => {
-  await page.goto("/projetos/software-aplicado-demonstrativo");
+  await page.goto("/projetos/software-aplicado");
 
   await expect(
     page.getByRole("heading", {
       level: 1,
-      name: "Projeto demonstrativo: Software aplicado",
+      name: "Software aplicado",
     }),
   ).toBeVisible();
   await expect(page.getByText("Dados do projeto")).toBeVisible();

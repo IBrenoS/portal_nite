@@ -3,7 +3,6 @@ import Link from "next/link";
 import { siteConfig } from "@/biblioteca/site-config";
 import { Container } from "@/components/layout/container";
 import { BrandMark } from "@/components/ui/brand-mark";
-import { Chip } from "@/components/ui/chip";
 
 const navItems = [
   { href: "/#sobre", label: "Sobre" },
@@ -36,7 +35,12 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <Chip className="hidden sm:inline-flex">{siteConfig.status}</Chip>
+        <Link
+          href="/#projetos"
+          className="hidden min-h-11 items-center rounded-md border border-brand-circuit-bright/30 px-4 py-2 font-mono text-xs uppercase tracking-[0.18em] text-brand-circuit-bright transition-colors hover:border-brand-circuit-bright hover:text-foreground sm:inline-flex"
+        >
+          Explorar projetos
+        </Link>
       </Container>
     </header>
   );

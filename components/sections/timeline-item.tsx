@@ -42,7 +42,6 @@ export function TimelineItem({ event, className }: TimelineItemProps) {
             <div className="flex flex-wrap gap-2">
               {event.category ? <Chip>{event.category}</Chip> : null}
               {event.month ? <Chip variant="quiet">{event.month}</Chip> : null}
-              {event.sourceStatus === "placeholder" ? <Chip variant="metal">Demonstrativo</Chip> : null}
             </div>
 
             <div className="grid gap-3">
@@ -52,12 +51,6 @@ export function TimelineItem({ event, className }: TimelineItemProps) {
               <h3 className="font-heading text-xl font-semibold leading-tight text-foreground">{event.title}</h3>
               <p className="text-sm leading-6 text-muted-foreground">{event.description}</p>
             </div>
-
-            {event.contentNotice ? (
-              <p className="rounded-md border border-border bg-muted/45 p-3 text-xs leading-5 text-muted-foreground">
-                {event.contentNotice}
-              </p>
-            ) : null}
 
             {projectHref ? (
               <Link

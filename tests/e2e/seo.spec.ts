@@ -1,9 +1,9 @@
 import { expect, test } from "@playwright/test";
 
-test("expoe metadata, canonical e schema da home do M7", async ({ page }) => {
+test("expõe metadata, canonical e schema da home", async ({ page }) => {
   await page.goto("/");
 
-  await expect(page).toHaveTitle("NITE UNIJORGE | Inovacao, tecnologia e projetos aplicados");
+  await expect(page).toHaveTitle("NITE UNIJORGE | Inovação, tecnologia e projetos aplicados");
   await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /NITE da UNIJORGE/);
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /^http:\/\/localhost:3000\/?$/);
   await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
@@ -28,7 +28,7 @@ test("expoe robots, sitemap, manifest e imagem social", async ({ request }) => {
   expect(sitemap.ok()).toBe(true);
   const sitemapXml = await sitemap.text();
   expect(sitemapXml).toContain("<loc>http://localhost:3000/</loc>");
-  expect(sitemapXml).not.toContain("/projetos/software-aplicado-demonstrativo");
+  expect(sitemapXml).not.toContain("/projetos/software-aplicado");
 
   const manifest = await request.get("/manifest.webmanifest");
   expect(manifest.ok()).toBe(true);
@@ -42,17 +42,24 @@ test("expoe robots, sitemap, manifest e imagem social", async ({ request }) => {
   expect(socialImage.headers()["content-type"]).toContain("image/png");
 });
 
-test("preserva SEO seguro nas paginas placeholder de projeto", async ({ page }) => {
-  await page.goto("/projetos/software-aplicado-demonstrativo");
+test("preserva SEO seguro nas páginas provisórias de projeto", async ({ page }) => {
+  await page.goto("/projetos/software-aplicado");
 
   await expect(page).toHaveTitle("Software aplicado em projetos do NITE | NITE");
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
     "href",
-    "http://localhost:3000/projetos/software-aplicado-demonstrativo",
+    "http://localhost:3000/projetos/software-aplicado",
   );
 
   const jsonLd = await page.locator("#structured-data-breadcrumb").textContent();
   expect(jsonLd).not.toBeNull();
   expect(JSON.parse(jsonLd!)["@type"]).toBe("BreadcrumbList");
+});
+
+test("redireciona slugs antigos para URLs limpas", async ({ page }) => {
+  await page.goto("/projetos/software-aplicado-demonstrativo");
+
+  await expect(page).toHaveURL(/\/projetos\/software-aplicado$/);
+  await expect(page.getByRole("heading", { level: 1, name: "Software aplicado" })).toBeVisible();
 });

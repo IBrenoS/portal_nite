@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeftIcon, ExternalLinkIcon, ShieldAlertIcon, SparklesIcon } from "lucide-react";
+import { ArrowLeftIcon, ExternalLinkIcon, SparklesIcon } from "lucide-react";
 
-import { getProjectBySlug, getProjectSlugs, getProjectStatusLabel, getRelatedProjects } from "@/biblioteca/conteudo";
+import { getProjectBySlug, getProjectSlugs, getRelatedProjects } from "@/biblioteca/conteudo";
 import { buildBreadcrumbJsonLd, buildPageTitle, buildProjectMetadata, serializeJsonLd } from "@/biblioteca/seo";
 import { siteConfig } from "@/biblioteca/site-config";
 import { Container } from "@/components/layout/container";
@@ -51,7 +51,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   const relatedProjects = getRelatedProjects(project.slug);
   const breadcrumbJsonLd = buildBreadcrumbJsonLd([
-    { name: "Inicio", path: "/" },
+    { name: "Início", path: "/" },
     { name: "Projetos", path: "/#projetos" },
     { name: project.title, path: `/projetos/${project.slug}` },
   ]);
@@ -72,7 +72,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 <ol className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
                   <li>
                     <Link className="rounded-md transition-colors hover:text-foreground" href="/">
-                      Inicio
+                      Início
                     </Link>
                   </li>
                   <li aria-hidden="true">/</li>
@@ -90,7 +90,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
               <div className="flex flex-wrap gap-2">
                 <Chip>{project.category}</Chip>
-                <Chip variant="quiet">{getProjectStatusLabel(project.status)}</Chip>
                 <Chip variant="metal">{project.year}</Chip>
               </div>
 
@@ -141,27 +140,15 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                   <dd className="mt-1 text-foreground">{project.category}</dd>
                 </div>
                 <div>
-                  <dt className="text-muted-foreground">Status</dt>
-                  <dd className="mt-1 text-foreground">{getProjectStatusLabel(project.status)}</dd>
-                </div>
-                <div>
                   <dt className="text-muted-foreground">Ano</dt>
                   <dd className="mt-1 text-foreground">{project.year}</dd>
                 </div>
               </dl>
-              {project.contentNotice ? (
-                <div className="rounded-lg border border-brand-circuit-bright/30 bg-brand-circuit-bright/10 p-4">
-                  <div className="flex gap-3">
-                    <ShieldAlertIcon className="mt-0.5 shrink-0 text-brand-circuit-bright" aria-hidden="true" />
-                    <p className="text-xs leading-5 text-muted-foreground">{project.contentNotice}</p>
-                  </div>
-                </div>
-              ) : null}
             </aside>
 
             <div className="flex flex-col gap-10">
               <section className="grid gap-3">
-                <h2 className="font-heading text-2xl font-semibold text-foreground">Descricao</h2>
+                <h2 className="font-heading text-2xl font-semibold text-foreground">Descrição</h2>
                 <p className="text-base leading-8 text-muted-foreground">{project.description}</p>
               </section>
 
@@ -268,7 +255,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                   Projetos relacionados
                 </p>
                 <h2 className="font-heading text-2xl font-semibold text-foreground sm:text-3xl">
-                  Continue explorando a vitrine do NITE.
+                  Continue explorando os projetos do NITE.
                 </h2>
               </div>
               <div className="grid gap-5 lg:grid-cols-2">
@@ -278,11 +265,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                     title={relatedProject.title}
                     summary={relatedProject.summary}
                     category={relatedProject.category}
-                    status={getProjectStatusLabel(relatedProject.status)}
                     href={`/projetos/${relatedProject.slug}`}
                     year={relatedProject.year}
                     technologies={relatedProject.technologies}
-                    notice={relatedProject.contentNotice}
                     image={{
                       src: relatedProject.coverImage,
                       alt: relatedProject.alt,

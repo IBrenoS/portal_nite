@@ -6,6 +6,25 @@ const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
   },
+  async redirects() {
+    return [
+      {
+        source: "/projetos/software-aplicado-demonstrativo",
+        destination: "/projetos/software-aplicado",
+        permanent: true,
+      },
+      {
+        source: "/projetos/robotica-educacional-demonstrativo",
+        destination: "/projetos/robotica-educacional",
+        permanent: true,
+      },
+      {
+        source: "/projetos/dados-ia-demonstrativo",
+        destination: "/projetos/dados-e-ia",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

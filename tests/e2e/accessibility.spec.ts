@@ -1,7 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-const urls = ["/", "/projetos/software-aplicado-demonstrativo"] as const;
+const urls = ["/", "/projetos/software-aplicado"] as const;
 
 for (const url of urls) {
   test(`nao tem violacoes criticas de acessibilidade em ${url}`, async ({ page }) => {

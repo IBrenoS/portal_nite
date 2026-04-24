@@ -42,6 +42,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html
       lang={siteConfig.locale}
       className={`dark ${headingFont.variable} ${bodyFont.variable} ${monoFont.variable}`}
+      data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">

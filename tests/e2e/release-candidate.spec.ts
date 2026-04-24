@@ -3,15 +3,15 @@ import { expect, test } from "@playwright/test";
 test("fluxo principal home -> projeto -> retorno funciona", async ({ page }) => {
   await page.goto("/");
 
-  await page.getByRole("link", { name: "Ver projeto: Projeto demonstrativo: Software aplicado" }).click();
+  await page.getByRole("link", { name: "Ver projeto: Software aplicado" }).click();
 
-  await expect(page).toHaveURL(/\/projetos\/software-aplicado-demonstrativo$/);
-  await expect(page.getByRole("heading", { level: 1, name: "Projeto demonstrativo: Software aplicado" })).toBeVisible();
+  await expect(page).toHaveURL(/\/projetos\/software-aplicado$/);
+  await expect(page.getByRole("heading", { level: 1, name: "Software aplicado" })).toBeVisible();
 
   await page.getByRole("link", { name: /voltar para projetos/i }).click();
 
   await expect(page).toHaveURL(/\/#projetos$/);
-  await expect(page.getByRole("heading", { name: "Cards com cara de vitrine, sem perder rastreabilidade editorial." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Projetos em destaque para explorar tecnologia em movimento." })).toBeVisible();
 });
 
 for (const viewport of [
