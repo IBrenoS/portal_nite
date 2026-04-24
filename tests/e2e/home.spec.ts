@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-test("carrega a homepage com vitrine de projetos do M5", async ({ page }) => {
+test("carrega a homepage com hardening M7", async ({ page }) => {
   await page.goto("/");
 
   await expect(
@@ -10,9 +10,11 @@ test("carrega a homepage com vitrine de projetos do M5", async ({ page }) => {
     }),
   ).toBeVisible();
 
-  await expect(page.getByText("M5 - experiencia de projetos").first()).toBeVisible();
+  await expect(page.getByText("M7 - SEO, acessibilidade e performance").first()).toBeVisible();
   await expect(page.getByText("Um nucleo para tirar tecnologia do discurso e colocar em movimento.")).toBeVisible();
   await expect(page.getByText("Cards com cara de vitrine, sem perder rastreabilidade editorial.")).toBeVisible();
+  await expect(page.getByText("A evolucao do NITE vira uma narrativa visual.")).toBeVisible();
+  await expect(page.getByText("Marco demonstrativo: vitrine para comunidade")).toBeVisible();
   await expect(page.getByText("Quer acompanhar a evolucao do NITE?")).toBeVisible();
 });
 
@@ -36,6 +38,16 @@ test("mantem layout mobile sem scroll horizontal e com alvos de toque acessiveis
     expect(box!.height).toBeGreaterThanOrEqual(44);
     expect(box!.width).toBeGreaterThanOrEqual(44);
   }
+
+  const secondaryBox = await secondaryCta.boundingBox();
+  const brandPanelBox = await page
+    .getByText("Tech institucional premium")
+    .locator("xpath=ancestor::div[contains(@class,'brand-panel')][1]")
+    .boundingBox();
+
+  expect(secondaryBox).not.toBeNull();
+  expect(brandPanelBox).not.toBeNull();
+  expect(secondaryBox!.y + secondaryBox!.height).toBeLessThanOrEqual(brandPanelBox!.y);
 });
 
 test("abre uma pagina interna de projeto a partir do slug estruturado", async ({ page }) => {

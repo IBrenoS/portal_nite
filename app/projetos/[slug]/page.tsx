@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ArrowLeftIcon, ExternalLinkIcon, ShieldAlertIcon, SparklesIcon } from "lucide-react";
 
 import { getProjectBySlug, getProjectSlugs, getProjectStatusLabel, getRelatedProjects } from "@/biblioteca/conteudo";
-import { buildPageTitle } from "@/biblioteca/seo";
+import { buildBreadcrumbJsonLd, buildPageTitle, buildProjectMetadata, serializeJsonLd } from "@/biblioteca/seo";
 import { siteConfig } from "@/biblioteca/site-config";
 import { Container } from "@/components/layout/container";
 import { SiteFooter } from "@/components/layout/site-footer";
@@ -31,24 +31,14 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   if (!project) {
     return {
       title: buildPageTitle("Projeto nao encontrado"),
+      robots: {
+        index: false,
+        follow: false,
+      },
     };
   }
 
-  return {
-    title: buildPageTitle(project.seo?.title ?? project.title),
-    description: project.seo?.description ?? project.summary,
-    robots: project.status === "placeholder" ? { index: false, follow: true } : undefined,
-    openGraph: {
-      title: buildPageTitle(project.seo?.title ?? project.title),
-      description: project.seo?.description ?? project.summary,
-      images: [
-        {
-          url: project.coverImage,
-          alt: project.alt,
-        },
-      ],
-    },
-  };
+  return buildProjectMetadata(project);
 }
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
@@ -60,24 +50,19 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   }
 
   const relatedProjects = getRelatedProjects(project.slug);
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-  const pageUrl = `${baseUrl}/projetos/${project.slug}`;
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Inicio", item: baseUrl },
-      { "@type": "ListItem", position: 2, name: "Projetos", item: `${baseUrl}/#projetos` },
-      { "@type": "ListItem", position: 3, name: project.title, item: pageUrl },
-    ],
-  };
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+    { name: "Inicio", path: "/" },
+    { name: "Projetos", path: "/#projetos" },
+    { name: project.title, path: `/projetos/${project.slug}` },
+  ]);
 
   return (
     <>
       <SiteHeader />
       <script
+        id="structured-data-breadcrumb"
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbJsonLd) }}
       />
       <main id="conteudo-principal">
         <section className="border-b border-border py-12 sm:py-16 lg:py-20">

@@ -48,12 +48,16 @@ export function getRelatedProjects(slug: string, limit = 2): Project[] {
     .slice(0, limit);
 }
 
+export function getIndexableProjects(): Project[] {
+  return getProjects().filter((project) => project.status !== "placeholder");
+}
+
 export function getProjectStatusLabel(status: ProjectStatus) {
   return projectStatusLabels[status];
 }
 
 export function getTimelineEvents(): TimelineEvent[] {
   return parseContent("conteudo/linha-do-tempo/eventos.json", timelineCollectionSchema, timelineJson).toSorted(
-    (current, next) => current.year - next.year,
+    (current, next) => current.year - next.year || current.sequence - next.sequence,
   );
 }

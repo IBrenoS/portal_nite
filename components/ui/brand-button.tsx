@@ -9,7 +9,7 @@ export function ButtonPrimary({ className, size = "lg", ...props }: BrandButtonP
     <Button
       size={size}
       className={cn(
-        "min-h-11 rounded-md border-brand-circuit-bright/40 bg-primary font-semibold text-primary-foreground shadow-[0_0_24px_rgb(51_212_255_/_0.16)] hover:bg-brand-circuit-bright",
+        "min-h-11 rounded-md border-brand-circuit-bright/40 bg-primary font-semibold !text-[#031018] shadow-[0_0_24px_rgb(51_212_255_/_0.16)] hover:bg-brand-circuit-bright hover:!text-[#031018]",
         className,
       )}
       {...props}
@@ -33,7 +33,7 @@ export function ButtonPrimaryLink({ className, ...props }: BrandButtonLinkProps)
     <a
       className={cn(
         buttonVariants({ size: "lg" }),
-        "min-h-11 rounded-md border-brand-circuit-bright/40 bg-primary font-semibold text-primary-foreground shadow-[0_0_24px_rgb(51_212_255_/_0.16)] hover:bg-brand-circuit-bright",
+        "min-h-11 rounded-md border-brand-circuit-bright/40 bg-primary font-semibold !text-[#031018] shadow-[0_0_24px_rgb(51_212_255_/_0.16)] hover:bg-brand-circuit-bright hover:!text-[#031018]",
         className,
       )}
       {...props}
