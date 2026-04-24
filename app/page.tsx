@@ -12,8 +12,10 @@ import {
   ShieldAlertIcon,
   ShieldCheckIcon,
 } from "lucide-react";
+import type { Metadata } from "next";
 
 import { getFeaturedProjects, getProjectStatusLabel, getTimelineEvents } from "@/biblioteca/conteudo";
+import { buildHomeJsonLd, buildHomeMetadata, serializeJsonLd } from "@/biblioteca/seo";
 import { siteConfig } from "@/biblioteca/site-config";
 import { Container } from "@/components/layout/container";
 import { SiteFooter } from "@/components/layout/site-footer";
@@ -44,21 +46,29 @@ const workFronts = [
 ] as const;
 
 const proofPoints = [
-  "Copy em pt-BR, clara e sem promessas nao validadas.",
-  "Projetos e timeline continuam ligados ao conteudo estruturado do M3.",
-  "Canais publicos aparecem sem inventar URL, e-mail ou numero.",
-  "CTAs mantem altura minima de 44px para toque confortavel.",
+  "Metadata, canonical, robots e sitemap foram publicados.",
+  "JSON-LD da home e breadcrumbs das paginas internas estao server-side.",
+  "Projetos placeholder seguem fora do sitemap e com noindex.",
+  "Acessibilidade critica e navegação mobile foram cobertas por testes.",
 ] as const;
 
 const contactIcons = [AtSignIcon, MailIcon, MessageCircleIcon] as const;
 
+export const metadata: Metadata = buildHomeMetadata();
+
 export default function HomePage() {
   const featuredProjects = getFeaturedProjects();
   const timelineEvents = getTimelineEvents();
+  const homeJsonLd = buildHomeJsonLd();
 
   return (
     <>
       <SiteHeader />
+      <script
+        id="structured-data-home"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(homeJsonLd) }}
+      />
       <main id="conteudo-principal" className="overflow-hidden">
         <section className="relative border-b border-border">
           <div className="brand-scanline pointer-events-none absolute inset-0 opacity-35" />
@@ -83,20 +93,20 @@ export default function HomePage() {
               </div>
 
               <div className="flex flex-col gap-3 sm:flex-row">
-                <ButtonPrimaryLink href="#projetos">
+                <ButtonPrimaryLink href="#projetos" className="w-full sm:w-fit">
                   Ver projetos
                   <ArrowRightIcon data-icon="inline-end" />
                 </ButtonPrimaryLink>
-                <ButtonSecondaryLink href="#sobre">
+                <ButtonSecondaryLink href="#sobre" className="w-full sm:w-fit">
                   Conhecer o NITE
                   <ArrowDownIcon data-icon="inline-end" />
                 </ButtonSecondaryLink>
               </div>
             </div>
 
-            <div className="relative min-h-72 lg:min-h-[34rem]">
+            <div className="relative mt-2 sm:mt-0 lg:min-h-[34rem]">
               <div className="absolute -right-12 top-6 h-56 w-56 rounded-full bg-brand-circuit-bright/10 blur-3xl sm:h-72 sm:w-72" />
-              <div className="brand-panel absolute inset-x-0 bottom-0 rounded-lg border border-border p-4 sm:p-6 lg:inset-y-10 lg:left-10 lg:right-0">
+              <div className="brand-panel relative rounded-lg border border-border p-4 sm:p-6 lg:absolute lg:inset-y-10 lg:left-10 lg:right-0">
                 <div className="brand-circuit-lines absolute inset-4 rounded-md border border-brand-circuit-bright/15" />
                 <div className="relative flex h-full min-h-64 flex-col justify-between gap-8">
                   <div className="flex items-center justify-between gap-4">
@@ -188,20 +198,27 @@ export default function HomePage() {
         </section>
 
         <section id="timeline" className="border-b border-border bg-background py-16 sm:py-24 lg:py-28">
-          <Container className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
-            <SectionHeader
-              eyebrow="Timeline"
-              title="A trajetoria do NITE ganha uma linha narrativa."
-              description="A timeline ja nasce orientada por dados estruturados para receber marcos institucionais confirmados."
-            />
+          <Container className="grid gap-10 lg:grid-cols-[0.74fr_1.26fr]">
+            <div className="grid h-fit gap-5 lg:sticky lg:top-24">
+              <SectionHeader
+                eyebrow="Timeline"
+                title="A evolucao do NITE vira uma narrativa visual."
+                description="O M6 prepara a linha do tempo para mostrar contexto, evidencias e conexoes com projetos, mantendo os marcos atuais como demonstrativos."
+              />
+              <div className="flex items-start gap-3 rounded-lg border border-brand-circuit-bright/30 bg-brand-circuit-bright/10 p-4 text-sm text-muted-foreground">
+                <ShieldAlertIcon className="mt-0.5 shrink-0 text-brand-circuit-bright" aria-hidden="true" />
+                <p>
+                  Datas e registros oficiais ainda precisam ser transcritos. As imagens atuais validam a experiencia
+                  visual da timeline.
+                </p>
+              </div>
+            </div>
 
             <div className="grid gap-5">
               {timelineEvents.map((event) => (
                 <TimelineItem
-                  key={`${event.year}-${event.title}`}
-                  year={String(event.year)}
-                  title={event.title}
-                  description={event.description}
+                  key={`${event.sequence}-${event.year}-${event.title}`}
+                  event={event}
                 />
               ))}
             </div>
@@ -255,7 +272,7 @@ export default function HomePage() {
             <SectionHeader
               eyebrow="Validacao"
               title="Homepage pronta para avaliacao visual sem mascarar pendencias."
-              description="O M4 organiza a narrativa institucional e deixa claro o que ainda depende de transcricao oficial."
+              description="O M7 endurece SEO, acessibilidade e performance sem esconder o que ainda depende de transcricao oficial."
             />
 
             <div className="grid gap-3">

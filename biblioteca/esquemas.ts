@@ -17,6 +17,7 @@ const seoSchema = z.object({
 });
 
 export const projectStatusValues = ["placeholder", "planejado", "em-andamento", "ativo", "concluido"] as const;
+export const timelineSourceStatusValues = ["placeholder", "confirmado"] as const;
 
 export const projectSchema = z.object({
   slug: slugSchema,
@@ -51,11 +52,17 @@ export const projectSchema = z.object({
 export const projectCollectionSchema = z.array(projectSchema).min(1);
 
 export const timelineEventSchema = z.object({
+  sequence: z.number().int().min(1).describe("Ordem editorial do marco dentro da timeline."),
   year: z.number().int().min(2000).max(2100).describe("Ano do evento na linha do tempo."),
   month: z.string().min(3).optional().describe("Mes textual, quando confirmado."),
   title: z.string().min(3).describe("Titulo curto do marco institucional."),
   description: z.string().min(24).describe("Descricao do marco institucional."),
   category: z.string().min(3).optional().describe("Categoria editorial do evento."),
+  sourceStatus: z
+    .enum(timelineSourceStatusValues)
+    .default("placeholder")
+    .describe("Indica se o marco e demonstrativo ou confirmado para publicacao."),
+  contentNotice: z.string().min(24).optional().describe("Aviso editorial para marcos demonstrativos ou pendentes."),
   image: z.string().min(1).optional().describe("Imagem opcional relacionada ao evento."),
   alt: z.string().min(12).optional().describe("Texto alternativo da imagem opcional."),
   projectSlug: slugSchema.optional().describe("Slug de projeto relacionado, quando existir."),
@@ -65,4 +72,5 @@ export const timelineCollectionSchema = z.array(timelineEventSchema).min(1);
 
 export type Project = z.infer<typeof projectSchema>;
 export type ProjectStatus = (typeof projectStatusValues)[number];
+export type TimelineSourceStatus = (typeof timelineSourceStatusValues)[number];
 export type TimelineEvent = z.infer<typeof timelineEventSchema>;

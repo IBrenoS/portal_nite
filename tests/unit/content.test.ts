@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 
-import { getProjectBySlug, getProjects, getProjectSlugs, getTimelineEvents } from "@/biblioteca/conteudo";
+import {
+  getIndexableProjects,
+  getProjectBySlug,
+  getProjects,
+  getProjectSlugs,
+  getTimelineEvents,
+} from "@/biblioteca/conteudo";
 import { projectCollectionSchema, timelineCollectionSchema } from "@/biblioteca/esquemas";
 
 describe("conteudo estruturado", () => {
@@ -18,10 +24,16 @@ describe("conteudo estruturado", () => {
     );
   });
 
-  it("ordena eventos da timeline por ano", () => {
+  it("ordena eventos da timeline por ano e sequencia editorial", () => {
     const events = getTimelineEvents();
 
-    expect(events.map((event) => event.year)).toEqual([2026]);
+    expect(events.map((event) => event.sequence)).toEqual([1, 2, 3]);
+    expect(events.map((event) => event.year)).toEqual([2026, 2026, 2026]);
+    expect(events.map((event) => event.sourceStatus)).toEqual(["placeholder", "placeholder", "placeholder"]);
+  });
+
+  it("remove placeholders do conjunto indexavel para sitemap", () => {
+    expect(getIndexableProjects()).toEqual([]);
   });
 
   it("falha explicitamente quando projeto nao cumpre schema", () => {

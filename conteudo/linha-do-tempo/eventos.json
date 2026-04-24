@@ -1,10 +1,40 @@
 [
   {
+    "sequence": 1,
     "year": 2026,
-    "month": "TODO(nite-content): mes",
-    "title": "TODO(nite-content): marco institucional confirmado",
-    "description": "TODO(nite-content): substituir este item pelo primeiro marco institucional aprovado para a timeline publica.",
-    "category": "TODO(nite-content): timeline",
-    "projectSlug": "projeto-placeholder-nite"
+    "month": "Periodo pendente",
+    "title": "Marco demonstrativo: estruturacao do NITE",
+    "description": "Modelo editorial para apresentar a origem, a organizacao inicial e os primeiros acordos institucionais do nucleo quando os registros oficiais forem aprovados.",
+    "category": "Institucional",
+    "sourceStatus": "placeholder",
+    "contentNotice": "TODO(nite-content): substituir por data, descricao e imagem oficiais do marco de estruturacao.",
+    "image": "/images/timeline/marco-fundacao-demonstrativo.png",
+    "alt": "Mesa de trabalho tecnologica com notebook, placa eletronica e luzes azuis em ambiente institucional"
+  },
+  {
+    "sequence": 2,
+    "year": 2026,
+    "month": "Periodo pendente",
+    "title": "Marco demonstrativo: primeiros projetos aplicados",
+    "description": "Exemplo de como a timeline pode conectar aulas, prototipos e desenvolvimento de software a uma narrativa publica de aprendizado aplicado.",
+    "category": "Projetos",
+    "sourceStatus": "placeholder",
+    "contentNotice": "TODO(nite-content): substituir por projeto oficial autorizado e evidencias de publicacao.",
+    "image": "/images/timeline/marco-projetos-demonstrativo.png",
+    "alt": "Estudantes trabalhando em prototipo de robotica e codigo em laboratorio escuro com iluminacao azul",
+    "projectSlug": "software-aplicado-demonstrativo"
+  },
+  {
+    "sequence": 3,
+    "year": 2026,
+    "month": "Periodo pendente",
+    "title": "Marco demonstrativo: vitrine para comunidade",
+    "description": "Representacao visual para futuros momentos de apresentacao, mostra ou publicacao de resultados do NITE para a comunidade academica.",
+    "category": "Showcase",
+    "sourceStatus": "placeholder",
+    "contentNotice": "TODO(nite-content): substituir por evento, mostra ou entrega publica confirmada pela instituicao.",
+    "image": "/images/timeline/marco-showcase-demonstrativo.png",
+    "alt": "Apresentacao de projeto tecnologico em tela ampla para pequeno grupo em ambiente universitario",
+    "projectSlug": "dados-ia-demonstrativo"
   }
 ]

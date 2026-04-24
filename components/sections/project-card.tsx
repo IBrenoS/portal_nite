@@ -81,6 +81,7 @@ export function ProjectCard({
       <CardFooter>
         <Link
           href={href as Route}
+          aria-label={`Ver projeto: ${title}`}
           className="inline-flex min-h-11 items-center gap-2 rounded-md text-sm font-semibold text-brand-circuit-bright transition-colors hover:text-foreground"
         >
           Ver projeto
