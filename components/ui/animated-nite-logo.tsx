@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
-import { cn } from "@/lib/utils";
+import { AnimatedNiteLogoClient } from "@/components/ui/animated-nite-logo-client";
 
 type AnimatedNiteLogoProps = {
   className?: string;
@@ -17,13 +17,5 @@ const logoSvg = readFileSync(join(process.cwd(), "public/brand/nite/logo_final.s
   .replace('id="letter-n-2"', 'id="text-parte-4"');
 
 export function AnimatedNiteLogo({ className }: AnimatedNiteLogoProps) {
-  return (
-    <div
-      className={cn(
-        "animated-nite-logo mx-auto flex w-full items-center justify-center drop-shadow-[0_0_44px_rgb(51_212_255_/_0.22)] [&_svg]:h-auto [&_svg]:w-full",
-        className,
-      )}
-      dangerouslySetInnerHTML={{ __html: logoSvg }}
-    />
-  );
+  return <AnimatedNiteLogoClient className={className} svgMarkup={logoSvg} />;
 }

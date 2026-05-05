@@ -1109,31 +1109,31 @@ Objetivo: substituir a imagem atual pelo SVG controlável no DOM.
 
 ### Tasks
 
-- [ ] Localizar o componente/seção atual do hero.
-- [ ] Identificar a div/card onde a PNG atual está renderizada.
-- [ ] Remover a imagem PNG do bloco visual do hero.
-- [ ] Criar componente `AnimatedNiteLogo`.
-- [ ] Inserir o SVG `logo-final` inline ou por estratégia que preserve acesso aos IDs.
-- [ ] Confirmar que os IDs estão presentes no DOM:
-  - [ ] `#logo-final`
-  - [ ] `#nite-logo`
-  - [ ] `#brain`
-  - [ ] `#text`
-  - [ ] `#text-parte-1`
-  - [ ] `#text-parte-2`
-  - [ ] `#text-parte-3`
-  - [ ] `#text-parte-4`
-  - [ ] `#bulb`
-- [ ] Ajustar wrapper responsivo.
-- [ ] Preservar proporção do SVG.
-- [ ] Garantir que o hero continue visualmente equilibrado.
+- [x] Localizar o componente/seção atual do hero.
+- [x] Identificar a div/card onde a PNG atual está renderizada.
+- [x] Remover a imagem PNG do bloco visual do hero.
+- [x] Criar componente `AnimatedNiteLogo`.
+- [x] Inserir o SVG `logo-final` inline ou por estratégia que preserve acesso aos IDs.
+- [x] Confirmar que os IDs estão presentes no DOM:
+  - [x] `#logo-final`
+  - [x] `#nite-logo`
+  - [x] `#brain`
+  - [x] `#text`
+  - [x] `#text-parte-1`
+  - [x] `#text-parte-2`
+  - [x] `#text-parte-3`
+  - [x] `#text-parte-4`
+  - [x] `#bulb`
+- [x] Ajustar wrapper responsivo.
+- [x] Preservar proporção do SVG.
+- [x] Garantir que o hero continue visualmente equilibrado.
 
 ### Definition of Done
 
-- [ ] O SVG aparece no local correto.
-- [ ] A landing continua responsiva.
-- [ ] Os grupos do SVG podem ser selecionados via JS.
-- [ ] Nenhuma animação ainda é obrigatória nesta etapa.
+- [x] O SVG aparece no local correto.
+- [x] A landing continua responsiva.
+- [x] Os grupos do SVG podem ser selecionados via JS.
+- [x] Nenhuma animação ainda é obrigatória nesta etapa.
 
 ---
 
@@ -1143,22 +1143,22 @@ Objetivo: preparar o ambiente de animação com GSAP.
 
 ### Tasks
 
-- [ ] Instalar `gsap`.
-- [ ] Instalar `@gsap/react`.
-- [ ] Registrar `useGSAP`.
-- [ ] Criar `ref` no wrapper.
-- [ ] Escopar seletores dentro do componente.
-- [ ] Criar timeline principal.
-- [ ] Criar timeline idle.
-- [ ] Implementar cleanup automático.
-- [ ] Implementar fallback para `prefers-reduced-motion`.
+- [x] Instalar `gsap`.
+- [x] Instalar `@gsap/react`.
+- [x] Registrar `useGSAP`.
+- [x] Criar `ref` no wrapper.
+- [x] Escopar seletores dentro do componente.
+- [x] Criar timeline principal.
+- [x] Criar timeline idle.
+- [x] Implementar cleanup automático.
+- [x] Implementar fallback para `prefers-reduced-motion`.
 
 ### Definition of Done
 
-- [ ] GSAP roda sem erro no client.
-- [ ] Não há erro de SSR/hydration.
-- [ ] A timeline é criada apenas uma vez.
-- [ ] O cleanup funciona ao desmontar o componente.
+- [x] GSAP roda sem erro no client.
+- [x] Não há erro de SSR/hydration.
+- [x] A timeline é criada apenas uma vez.
+- [x] O cleanup funciona ao desmontar o componente.
 
 ---
 
@@ -1168,19 +1168,19 @@ Objetivo: criar a primeira impressão cinematográfica.
 
 ### Tasks
 
-- [ ] Animar entrada de `#nite-logo`.
-- [ ] Aplicar fade in.
-- [ ] Aplicar scale sutil.
-- [ ] Aplicar deslocamento vertical sutil.
-- [ ] Ajustar easing premium.
-- [ ] Garantir que a entrada não seja lenta demais.
-- [ ] Garantir que a entrada não seja brusca demais.
+- [x] Animar entrada de `#nite-logo`.
+- [x] Aplicar fade in.
+- [x] Aplicar scale sutil.
+- [x] Aplicar deslocamento vertical sutil.
+- [x] Ajustar easing premium.
+- [x] Garantir que a entrada não seja lenta demais.
+- [x] Garantir que a entrada não seja brusca demais.
 
 ### Definition of Done
 
-- [ ] A abertura comunica qualidade visual.
-- [ ] O logo não simplesmente “aparece”.
-- [ ] O movimento parece intencional e refinado.
+- [x] A abertura comunica qualidade visual.
+- [x] O logo não simplesmente “aparece”.
+- [x] O movimento parece intencional e refinado.
 
 ---
 
@@ -1190,18 +1190,18 @@ Objetivo: transformar o bulb/bocal na origem visual da energia.
 
 ### Tasks
 
-- [ ] Animar `#bulb` antes do cérebro.
-- [ ] Criar pulso inicial no bulb.
-- [ ] Aplicar brilho/drop-shadow controlado.
-- [ ] Aplicar leve scale/vibração.
-- [ ] Sincronizar bulb com início da energia cerebral.
-- [ ] Estabilizar bulb após o pulso.
+- [x] Animar `#bulb` antes do cérebro.
+- [x] Criar pulso inicial no bulb.
+- [x] Aplicar brilho/drop-shadow controlado.
+- [x] Aplicar leve scale/vibração.
+- [x] Sincronizar bulb com início da energia cerebral.
+- [x] Estabilizar bulb após o pulso.
 
 ### Definition of Done
 
-- [ ] O bulb parece gerar energia.
-- [ ] O usuário entende visualmente que a energia nasce ali.
-- [ ] O efeito não fica exagerado.
+- [x] O bulb parece gerar energia.
+- [x] O usuário entende visualmente que a energia nasce ali.
+- [x] O efeito não fica exagerado.
 
 ---
 
@@ -1211,21 +1211,21 @@ Objetivo: criar a sensação de eletricidade subindo e ativando o brain.
 
 ### Tasks
 
-- [ ] Selecionar elementos internos de `#brain`.
-- [ ] Ordenar elementos por posição vertical com `getBBox()`.
-- [ ] Criar stagger de baixo para cima.
-- [ ] Animar opacidade/brightness dos paths.
-- [ ] Aplicar glow controlado.
-- [ ] Detectar strokes e aplicar dash animation quando disponível.
-- [ ] Detectar fills e aplicar animação por brightness/opacidade.
-- [ ] Ajustar duração para parecer fluxo, não piscada.
-- [ ] Testar variação de stagger.
+- [x] Selecionar elementos internos de `#brain`.
+- [x] Ordenar elementos por posição vertical com `getBBox()`.
+- [x] Criar stagger de baixo para cima.
+- [x] Animar opacidade/brightness dos paths.
+- [x] Aplicar glow controlado.
+- [x] Detectar strokes e aplicar dash animation quando disponível.
+- [x] Detectar fills e aplicar animação por brightness/opacidade.
+- [x] Ajustar duração para parecer fluxo, não piscada.
+- [x] Testar variação de stagger.
 
 ### Definition of Done
 
-- [ ] A energia aparenta subir do bulb para o cérebro.
-- [ ] Os circuitos aparentam estar sendo percorridos.
-- [ ] O cérebro ganha vida visualmente.
+- [x] A energia aparenta subir do bulb para o cérebro.
+- [x] Os circuitos aparentam estar sendo percorridos.
+- [x] O cérebro ganha vida visualmente.
 
 ---
 
@@ -1235,20 +1235,20 @@ Objetivo: energizar os pontinhos e nós do circuito cerebral.
 
 ### Tasks
 
-- [ ] Criar heurística para detectar elementos pequenos no `#brain`.
-- [ ] Separar candidatos a pontos/nós por área de `getBBox()`.
-- [ ] Aplicar scale sutil nos nós.
-- [ ] Aplicar brightness/glow nos nós.
-- [ ] Usar stagger irregular.
-- [ ] Criar pequenos pulsos durante a abertura.
-- [ ] Criar micro-pulsos ocasionais no idle.
-- [ ] Ajustar opacidade para não poluir.
+- [x] Criar heurística para detectar elementos pequenos no `#brain`.
+- [x] Separar candidatos a pontos/nós por área de `getBBox()`.
+- [x] Aplicar scale sutil nos nós.
+- [x] Aplicar brightness/glow nos nós.
+- [x] Usar stagger irregular.
+- [x] Criar pequenos pulsos durante a abertura.
+- [x] Criar micro-pulsos ocasionais no idle.
+- [x] Ajustar opacidade para não poluir.
 
 ### Definition of Done
 
-- [ ] Os pontinhos parecem receber carga elétrica.
-- [ ] A ativação parece orgânica.
-- [ ] O cérebro parece uma rede neural/circuito vivo.
+- [x] Os pontinhos parecem receber carga elétrica.
+- [x] A ativação parece orgânica.
+- [x] O cérebro parece uma rede neural/circuito vivo.
 
 ---
 
@@ -1258,19 +1258,19 @@ Objetivo: criar flashes cinematográficos de eletricidade dentro do cérebro.
 
 ### Tasks
 
-- [ ] Identificar candidatos a raio entre paths/lines/polylines do `#brain`.
-- [ ] Aplicar flashes rápidos com duração curta.
-- [ ] Usar `steps(1)` ou easing seco para descarga.
-- [ ] Variar timing dos flashes.
-- [ ] Sincronizar descargas com pico do bulb.
-- [ ] Garantir que o efeito não prejudique a leitura do logo.
-- [ ] Reduzir intensidade em mobile se necessário.
+- [x] Identificar candidatos a raio entre paths/lines/polylines do `#brain`.
+- [x] Aplicar flashes rápidos com duração curta.
+- [x] Usar `steps(1)` ou easing seco para descarga.
+- [x] Variar timing dos flashes.
+- [x] Sincronizar descargas com pico do bulb.
+- [x] Garantir que o efeito não prejudique a leitura do logo.
+- [x] Reduzir intensidade em mobile se necessário.
 
 ### Definition of Done
 
-- [ ] Há sensação clara de eletricidade interna.
-- [ ] Os raios parecem intencionais e cinematográficos.
-- [ ] O efeito não vira ruído visual.
+- [x] Há sensação clara de eletricidade interna.
+- [x] Os raios parecem intencionais e cinematográficos.
+- [x] O efeito não vira ruído visual.
 
 ---
 
@@ -1280,20 +1280,20 @@ Objetivo: fazer a tipografia reagir à energia final.
 
 ### Tasks
 
-- [ ] Selecionar `#text > g`.
-- [ ] Animar letras separadamente.
-- [ ] Criar brilho por letra.
-- [ ] Aplicar shimmer discreto.
-- [ ] Sincronizar texto após pico do cérebro.
-- [ ] Retornar texto para estado legível e estável.
-- [ ] Testar variação de stagger.
-- [ ] Garantir que o nome permaneça legível.
+- [x] Selecionar `#text > g`.
+- [x] Animar letras separadamente.
+- [x] Criar brilho por letra.
+- [x] Aplicar shimmer discreto.
+- [x] Sincronizar texto após pico do cérebro.
+- [x] Retornar texto para estado legível e estável.
+- [x] Testar variação de stagger.
+- [x] Garantir que o nome permaneça legível.
 
 ### Definition of Done
 
-- [ ] O nome NITE participa da narrativa.
-- [ ] As letras reagem ao pulso final.
-- [ ] O efeito é premium e não chamativo demais.
+- [x] O nome NITE participa da narrativa.
+- [x] As letras reagem ao pulso final.
+- [x] O efeito é premium e não chamativo demais.
 
 ---
 
