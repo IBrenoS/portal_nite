@@ -42,14 +42,11 @@ test("mantem layout mobile sem scroll horizontal e com alvos de toque acessiveis
   }
 
   const secondaryBox = await secondaryCta.boundingBox();
-  const brandPanelBox = await page
-    .getByText("Tecnologia aplicada", { exact: true })
-    .locator("xpath=ancestor::div[contains(@class,'brand-panel')][1]")
-    .boundingBox();
+  const logoBox = await page.locator("#logo-final").boundingBox();
 
   expect(secondaryBox).not.toBeNull();
-  expect(brandPanelBox).not.toBeNull();
-  expect(secondaryBox!.y + secondaryBox!.height).toBeLessThanOrEqual(brandPanelBox!.y);
+  expect(logoBox).not.toBeNull();
+  expect(secondaryBox!.y + secondaryBox!.height).toBeLessThanOrEqual(logoBox!.y);
 });
 
 test("abre uma pagina interna de projeto a partir do slug estruturado", async ({ page }) => {

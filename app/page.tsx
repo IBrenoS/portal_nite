@@ -3,7 +3,6 @@ import {
   ArrowRightIcon,
   AtSignIcon,
   CircuitBoardIcon,
-  CompassIcon,
   GraduationCapIcon,
   HandshakeIcon,
   ShieldCheckIcon,
@@ -21,7 +20,6 @@ import { SectionHeader } from "@/components/sections/section-header";
 import { TimelineItem } from "@/components/sections/timeline-item";
 import { AnimatedNiteLogo } from "@/components/ui/animated-nite-logo";
 import { ButtonPrimaryLink, ButtonSecondaryLink } from "@/components/ui/brand-button";
-import { Chip } from "@/components/ui/chip";
 
 const workFronts = [
   {
@@ -88,21 +86,8 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="relative mt-2 sm:mt-0 lg:min-h-[34rem]">
-              <div className="absolute -right-12 top-6 h-56 w-56 rounded-full bg-brand-circuit-bright/10 blur-3xl sm:h-72 sm:w-72" />
-              <div className="brand-panel relative rounded-lg border border-border p-4 sm:p-6 lg:absolute lg:inset-y-10 lg:left-10 lg:right-0">
-                <div className="brand-circuit-lines absolute inset-4 rounded-md border border-brand-circuit-bright/15" />
-                <div className="relative flex h-full min-h-64 flex-col justify-between gap-8">
-                  <div className="flex items-center justify-between gap-4">
-                    <Chip variant="metal">Tecnologia aplicada</Chip>
-                    <CompassIcon className="text-brand-circuit-bright" aria-hidden="true" />
-                  </div>
-                  <AnimatedNiteLogo className="max-w-[11.5rem] sm:max-w-[13.5rem] lg:max-w-[15rem]" />
-                  <p className="max-w-sm text-sm leading-6 text-muted-foreground">
-                    Um ambiente para aproximar repertório técnico, colaboração acadêmica e novas experiências.
-                  </p>
-                </div>
-              </div>
+            <div className="relative mt-2 flex items-center justify-center sm:mt-0 lg:min-h-[34rem]">
+              <AnimatedNiteLogo className="w-full max-w-[13rem] sm:max-w-[16rem] lg:max-w-[18rem]" />
             </div>
           </Container>
         </section>
