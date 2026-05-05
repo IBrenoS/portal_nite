@@ -22,5 +22,19 @@ describe("HomePage", () => {
     expect(screen.getByText("Primeiros projetos aplicados")).toBeInTheDocument();
     expect(screen.getByText("Quer acompanhar a evolução do NITE?")).toBeInTheDocument();
     expect(screen.getAllByText("@nite.uj")).toHaveLength(2);
+
+    for (const id of [
+      "logo-final",
+      "nite-logo",
+      "brain",
+      "text",
+      "text-parte-1",
+      "text-parte-2",
+      "text-parte-3",
+      "text-parte-4",
+      "bulb",
+    ]) {
+      expect(document.querySelector(`#${id}`)).toBeInTheDocument();
+    }
   });
 });

@@ -19,7 +19,7 @@ import { SiteHeader } from "@/components/layout/site-header";
 import { ProjectCard } from "@/components/sections/project-card";
 import { SectionHeader } from "@/components/sections/section-header";
 import { TimelineItem } from "@/components/sections/timeline-item";
-import { BrandMark } from "@/components/ui/brand-mark";
+import { AnimatedNiteLogo } from "@/components/ui/animated-nite-logo";
 import { ButtonPrimaryLink, ButtonSecondaryLink } from "@/components/ui/brand-button";
 import { Chip } from "@/components/ui/chip";
 
@@ -97,7 +97,7 @@ export default function HomePage() {
                     <Chip variant="metal">Tecnologia aplicada</Chip>
                     <CompassIcon className="text-brand-circuit-bright" aria-hidden="true" />
                   </div>
-                  <BrandMark className="mx-auto size-48 shadow-[0_0_80px_rgb(51_212_255_/_0.2)] sm:size-64 lg:size-72" priority />
+                  <AnimatedNiteLogo className="max-w-[11.5rem] sm:max-w-[13.5rem] lg:max-w-[15rem]" />
                   <p className="max-w-sm text-sm leading-6 text-muted-foreground">
                     Um ambiente para aproximar repertório técnico, colaboração acadêmica e novas experiências.
                   </p>
