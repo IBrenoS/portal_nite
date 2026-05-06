@@ -41,12 +41,17 @@ test("mantem layout mobile sem scroll horizontal e com alvos de toque acessiveis
     expect(box!.width).toBeGreaterThanOrEqual(44);
   }
 
-  const secondaryBox = await secondaryCta.boundingBox();
+  const headingBox = await page
+    .getByRole("heading", {
+      level: 1,
+      name: /NITE transforma ideias em projetos/i,
+    })
+    .boundingBox();
   const logoBox = await page.locator("#logo-final").boundingBox();
 
-  expect(secondaryBox).not.toBeNull();
+  expect(headingBox).not.toBeNull();
   expect(logoBox).not.toBeNull();
-  expect(secondaryBox!.y + secondaryBox!.height).toBeLessThanOrEqual(logoBox!.y);
+  expect(logoBox!.y + logoBox!.height).toBeLessThanOrEqual(headingBox!.y);
 });
 
 test("mantem o hero responsivo, decorativo e navegavel por teclado", async ({ page }) => {

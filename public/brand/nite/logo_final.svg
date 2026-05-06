@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg id="logo-final" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 690.261 1118.783">
+<svg id="logo-final" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 690.261 1118.783">
+  <defs>
+    <linearGradient id="Gradiente_sem_nome_3" data-name="Gradiente sem nome 3" x1="-1.631" y1="1118.506" x2="-.631" y2="1118.506" gradientTransform="translate(923.905 718702.539) scale(287 -642)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+      <stop offset=".45" stop-color="#fff" stop-opacity=".25"/>
+      <stop offset=".5" stop-color="#7df9ff" stop-opacity=".95"/>
+      <stop offset=".55" stop-color="#fff" stop-opacity=".25"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
   <g id="nite-logo">
     <g id="bulb">
       <polygon points="551.029 882.141 551.036 884.757 551.032 908.246 550.028 908.26 550.02 907.11 550.013 905.174 550.018 883.113 550.062 882.179 551.029 882.141" fill="#cecdcd"/>
@@ -1464,6 +1473,53 @@
       <path d="M203.326,314.636l-18.369.048.081-.654c.124-.52,1.446.25,2.481-1.598.626-1.118,2.303-2.446,3.567-2.468l9.75-.173c1.403-.025,2.812.625,3.278,1.975l-1.314,1.307.526,1.564h0Z" fill="#02b9f7"/>
       <path d="M128.418,248.347l-1.116.007.774-.301c.138-.04.198.124.342.295h0Z" fill="#02b9f7"/>
       <path d="M351.021,804.95c-2.761,1.252-5.013.967-7.588-.087-3.505-1.436-7.52-3.744-8.284-7.99l-.1-7.974c2.387-1.758,1.992-3.626,5.103-5.15.706-.346,2.483-1.439,2.483-2.301l-.018-63.935c0-1.277-.594-3.155-.02-4.048,1.444-2.25,3.474-2.832,5.8-1.776,1.042.473,1.898,1.514,1.923,2.66l.198,9.242.038,58.395c5.393,1.675,10.246,8.013,8.904,12.566l-1.219,4.134c-.267.906-1.498,2.676-2.221,3.337-1.347,1.233-3.257,2.138-4.998,2.927h0ZM341.391,795.548c1.159,2.771,3.376,4.17,6.196,3.949,3.382-.265,5.7-3.051,5.682-6.154-.018-2.963-2.217-5.608-5.025-6.02-3.166-.464-5.995,1.146-7.084,4.274-.41,1.178-.306,2.667.231,3.951h0Z" fill="#0271d7"/>
+    </g>
+  </g>
+  <g id="energy-overlay">
+    <g id="text-shimmer-mask" data-overlay-group="text-shimmer-mask">
+      <path id="text-shimmer-sweep-main" d="M455.82,943l287-642" data-shimmer="nite-sweep" vector-effect="non-scaling-stroke" fill="none" stroke="url(#Gradiente_sem_nome_3)" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".9" stroke-width="18"/>
+      <path id="text-shimmer-sweep-soft" d="M430.82,669l300-230" data-shimmer="nite-sweep-soft" vector-effect="non-scaling-stroke" fill="none" stroke="rgba(255, 255, 255, .28)" stroke-linecap="round" stroke-linejoin="round" stroke-width="7"/>
+      <path id="text-shimmer-edge-glow" d="M511.82,247c71,30,154,31,211-14" data-shimmer="edge-glow" vector-effect="non-scaling-stroke" fill="none" stroke="rgba(125, 249, 255, .34)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5"/>
+    </g>
+    <g id="spark-heads" data-overlay-group="spark-heads">
+      <circle id="spark-head-01" cx="143.82" cy="81" r="10" data-spark="node" fill="#efffff" isolation="isolate" opacity=".98" stroke="#7df9ff" stroke-width="5"/>
+      <circle id="spark-head-02" cx="291.82" cy="10" r="10" data-spark="node" fill="#efffff" isolation="isolate" opacity=".98" stroke="#7df9ff" stroke-width="5"/>
+      <circle id="spark-head-03" cx="67.82" cy="193" r="9" data-spark="node" fill="#efffff" isolation="isolate" opacity=".95" stroke="#7df9ff" stroke-width="4.5"/>
+      <circle id="spark-head-04" cx="-3.18" cy="387" r="9" data-spark="node" fill="#efffff" isolation="isolate" opacity=".95" stroke="#7df9ff" stroke-width="4.5"/>
+      <circle id="spark-head-05" cx="34.82" cy="467" r="8" data-spark="node" fill="#efffff" isolation="isolate" opacity=".92" stroke="#7df9ff" stroke-width="4"/>
+      <circle id="spark-head-06" cx="60.82" cy="642" r="8" data-spark="node" fill="#efffff" isolation="isolate" opacity=".92" stroke="#7df9ff" stroke-width="4"/>
+      <circle id="spark-head-07" cx="144.82" cy="815" r="8" data-spark="node" fill="#efffff" isolation="isolate" opacity=".92" stroke="#7df9ff" stroke-width="4"/>
+      <circle id="spark-head-08" cx="247.82" cy="1001" r="8" data-spark="node" fill="#efffff" isolation="isolate" opacity=".9" stroke="#7df9ff" stroke-width="4"/>
+      <circle id="spark-head-09" cx="346.82" cy="396" r="8" data-spark="node" fill="#efffff" isolation="isolate" opacity=".92" stroke="#7df9ff" stroke-width="4"/>
+      <circle id="spark-head-10" cx="362.82" cy="427" r="8" data-spark="node" fill="#efffff" isolation="isolate" opacity=".9" stroke="#7df9ff" stroke-width="4"/>
+      <circle id="spark-head-11" cx="334.82" cy="527" r="8" data-spark="node" fill="#efffff" isolation="isolate" opacity=".9" stroke="#7df9ff" stroke-width="4"/>
+      <circle id="spark-head-12" cx="353.82" cy="582" r="8" data-spark="node" fill="#efffff" isolation="isolate" opacity=".9" stroke="#7df9ff" stroke-width="4"/>
+      <circle id="spark-head-13" cx="335.82" cy="757" r="8" data-spark="node" fill="#efffff" isolation="isolate" opacity=".9" stroke="#7df9ff" stroke-width="4"/>
+      <circle id="spark-head-14" cx="328.82" cy="1093" r="11" data-spark="node" fill="#fff" isolation="isolate" opacity=".98" stroke="#7df9ff" stroke-width="6"/>
+    </g>
+    <g id="electric-arcs" data-overlay-group="electric-arcs">
+      <path id="electric-arc-jump-01" d="M193.82,308l22-14,15,13,23-25,17,15,22-20" data-arc="jump" vector-effect="non-scaling-stroke" fill="none" stroke="rgba(255, 255, 255, .98)" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.4"/>
+      <path id="electric-arc-branch-01" d="M269.82,633l21,27-9,28,28,25-8,28,26,28" data-arc="branch" vector-effect="non-scaling-stroke" fill="none" stroke="rgba(255, 255, 255, .95)" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.2"/>
+      <path id="electric-arc-jump-02" d="M353.82,204l21,21-10,23,23,19" data-arc="jump" vector-effect="non-scaling-stroke" fill="none" stroke="rgba(255, 255, 255, .92)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.8"/>
+      <path id="electric-arc-micro-01" d="M114.82,421l23-10,15,17,22-12" data-arc="micro" vector-effect="non-scaling-stroke" fill="none" stroke="rgba(191, 255, 255, .9)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.8"/>
+    </g>
+    <g id="energy-routes" data-overlay-group="energy-routes">
+      <path id="energy-route-primary-01" d="M143.82,81l77,78v111l126,126" data-route="primary" vector-effect="non-scaling-stroke" fill="none" stroke="rgba(125, 249, 255, .9)" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/>
+      <path id="energy-route-primary-02" d="M291.82,10l57,54v119l40,40" data-route="primary" vector-effect="non-scaling-stroke" fill="none" stroke="rgba(125, 249, 255, .9)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5.5"/>
+      <path id="energy-route-primary-03" d="M67.82,193l113,114v38l85,82h97" data-route="primary" vector-effect="non-scaling-stroke" fill="none" stroke="rgba(125, 249, 255, .88)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5.5"/>
+      <path id="energy-route-primary-04" d="M-3.18,387h134l60,51h140" data-route="primary" vector-effect="non-scaling-stroke" fill="none" stroke="rgba(125, 249, 255, .88)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5.5"/>
+      <path id="energy-route-secondary-01" d="M34.82,467h91l64,60h145" data-route="secondary" vector-effect="non-scaling-stroke" fill="none" stroke="rgba(191, 255, 255, .8)" stroke-linecap="round" stroke-linejoin="round" stroke-width="4.2"/>
+      <path id="energy-route-secondary-02" d="M60.82,642h65l55-60h172" data-route="secondary" vector-effect="non-scaling-stroke" fill="none" stroke="rgba(191, 255, 255, .78)" stroke-linecap="round" stroke-linejoin="round" stroke-width="4.2"/>
+      <path id="energy-route-secondary-03" d="M144.82,815l73-71h63l60-61" data-route="secondary" vector-effect="non-scaling-stroke" fill="none" stroke="rgba(191, 255, 255, .78)" stroke-linecap="round" stroke-linejoin="round" stroke-width="4.2"/>
+      <path id="energy-route-secondary-04" d="M247.82,1001v-152l88-92,22-40" data-route="secondary" vector-effect="non-scaling-stroke" fill="none" stroke="rgba(191, 255, 255, .75)" stroke-linecap="round" stroke-linejoin="round" stroke-width="4.2"/>
+      <path id="energy-route-micro-01" d="M117.82,159h67l48,49v140" data-route="micro" vector-effect="non-scaling-stroke" fill="none" stroke="rgba(239, 255, 255, .72)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.8"/>
+      <path id="energy-route-micro-02" d="M65.82,677h65l70-45" data-route="micro" vector-effect="non-scaling-stroke" fill="none" stroke="rgba(239, 255, 255, .72)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.8"/>
+      <path id="energy-route-micro-03" d="M286.82,125v116l80,80" data-route="micro" vector-effect="non-scaling-stroke" fill="none" stroke="rgba(239, 255, 255, .72)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.8"/>
+    </g>
+    <g id="energy-main-rise" data-overlay-group="energy-main-rise">
+      <path id="energy-main-rise-bulb-to-brain-primary" d="M328.82,1093c-6-58-38-96-45-151-6-52,29-100,25-155" data-route="bulb-to-brain-primary" vector-effect="non-scaling-stroke" fill="none" stroke="rgba(125, 249, 255, .95)" stroke-linecap="round" stroke-linejoin="round" stroke-width="7"/>
+      <path id="energy-main-rise-bulb-to-brain-left" d="M302.82,1094c-18-63-65-96-82-153-18-60,13-112-12-164" data-route="bulb-to-brain-left" vector-effect="non-scaling-stroke" fill="none" stroke="rgba(191, 255, 255, .85)" stroke-linecap="round" stroke-linejoin="round" stroke-width="4.5"/>
+      <path id="energy-main-rise-bulb-to-brain-right" d="M353.82,1094c17-64-5-125,13-182,16-53-6-106,11-163" data-route="bulb-to-brain-right" vector-effect="non-scaling-stroke" fill="none" stroke="rgba(56, 223, 255, .8)" stroke-linecap="round" stroke-linejoin="round" stroke-width="4.5"/>
     </g>
   </g>
 </svg>

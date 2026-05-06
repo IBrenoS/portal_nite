@@ -1,1418 +1,1291 @@
-# Specs.md — Transformação GSAP do Hero SVG NITE
+# Specs SVG — NITE Cinematic Electric System
 
-## 1. Objetivo
+## 1. Objetivo do documento
 
-Transformar o bloco visual atual da landing page do NITE em uma experiência hero premium, cinematográfica e tecnológica usando GSAP.
+Este documento substitui a abordagem anterior de animação baseada em **detecção automática de elementos do SVG** por uma execução com **direção artística, contrato técnico e critérios verificáveis**.
 
-Hoje, a landing possui uma área onde existe um card/div com uma imagem PNG da marca. Essa área deve ser substituída pela versão SVG vetorial do logo final, preservando a composição da página e elevando a percepção visual do hero.
+A animação do logo NITE deve deixar de parecer apenas um `glow/pulse` genérico e passar a comunicar, de forma evidente:
 
-A animação deve transmitir:
+> Uma carga elétrica nasce na lâmpada, sobe até o cérebro, percorre rotas neurais/circuitos em forma de rajadas, ativa nós de energia e culmina no nome NITE acendendo com brilho metálico premium.
 
-- energia;
-- eletricidade;
-- tecnologia aplicada;
-- cérebro/circuito vivo;
-- núcleo de inovação;
-- conexão entre conhecimento, tecnologia e prática;
-- abertura premium, institucional e cinematográfica.
-
-A peça principal será o SVG `logo-final`, com foco na animação do cérebro/circuito, do bocal/bulb e do nome NITE.
+O resultado esperado deve se aproximar da qualidade percebida em landings premium como Resend, Linear, Raycast e Anthropic: visual limpo, intencional, memorável, com movimento elegante e sem excesso visual.
 
 ---
 
-## 2. Contexto visual da landing
+## 2. Problema da versão anterior
 
-A landing publicada apresenta o NITE como:
+A versão anterior falhou porque descrevia uma intenção visual, mas não estabelecia um contrato técnico suficientemente rígido.
 
-> UNIJORGE / Núcleo de Inovação, Tecnologia e Experiência
+O agente interpretou o SVG como uma massa de elementos vetoriais e tentou inferir sozinho quais partes eram circuitos animáveis. Isso produziu um resultado bonito, mas incorreto para a intenção original.
 
-Headline atual:
+### Problemas identificados
 
-> NITE transforma ideias em projetos, aprendizado em prática e tecnologia em impacto.
+* A animação dependia de heurísticas como `getBBox`, área, proporção e posição.
+* Nem todos os circuitos eram considerados elegíveis.
+* O efeito visual ficou mais próximo de iluminação suave do que de eletricidade real.
+* O cérebro parecia “pulsar” ou “brilhar”, mas não recebia rajadas claras de energia.
+* O nome NITE não tinha um clímax visual suficientemente evidente.
+* A timeline não tinha uma narrativa cinematográfica clara: origem → condução → descarga → ativação → idle.
 
-Texto de apoio atual:
+### Decisão obrigatória
 
-> O NITE é o núcleo que conecta universidade, inovação, prática e desenvolvimento tecnológico em experiências e projetos reais. Explore iniciativas, marcos e frentes de trabalho em uma experiência clara, visual e direta.
+A partir desta versão, **não usar detecção automática como fonte principal da animação**.
 
-A animação GSAP deve reforçar essa narrativa: o NITE como núcleo vivo, energético, tecnológico e conectado.
+A animação deve usar a camada técnica explícita criada no SVG:
+
+```txt
+#energy-overlay
+```
+
+Essa camada passa a ser a fonte de verdade para a eletricidade.
 
 ---
 
-## 3. Local de aplicação
+## 3. Princípio visual
 
-A transformação deve acontecer na área visual principal do hero, no local onde atualmente existe:
+A animação deve ser construída como um sistema em camadas:
 
-- uma `div`/card visual;
-- a imagem PNG embutida;
-- a representação estática do logo.
+```txt
+SVG base original
+├── #nite-logo
+│   ├── #bulb
+│   ├── #brain
+│   └── #text
+└── #energy-overlay
+    ├── #energy-main-rise
+    ├── #energy-routes
+    ├── #electric-arcs
+    ├── #spark-heads
+    └── #text-shimmer-mask
+```
 
-A implementação deve substituir esse bloco por um componente animado com SVG inline ou SVG importado de forma controlável pelo DOM.
+### Regra principal
 
-### Resultado esperado
+O SVG original continua sendo a arte base. A camada `#energy-overlay` é responsável por criar a ilusão de eletricidade real.
 
-- O hero deve manter a estrutura geral da landing.
-- O SVG deve ocupar o lugar da imagem atual.
-- O novo bloco deve parecer integrado ao design existente.
-- A animação deve ser visível logo na abertura da página.
-- A animação deve continuar com um loop sutil depois da sequência inicial.
+Não tentar transformar todos os paths originais do cérebro em raios. A eletricidade deve ser desenhada e animada por cima do SVG base usando paths dedicados.
 
 ---
 
-## 4. Arquivo SVG base
+## 4. Contrato técnico obrigatório do SVG
 
-Arquivo visual principal:
+Antes de implementar qualquer animação, o agente deve validar a existência dos seletores abaixo.
 
-```txt
-logo_final.svg
-```
-
-Arquivo de origem vetorial:
-
-```txt
-logo_final.ai
-```
-
-IDs/grupos conhecidos no SVG exportado:
-
-```txt
-logo-final
-└── nite-logo
-    ├── brain
-    ├── text
-    │   ├── text-parte-1
-    │   ├── text-parte-2
-    │   ├── text-parte-3
-    │   └── text-parte-4
-    └── bulb
-```
-
-IDs principais detectados:
+### Seletores obrigatórios
 
 ```txt
 #logo-final
 #nite-logo
+#bulb
 #brain
 #text
-#text-parte-1
-#text-parte-2
-#text-parte-3
-#text-parte-4
-#bulb
+#energy-overlay
+#text-shimmer-mask
+#spark-heads
+#electric-arcs
+#energy-routes
+#energy-main-rise
 ```
 
-Observação de implementação:
-
-O grupo `brain` contém múltiplos elementos vetoriais internos, incluindo paths, polygons, line, polyline e rect. A animação deve trabalhar com esses elementos internos como partes do circuito cerebral.
-
-Seletores úteis:
-
-```js
-const root = container.current.querySelector("#logo-final");
-const logo = container.current.querySelector("#nite-logo");
-const brain = container.current.querySelector("#brain");
-const bulb = container.current.querySelector("#bulb");
-const text = container.current.querySelector("#text");
-
-const letters = gsap.utils.toArray("#text > g");
-const brainPaths = gsap.utils.toArray("#brain path");
-const brainPolygons = gsap.utils.toArray("#brain polygon");
-const brainLines = gsap.utils.toArray("#brain line, #brain polyline");
-const brainNodes = gsap.utils.toArray("#brain circle, #brain ellipse, #brain rect, #brain polygon");
-```
-
----
-
-## 5. Direção criativa
-
-A animação deve se comportar como uma sequência de ativação tecnológica.
-
-### Conceito
-
-O `bulb` funciona como origem/conector da energia. Ele energiza a composição, envia pulsos para o cérebro, ativa os caminhos internos de circuito e faz o nome NITE reagir ao fluxo elétrico.
-
-### Narrativa visual
-
-1. A tela carrega.
-2. O logo aparece de forma premium.
-3. O bulb/bocal desperta como fonte de energia.
-4. Uma carga elétrica sobe para o cérebro.
-5. Circuitos internos acendem em sequência.
-6. Pontos e nós do cérebro pulsam.
-7. Descargas internas em forma de raio aparecem brevemente.
-8. O cérebro atinge um pico luminoso.
-9. O nome NITE recebe reflexo/brilho controlado.
-10. A animação entra em modo idle loop, com energia viva e sutil.
-
----
-
-## 6. Tom da animação
-
-A animação deve parecer:
-
-- premium;
-- tecnológica;
-- elegante;
-- cinematográfica;
-- precisa;
-- institucional;
-- futurista;
-- sem exagero visual;
-- sem aparência de banner piscante;
-- sem poluição de efeitos.
-
-### Referência de sensação
-
-A composição deve lembrar uma ativação de sistema neural/cibernético, como se o núcleo estivesse sendo energizado por uma corrente inteligente.
-
----
-
-## 7. Regras visuais
-
-- Usar azul/ciano como cor primária da energia.
-- Preservar a identidade metálica/tecnológica do logo.
-- Criar contrastes de brilho com moderação.
-- Evitar flicker excessivo.
-- Evitar loop muito rápido.
-- Priorizar ritmo e intenção.
-- O visual deve continuar legível.
-- A tipografia NITE não deve perder leitura.
-- O cérebro deve ser o centro da atenção visual.
-- O bulb deve parecer a origem/conector da energia.
-
----
-
-## 8. Estratégia técnica
-
-### Biblioteca principal
-
-Usar GSAP como motor principal da animação.
-
-Dependências sugeridas:
-
-```bash
-npm install gsap @gsap/react
-```
-
-Uso em React/Next:
-
-```tsx
-"use client";
-
-import { useRef } from "react";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-
-gsap.registerPlugin(useGSAP);
-```
-
-### Abordagem
-
-A animação deve ser implementada como componente isolado, preferencialmente:
+### Seletores de paths/círculos animáveis
 
 ```txt
-components/NiteHeroLogo.tsx
+#energy-main-rise path
+#energy-routes path
+#electric-arcs path
+#spark-heads circle
+#text-shimmer-mask path
 ```
 
-ou:
+### Atributos obrigatórios esperados
+
+Os elementos de energia devem possuir pelo menos parte destes atributos:
 
 ```txt
-components/AnimatedNiteLogo.tsx
+data-overlay-group
+data-route
+data-arc
+data-spark
+data-shimmer
+vector-effect="non-scaling-stroke"
+fill="none"
+stroke-linecap="round"
+stroke-linejoin="round"
 ```
 
-O componente deve:
+### Validação inicial obrigatória
 
-- receber o SVG inline ou importar o SVG de forma que seus IDs sejam acessíveis;
-- usar `useRef`;
-- usar `useGSAP`;
-- escopar seletores dentro do container;
-- criar uma timeline principal;
-- criar uma timeline idle separada;
-- respeitar `prefers-reduced-motion`;
-- fazer cleanup corretamente pelo `useGSAP`.
+Implementar uma função de validação antes da timeline principal:
 
----
+```ts
+function validateNiteSvgContract(root: SVGSVGElement | HTMLElement) {
+  const required = [
+    '#logo-final',
+    '#nite-logo',
+    '#bulb',
+    '#brain',
+    '#text',
+    '#energy-overlay',
+    '#text-shimmer-mask',
+    '#spark-heads',
+    '#electric-arcs',
+    '#energy-routes',
+    '#energy-main-rise',
+  ];
 
-## 9. Estrutura recomendada do componente
+  const missing = required.filter((selector) => !root.querySelector(selector));
 
-```tsx
-"use client";
+  const counts = {
+    mainRise: root.querySelectorAll('#energy-main-rise path').length,
+    routes: root.querySelectorAll('#energy-routes path').length,
+    arcs: root.querySelectorAll('#electric-arcs path').length,
+    sparks: root.querySelectorAll('#spark-heads circle').length,
+    shimmer: root.querySelectorAll('#text-shimmer-mask path').length,
+    overlays: root.querySelectorAll('#energy-overlay').length,
+  };
 
-import { useRef } from "react";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
+  if (missing.length > 0) {
+    throw new Error(`[NITE SVG] Missing required selectors: ${missing.join(', ')}`);
+  }
 
-gsap.registerPlugin(useGSAP);
+  if (counts.overlays !== 1) {
+    throw new Error(`[NITE SVG] Expected exactly one #energy-overlay. Found: ${counts.overlays}`);
+  }
 
-export function AnimatedNiteLogo() {
-  const container = useRef<HTMLDivElement | null>(null);
+  if (counts.mainRise < 3) {
+    throw new Error('[NITE SVG] Expected at least 3 bulb-to-brain energy paths.');
+  }
 
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia();
+  if (counts.routes < 8) {
+    throw new Error('[NITE SVG] Expected at least 8 brain energy routes.');
+  }
 
-      mm.add("(prefers-reduced-motion: reduce)", () => {
-        gsap.set("#nite-logo", { opacity: 1, scale: 1 });
-        return () => {};
-      });
+  if (counts.arcs < 3) {
+    throw new Error('[NITE SVG] Expected at least 3 electric arc paths.');
+  }
 
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        const logo = "#nite-logo";
-        const brain = "#brain";
-        const bulb = "#bulb";
-        const letters = gsap.utils.toArray("#text > g");
-        const brainPaths = gsap.utils.toArray("#brain path");
-        const brainNodes = gsap.utils.toArray("#brain circle, #brain ellipse, #brain rect, #brain polygon");
-        const brainLines = gsap.utils.toArray("#brain line, #brain polyline");
+  if (counts.sparks < 8) {
+    throw new Error('[NITE SVG] Expected at least 8 spark nodes.');
+  }
 
-        const tl = gsap.timeline({
-          defaults: {
-            ease: "power3.out"
-          }
-        });
+  if (counts.shimmer < 2) {
+    throw new Error('[NITE SVG] Expected at least 2 NITE shimmer paths.');
+  }
 
-        // timeline principal aqui
-
-        const idle = gsap.timeline({
-          repeat: -1,
-          defaults: {
-            ease: "sine.inOut"
-          }
-        });
-
-        // loop idle aqui
-
-        return () => {
-          tl.kill();
-          idle.kill();
-        };
-      });
-
-      return () => mm.revert();
-    },
-    { scope: container }
-  );
-
-  return (
-    <div ref={container} className="relative">
-      {/* SVG inline aqui */}
-    </div>
-  );
+  return counts;
 }
 ```
 
----
+### Regra de confirmação
 
-## 10. Timeline principal
+Ao iniciar em ambiente de desenvolvimento, imprimir uma confirmação curta:
 
-### Duração alvo
-
-A abertura cinematográfica deve durar aproximadamente:
-
-```txt
-3.2s a 4.5s
+```ts
+console.info('[NITE SVG] Cinematic electric contract validated', counts);
 ```
 
-Depois disso, o logo entra em loop idle.
+Não imprimir logs em produção, exceto erros críticos.
 
 ---
 
-## 11. Sequência cinematográfica
+## 5. Restrição crítica: SVG precisa estar inline no DOM
 
-### Fase 1 — Presença inicial
+A animação GSAP só poderá acessar `#energy-overlay`, `#energy-routes`, `#electric-arcs` e demais seletores se o SVG estiver inline no DOM.
 
-Tempo aproximado:
+### Permitido
 
-```txt
-0.0s → 0.8s
-```
+* SVG convertido para componente React.
+* SVG injetado como markup inline controlado.
+* SVG importado via SVGR, se a configuração preservar IDs.
 
-Objetivo:
+### Não permitido
 
-- introduzir o logo com peso visual;
-- evitar entrada simples demais;
-- criar sensação de sistema iniciando.
+* `<img src="/brand/nite/logo_final.svg" />`
+* `next/image` renderizando SVG como imagem externa.
+* `background-image: url(...)`.
 
-Animações:
-
-- fade in geral;
-- leve scale de 0.94 → 1;
-- leve `y` de 24 → 0;
-- blur/brightness inicial se aplicável;
-- opacidade do cérebro menor no início.
-
-Exemplo:
-
-```js
-tl.fromTo(
-  "#nite-logo",
-  {
-    opacity: 0,
-    scale: 0.94,
-    y: 28,
-    transformOrigin: "50% 50%"
-  },
-  {
-    opacity: 1,
-    scale: 1,
-    y: 0,
-    duration: 1.1,
-    ease: "power4.out"
-  },
-  0
-);
-```
+Se o SVG estiver sendo renderizado como imagem, o agente deve primeiro mudar a integração para SVG inline antes de tentar animar.
 
 ---
 
-### Fase 2 — Despertar do bulb
+## 6. Estado inicial obrigatório
 
-Tempo aproximado:
+A camada extra deve existir, mas começar invisível. O usuário não pode ver rotas elétricas estáticas antes da animação.
 
-```txt
-0.35s → 1.4s
+### Estado inicial exigido
+
+```ts
+gsap.set('#energy-overlay', { opacity: 0 });
+gsap.set('#energy-main-rise path, #energy-routes path, #electric-arcs path', {
+  opacity: 0,
+  strokeDasharray: 1,
+  strokeDashoffset: 1,
+});
+gsap.set('#spark-heads circle', {
+  opacity: 0,
+  scale: 0,
+  transformOrigin: 'center center',
+});
+gsap.set('#text-shimmer-mask path', {
+  opacity: 0,
+  strokeDasharray: 1,
+  strokeDashoffset: 1,
+});
 ```
 
-Objetivo:
+### Regra
 
-- mostrar o bulb/bocal como fonte de energia;
-- criar o primeiro pulso da composição;
-- preparar o envio de eletricidade para o cérebro.
+Nenhum elemento de `#energy-overlay` deve aparecer parado no primeiro frame.
 
-Animações:
-
-- brilho no bulb;
-- aumento de luminosidade;
-- pulso curto;
-- vibração sutil;
-- possível ring/glow externo via CSS filter ou pseudo-layer.
-
-Exemplo:
-
-```js
-tl.fromTo(
-  "#bulb",
-  {
-    opacity: 0.65,
-    scale: 0.985,
-    filter: "brightness(0.75)"
-  },
-  {
-    opacity: 1,
-    scale: 1.02,
-    filter: "brightness(1.6) drop-shadow(0 0 18px rgba(0, 200, 255, 0.7))",
-    duration: 0.7,
-    ease: "power2.out"
-  },
-  0.35
-);
-
-tl.to(
-  "#bulb",
-  {
-    scale: 1,
-    filter: "brightness(1.15) drop-shadow(0 0 10px rgba(0, 200, 255, 0.45))",
-    duration: 0.45,
-    ease: "sine.out"
-  },
-  1.05
-);
-```
+Critério de rejeição: se a página carregar com linhas elétricas visíveis antes da animação, a implementação está incorreta.
 
 ---
 
-### Fase 3 — Energia sobe para o cérebro
+## 7. Verificação de coordenadas e clipping
 
-Tempo aproximado:
+Alguns elementos da camada elétrica podem encostar nas bordas do `viewBox`, incluindo nós próximos ou parcialmente fora do eixo X.
 
-```txt
-0.8s → 2.2s
+### Verificação obrigatória
+
+Antes de finalizar, o agente deve validar:
+
+* Se algum `circle` em `#spark-heads` possui `cx < 0`, `cy < 0`, `cx > viewBox.width` ou `cy > viewBox.height`.
+* Se algum path de `#energy-routes` ou `#electric-arcs` está sendo cortado pelo container.
+* Se o CSS do SVG/container usa `overflow: hidden` e está cortando faíscas.
+
+### Regra visual
+
+Se uma faísca for intencionalmente posicionada na borda, ela pode permanecer assim, mas precisa ser visível de forma elegante. Caso seja cortada de maneira acidental, deve ser reposicionada ou o overflow deve ser ajustado.
+
+### CSS recomendado
+
+```css
+.nite-logo-svg,
+.nite-logo-svg svg {
+  overflow: visible;
+}
 ```
 
-Objetivo:
-
-- criar a sensação de corrente elétrica ascendente;
-- acender partes internas do cérebro;
-- simular caminhos de circuito sendo percorridos.
-
-Estratégia:
-
-- aplicar animações em elementos internos do `#brain`;
-- usar stagger com direção ascendente sempre que possível;
-- ordenar elementos por posição vertical usando `getBBox().y`;
-- animar opacidade, brilho, escala e filtros;
-- quando elementos forem stroke, usar `strokeDasharray` e `strokeDashoffset`;
-- quando elementos forem fill, animar brightness, opacity, fill e shadow.
-
-Ordenação sugerida:
-
-```js
-const orderedBrainParts = gsap.utils
-  .toArray("#brain path, #brain polygon, #brain line, #brain polyline, #brain rect")
-  .sort((a, b) => {
-    const boxA = a.getBBox();
-    const boxB = b.getBBox();
-    return boxB.y - boxA.y; // de baixo para cima
-  });
-```
-
-Animação sugerida:
-
-```js
-tl.fromTo(
-  orderedBrainParts,
-  {
-    opacity: 0.35,
-    filter: "brightness(0.65)"
-  },
-  {
-    opacity: 1,
-    filter: "brightness(1.35) drop-shadow(0 0 8px rgba(0, 200, 255, 0.35))",
-    duration: 0.9,
-    stagger: {
-      each: 0.012,
-      from: "start"
-    },
-    ease: "power2.out"
-  },
-  0.8
-);
-```
+Usar `overflow: visible` apenas se não quebrar o layout da seção hero.
 
 ---
 
-### Fase 4 — Circuitos e pontos energizados
+## 8. Direção artística da animação
 
-Tempo aproximado:
+A animação deve ter narrativa clara em quatro atos.
 
 ```txt
-1.3s → 2.8s
+Ato 1 — Dormant State
+Ato 2 — Ignition / lâmpada acorda
+Ato 3 — Neural Storm / rajadas no cérebro
+Ato 4 — NITE Ascension / texto acende
+Ato 5 — Premium Idle Loop
 ```
 
-Objetivo:
-
-- simular eletricidade percorrendo trilhas;
-- fazer os pontinhos/nós acenderem;
-- criar sensação de rede neural ativada.
-
-Estratégia:
-
-- detectar elementos pequenos dentro do `#brain`;
-- usar `getBBox()` para classificar possíveis nós/pontos;
-- animar esses elementos com scale, opacity e glow;
-- usar stagger rápido e irregular.
-
-Heurística para detectar pontos/nós:
-
-```js
-const brainNodes = gsap.utils.toArray("#brain path, #brain polygon, #brain rect, #brain circle, #brain ellipse")
-  .filter((el) => {
-    const box = el.getBBox();
-    const area = box.width * box.height;
-    return area > 2 && area < 900;
-  });
-```
-
-Animação sugerida:
-
-```js
-tl.fromTo(
-  brainNodes,
-  {
-    opacity: 0.35,
-    scale: 0.94,
-    transformOrigin: "50% 50%",
-    filter: "brightness(0.8)"
-  },
-  {
-    opacity: 1,
-    scale: 1.08,
-    filter: "brightness(1.9) drop-shadow(0 0 10px rgba(0, 220, 255, 0.7))",
-    duration: 0.22,
-    stagger: {
-      each: 0.018,
-      from: "random"
-    },
-    yoyo: true,
-    repeat: 1,
-    ease: "power2.inOut"
-  },
-  1.3
-);
-```
+A transição deve parecer cinematográfica, não mecânica.
 
 ---
 
-### Fase 5 — Descargas internas / raios
+## 9. Ato 1 — Dormant State
 
-Tempo aproximado:
+### Objetivo
+
+Estabelecer a marca em estado frio, elegante e premium.
+
+### Visual
+
+* Logo visível, porém calmo.
+* Cérebro com brilho muito sutil.
+* Lâmpada levemente presente.
+* Texto NITE metálico/prateado, sem brilho exagerado.
+* Nenhuma rota elétrica visível.
+
+### Regras
+
+* `#energy-overlay`: opacity 0.
+* `#brain`: leve opacidade/brilho, sem pulsação forte.
+* `#text`: prata legível, sem cintilação inicial.
+
+---
+
+## 10. Ato 2 — Ignition / lâmpada acorda
+
+### Objetivo
+
+Mostrar claramente que a energia nasce na lâmpada.
+
+### Elementos envolvidos
 
 ```txt
-1.7s → 3.1s
+#bulb
+#energy-main-rise path[data-route^="bulb-to-brain"]
+#spark-heads circle perto da base
 ```
 
-Objetivo:
+### Movimento esperado
 
-- criar efeitos curtos de raio dentro do cérebro;
-- intensificar a sensação de eletricidade;
-- gerar um clímax visual sem poluir a composição.
+1. A lâmpada dá 2 ou 3 flickers curtos.
+2. Surge um brilho interno branco/ciano.
+3. Uma carga começa a subir da lâmpada para o cérebro.
+4. A energia não deve subir como “barra de loading”. Deve parecer descarga irregular.
 
-Estratégia:
+### Timings sugeridos
 
-- selecionar partes internas do brain com aparência de circuito;
-- aplicar flashes rápidos;
-- criar delays irregulares;
-- usar opacidade alta por poucos frames;
-- retornar ao estado normal rapidamente.
+```txt
+0.00s – estado frio
+0.15s – primeiro flicker curto
+0.28s – segundo flicker mais forte
+0.42s – início da subida principal
+0.70s – energia toca a base do cérebro
+```
 
-Exemplo:
+### GSAP sugerido
 
-```js
-const lightningCandidates = gsap.utils.toArray("#brain path, #brain polyline, #brain line")
-  .filter((el) => {
-    const box = el.getBBox();
-    return box.width > 8 || box.height > 8;
-  });
+```ts
+const mainRise = q('#energy-main-rise path');
+const bulb = q('#bulb');
 
-tl.to(
-  lightningCandidates,
-  {
-    opacity: 1,
-    filter: "brightness(2.4) drop-shadow(0 0 16px rgba(0, 235, 255, 0.95))",
-    duration: 0.055,
-    stagger: {
-      each: 0.018,
-      from: "random"
-    },
+intro
+  .to(bulb, {
+    filter: 'drop-shadow(0 0 12px rgba(125,249,255,.45))',
+    duration: 0.08,
     repeat: 2,
     yoyo: true,
-    ease: "steps(1)"
-  },
-  1.7
-);
+    ease: 'steps(2)',
+  }, 0.12)
+  .to('#energy-overlay', {
+    opacity: 1,
+    duration: 0.08,
+  }, 0.30)
+  .fromTo(mainRise,
+    { opacity: 0, strokeDashoffset: 1 },
+    {
+      opacity: 1,
+      strokeDashoffset: 0,
+      duration: 0.45,
+      stagger: 0.055,
+      ease: 'power3.out',
+    },
+    0.36
+  );
 ```
 
 ---
 
-### Fase 6 — Pico neural
+## 11. Ato 3 — Neural Storm / rajadas no cérebro
 
-Tempo aproximado:
+### Objetivo
+
+Criar a sensação de raios reais percorrendo os circuitos do cérebro.
+
+### Elementos envolvidos
 
 ```txt
-2.4s → 3.3s
+#energy-routes path[data-route="primary"]
+#energy-routes path[data-route="secondary"]
+#energy-routes path[data-route="micro"]
+#electric-arcs path[data-arc]
+#spark-heads circle[data-spark="node"]
+#brain
 ```
 
-Objetivo:
+### Regra de movimento
 
-- cérebro atinge a ativação completa;
-- bulb e cérebro ficam sincronizados;
-- transição para a marca textual.
+Não acender tudo ao mesmo tempo.
 
-Animações:
+A energia deve se propagar em grupos:
 
-- brain com brilho de pico;
-- bulb com pulso final;
-- leve glow no conjunto;
-- estabilização visual.
+```txt
+Grupo 1 — rotas primárias
+Grupo 2 — rotas secundárias
+Grupo 3 — micro rotas
+Grupo 4 — arcos/jumps
+Grupo 5 — nós/sparks
+```
 
-Exemplo:
+### Sequência esperada
 
-```js
-tl.to(
-  "#brain",
-  {
-    filter: "brightness(1.55) drop-shadow(0 0 22px rgba(0, 200, 255, 0.45))",
-    duration: 0.38,
-    ease: "power2.out"
-  },
-  2.45
-);
+1. Rotas primárias recebem a primeira descarga.
+2. Rotas secundárias respondem com atraso curto.
+3. Micro rotas disparam detalhes rápidos.
+4. Arcos aparecem como “saltos elétricos” muito breves.
+5. Nós piscam e deixam afterglow curto.
 
-tl.to(
-  "#brain",
-  {
-    filter: "brightness(1.08) drop-shadow(0 0 8px rgba(0, 200, 255, 0.25))",
-    duration: 0.8,
-    ease: "sine.out"
-  },
-  2.85
-);
+### Timing sugerido
+
+```txt
+0.70s – rotas primárias começam
+0.88s – rotas secundárias entram
+1.05s – micro rotas disparam
+1.10s – arcos aparecem em rajadas rápidas
+1.22s – sparks/nós acendem
+1.45s – cérebro atinge pico de energia
+1.70s – afterglow começa a decair
+```
+
+### Aparência dos raios
+
+O raio deve ser composto por camadas:
+
+```txt
+core branco fino
+halo ciano maior
+afterglow curto
+jitter irregular
+```
+
+Se houver apenas brilho uniforme, está errado.
+
+### GSAP sugerido
+
+```ts
+const routesPrimary = q('#energy-routes path[data-route="primary"]');
+const routesSecondary = q('#energy-routes path[data-route="secondary"]');
+const routesMicro = q('#energy-routes path[data-route="micro"]');
+const arcs = q('#electric-arcs path');
+const sparks = q('#spark-heads circle');
+
+intro
+  .fromTo(routesPrimary,
+    { opacity: 0, strokeDashoffset: 1 },
+    {
+      opacity: 1,
+      strokeDashoffset: 0,
+      duration: 0.36,
+      stagger: { each: 0.045, from: 'start' },
+      ease: 'power4.out',
+    },
+    0.70
+  )
+  .fromTo(routesSecondary,
+    { opacity: 0, strokeDashoffset: 1 },
+    {
+      opacity: 0.85,
+      strokeDashoffset: 0,
+      duration: 0.32,
+      stagger: 0.04,
+      ease: 'power3.out',
+    },
+    0.88
+  )
+  .fromTo(routesMicro,
+    { opacity: 0, strokeDashoffset: 1 },
+    {
+      opacity: 0.75,
+      strokeDashoffset: 0,
+      duration: 0.22,
+      stagger: 0.025,
+      ease: 'expo.out',
+    },
+    1.05
+  )
+  .fromTo(arcs,
+    { opacity: 0, strokeDashoffset: 1 },
+    {
+      opacity: 1,
+      strokeDashoffset: 0,
+      duration: 0.08,
+      stagger: { each: 0.055, from: 'random' },
+      ease: 'none',
+      yoyo: true,
+      repeat: 1,
+    },
+    1.10
+  )
+  .fromTo(sparks,
+    { opacity: 0, scale: 0.2 },
+    {
+      opacity: 1,
+      scale: 1,
+      duration: 0.10,
+      stagger: { each: 0.035, from: 'random' },
+      ease: 'expo.out',
+    },
+    1.20
+  )
+  .to(sparks, {
+    opacity: 0.22,
+    scale: 0.62,
+    duration: 0.55,
+    stagger: { each: 0.018, from: 'random' },
+    ease: 'power2.out',
+  }, 1.42);
 ```
 
 ---
 
-### Fase 7 — Nome NITE reage ao pulso
+## 12. Ato 4 — NITE Ascension / texto acende
 
-Tempo aproximado:
+### Objetivo
 
-```txt
-2.6s → 3.8s
-```
+O nome NITE deve ser o clímax da animação.
 
-Objetivo:
+A energia no cérebro deve culminar no texto ficando mais vivo, metálico e ascendente.
 
-- o nome recebe a energia final;
-- reforçar assinatura visual da marca;
-- criar leitura premium sem excesso.
-
-Animações:
-
-- letras entram/reagem em sequência;
-- shimmer ou brilho metálico;
-- leve deslocamento vertical;
-- opacidade/brightness;
-- stagger por letra.
-
-Mapeamento conhecido:
+### Elementos envolvidos
 
 ```txt
 #text
-├── #text-parte-1
-├── #text-parte-2
-├── #text-parte-3
-└── #text-parte-4
+#text-shimmer-mask path[data-shimmer]
 ```
 
-Exemplo:
+### Movimento esperado
 
-```js
-tl.fromTo(
-  "#text > g",
-  {
-    opacity: 0.72,
-    y: 10,
-    filter: "brightness(0.75)"
-  },
-  {
-    opacity: 1,
-    y: 0,
-    filter: "brightness(1.35) drop-shadow(0 0 9px rgba(0, 200, 255, 0.28))",
-    duration: 0.55,
-    stagger: 0.09,
-    ease: "power3.out"
-  },
-  2.65
-);
+* Um shimmer principal atravessa o texto.
+* O prata do NITE ganha vida por um instante.
+* Bordas recebem glow ciano sutil.
+* O brilho decai para um estado premium, sem ficar chamativo demais.
 
-tl.to(
-  "#text > g",
-  {
-    filter: "brightness(1.05)",
-    duration: 0.7,
-    stagger: 0.04,
-    ease: "sine.out"
-  },
-  3.25
-);
+### Timing sugerido
+
+```txt
+1.35s – energia atinge pico no cérebro
+1.48s – shimmer começa no NITE
+1.70s – texto atinge pico metálico
+2.05s – decai para estado premium
+```
+
+### GSAP sugerido
+
+```ts
+const shimmer = q('#text-shimmer-mask path');
+const text = q('#text');
+
+intro
+  .fromTo(shimmer,
+    { opacity: 0, strokeDashoffset: 1 },
+    {
+      opacity: 1,
+      strokeDashoffset: 0,
+      duration: 0.52,
+      stagger: 0.08,
+      ease: 'power3.inOut',
+    },
+    1.48
+  )
+  .to(text, {
+    filter: 'drop-shadow(0 0 18px rgba(125,249,255,.32)) brightness(1.18)',
+    duration: 0.30,
+    ease: 'power2.out',
+  }, 1.55)
+  .to(text, {
+    filter: 'drop-shadow(0 0 8px rgba(125,249,255,.14)) brightness(1.04)',
+    duration: 0.70,
+    ease: 'power2.out',
+  }, 1.90)
+  .to(shimmer, {
+    opacity: 0,
+    duration: 0.38,
+    ease: 'power2.out',
+  }, 2.05);
 ```
 
 ---
 
-## 12. Loop idle
+## 13. Ato 5 — Premium Idle Loop
 
-Depois da abertura, a animação deve continuar viva, mas elegante.
+### Objetivo
+
+Manter o logo vivo sem parecer loading, banner gamer ou efeito neon excessivo.
 
 ### Regras do idle
 
-- não competir com o conteúdo textual;
-- não parecer carregamento;
-- não piscar constantemente;
-- manter sensação de energia ativa;
-- repetir com variação sutil.
+* O idle deve ser sutil.
+* Não repetir a explosão completa o tempo todo.
+* Usar micro rajadas ocasionais.
+* O cérebro pode respirar levemente.
+* O texto NITE pode receber um shimmer raro e discreto.
+* A lâmpada pode manter um glow mínimo.
 
-### Duração sugerida do loop
+### Timing recomendado
 
 ```txt
-5s a 8s
+Loop total: 5s a 8s
+Micro descarga: 1 ou 2 por ciclo
+Shimmer do texto: no máximo 1 vez a cada 2 ciclos
+Sparks simultâneos: no máximo 3
+Arcos simultâneos: no máximo 2
 ```
 
-### Elementos do idle
+### GSAP sugerido
 
-- bulb respirando;
-- circuitos com micro-pulsos;
-- brain com glow discreto;
-- pontos internos acendendo ocasionalmente;
-- nome com brilho raro e sutil.
-
-Exemplo:
-
-```js
-const idle = gsap.timeline({
-  repeat: -1,
-  repeatDelay: 0.3,
-  defaults: {
-    ease: "sine.inOut"
-  }
-});
+```ts
+const idle = gsap.timeline({ repeat: -1, paused: true });
 
 idle
-  .to("#bulb", {
-    filter: "brightness(1.35) drop-shadow(0 0 14px rgba(0, 200, 255, 0.45))",
-    duration: 1.4,
+  .to('#brain', {
+    filter: 'drop-shadow(0 0 8px rgba(125,249,255,.12))',
+    duration: 2.2,
     yoyo: true,
-    repeat: 1
-  })
-  .to("#brain", {
-    filter: "brightness(1.22) drop-shadow(0 0 13px rgba(0, 200, 255, 0.28))",
-    duration: 1.6,
-    yoyo: true,
-    repeat: 1
-  }, "<0.2")
-  .to("#text > g", {
-    filter: "brightness(1.22) drop-shadow(0 0 6px rgba(0, 200, 255, 0.18))",
-    duration: 0.5,
-    stagger: 0.06,
-    yoyo: true,
-    repeat: 1
-  }, ">0.6");
+    repeat: 1,
+    ease: 'sine.inOut',
+  }, 0)
+  .fromTo('#electric-arcs path',
+    { opacity: 0, strokeDashoffset: 1 },
+    {
+      opacity: 0.85,
+      strokeDashoffset: 0,
+      duration: 0.07,
+      stagger: { each: 0.06, from: 'random' },
+      yoyo: true,
+      repeat: 1,
+      ease: 'none',
+    },
+    1.6
+  )
+  .fromTo('#spark-heads circle',
+    { opacity: 0, scale: 0.35 },
+    {
+      opacity: 0.65,
+      scale: 0.8,
+      duration: 0.10,
+      stagger: { amount: 0.20, from: 'random' },
+      yoyo: true,
+      repeat: 1,
+      ease: 'expo.out',
+    },
+    2.4
+  )
+  .to({}, { duration: 2.4 });
+```
+
+### Critério de qualidade
+
+O idle deve ser percebido como “vivo”, não como “piscando”.
+
+---
+
+## 14. Regras para não animar tudo ao mesmo tempo
+
+A camada `#energy-overlay` é rica e deve ser coreografada.
+
+### Proibição
+
+Não fazer:
+
+```ts
+gsap.to('#energy-overlay *', { opacity: 1 });
+```
+
+Não fazer:
+
+```ts
+gsap.fromTo('path', ...);
+```
+
+Não fazer animação global em todos os paths do SVG.
+
+### Permitido
+
+Animar por grupos semânticos:
+
+```ts
+#energy-main-rise path
+#energy-routes path[data-route="primary"]
+#energy-routes path[data-route="secondary"]
+#energy-routes path[data-route="micro"]
+#electric-arcs path[data-arc="jump"]
+#electric-arcs path[data-arc="branch"]
+#electric-arcs path[data-arc="micro"]
+#spark-heads circle
+#text-shimmer-mask path
 ```
 
 ---
 
-## 13. Técnicas específicas para SVG
+## 15. Implementação recomendada no React/Next
 
-### 13.1 Animação por stroke
+### Estrutura esperada
 
-Quando o elemento interno possuir `stroke`, aplicar:
-
-```js
-const strokePaths = gsap.utils.toArray("#brain path, #brain line, #brain polyline")
-  .filter((el) => {
-    const stroke = window.getComputedStyle(el).stroke;
-    return stroke && stroke !== "none";
-  });
-
-strokePaths.forEach((path) => {
-  const length = path.getTotalLength?.();
-
-  if (!length) return;
-
-  gsap.set(path, {
-    strokeDasharray: length,
-    strokeDashoffset: length
-  });
-});
+```txt
+components/
+└── nite/
+    ├── NiteLogoCinematic.tsx
+    ├── useNiteElectricAnimation.ts
+    └── validateNiteSvgContract.ts
 ```
 
-Reveal:
+### Hook recomendado
 
-```js
-tl.to(strokePaths, {
-  strokeDashoffset: 0,
-  duration: 1.2,
-  stagger: 0.025,
-  ease: "power2.inOut"
-}, 0.9);
-```
+```ts
+export function useNiteElectricAnimation(scopeRef: RefObject<HTMLElement>) {
+  useGSAP(() => {
+    const root = scopeRef.current;
+    if (!root) return;
 
-### 13.2 Animação por fill
+    const svg = root.querySelector('svg');
+    if (!svg) return;
 
-Quando o elemento for uma forma preenchida, aplicar:
+    const counts = validateNiteSvgContract(svg);
 
-```js
-tl.fromTo(
-  fillParts,
-  {
-    opacity: 0.45,
-    filter: "brightness(0.7)"
-  },
-  {
-    opacity: 1,
-    filter: "brightness(1.35) drop-shadow(0 0 7px rgba(0, 200, 255, 0.32))",
-    duration: 0.65,
-    stagger: 0.01
-  },
-  1
-);
-```
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-### 13.3 Ordenação espacial
+    if (prefersReducedMotion) {
+      applyReducedMotionState(svg);
+      return;
+    }
 
-Para criar energia subindo:
+    const q = gsap.utils.selector(svg);
 
-```js
-const byVerticalPosition = (items) =>
-  items.sort((a, b) => b.getBBox().y - a.getBBox().y);
-```
+    setupInitialState(q);
 
-Para energia saindo do bulb, ordenar por distância ao centro do bulb:
+    const intro = buildIntroTimeline(q);
+    const idle = buildIdleTimeline(q);
 
-```js
-const bulbBox = document.querySelector("#bulb").getBBox();
-const bulbCenter = {
-  x: bulbBox.x + bulbBox.width / 2,
-  y: bulbBox.y + bulbBox.height / 2
-};
+    intro.eventCallback('onComplete', () => idle.play());
 
-const byDistanceFromBulb = (items) =>
-  items.sort((a, b) => {
-    const boxA = a.getBBox();
-    const boxB = b.getBBox();
-
-    const ax = boxA.x + boxA.width / 2;
-    const ay = boxA.y + boxA.height / 2;
-
-    const bx = boxB.x + boxB.width / 2;
-    const by = boxB.y + boxB.height / 2;
-
-    const da = Math.hypot(ax - bulbCenter.x, ay - bulbCenter.y);
-    const db = Math.hypot(bx - bulbCenter.x, by - bulbCenter.y);
-
-    return da - db;
-  });
-```
-
----
-
-## 14. Shimmer no texto
-
-O nome NITE pode receber um shimmer metálico discreto.
-
-Estratégias possíveis:
-
-1. animar brightness por letra;
-2. usar overlay/mask;
-3. usar gradiente SVG;
-4. usar filtro/drop-shadow controlado.
-
-Implementação simples por letra:
-
-```js
-const textSweep = gsap.timeline({ repeat: -1, repeatDelay: 6 });
-
-textSweep.to("#text > g", {
-  filter: "brightness(1.45) drop-shadow(0 0 8px rgba(0, 200, 255, 0.22))",
-  duration: 0.28,
-  stagger: 0.08,
-  yoyo: true,
-  repeat: 1,
-  ease: "sine.inOut"
-});
-```
-
----
-
-## 15. Background e card visual
-
-A área que contém o SVG deve colaborar com a sensação premium.
-
-Recomendações:
-
-- manter fundo escuro/tecnológico;
-- adicionar radial gradient atrás do cérebro;
-- usar borda sutil;
-- usar glassmorphism leve se combinar com o layout atual;
-- evitar card muito opaco;
-- permitir que o glow do SVG respire.
-
-Exemplo de wrapper:
-
-```tsx
-<div className="relative overflow-hidden rounded-[2rem] border border-cyan-300/10 bg-slate-950/60 p-6 shadow-2xl">
-  <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_38%,rgba(0,200,255,0.22),transparent_48%)]" />
-  <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.08),transparent_35%,rgba(0,200,255,0.08))]" />
-  <AnimatedNiteLogo />
-</div>
-```
-
----
-
-## 16. Responsividade
-
-A animação deve funcionar bem em:
-
-- desktop;
-- tablet;
-- mobile.
-
-Regras:
-
-- SVG deve usar `width: 100%`;
-- preservar `viewBox`;
-- evitar dimensões fixas rígidas;
-- manter proporção original;
-- em mobile, reduzir intensidade de glow;
-- em mobile, reduzir quantidade de animação simultânea se necessário.
-
-Exemplo:
-
-```tsx
-<div className="mx-auto w-full max-w-[420px] sm:max-w-[520px] lg:max-w-[580px]">
-  <AnimatedNiteLogo />
-</div>
-```
-
----
-
-## 17. Acessibilidade
-
-Implementar suporte para `prefers-reduced-motion`.
-
-Quando o usuário preferir movimento reduzido:
-
-- não executar timeline cinematográfica;
-- renderizar logo em estado final;
-- manter apenas brilho estático ou nenhum efeito;
-- evitar loops infinitos.
-
-Exemplo:
-
-```js
-const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-if (prefersReduced) {
-  gsap.set("#nite-logo", {
-    opacity: 1,
-    scale: 1,
-    clearProps: "filter"
-  });
-  return;
+    return () => {
+      intro.kill();
+      idle.kill();
+    };
+  }, { scope: scopeRef });
 }
 ```
 
 ---
 
-## 18. Performance
+## 16. Reduced Motion
 
-A animação deve priorizar fluidez.
+Se o usuário preferir redução de movimento, não executar raios, flickers ou rajadas.
 
-Regras:
+### Estado recomendado
 
-- evitar animar layout;
-- preferir `transform`, `opacity` e `filter`;
-- usar `will-change` no wrapper com moderação;
-- escopar seletores;
-- evitar timelines duplicadas;
-- limpar timelines ao desmontar;
-- não criar loops em excesso;
-- testar no mobile;
-- reduzir glow se houver queda de performance.
+* Logo estático.
+* Lâmpada levemente iluminada.
+* Texto NITE um pouco mais vivo.
+* Sem loops.
+* Sem flicker.
 
-CSS sugerido:
+### Implementação sugerida
 
-```css
-.animated-nite-logo {
-  transform-box: fill-box;
-  transform-origin: center;
-}
-
-.animated-nite-logo svg * {
-  vector-effect: non-scaling-stroke;
+```ts
+function applyReducedMotionState(root: SVGSVGElement | HTMLElement) {
+  gsap.set(root.querySelector('#energy-overlay'), { opacity: 0 });
+  gsap.set(root.querySelector('#bulb'), {
+    filter: 'drop-shadow(0 0 8px rgba(125,249,255,.18))',
+  });
+  gsap.set(root.querySelector('#text'), {
+    filter: 'drop-shadow(0 0 6px rgba(125,249,255,.10)) brightness(1.03)',
+  });
 }
 ```
 
 ---
 
-## 19. Integração no hero
+## 17. Performance budget
 
-Substituir o bloco visual atual por:
+A animação deve ser premium e leve.
 
-```tsx
-<div className="hero-visual">
-  <AnimatedNiteLogo />
-</div>
-```
+### Regras
 
-Garantir que:
+* Evitar animar centenas de elementos do SVG base.
+* Animar principalmente a camada `#energy-overlay`.
+* Limitar filtros pesados simultâneos.
+* Preferir `opacity`, `strokeDashoffset`, `scale` e `filter` controlado.
+* Não usar blur intenso em muitos elementos ao mesmo tempo.
+* Não executar idle se o hero estiver fora da viewport.
+* Pausar animação quando `document.hidden === true`.
 
-- o componente fique no mesmo local da imagem/card atual;
-- a altura visual do hero continue equilibrada;
-- o texto do hero continue com prioridade de leitura;
-- a animação não atrapalhe os CTAs;
-- a animação comece quando o componente entrar em tela.
+### Limites sugeridos
 
----
-
-## 20. Possível integração com scroll
-
-Opcionalmente, usar ScrollTrigger para:
-
-- iniciar a animação quando o hero estiver visível;
-- reduzir intensidade ao sair do viewport;
-- pausar idle quando fora da tela;
-- reativar quando voltar.
-
-Exemplo conceitual:
-
-```js
-ScrollTrigger.create({
-  trigger: container.current,
-  start: "top 80%",
-  onEnter: () => tl.play(),
-  onLeave: () => idle.pause(),
-  onEnterBack: () => idle.play()
-});
-```
-
-Se usar ScrollTrigger, instalar/importar:
-
-```js
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(useGSAP, ScrollTrigger);
+```txt
+Paths elétricos simultâneos no pico: até 12
+Sparks simultâneos no pico: até 8
+Arcos simultâneos no pico: até 4
+Filtros com drop-shadow animados ao mesmo tempo: até 3 grupos
 ```
 
 ---
 
-## 21. Estados esperados
+## 18. Pausa por visibilidade
 
-### Estado inicial
+Implementar pausa com `IntersectionObserver`.
 
-- logo invisível ou semi-invisível;
-- bulb apagado;
-- cérebro com brilho reduzido;
-- texto com baixa intensidade.
+### Regra
 
-### Estado durante ativação
-
-- bulb acende primeiro;
-- cérebro recebe pulso;
-- circuitos internos energizam;
-- pontos acendem;
-- descargas rápidas aparecem;
-- texto reage por último.
-
-### Estado final
-
-- logo totalmente visível;
-- cérebro com brilho tecnológico sutil;
-- bulb respirando;
-- texto legível;
-- loop idle discreto.
+* Se o hero/logo sair da viewport, pausar idle.
+* Ao voltar, retomar idle suavemente.
+* Não reiniciar intro após a primeira execução, exceto se o componente for remontado.
 
 ---
 
-## 22. Critérios de aceite visual
+## 19. Mobile behavior
 
-- [ ] O SVG substitui a PNG/card atual no hero.
-- [ ] A abertura parece premium e cinematográfica.
-- [ ] O bulb comunica claramente a origem da energia.
-- [ ] A energia aparenta subir do bulb para o cérebro.
-- [ ] O cérebro aparenta conter circuitos vivos/energizados.
-- [ ] Existem pulsos ou flashes internos que lembram eletricidade.
-- [ ] Pontos/nós internos acendem de forma orgânica.
-- [ ] O nome NITE reage ao final da ativação.
-- [ ] O loop idle é sutil e elegante.
-- [ ] A animação não prejudica leitura da headline.
-- [ ] A animação não parece carregamento infinito.
-- [ ] A performance continua boa em mobile.
-- [ ] `prefers-reduced-motion` é respeitado.
-- [ ] O código é isolado em componente reutilizável.
-- [ ] O cleanup do GSAP está correto.
+O logo animado é um diferencial visual da landing. No mobile, ele não deve ficar escondido ou aparecer tarde demais.
 
----
+### Regras para mobile
 
-# Milestones
+* O SVG deve aparecer completo no primeiro viewport ou muito próximo disso.
+* Evitar que CTAs empurrem o logo para fora da área inicial.
+* A animação mobile deve ter menos elementos simultâneos, mas manter a narrativa.
+* Não remover a eletricidade no mobile; apenas reduzir densidade.
 
-## Milestone 1 — Preparação do SVG e integração base
+### Reduções recomendadas no mobile
 
-Objetivo: substituir a imagem atual pelo SVG controlável no DOM.
+```txt
+Rotas primárias: manter todas
+Rotas secundárias: usar 2 ou 3
+Micro rotas: usar 1 ou 2
+Arcos: usar até 2
+Sparks simultâneos: até 5
+Idle: mais lento e mais sutil
+```
 
-### Tasks
+### Composição recomendada no mobile
 
-- [x] Localizar o componente/seção atual do hero.
-- [x] Identificar a div/card onde a PNG atual está renderizada.
-- [x] Remover a imagem PNG do bloco visual do hero.
-- [x] Criar componente `AnimatedNiteLogo`.
-- [x] Inserir o SVG `logo-final` inline ou por estratégia que preserve acesso aos IDs.
-- [x] Confirmar que os IDs estão presentes no DOM:
-  - [x] `#logo-final`
-  - [x] `#nite-logo`
-  - [x] `#brain`
-  - [x] `#text`
-  - [x] `#text-parte-1`
-  - [x] `#text-parte-2`
-  - [x] `#text-parte-3`
-  - [x] `#text-parte-4`
-  - [x] `#bulb`
-- [x] Ajustar wrapper responsivo.
-- [x] Preservar proporção do SVG.
-- [x] Garantir que o hero continue visualmente equilibrado.
+Priorizar o impacto visual:
 
-### Definition of Done
+```txt
+Logo / SVG animado
+Eyebrow
+Headline
+Subheadline
+CTAs
+```
 
-- [x] O SVG aparece no local correto.
-- [x] A landing continua responsiva.
-- [x] Os grupos do SVG podem ser selecionados via JS.
-- [x] Nenhuma animação ainda é obrigatória nesta etapa.
+Se o layout atual mantiver headline antes do SVG, garantir que o SVG continue visível sem scroll excessivo.
 
 ---
 
-## Milestone 2 — Setup GSAP em React/Next
+## 20. Critérios de aceite visual
 
-Objetivo: preparar o ambiente de animação com GSAP.
+A implementação só deve ser considerada correta se todos os pontos abaixo forem verdadeiros.
 
-### Tasks
+### Eletricidade
 
-- [x] Instalar `gsap`.
-- [x] Instalar `@gsap/react`.
-- [x] Registrar `useGSAP`.
-- [x] Criar `ref` no wrapper.
-- [x] Escopar seletores dentro do componente.
-- [x] Criar timeline principal.
-- [x] Criar timeline idle.
-- [x] Implementar cleanup automático.
-- [x] Implementar fallback para `prefers-reduced-motion`.
+* É evidente que a energia nasce na lâmpada.
+* É evidente que a energia sobe até o cérebro.
+* O cérebro recebe rajadas, não apenas glow.
+* Há linhas finas de descarga branca/ciano.
+* Há arcos ou saltos elétricos breves.
+* Há afterglow após a passagem da energia.
+* Nem tudo acende ao mesmo tempo.
 
-### Definition of Done
+### Texto NITE
 
-- [x] GSAP roda sem erro no client.
-- [x] Não há erro de SSR/hydration.
-- [x] A timeline é criada apenas uma vez.
-- [x] O cleanup funciona ao desmontar o componente.
+* O nome NITE tem um momento claro de ascensão.
+* O prata fica mais vivo no clímax.
+* O shimmer é elegante e legível.
+* O texto não vira neon exagerado.
 
----
+### Premium feel
 
-## Milestone 3 — Abertura premium do logo
-
-Objetivo: criar a primeira impressão cinematográfica.
-
-### Tasks
-
-- [x] Animar entrada de `#nite-logo`.
-- [x] Aplicar fade in.
-- [x] Aplicar scale sutil.
-- [x] Aplicar deslocamento vertical sutil.
-- [x] Ajustar easing premium.
-- [x] Garantir que a entrada não seja lenta demais.
-- [x] Garantir que a entrada não seja brusca demais.
-
-### Definition of Done
-
-- [x] A abertura comunica qualidade visual.
-- [x] O logo não simplesmente “aparece”.
-- [x] O movimento parece intencional e refinado.
+* O movimento parece intencional.
+* O loop não parece loading.
+* O efeito não parece template genérico.
+* A animação reforça a identidade da landing.
+* O hero continua limpo e sofisticado.
 
 ---
 
-## Milestone 4 — Ativação do bulb
+## 21. Critérios de rejeição
 
-Objetivo: transformar o bulb/bocal na origem visual da energia.
+Rejeitar a implementação se qualquer item abaixo acontecer.
 
-### Tasks
-
-- [x] Animar `#bulb` antes do cérebro.
-- [x] Criar pulso inicial no bulb.
-- [x] Aplicar brilho/drop-shadow controlado.
-- [x] Aplicar leve scale/vibração.
-- [x] Sincronizar bulb com início da energia cerebral.
-- [x] Estabilizar bulb após o pulso.
-
-### Definition of Done
-
-- [x] O bulb parece gerar energia.
-- [x] O usuário entende visualmente que a energia nasce ali.
-- [x] O efeito não fica exagerado.
+* O efeito parece apenas brilho suave.
+* O cérebro apenas pulsa sem descargas claras.
+* A lâmpada não parece a origem da energia.
+* O texto NITE não tem clímax perceptível.
+* As rotas elétricas aparecem estáticas no carregamento.
+* Todos os paths acendem ao mesmo tempo.
+* O idle parece piscando, bugado ou agressivo.
+* O SVG é renderizado como `<img>` e a animação tenta acessar elementos internos.
+* A implementação depende novamente de heurísticas para decidir o que animar.
+* O agente anima todos os paths do SVG base indiscriminadamente.
+* Elementos importantes da camada elétrica são cortados pelo viewBox/container sem intenção.
+* O resultado fica mais “cyberpunk neon” do que “premium tech”.
 
 ---
 
-## Milestone 5 — Energia ascendente no cérebro
+## 22. Checklist técnico obrigatório antes de finalizar
 
-Objetivo: criar a sensação de eletricidade subindo e ativando o brain.
+O agente deve confirmar cada item abaixo antes de considerar a tarefa concluída.
 
-### Tasks
-
-- [x] Selecionar elementos internos de `#brain`.
-- [x] Ordenar elementos por posição vertical com `getBBox()`.
-- [x] Criar stagger de baixo para cima.
-- [x] Animar opacidade/brightness dos paths.
-- [x] Aplicar glow controlado.
-- [x] Detectar strokes e aplicar dash animation quando disponível.
-- [x] Detectar fills e aplicar animação por brightness/opacidade.
-- [x] Ajustar duração para parecer fluxo, não piscada.
-- [x] Testar variação de stagger.
-
-### Definition of Done
-
-- [x] A energia aparenta subir do bulb para o cérebro.
-- [x] Os circuitos aparentam estar sendo percorridos.
-- [x] O cérebro ganha vida visualmente.
-
----
-
-## Milestone 6 — Pontos, nós e micro-pulsos
-
-Objetivo: energizar os pontinhos e nós do circuito cerebral.
-
-### Tasks
-
-- [x] Criar heurística para detectar elementos pequenos no `#brain`.
-- [x] Separar candidatos a pontos/nós por área de `getBBox()`.
-- [x] Aplicar scale sutil nos nós.
-- [x] Aplicar brightness/glow nos nós.
-- [x] Usar stagger irregular.
-- [x] Criar pequenos pulsos durante a abertura.
-- [x] Criar micro-pulsos ocasionais no idle.
-- [x] Ajustar opacidade para não poluir.
-
-### Definition of Done
-
-- [x] Os pontinhos parecem receber carga elétrica.
-- [x] A ativação parece orgânica.
-- [x] O cérebro parece uma rede neural/circuito vivo.
+```txt
+[ ] O SVG está inline no DOM.
+[ ] Existe exatamente um #energy-overlay.
+[ ] #energy-overlay começa invisível.
+[ ] #energy-main-rise contém paths animáveis.
+[ ] #energy-routes contém rotas primary, secondary e micro.
+[ ] #electric-arcs contém jumps/branches/micro arcs.
+[ ] #spark-heads contém nós animáveis.
+[ ] #text-shimmer-mask contém paths de shimmer.
+[ ] A animação não usa detecção heurística como fonte principal.
+[ ] A timeline tem origem na lâmpada.
+[ ] A timeline tem rajadas no cérebro.
+[ ] A timeline tem clímax no texto NITE.
+[ ] O idle é sutil e não parece loading.
+[ ] Reduced motion está implementado.
+[ ] A animação pausa fora da viewport.
+[ ] A animação pausa quando a aba fica oculta.
+[ ] Mobile reduz densidade sem remover a narrativa.
+[ ] Nenhuma faísca/path relevante é cortado por clipping acidental.
+```
 
 ---
 
-## Milestone 7 — Descargas internas e efeito de raio
+## 23. Checklist visual obrigatório
 
-Objetivo: criar flashes cinematográficos de eletricidade dentro do cérebro.
+O agente deve testar manualmente em desktop e mobile.
 
-### Tasks
+### Desktop
 
-- [x] Identificar candidatos a raio entre paths/lines/polylines do `#brain`.
-- [x] Aplicar flashes rápidos com duração curta.
-- [x] Usar `steps(1)` ou easing seco para descarga.
-- [x] Variar timing dos flashes.
-- [x] Sincronizar descargas com pico do bulb.
-- [x] Garantir que o efeito não prejudique a leitura do logo.
-- [x] Reduzir intensidade em mobile se necessário.
+```txt
+[ ] Primeira impressão parece premium.
+[ ] A lâmpada acende antes do cérebro.
+[ ] A energia sobe de baixo para cima.
+[ ] O cérebro recebe descargas evidentes.
+[ ] O texto NITE acende no clímax.
+[ ] O loop mantém vida sem exagero.
+```
 
-### Definition of Done
+### Mobile
 
-- [x] Há sensação clara de eletricidade interna.
-- [x] Os raios parecem intencionais e cinematográficos.
-- [x] O efeito não vira ruído visual.
-
----
-
-## Milestone 8 — Reação do nome NITE
-
-Objetivo: fazer a tipografia reagir à energia final.
-
-### Tasks
-
-- [x] Selecionar `#text > g`.
-- [x] Animar letras separadamente.
-- [x] Criar brilho por letra.
-- [x] Aplicar shimmer discreto.
-- [x] Sincronizar texto após pico do cérebro.
-- [x] Retornar texto para estado legível e estável.
-- [x] Testar variação de stagger.
-- [x] Garantir que o nome permaneça legível.
-
-### Definition of Done
-
-- [x] O nome NITE participa da narrativa.
-- [x] As letras reagem ao pulso final.
-- [x] O efeito é premium e não chamativo demais.
+```txt
+[ ] O SVG aparece com destaque suficiente.
+[ ] A animação não fica minúscula ou escondida.
+[ ] A densidade de raios não polui a tela.
+[ ] Os CTAs continuam acessíveis.
+[ ] Não há queda perceptível de performance.
+```
 
 ---
 
-## Milestone 9 — Loop idle
+## 24. Milestones com tasks e checkboxes
 
-Objetivo: manter o SVG vivo após a abertura.
+Esta seção existe para transformar a direção artística em execução auditável.
 
-### Tasks
-
-- [x] Criar timeline idle com `repeat: -1`.
-- [x] Adicionar respiração luminosa ao bulb.
-- [x] Adicionar glow sutil ao brain.
-- [x] Adicionar micro-pulsos em nós internos.
-- [x] Adicionar shimmer raro no texto.
-- [x] Configurar duração entre 5s e 8s.
-- [x] Evitar piscadas repetitivas.
-- [x] Pausar ou reduzir idle quando fora de viewport, se aplicável.
-
-### Definition of Done
-
-- [x] O logo continua vivo.
-- [x] O loop é elegante.
-- [x] O loop não distrai da leitura da página.
+O agente executor deve trabalhar milestone por milestone, marcando mentalmente cada task como concluída antes de avançar. Se uma task bloquear a próxima etapa, ele deve resolver o bloqueio ou reportar explicitamente o motivo.
 
 ---
 
-## Milestone 10 — Polimento visual do card/hero
+### Milestone 1 — Auditoria inicial do SVG e integração
 
-Objetivo: integrar o SVG animado ao design da landing.
+Objetivo: garantir que o SVG está acessível, inline e com contrato técnico válido antes de qualquer animação.
 
-### Tasks
+```txt
+[ ] Confirmar que o SVG não está sendo renderizado via <img>, next/image ou background-image.
+[ ] Confirmar que o SVG está inline no DOM e seus IDs são acessíveis por querySelector.
+[ ] Confirmar a presença de #logo-final.
+[ ] Confirmar a presença de #nite-logo.
+[ ] Confirmar a presença de #bulb.
+[ ] Confirmar a presença de #brain.
+[ ] Confirmar a presença de #text.
+[ ] Confirmar a presença de exatamente um #energy-overlay.
+[ ] Confirmar a presença de #energy-main-rise.
+[ ] Confirmar a presença de #energy-routes.
+[ ] Confirmar a presença de #electric-arcs.
+[ ] Confirmar a presença de #spark-heads.
+[ ] Confirmar a presença de #text-shimmer-mask.
+[ ] Implementar validateNiteSvgContract.
+[ ] Fazer a validação falhar de forma explícita se algum seletor obrigatório não existir.
+[ ] Não criar fallback heurístico silencioso.
+```
 
-- [x] Ajustar wrapper visual.
-- [x] Aplicar radial gradient atrás do cérebro.
-- [x] Aplicar borda sutil.
-- [x] Ajustar padding.
-- [x] Ajustar sombra do card.
-- [x] Testar contraste com headline.
-- [x] Testar contraste com fundo.
-- [x] Garantir que o SVG não fique pequeno demais.
-- [x] Garantir que o SVG não domine exageradamente o hero.
+Critério de saída:
 
-### Definition of Done
-
-- [x] O hero parece premium.
-- [x] O SVG parece parte nativa do layout.
-- [x] O card não parece apenas um container de imagem.
-
----
-
-## Milestone 11 — Responsividade e acessibilidade
-
-Objetivo: garantir experiência robusta.
-
-### Tasks
-
-- [x] Testar desktop.
-- [x] Testar tablet.
-- [x] Testar mobile.
-- [x] Ajustar escala do SVG por breakpoint.
-- [x] Reduzir intensidade de filtros em telas pequenas.
-- [x] Implementar `prefers-reduced-motion`.
-- [x] Garantir foco e leitura dos CTAs.
-- [x] Garantir que animação não cause layout shift.
-- [x] Validar contraste visual.
-
-### Definition of Done
-
-- [x] A animação funciona bem em todos os tamanhos.
-- [x] Usuários com movimento reduzido recebem versão estática ou simplificada.
-- [x] A página continua acessível.
+```txt
+[ ] O contrato do SVG foi validado em desenvolvimento.
+[ ] O agente consegue listar counts de rotas, arcos, sparks e shimmer.
+[ ] Nenhuma animação foi implementada antes da validação do contrato.
+```
 
 ---
 
-## Milestone 12 — Performance e revisão final
+### Milestone 2 — Preparação estrutural da animação
 
-Objetivo: entregar uma animação fluida e segura para produção.
+Objetivo: organizar o código para que a timeline seja previsível, testável e fácil de ajustar.
 
-### Tasks
+```txt
+[ ] Criar ou revisar NiteLogoCinematic.tsx.
+[ ] Criar ou revisar useNiteElectricAnimation.ts.
+[ ] Criar ou revisar validateNiteSvgContract.ts.
+[ ] Criar funções separadas para setupInitialState, buildIntroTimeline e buildIdleTimeline.
+[ ] Usar gsap.utils.selector escopado no SVG ou no container do logo.
+[ ] Evitar seletores globais fora do escopo do componente.
+[ ] Garantir cleanup das timelines no unmount.
+[ ] Garantir que a intro não seja recriada em loop involuntariamente.
+```
 
-- [x] Verificar FPS em desktop.
-- [x] Verificar FPS em mobile.
-- [x] Reduzir filtros se necessário.
-- [x] Confirmar que não há memory leak.
-- [x] Confirmar cleanup do GSAP.
-- [x] Confirmar ausência de erro no console.
-- [x] Confirmar ausência de erro de hydration.
-- [x] Testar reload da página.
-- [x] Testar navegação entre páginas, se houver.
-- [x] Revisar tempo total da abertura.
-- [x] Revisar loop idle.
-- [x] Fazer ajuste fino de delays/easings.
+Critério de saída:
 
-### Definition of Done
-
-- [x] A animação está estável.
-- [x] A performance é aceitável.
-- [x] A experiência visual está premium.
-- [x] O componente pode ir para produção.
+```txt
+[ ] A animação está encapsulada em hook/componente próprio.
+[ ] O código não mistura layout da landing com coreografia GSAP.
+[ ] O cleanup elimina timelines sem vazamento.
+```
 
 ---
 
-# Checklist final de entrega
+### Milestone 3 — Estado inicial e invisibilidade da camada elétrica
 
-- [ ] `AnimatedNiteLogo` criado.
-- [ ] SVG inserido no hero.
-- [ ] PNG antiga removida.
-- [ ] IDs principais preservados.
-- [ ] Timeline principal implementada.
-- [ ] Timeline idle implementada.
-- [ ] Bulb energiza primeiro.
-- [ ] Brain recebe energia ascendente.
-- [ ] Pontos/nós pulsam.
-- [ ] Descargas/raios internos aparecem.
-- [ ] Texto NITE reage ao final.
-- [ ] Loop idle funciona.
-- [ ] Hero continua responsivo.
-- [ ] `prefers-reduced-motion` implementado.
-- [ ] Sem erros no console.
-- [ ] Sem problemas de hydration.
-- [ ] Performance validada.
-- [ ] Resultado visual aprovado como premium/cinematográfico.
+Objetivo: impedir que rotas, arcos, sparks ou shimmer apareçam estáticos antes da animação.
+
+```txt
+[ ] Definir #energy-overlay com opacity 0 no primeiro frame.
+[ ] Definir #energy-main-rise path com opacity 0.
+[ ] Definir #energy-routes path com opacity 0.
+[ ] Definir #electric-arcs path com opacity 0.
+[ ] Definir #spark-heads circle com opacity 0 e scale 0.
+[ ] Definir #text-shimmer-mask path com opacity 0.
+[ ] Configurar strokeDasharray e strokeDashoffset nos paths animáveis.
+[ ] Confirmar visualmente que nenhuma linha elétrica aparece parada no carregamento.
+```
+
+Critério de saída:
+
+```txt
+[ ] O primeiro frame é limpo, premium e sem artefatos elétricos estáticos.
+[ ] A camada elétrica só aparece quando a timeline manda aparecer.
+```
+
+---
+
+### Milestone 4 — Ignition da lâmpada
+
+Objetivo: deixar claro que a energia nasce na lâmpada.
+
+```txt
+[ ] Animar #bulb antes de qualquer descarga no cérebro.
+[ ] Criar 2 ou 3 flickers curtos e elegantes.
+[ ] Aplicar glow branco/ciano controlado no bulb.
+[ ] Evitar flicker agressivo ou com aparência de bug.
+[ ] Iniciar #energy-main-rise somente depois do primeiro sinal da lâmpada.
+[ ] Fazer a energia subir da lâmpada para o cérebro.
+[ ] Evitar aparência de barra de loading vertical.
+```
+
+Critério de saída:
+
+```txt
+[ ] Um usuário consegue perceber que a lâmpada é a fonte da energia.
+[ ] A subida parece descarga irregular, não preenchimento linear.
+```
+
+---
+
+### Milestone 5 — Neural Storm no cérebro
+
+Objetivo: criar rajadas elétricas reais, com propagação e impacto visual.
+
+```txt
+[ ] Animar primeiro as rotas primary.
+[ ] Animar depois as rotas secondary.
+[ ] Animar micro rotas apenas como detalhes rápidos.
+[ ] Animar electric-arcs como saltos curtos e irregulares.
+[ ] Animar spark-heads como nós de ativação.
+[ ] Criar afterglow após a passagem da energia.
+[ ] Usar stagger com ordem e timing intencionais.
+[ ] Não acender todas as rotas ao mesmo tempo.
+[ ] Não animar todos os paths do SVG base.
+[ ] Não depender de getBBox, área ou heurística para selecionar circuitos principais.
+```
+
+Critério de saída:
+
+```txt
+[ ] O cérebro recebe rajadas evidentes.
+[ ] O efeito parece eletricidade percorrendo rotas, não apenas brilho difuso.
+[ ] Há variação entre core, halo, arcs, sparks e afterglow.
+```
+
+---
+
+### Milestone 6 — NITE Ascension
+
+Objetivo: transformar o texto NITE no clímax da animação.
+
+```txt
+[ ] Iniciar o shimmer do texto após o pico do cérebro.
+[ ] Animar #text-shimmer-mask path com strokeDashoffset.
+[ ] Aplicar brilho metálico no #text durante o clímax.
+[ ] Fazer o prata do NITE parecer mais vivo.
+[ ] Reduzir o brilho após o clímax para um estado premium.
+[ ] Evitar transformar o texto em neon exagerado.
+[ ] Garantir que o texto continue legível durante todo o efeito.
+```
+
+Critério de saída:
+
+```txt
+[ ] O nome NITE tem um momento claro de ascensão.
+[ ] O clímax visual acontece no texto, não apenas no cérebro.
+```
+
+---
+
+### Milestone 7 — Premium Idle Loop
+
+Objetivo: manter o logo vivo sem repetir a intro completa e sem parecer loading.
+
+```txt
+[ ] Criar idle separado da intro.
+[ ] Iniciar o idle apenas após a conclusão da intro.
+[ ] Usar micro descargas ocasionais.
+[ ] Limitar sparks simultâneos no idle.
+[ ] Limitar arcs simultâneos no idle.
+[ ] Manter respiração sutil no brain.
+[ ] Manter glow mínimo no bulb.
+[ ] Não repetir a tempestade completa a cada ciclo.
+[ ] Evitar loop com ritmo previsível demais.
+[ ] Evitar piscadas agressivas.
+```
+
+Critério de saída:
+
+```txt
+[ ] O logo parece vivo.
+[ ] O idle não parece loading, bug ou efeito chamativo demais.
+```
+
+---
+
+### Milestone 8 — Reduced motion, viewport e aba oculta
+
+Objetivo: respeitar acessibilidade e performance.
+
+```txt
+[ ] Detectar prefers-reduced-motion.
+[ ] Em reduced motion, não executar flickers, raios, arcs ou loop.
+[ ] Aplicar estado estático premium em reduced motion.
+[ ] Implementar IntersectionObserver para pausar idle fora da viewport.
+[ ] Retomar idle suavemente quando o logo voltar à viewport.
+[ ] Pausar timelines quando document.hidden for true.
+[ ] Retomar corretamente quando a aba voltar a ficar visível.
+```
+
+Critério de saída:
+
+```txt
+[ ] A animação respeita reduced motion.
+[ ] O idle não consome recursos fora da viewport ou com a aba oculta.
+```
+
+---
+
+### Milestone 9 — Mobile e responsividade
+
+Objetivo: manter o impacto visual em telas menores sem excesso de densidade.
+
+```txt
+[ ] Testar a animação em mobile real ou viewport equivalente.
+[ ] Garantir que o SVG aparece com destaque suficiente no primeiro impacto.
+[ ] Reduzir densidade de rotas secundárias no mobile.
+[ ] Reduzir micro rotas no mobile.
+[ ] Limitar arcs e sparks simultâneos no mobile.
+[ ] Verificar que CTAs continuam acessíveis.
+[ ] Verificar que o SVG não fica minúsculo ou escondido.
+[ ] Verificar que não há queda perceptível de performance.
+```
+
+Critério de saída:
+
+```txt
+[ ] A narrativa lâmpada → cérebro → NITE continua clara no mobile.
+[ ] A animação mobile é mais leve, mas não perde identidade.
+```
+
+---
+
+### Milestone 10 — Validação visual e critérios de rejeição
+
+Objetivo: impedir que a entrega seja aprovada apenas porque “tem animação”.
+
+```txt
+[ ] Comparar resultado com o objetivo visual deste spec.
+[ ] Verificar se o efeito ainda parece apenas glow/pulse.
+[ ] Verificar se a origem da energia está clara.
+[ ] Verificar se existem raios/arcos perceptíveis.
+[ ] Verificar se existe afterglow.
+[ ] Verificar se NITE tem clímax próprio.
+[ ] Verificar se o idle é premium e discreto.
+[ ] Verificar se nenhuma rota elétrica aparece estática no primeiro frame.
+[ ] Verificar se nenhum elemento importante está cortado por clipping.
+[ ] Verificar se a implementação não voltou a depender de heurísticas.
+[ ] Rejeitar a entrega se qualquer critério de rejeição da seção 21 acontecer.
+```
+
+Critério de saída:
+
+```txt
+[ ] A implementação pode ser considerada uma assinatura visual premium da landing.
+[ ] A animação comunica: Ideia → energia → cérebro → inteligência → NITE.
+```
+
+---
+
+### Milestone 11 — Confirmação final do agente executor
+
+Objetivo: exigir uma resposta final objetiva de validação.
+
+Ao concluir, o agente executor deve reportar:
+
+```txt
+[ ] Arquivos alterados.
+[ ] Como o SVG inline foi garantido.
+[ ] Resultado da validação do contrato do SVG.
+[ ] Como a intro foi dividida em atos.
+[ ] Como o idle foi implementado.
+[ ] Como reduced motion foi tratado.
+[ ] Como viewport/document.hidden foram tratados.
+[ ] Como mobile foi ajustado.
+[ ] Quais critérios visuais foram validados.
+[ ] Quais limitações ou trade-offs permaneceram.
+```
+
+Resposta final esperada do executor:
+
+```txt
+Implementação concluída somente se:
+- o contrato SVG passou;
+- a camada elétrica começa invisível;
+- a energia nasce na lâmpada;
+- há rajadas no cérebro;
+- o NITE tem clímax evidente;
+- o idle é premium e sutil;
+- reduced motion, viewport e mobile foram validados.
+```
+
+---
+
+## 25. Resultado esperado
+
+A nova implementação deve transformar o logo NITE em uma peça hero memorável.
+
+A animação deve comunicar:
+
+```txt
+Ideia → energia → cérebro → inteligência → NITE
+```
+
+A camada `#energy-overlay` deve ser usada como instrumento principal da direção artística.
+
+O resultado final não deve ser apenas “um SVG animado”. Deve parecer uma assinatura visual premium da landing.
+
+---
+
+## 26. Instrução final para o agente executor
+
+Não tente resolver este spec com heurísticas genéricas.
+
+Não tente “melhorar um pouco” a animação antiga.
+
+A tarefa é reconstruir a lógica de animação em torno de um contrato técnico explícito e uma direção artística cinematográfica.
+
+A implementação correta deve seguir esta ordem:
+
+```txt
+1. Garantir SVG inline.
+2. Validar contrato do SVG.
+3. Definir estado inicial invisível da camada elétrica.
+4. Construir timeline intro em atos.
+5. Construir idle loop premium.
+6. Implementar reduced motion.
+7. Implementar pausa por viewport/visibilidade.
+8. Validar desktop/mobile.
+9. Confirmar checklist técnico e visual.
+```
+
+Se algum seletor obrigatório não existir, o agente deve parar, reportar o problema e não inventar uma nova heurística silenciosa.
+
+Este spec é a fonte de verdade para a próxima versão da animação NITE.
