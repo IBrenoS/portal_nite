@@ -191,18 +191,58 @@ export function AnimatedNiteLogoClient({ className, svgMarkup }: AnimatedNiteLog
         const lightningGlow = isCompactViewport
           ? "brightness(1.75) drop-shadow(0 0 8px rgba(0, 210, 255, 0.45))"
           : "brightness(2.25) drop-shadow(0 0 14px rgba(0, 235, 255, 0.78))";
+        const lightningStableGlow = isCompactViewport
+          ? "brightness(1.08) drop-shadow(0 0 4px rgba(0, 200, 255, 0.14))"
+          : "brightness(1.12) drop-shadow(0 0 5px rgba(0, 200, 255, 0.2))";
+        const bulbIgniteGlow = isCompactViewport
+          ? "brightness(1.34) drop-shadow(0 0 10px rgba(0, 200, 255, 0.42))"
+          : "brightness(1.6) drop-shadow(0 0 18px rgba(0, 200, 255, 0.7))";
+        const bulbStableGlow = isCompactViewport
+          ? "brightness(1.08) drop-shadow(0 0 6px rgba(0, 200, 255, 0.24))"
+          : "brightness(1.15) drop-shadow(0 0 10px rgba(0, 200, 255, 0.45))";
+        const brainEnergyGlow = isCompactViewport
+          ? "brightness(1.2) drop-shadow(0 0 5px rgba(0, 200, 255, 0.2))"
+          : "brightness(1.35) drop-shadow(0 0 8px rgba(0, 200, 255, 0.35))";
+        const brainStableGlow = isCompactViewport
+          ? "brightness(1.04) drop-shadow(0 0 4px rgba(0, 200, 255, 0.14))"
+          : "brightness(1.08) drop-shadow(0 0 6px rgba(0, 200, 255, 0.22))";
+        const nodePulseGlow = isCompactViewport
+          ? "brightness(1.48) drop-shadow(0 0 6px rgba(0, 220, 255, 0.34))"
+          : "brightness(1.85) drop-shadow(0 0 10px rgba(0, 220, 255, 0.62))";
+        const nodeStableGlow = isCompactViewport
+          ? "brightness(1.06) drop-shadow(0 0 4px rgba(0, 200, 255, 0.16))"
+          : "brightness(1.12) drop-shadow(0 0 6px rgba(0, 200, 255, 0.24))";
         const textGlow = isCompactViewport
           ? "brightness(1.22) drop-shadow(0 0 5px rgba(0, 200, 255, 0.18))"
           : "brightness(1.38) drop-shadow(0 0 9px rgba(0, 200, 255, 0.28))";
+        const idleBulbGlow = isCompactViewport
+          ? "brightness(1.22) drop-shadow(0 0 8px rgba(0, 200, 255, 0.28))"
+          : "brightness(1.34) drop-shadow(0 0 12px rgba(0, 200, 255, 0.36))";
+        const idleBrainGlow = isCompactViewport
+          ? "brightness(1.16) drop-shadow(0 0 8px rgba(0, 200, 255, 0.18))"
+          : "brightness(1.23) drop-shadow(0 0 11px rgba(0, 200, 255, 0.25))";
+        const idleNodeGlow = isCompactViewport
+          ? "brightness(1.28) drop-shadow(0 0 5px rgba(0, 220, 255, 0.2))"
+          : "brightness(1.42) drop-shadow(0 0 7px rgba(0, 220, 255, 0.32))";
+        const idleTextGlow = isCompactViewport
+          ? "brightness(1.16) drop-shadow(0 0 4px rgba(0, 200, 255, 0.14))"
+          : "brightness(1.24) drop-shadow(0 0 6px rgba(0, 200, 255, 0.18))";
+        const logoIntroScale = isCompactViewport ? 0.96 : 0.94;
+        const logoIntroY = isCompactViewport ? 18 : 28;
+        const textIntroY = isCompactViewport ? 4 : 7;
         const introTimeline = gsap.timeline({
           defaults: { ease: "none" },
         });
         const idleTimeline = gsap.timeline({
           paused: true,
           repeat: -1,
-          repeatDelay: 3.8,
+          repeatDelay: 1.85,
           defaults: { ease: "sine.inOut" },
         });
+        const rootElement = containerRef.current;
+        let introComplete = false;
+        let idleStarted = false;
+        let isLogoInViewport = true;
 
         gsap.set(brainInitialTargets, {
           opacity: 0.35,
@@ -219,9 +259,13 @@ export function AnimatedNiteLogoClient({ className, svgMarkup }: AnimatedNiteLog
           transformBox: "fill-box",
           transformOrigin: "50% 50%",
         });
+        gsap.set(bulb, {
+          transformBox: "fill-box",
+          transformOrigin: "50% 50%",
+        });
         gsap.set(orderedTextLetters, {
           opacity: 0.76,
-          y: 7,
+          y: textIntroY,
           filter: "brightness(0.78)",
           transformBox: "fill-box",
           transformOrigin: "50% 50%",
@@ -244,8 +288,8 @@ export function AnimatedNiteLogoClient({ className, svgMarkup }: AnimatedNiteLog
           logo,
           {
             opacity: 0,
-            scale: 0.94,
-            y: 28,
+            scale: logoIntroScale,
+            y: logoIntroY,
             transformOrigin: "50% 50%",
           },
           {
@@ -270,7 +314,7 @@ export function AnimatedNiteLogoClient({ className, svgMarkup }: AnimatedNiteLog
             {
               opacity: 1,
               scale: 1.02,
-              filter: "brightness(1.6) drop-shadow(0 0 18px rgba(0, 200, 255, 0.7))",
+              filter: bulbIgniteGlow,
               duration: 0.7,
               ease: "power2.out",
             },
@@ -294,7 +338,7 @@ export function AnimatedNiteLogoClient({ className, svgMarkup }: AnimatedNiteLog
               scale: 1,
               x: 0,
               y: 0,
-              filter: "brightness(1.15) drop-shadow(0 0 10px rgba(0, 200, 255, 0.45))",
+              filter: bulbStableGlow,
               duration: 0.45,
               ease: "sine.out",
             },
@@ -304,7 +348,7 @@ export function AnimatedNiteLogoClient({ className, svgMarkup }: AnimatedNiteLog
           orderedBrainParts,
           {
             opacity: 1,
-            filter: "brightness(1.35) drop-shadow(0 0 8px rgba(0, 200, 255, 0.35))",
+            filter: brainEnergyGlow,
             duration: 0.9,
             stagger: {
               each: 0.012,
@@ -332,7 +376,7 @@ export function AnimatedNiteLogoClient({ className, svgMarkup }: AnimatedNiteLog
             {
               opacity: 1,
               scale: 1.08,
-              filter: "brightness(1.85) drop-shadow(0 0 10px rgba(0, 220, 255, 0.62))",
+              filter: nodePulseGlow,
               duration: 0.22,
               repeat: 1,
               yoyo: true,
@@ -349,7 +393,7 @@ export function AnimatedNiteLogoClient({ className, svgMarkup }: AnimatedNiteLog
             {
               opacity: 1,
               scale: 1,
-              filter: "brightness(1.12) drop-shadow(0 0 6px rgba(0, 200, 255, 0.24))",
+              filter: nodeStableGlow,
               duration: 0.32,
               stagger: {
                 each: 0.006,
@@ -384,7 +428,7 @@ export function AnimatedNiteLogoClient({ className, svgMarkup }: AnimatedNiteLog
         introTimeline.to(
           brain,
           {
-            filter: "brightness(1.08) drop-shadow(0 0 6px rgba(0, 200, 255, 0.22))",
+            filter: brainStableGlow,
             duration: 0.45,
             ease: "sine.out",
           },
@@ -394,7 +438,7 @@ export function AnimatedNiteLogoClient({ className, svgMarkup }: AnimatedNiteLog
           orderedLightningCandidates,
           {
             opacity: 1,
-            filter: "brightness(1.12) drop-shadow(0 0 5px rgba(0, 200, 255, 0.2))",
+            filter: lightningStableGlow,
             duration: 0.22,
             ease: "sine.out",
           },
@@ -435,41 +479,135 @@ export function AnimatedNiteLogoClient({ className, svgMarkup }: AnimatedNiteLog
               duration: 0.32,
               stagger: 0.035,
               ease: "sine.out",
+          },
+          3.38,
+        );
+        idleTimeline
+          .to(
+            bulb,
+            {
+              scale: 1.012,
+              filter: idleBulbGlow,
+              duration: 1.25,
+              repeat: 1,
+              yoyo: true,
             },
-            3.38,
+            0,
+          )
+          .to(
+            brain,
+            {
+              filter: idleBrainGlow,
+              duration: 1.45,
+              repeat: 1,
+              yoyo: true,
+            },
+            0.2,
           );
         if (idleBrainNodes.length > 0) {
           idleTimeline
-            .to(idleBrainNodes, {
-              opacity: 1,
-              scale: 1.045,
-              filter: "brightness(1.42) drop-shadow(0 0 7px rgba(0, 220, 255, 0.32))",
-              duration: 0.28,
-              stagger: {
-                each: 0.045,
-                from: "start",
+            .to(
+              idleBrainNodes,
+              {
+                opacity: 1,
+                scale: 1.045,
+                filter: idleNodeGlow,
+                duration: 0.26,
+                stagger: {
+                  each: 0.045,
+                  from: "start",
+                },
+                repeat: 1,
+                yoyo: true,
               },
-              repeat: 1,
-              yoyo: true,
-            })
+              1.45,
+            )
             .to(
               idleBrainNodes,
               {
                 scale: 1,
-                filter: "brightness(1.12) drop-shadow(0 0 5px rgba(0, 200, 255, 0.2))",
-                duration: 0.35,
+                filter: nodeStableGlow,
+                duration: 0.32,
                 stagger: {
-                  each: 0.02,
+                  each: 0.018,
                   from: "end",
                 },
                 ease: "sine.out",
               },
-              ">-0.15",
+              2.25,
             );
-          introTimeline.add(() => idleTimeline.play(0), 3.55);
         }
+        idleTimeline
+          .to(
+            orderedTextLetters,
+            {
+              opacity: 1,
+              filter: idleTextGlow,
+              duration: 0.3,
+              repeat: 1,
+              yoyo: true,
+              stagger: {
+                each: 0.06,
+                from: "start",
+              },
+            },
+            3.25,
+          )
+          .to(
+            orderedTextLetters,
+            {
+              opacity: 1,
+              filter: "brightness(1.05)",
+              duration: 0.32,
+              stagger: {
+                each: 0.035,
+                from: "end",
+              },
+              ease: "sine.out",
+            },
+            4.05,
+          );
+
+        const shouldPlayIdle = () =>
+          introComplete && isLogoInViewport && document.visibilityState === "visible";
+        const syncIdlePlayback = () => {
+          if (!shouldPlayIdle()) {
+            idleTimeline.pause();
+            return;
+          }
+
+          if (!idleStarted) {
+            idleStarted = true;
+            idleTimeline.play(0);
+            return;
+          }
+
+          idleTimeline.resume();
+        };
+        const observer =
+          rootElement && "IntersectionObserver" in window
+            ? new IntersectionObserver(
+                ([entry]) => {
+                  isLogoInViewport = entry.isIntersecting && entry.intersectionRatio >= 0.2;
+                  syncIdlePlayback();
+                },
+                { threshold: 0.2 },
+              )
+            : null;
+        const handleVisibilityChange = () => syncIdlePlayback();
+
+        if (observer && rootElement) {
+          observer.observe(rootElement);
+        }
+        document.addEventListener("visibilitychange", handleVisibilityChange);
+        introTimeline.add(() => {
+          introComplete = true;
+          syncIdlePlayback();
+        }, 3.55);
 
         return () => {
+          observer?.disconnect();
+          document.removeEventListener("visibilitychange", handleVisibilityChange);
           introTimeline.kill();
           idleTimeline.kill();
         };
@@ -483,8 +621,9 @@ export function AnimatedNiteLogoClient({ className, svgMarkup }: AnimatedNiteLog
   return (
     <div
       ref={containerRef}
+      aria-hidden="true"
       className={cn(
-        "animated-nite-logo mx-auto flex w-full items-center justify-center drop-shadow-[0_0_44px_rgb(51_212_255_/_0.22)] [&_svg]:h-auto [&_svg]:w-full",
+        "animated-nite-logo mx-auto flex w-full items-center justify-center drop-shadow-[0_0_24px_rgb(51_212_255_/_0.16)] sm:drop-shadow-[0_0_36px_rgb(51_212_255_/_0.2)] lg:drop-shadow-[0_0_44px_rgb(51_212_255_/_0.22)] [&_svg]:h-auto [&_svg]:w-full",
         className,
       )}
       dangerouslySetInnerHTML={{ __html: svgMarkup }}

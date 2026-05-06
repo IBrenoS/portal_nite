@@ -1303,20 +1303,20 @@ Objetivo: manter o SVG vivo após a abertura.
 
 ### Tasks
 
-- [ ] Criar timeline idle com `repeat: -1`.
-- [ ] Adicionar respiração luminosa ao bulb.
-- [ ] Adicionar glow sutil ao brain.
-- [ ] Adicionar micro-pulsos em nós internos.
-- [ ] Adicionar shimmer raro no texto.
-- [ ] Configurar duração entre 5s e 8s.
-- [ ] Evitar piscadas repetitivas.
-- [ ] Pausar ou reduzir idle quando fora de viewport, se aplicável.
+- [x] Criar timeline idle com `repeat: -1`.
+- [x] Adicionar respiração luminosa ao bulb.
+- [x] Adicionar glow sutil ao brain.
+- [x] Adicionar micro-pulsos em nós internos.
+- [x] Adicionar shimmer raro no texto.
+- [x] Configurar duração entre 5s e 8s.
+- [x] Evitar piscadas repetitivas.
+- [x] Pausar ou reduzir idle quando fora de viewport, se aplicável.
 
 ### Definition of Done
 
-- [ ] O logo continua vivo.
-- [ ] O loop é elegante.
-- [ ] O loop não distrai da leitura da página.
+- [x] O logo continua vivo.
+- [x] O loop é elegante.
+- [x] O loop não distrai da leitura da página.
 
 ---
 
@@ -1326,21 +1326,21 @@ Objetivo: integrar o SVG animado ao design da landing.
 
 ### Tasks
 
-- [ ] Ajustar wrapper visual.
-- [ ] Aplicar radial gradient atrás do cérebro.
-- [ ] Aplicar borda sutil.
-- [ ] Ajustar padding.
-- [ ] Ajustar sombra do card.
-- [ ] Testar contraste com headline.
-- [ ] Testar contraste com fundo.
-- [ ] Garantir que o SVG não fique pequeno demais.
-- [ ] Garantir que o SVG não domine exageradamente o hero.
+- [x] Ajustar wrapper visual.
+- [x] Aplicar radial gradient atrás do cérebro.
+- [x] Aplicar borda sutil.
+- [x] Ajustar padding.
+- [x] Ajustar sombra do card.
+- [x] Testar contraste com headline.
+- [x] Testar contraste com fundo.
+- [x] Garantir que o SVG não fique pequeno demais.
+- [x] Garantir que o SVG não domine exageradamente o hero.
 
 ### Definition of Done
 
-- [ ] O hero parece premium.
-- [ ] O SVG parece parte nativa do layout.
-- [ ] O card não parece apenas um container de imagem.
+- [x] O hero parece premium.
+- [x] O SVG parece parte nativa do layout.
+- [x] O card não parece apenas um container de imagem.
 
 ---
 
@@ -1350,21 +1350,21 @@ Objetivo: garantir experiência robusta.
 
 ### Tasks
 
-- [ ] Testar desktop.
-- [ ] Testar tablet.
-- [ ] Testar mobile.
-- [ ] Ajustar escala do SVG por breakpoint.
-- [ ] Reduzir intensidade de filtros em telas pequenas.
-- [ ] Implementar `prefers-reduced-motion`.
-- [ ] Garantir foco e leitura dos CTAs.
-- [ ] Garantir que animação não cause layout shift.
-- [ ] Validar contraste visual.
+- [x] Testar desktop.
+- [x] Testar tablet.
+- [x] Testar mobile.
+- [x] Ajustar escala do SVG por breakpoint.
+- [x] Reduzir intensidade de filtros em telas pequenas.
+- [x] Implementar `prefers-reduced-motion`.
+- [x] Garantir foco e leitura dos CTAs.
+- [x] Garantir que animação não cause layout shift.
+- [x] Validar contraste visual.
 
 ### Definition of Done
 
-- [ ] A animação funciona bem em todos os tamanhos.
-- [ ] Usuários com movimento reduzido recebem versão estática ou simplificada.
-- [ ] A página continua acessível.
+- [x] A animação funciona bem em todos os tamanhos.
+- [x] Usuários com movimento reduzido recebem versão estática ou simplificada.
+- [x] A página continua acessível.
 
 ---
 
@@ -1374,25 +1374,25 @@ Objetivo: entregar uma animação fluida e segura para produção.
 
 ### Tasks
 
-- [ ] Verificar FPS em desktop.
-- [ ] Verificar FPS em mobile.
-- [ ] Reduzir filtros se necessário.
-- [ ] Confirmar que não há memory leak.
-- [ ] Confirmar cleanup do GSAP.
-- [ ] Confirmar ausência de erro no console.
-- [ ] Confirmar ausência de erro de hydration.
-- [ ] Testar reload da página.
-- [ ] Testar navegação entre páginas, se houver.
-- [ ] Revisar tempo total da abertura.
-- [ ] Revisar loop idle.
-- [ ] Fazer ajuste fino de delays/easings.
+- [x] Verificar FPS em desktop.
+- [x] Verificar FPS em mobile.
+- [x] Reduzir filtros se necessário.
+- [x] Confirmar que não há memory leak.
+- [x] Confirmar cleanup do GSAP.
+- [x] Confirmar ausência de erro no console.
+- [x] Confirmar ausência de erro de hydration.
+- [x] Testar reload da página.
+- [x] Testar navegação entre páginas, se houver.
+- [x] Revisar tempo total da abertura.
+- [x] Revisar loop idle.
+- [x] Fazer ajuste fino de delays/easings.
 
 ### Definition of Done
 
-- [ ] A animação está estável.
-- [ ] A performance é aceitável.
-- [ ] A experiência visual está premium.
-- [ ] O componente pode ir para produção.
+- [x] A animação está estável.
+- [x] A performance é aceitável.
+- [x] A experiência visual está premium.
+- [x] O componente pode ir para produção.
 
 ---
 

@@ -36,5 +36,8 @@ describe("HomePage", () => {
     ]) {
       expect(document.querySelector(`#${id}`)).toBeInTheDocument();
     }
+
+    expect(document.querySelector(".animated-nite-logo")).toHaveAttribute("aria-hidden", "true");
+    expect(document.querySelector("#logo-final")?.closest(".brand-panel")).toBeNull();
   });
 });

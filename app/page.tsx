@@ -57,7 +57,7 @@ export default function HomePage() {
       <main id="conteudo-principal" className="overflow-hidden">
         <section className="relative border-b border-border">
           <div className="brand-scanline pointer-events-none absolute inset-0 opacity-35" />
-          <Container className="relative grid min-h-[calc(88svh-4rem)] items-center gap-10 py-12 sm:py-20 lg:grid-cols-[1.08fr_0.92fr] lg:py-24">
+          <Container className="relative grid min-h-[calc(88svh-4rem)] items-center gap-10 py-12 sm:py-20 lg:grid-cols-[1.08fr_0.92fr] lg:py-20">
             <div className="relative z-10 flex flex-col gap-8 animate-brand-rise">
               <div className="flex flex-col gap-6">
                 <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-circuit-bright">
@@ -86,8 +86,16 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="relative mt-2 flex items-center justify-center sm:mt-0 lg:min-h-[34rem]">
-              <AnimatedNiteLogo className="w-full max-w-[13rem] sm:max-w-[16rem] lg:max-w-[18rem]" />
+            <div className="relative isolate mt-2 flex min-h-[15rem] items-center justify-center overflow-visible sm:mt-0 sm:min-h-[22rem] lg:min-h-[34rem]">
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-[-18%] top-[4%] z-0 h-[72%] bg-[radial-gradient(ellipse_at_50%_36%,rgb(51_212_255_/_0.11),rgb(41_174_255_/_0.055)_36%,transparent_72%)] blur-2xl sm:inset-x-[-24%] sm:top-[2%] sm:h-[76%] sm:bg-[radial-gradient(ellipse_at_50%_36%,rgb(51_212_255_/_0.16),rgb(41_174_255_/_0.08)_36%,transparent_72%)] sm:blur-3xl lg:inset-x-[-16%] lg:top-[6%]"
+              />
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-[8%] top-[13%] z-0 h-[46%] bg-[radial-gradient(ellipse_at_50%_44%,rgb(255_255_255_/_0.04),transparent_68%)] blur-xl sm:inset-x-[2%] sm:h-[52%] sm:bg-[radial-gradient(ellipse_at_50%_44%,rgb(255_255_255_/_0.065),transparent_68%)] lg:inset-x-[6%]"
+              />
+              <AnimatedNiteLogo className="relative z-10 w-full max-w-[13rem] sm:max-w-[18rem] lg:max-w-[21rem] xl:max-w-[22rem]" />
             </div>
           </Container>
         </section>
