@@ -1,0 +1,16 @@
+{
+  "sampleCount": 244,
+  "initialShimmerHidden": true,
+  "firstSparkAt": 2574.300000011921,
+  "firstShimmerAt": 3248.600000023842,
+  "shimmerStartsAfterNeuralStorm": true,
+  "initialShimmerDashoffset": 1200,
+  "minVisibleShimmerDashoffset": 0,
+  "textReceivesGlow": true,
+  "peakTextBrightness": 1.2389,
+  "finalTextBrightness": 1.05,
+  "finalShimmerOpacity": 0,
+  "shimmerActivationCount": 1,
+  "textLegible": true,
+  "premiumIdleLoopImplemented": false
+}

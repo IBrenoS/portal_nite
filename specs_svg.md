@@ -964,30 +964,30 @@ O agente executor deve trabalhar milestone por milestone, marcando mentalmente c
 Objetivo: garantir que o SVG está acessível, inline e com contrato técnico válido antes de qualquer animação.
 
 ```txt
-[ ] Confirmar que o SVG não está sendo renderizado via <img>, next/image ou background-image.
-[ ] Confirmar que o SVG está inline no DOM e seus IDs são acessíveis por querySelector.
-[ ] Confirmar a presença de #logo-final.
-[ ] Confirmar a presença de #nite-logo.
-[ ] Confirmar a presença de #bulb.
-[ ] Confirmar a presença de #brain.
-[ ] Confirmar a presença de #text.
-[ ] Confirmar a presença de exatamente um #energy-overlay.
-[ ] Confirmar a presença de #energy-main-rise.
-[ ] Confirmar a presença de #energy-routes.
-[ ] Confirmar a presença de #electric-arcs.
-[ ] Confirmar a presença de #spark-heads.
-[ ] Confirmar a presença de #text-shimmer-mask.
-[ ] Implementar validateNiteSvgContract.
-[ ] Fazer a validação falhar de forma explícita se algum seletor obrigatório não existir.
-[ ] Não criar fallback heurístico silencioso.
+[x] Confirmar que o SVG não está sendo renderizado via <img>, next/image ou background-image.
+[x] Confirmar que o SVG está inline no DOM e seus IDs são acessíveis por querySelector.
+[x] Confirmar a presença de #logo-final.
+[x] Confirmar a presença de #nite-logo.
+[x] Confirmar a presença de #bulb.
+[x] Confirmar a presença de #brain.
+[x] Confirmar a presença de #text.
+[x] Confirmar a presença de exatamente um #energy-overlay.
+[x] Confirmar a presença de #energy-main-rise.
+[x] Confirmar a presença de #energy-routes.
+[x] Confirmar a presença de #electric-arcs.
+[x] Confirmar a presença de #spark-heads.
+[x] Confirmar a presença de #text-shimmer-mask.
+[x] Implementar validateNiteSvgContract.
+[x] Fazer a validação falhar de forma explícita se algum seletor obrigatório não existir.
+[x] Não criar fallback heurístico silencioso.
 ```
 
 Critério de saída:
 
 ```txt
-[ ] O contrato do SVG foi validado em desenvolvimento.
-[ ] O agente consegue listar counts de rotas, arcos, sparks e shimmer.
-[ ] Nenhuma animação foi implementada antes da validação do contrato.
+[x] O contrato do SVG foi validado em desenvolvimento.
+[x] O agente consegue listar counts de rotas, arcos, sparks e shimmer.
+[x] Nenhuma animação foi implementada antes da validação do contrato.
 ```
 
 ---
@@ -997,22 +997,22 @@ Critério de saída:
 Objetivo: organizar o código para que a timeline seja previsível, testável e fácil de ajustar.
 
 ```txt
-[ ] Criar ou revisar NiteLogoCinematic.tsx.
-[ ] Criar ou revisar useNiteElectricAnimation.ts.
-[ ] Criar ou revisar validateNiteSvgContract.ts.
-[ ] Criar funções separadas para setupInitialState, buildIntroTimeline e buildIdleTimeline.
-[ ] Usar gsap.utils.selector escopado no SVG ou no container do logo.
-[ ] Evitar seletores globais fora do escopo do componente.
-[ ] Garantir cleanup das timelines no unmount.
-[ ] Garantir que a intro não seja recriada em loop involuntariamente.
+[x] Criar ou revisar NiteLogoCinematic.tsx.
+[x] Criar ou revisar useNiteElectricAnimation.ts.
+[x] Criar ou revisar validateNiteSvgContract.ts.
+[x] Criar funções separadas para setupInitialState, buildIntroTimeline e buildIdleTimeline.
+[x] Usar gsap.utils.selector escopado no SVG ou no container do logo.
+[x] Evitar seletores globais fora do escopo do componente.
+[x] Garantir cleanup das timelines no unmount.
+[x] Garantir que a intro não seja recriada em loop involuntariamente.
 ```
 
 Critério de saída:
 
 ```txt
-[ ] A animação está encapsulada em hook/componente próprio.
-[ ] O código não mistura layout da landing com coreografia GSAP.
-[ ] O cleanup elimina timelines sem vazamento.
+[x] A animação está encapsulada em hook/componente próprio.
+[x] O código não mistura layout da landing com coreografia GSAP.
+[x] O cleanup elimina timelines sem vazamento.
 ```
 
 ---
@@ -1022,21 +1022,21 @@ Critério de saída:
 Objetivo: impedir que rotas, arcos, sparks ou shimmer apareçam estáticos antes da animação.
 
 ```txt
-[ ] Definir #energy-overlay com opacity 0 no primeiro frame.
-[ ] Definir #energy-main-rise path com opacity 0.
-[ ] Definir #energy-routes path com opacity 0.
-[ ] Definir #electric-arcs path com opacity 0.
-[ ] Definir #spark-heads circle com opacity 0 e scale 0.
-[ ] Definir #text-shimmer-mask path com opacity 0.
-[ ] Configurar strokeDasharray e strokeDashoffset nos paths animáveis.
-[ ] Confirmar visualmente que nenhuma linha elétrica aparece parada no carregamento.
+[x] Definir #energy-overlay com opacity 0 no primeiro frame.
+[x] Definir #energy-main-rise path com opacity 0.
+[x] Definir #energy-routes path com opacity 0.
+[x] Definir #electric-arcs path com opacity 0.
+[x] Definir #spark-heads circle com opacity 0 e scale 0.
+[x] Definir #text-shimmer-mask path com opacity 0.
+[x] Configurar strokeDasharray e strokeDashoffset nos paths animáveis.
+[x] Confirmar visualmente que nenhuma linha elétrica aparece parada no carregamento.
 ```
 
 Critério de saída:
 
 ```txt
-[ ] O primeiro frame é limpo, premium e sem artefatos elétricos estáticos.
-[ ] A camada elétrica só aparece quando a timeline manda aparecer.
+[x] O primeiro frame é limpo, premium e sem artefatos elétricos estáticos.
+[x] A camada elétrica só aparece quando a timeline manda aparecer.
 ```
 
 ---
@@ -1046,20 +1046,20 @@ Critério de saída:
 Objetivo: deixar claro que a energia nasce na lâmpada.
 
 ```txt
-[ ] Animar #bulb antes de qualquer descarga no cérebro.
-[ ] Criar 2 ou 3 flickers curtos e elegantes.
-[ ] Aplicar glow branco/ciano controlado no bulb.
-[ ] Evitar flicker agressivo ou com aparência de bug.
-[ ] Iniciar #energy-main-rise somente depois do primeiro sinal da lâmpada.
-[ ] Fazer a energia subir da lâmpada para o cérebro.
-[ ] Evitar aparência de barra de loading vertical.
+[x] Animar #bulb antes de qualquer descarga no cérebro.
+[x] Criar 2 ou 3 flickers curtos e elegantes.
+[x] Aplicar glow branco/ciano controlado no bulb.
+[x] Evitar flicker agressivo ou com aparência de bug.
+[x] Iniciar #energy-main-rise somente depois do primeiro sinal da lâmpada.
+[x] Fazer a energia subir da lâmpada para o cérebro.
+[x] Evitar aparência de barra de loading vertical.
 ```
 
 Critério de saída:
 
 ```txt
-[ ] Um usuário consegue perceber que a lâmpada é a fonte da energia.
-[ ] A subida parece descarga irregular, não preenchimento linear.
+[x] Um usuário consegue perceber que a lâmpada é a fonte da energia.
+[x] A subida parece descarga irregular, não preenchimento linear.
 ```
 
 ---
@@ -1069,24 +1069,24 @@ Critério de saída:
 Objetivo: criar rajadas elétricas reais, com propagação e impacto visual.
 
 ```txt
-[ ] Animar primeiro as rotas primary.
-[ ] Animar depois as rotas secondary.
-[ ] Animar micro rotas apenas como detalhes rápidos.
-[ ] Animar electric-arcs como saltos curtos e irregulares.
-[ ] Animar spark-heads como nós de ativação.
-[ ] Criar afterglow após a passagem da energia.
-[ ] Usar stagger com ordem e timing intencionais.
-[ ] Não acender todas as rotas ao mesmo tempo.
-[ ] Não animar todos os paths do SVG base.
-[ ] Não depender de getBBox, área ou heurística para selecionar circuitos principais.
+[x] Animar primeiro as rotas primary.
+[x] Animar depois as rotas secondary.
+[x] Animar micro rotas apenas como detalhes rápidos.
+[x] Animar electric-arcs como saltos curtos e irregulares.
+[x] Animar spark-heads como nós de ativação.
+[x] Criar afterglow após a passagem da energia.
+[x] Usar stagger com ordem e timing intencionais.
+[x] Não acender todas as rotas ao mesmo tempo.
+[x] Não animar todos os paths do SVG base.
+[x] Não depender de getBBox, área ou heurística para selecionar circuitos principais.
 ```
 
 Critério de saída:
 
 ```txt
-[ ] O cérebro recebe rajadas evidentes.
-[ ] O efeito parece eletricidade percorrendo rotas, não apenas brilho difuso.
-[ ] Há variação entre core, halo, arcs, sparks e afterglow.
+[x] O cérebro recebe rajadas evidentes.
+[x] O efeito parece eletricidade percorrendo rotas, não apenas brilho difuso.
+[x] Há variação entre core, halo, arcs, sparks e afterglow.
 ```
 
 ---
@@ -1096,20 +1096,20 @@ Critério de saída:
 Objetivo: transformar o texto NITE no clímax da animação.
 
 ```txt
-[ ] Iniciar o shimmer do texto após o pico do cérebro.
-[ ] Animar #text-shimmer-mask path com strokeDashoffset.
-[ ] Aplicar brilho metálico no #text durante o clímax.
-[ ] Fazer o prata do NITE parecer mais vivo.
-[ ] Reduzir o brilho após o clímax para um estado premium.
-[ ] Evitar transformar o texto em neon exagerado.
-[ ] Garantir que o texto continue legível durante todo o efeito.
+[x] Iniciar o shimmer do texto após o pico do cérebro.
+[x] Animar #text-shimmer-mask path com strokeDashoffset.
+[x] Aplicar brilho metálico no #text durante o clímax.
+[x] Fazer o prata do NITE parecer mais vivo.
+[x] Reduzir o brilho após o clímax para um estado premium.
+[x] Evitar transformar o texto em neon exagerado.
+[x] Garantir que o texto continue legível durante todo o efeito.
 ```
 
 Critério de saída:
 
 ```txt
-[ ] O nome NITE tem um momento claro de ascensão.
-[ ] O clímax visual acontece no texto, não apenas no cérebro.
+[x] O nome NITE tem um momento claro de ascensão.
+[x] O clímax visual acontece no texto, não apenas no cérebro.
 ```
 
 ---
@@ -1119,23 +1119,23 @@ Critério de saída:
 Objetivo: manter o logo vivo sem repetir a intro completa e sem parecer loading.
 
 ```txt
-[ ] Criar idle separado da intro.
-[ ] Iniciar o idle apenas após a conclusão da intro.
-[ ] Usar micro descargas ocasionais.
-[ ] Limitar sparks simultâneos no idle.
-[ ] Limitar arcs simultâneos no idle.
-[ ] Manter respiração sutil no brain.
-[ ] Manter glow mínimo no bulb.
-[ ] Não repetir a tempestade completa a cada ciclo.
-[ ] Evitar loop com ritmo previsível demais.
-[ ] Evitar piscadas agressivas.
+[x] Criar idle separado da intro.
+[x] Iniciar o idle apenas após a conclusão da intro.
+[x] Usar micro descargas ocasionais.
+[x] Limitar sparks simultâneos no idle.
+[x] Limitar arcs simultâneos no idle.
+[x] Manter respiração sutil no brain.
+[x] Manter glow mínimo no bulb.
+[x] Não repetir a tempestade completa a cada ciclo.
+[x] Evitar loop com ritmo previsível demais.
+[x] Evitar piscadas agressivas.
 ```
 
 Critério de saída:
 
 ```txt
-[ ] O logo parece vivo.
-[ ] O idle não parece loading, bug ou efeito chamativo demais.
+[x] O logo parece vivo.
+[x] O idle não parece loading, bug ou efeito chamativo demais.
 ```
 
 ---
@@ -1145,20 +1145,20 @@ Critério de saída:
 Objetivo: respeitar acessibilidade e performance.
 
 ```txt
-[ ] Detectar prefers-reduced-motion.
-[ ] Em reduced motion, não executar flickers, raios, arcs ou loop.
-[ ] Aplicar estado estático premium em reduced motion.
-[ ] Implementar IntersectionObserver para pausar idle fora da viewport.
-[ ] Retomar idle suavemente quando o logo voltar à viewport.
-[ ] Pausar timelines quando document.hidden for true.
-[ ] Retomar corretamente quando a aba voltar a ficar visível.
+[x] Detectar prefers-reduced-motion.
+[x] Em reduced motion, não executar flickers, raios, arcs ou loop.
+[x] Aplicar estado estático premium em reduced motion.
+[x] Implementar IntersectionObserver para pausar idle fora da viewport.
+[x] Retomar idle suavemente quando o logo voltar à viewport.
+[x] Pausar timelines quando document.hidden for true.
+[x] Retomar corretamente quando a aba voltar a ficar visível.
 ```
 
 Critério de saída:
 
 ```txt
-[ ] A animação respeita reduced motion.
-[ ] O idle não consome recursos fora da viewport ou com a aba oculta.
+[x] A animação respeita reduced motion.
+[x] O idle não consome recursos fora da viewport ou com a aba oculta.
 ```
 
 ---
@@ -1168,21 +1168,21 @@ Critério de saída:
 Objetivo: manter o impacto visual em telas menores sem excesso de densidade.
 
 ```txt
-[ ] Testar a animação em mobile real ou viewport equivalente.
-[ ] Garantir que o SVG aparece com destaque suficiente no primeiro impacto.
-[ ] Reduzir densidade de rotas secundárias no mobile.
-[ ] Reduzir micro rotas no mobile.
-[ ] Limitar arcs e sparks simultâneos no mobile.
-[ ] Verificar que CTAs continuam acessíveis.
-[ ] Verificar que o SVG não fica minúsculo ou escondido.
-[ ] Verificar que não há queda perceptível de performance.
+[x] Testar a animação em mobile real ou viewport equivalente.
+[x] Garantir que o SVG aparece com destaque suficiente no primeiro impacto.
+[x] Reduzir densidade de rotas secundárias no mobile.
+[x] Reduzir micro rotas no mobile.
+[x] Limitar arcs e sparks simultâneos no mobile.
+[x] Verificar que CTAs continuam acessíveis.
+[x] Verificar que o SVG não fica minúsculo ou escondido.
+[x] Verificar que não há queda perceptível de performance.
 ```
 
 Critério de saída:
 
 ```txt
-[ ] A narrativa lâmpada → cérebro → NITE continua clara no mobile.
-[ ] A animação mobile é mais leve, mas não perde identidade.
+[x] A narrativa lâmpada → cérebro → NITE continua clara no mobile.
+[x] A animação mobile é mais leve, mas não perde identidade.
 ```
 
 ---
@@ -1192,24 +1192,24 @@ Critério de saída:
 Objetivo: impedir que a entrega seja aprovada apenas porque “tem animação”.
 
 ```txt
-[ ] Comparar resultado com o objetivo visual deste spec.
-[ ] Verificar se o efeito ainda parece apenas glow/pulse.
-[ ] Verificar se a origem da energia está clara.
-[ ] Verificar se existem raios/arcos perceptíveis.
-[ ] Verificar se existe afterglow.
-[ ] Verificar se NITE tem clímax próprio.
-[ ] Verificar se o idle é premium e discreto.
-[ ] Verificar se nenhuma rota elétrica aparece estática no primeiro frame.
-[ ] Verificar se nenhum elemento importante está cortado por clipping.
-[ ] Verificar se a implementação não voltou a depender de heurísticas.
-[ ] Rejeitar a entrega se qualquer critério de rejeição da seção 21 acontecer.
+[x] Comparar resultado com o objetivo visual deste spec.
+[x] Verificar se o efeito ainda parece apenas glow/pulse.
+[x] Verificar se a origem da energia está clara.
+[x] Verificar se existem raios/arcos perceptíveis.
+[x] Verificar se existe afterglow.
+[x] Verificar se NITE tem clímax próprio.
+[x] Verificar se o idle é premium e discreto.
+[x] Verificar se nenhuma rota elétrica aparece estática no primeiro frame.
+[x] Verificar se nenhum elemento importante está cortado por clipping.
+[x] Verificar se a implementação não voltou a depender de heurísticas.
+[x] Rejeitar a entrega se qualquer critério de rejeição da seção 21 acontecer.
 ```
 
 Critério de saída:
 
 ```txt
-[ ] A implementação pode ser considerada uma assinatura visual premium da landing.
-[ ] A animação comunica: Ideia → energia → cérebro → inteligência → NITE.
+[x] A implementação pode ser considerada uma assinatura visual premium da landing.
+[x] A animação comunica: Ideia → energia → cérebro → inteligência → NITE.
 ```
 
 ---

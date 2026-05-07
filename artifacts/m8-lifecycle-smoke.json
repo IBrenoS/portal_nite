@@ -1,0 +1,45 @@
+{
+  "reducedMotion": {
+    "motion": "reduced",
+    "intro": "static",
+    "idle": "disabled",
+    "overlayHidden": true,
+    "electricHidden": true,
+    "sparksHidden": true,
+    "bulbFilter": "brightness(1.08) drop-shadow(rgba(125, 249, 255, 0.18) 0px 0px 8px)",
+    "textFilter": "brightness(1.03) drop-shadow(rgba(125, 249, 255, 0.1) 0px 0px 6px)",
+    "logoCount": 1,
+    "noIntroOrIdleAnimation": true,
+    "staticPremiumText": true,
+    "staticPremiumBulb": true
+  },
+  "viewport": {
+    "initialIdleHasMicroDischarge": true,
+    "pausedOutOfViewport": true,
+    "noMicroDischargeOutOfViewport": true,
+    "resumedAfterViewportReturn": true,
+    "introDidNotRestartAfterViewportReturn": true
+  },
+  "documentHidden": {
+    "pausedWhenHidden": true,
+    "noMicroDischargeWhileHidden": true,
+    "resumedWhenVisible": true
+  },
+  "cleanupSignal": {
+    "singleLogoInstance": true,
+    "runtimeErrors": []
+  },
+  "visualGuardrails": {
+    "textMaxBrightness": 1.05,
+    "textAvoidsNeon": true,
+    "screenshot": "D:\\portal_nite\\artifacts\\m8-premium-idle-visible.png"
+  },
+  "finalState": {
+    "motion": "no-preference",
+    "viewport": "visible",
+    "visibility": "visible",
+    "intro": "complete",
+    "idle": "running",
+    "logoCount": 1
+  }
+}

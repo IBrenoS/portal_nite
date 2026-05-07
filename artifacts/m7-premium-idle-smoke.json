@@ -1,0 +1,21 @@
+{
+  "sampleCount": 466,
+  "lastIntroShimmerAt": 3765.800000011921,
+  "firstIdleArcAt": 5380.5,
+  "firstIdleSparkAt": 5501.5999999940395,
+  "idleStartsAfterIntro": true,
+  "highMainRiseAfterIntro": false,
+  "highPrimaryRoutesAfterIntro": false,
+  "maxHighArcCount": 2,
+  "maxHighSparkCount": 3,
+  "arcActivationCount": 4,
+  "sparkActivationCount": 4,
+  "arcDutyRatio": 0.037267080745341616,
+  "sparkDutyRatio": 0.09316770186335403,
+  "brainBreathRange": 0.027300000000000102,
+  "bulbMinBrightness": 1.1,
+  "textMaxBrightness": 1.05,
+  "shimmerActivatesInIdle": false,
+  "m8ViewportPauseImplemented": false,
+  "m8DocumentHiddenHookImplemented": false
+}

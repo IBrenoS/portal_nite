@@ -1,0 +1,13 @@
+
+> portal_nite@0.1.0 dev
+> next dev --hostname 127.0.0.1 --port 3000
+
+▲ Next.js 16.2.4 (Turbopack)
+- Local:         http://127.0.0.1:3000
+- Network:       http://127.0.0.1:3000
+✓ Ready in 898ms
+
+ GET /manifest.webmanifest 200 in 273ms (next.js: 191ms, application-code: 82ms)
+ GET / 200 in 3.7s (next.js: 512ms, application-code: 3.2s)
+ GET / 200 in 497ms (next.js: 6ms, application-code: 491ms)
+[?25h

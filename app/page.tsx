@@ -10,7 +10,11 @@ import {
 import type { Metadata } from "next";
 
 import { getFeaturedProjects, getTimelineEvents } from "@/biblioteca/conteudo";
-import { buildHomeJsonLd, buildHomeMetadata, serializeJsonLd } from "@/biblioteca/seo";
+import {
+  buildHomeJsonLd,
+  buildHomeMetadata,
+  serializeJsonLd,
+} from "@/biblioteca/seo";
 import { siteConfig } from "@/biblioteca/site-config";
 import { Container } from "@/components/layout/container";
 import { SiteFooter } from "@/components/layout/site-footer";
@@ -19,23 +23,29 @@ import { ProjectCard } from "@/components/sections/project-card";
 import { SectionHeader } from "@/components/sections/section-header";
 import { TimelineItem } from "@/components/sections/timeline-item";
 import { AnimatedNiteLogo } from "@/components/ui/animated-nite-logo";
-import { ButtonPrimaryLink, ButtonSecondaryLink } from "@/components/ui/brand-button";
+import {
+  ButtonPrimaryLink,
+  ButtonSecondaryLink,
+} from "@/components/ui/brand-button";
 
 const workFronts = [
   {
     icon: GraduationCapIcon,
     title: "Aprendizado aplicado",
-    description: "Um espaço para aproximar estudantes de problemas, ferramentas e entregas com contexto real.",
+    description:
+      "Um espaço para aproximar estudantes de problemas, ferramentas e entregas com contexto real.",
   },
   {
     icon: CircuitBoardIcon,
     title: "Tecnologia em prática",
-    description: "Projetos orientados por desenvolvimento, inovação e experimentação responsável.",
+    description:
+      "Projetos orientados por desenvolvimento, inovação e experimentação responsável.",
   },
   {
     icon: HandshakeIcon,
     title: "Ponte institucional",
-    description: "Conexão entre gestores, professores, alunos e parceiros em torno das iniciativas do núcleo.",
+    description:
+      "Conexão entre gestores, professores, alunos e parceiros em torno das iniciativas do núcleo.",
   },
 ] as const;
 
@@ -61,16 +71,18 @@ export default function HomePage() {
             <div className="relative z-10 order-2 flex flex-col items-center gap-6 text-center animate-brand-rise sm:gap-8 lg:order-1 lg:items-start lg:text-left">
               <div className="flex flex-col items-center gap-5 sm:gap-6 lg:items-start">
                 <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-circuit-bright">
-                  {siteConfig.institution} / Núcleo de Inovação, Tecnologia e Experiência
+                  {siteConfig.institution} / Núcleo de Inovação, Tecnologia e
+                  Experiência
                 </p>
                 <h1 className="max-w-5xl font-heading text-[2rem] font-semibold leading-[1.02] text-foreground sm:text-6xl sm:leading-[0.98] lg:text-7xl">
                   <span className="brand-metal-text">
-                    NITE transforma ideias em projetos, aprendizado em prática e tecnologia em impacto.
+                    NITE transforma ideias em projetos, aprendizado em prática e
+                    tecnologia em impacto.
                   </span>
                 </h1>
                 <p className="max-w-2xl text-base leading-7 text-muted-foreground sm:text-xl sm:leading-8 lg:mx-0">
-                  {siteConfig.description} Explore iniciativas, marcos e frentes de trabalho em uma experiência clara,
-                  visual e direta.
+                  {siteConfig.description} Explore iniciativas, marcos e frentes
+                  de trabalho em uma experiência clara, visual e direta.
                 </p>
               </div>
 
@@ -86,7 +98,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="relative isolate order-1 mt-0 flex min-h-[10.5rem] items-center justify-center overflow-visible sm:min-h-[22rem] lg:order-2 lg:min-h-[34rem]">
+            <div className="relative isolate order-1 mt-0 flex min-h-[13rem] items-center justify-center overflow-visible sm:min-h-[22rem] lg:order-2 lg:min-h-[34rem]">
               <div
                 aria-hidden="true"
                 className="pointer-events-none absolute inset-x-[-18%] top-[4%] z-0 h-[72%] bg-[radial-gradient(ellipse_at_50%_36%,rgb(51_212_255_/_0.11),rgb(41_174_255_/_0.055)_36%,transparent_72%)] blur-2xl sm:inset-x-[-24%] sm:top-[2%] sm:h-[76%] sm:bg-[radial-gradient(ellipse_at_50%_36%,rgb(51_212_255_/_0.16),rgb(41_174_255_/_0.08)_36%,transparent_72%)] sm:blur-3xl lg:inset-x-[-16%] lg:top-[6%]"
@@ -95,12 +107,15 @@ export default function HomePage() {
                 aria-hidden="true"
                 className="pointer-events-none absolute inset-x-[8%] top-[13%] z-0 h-[46%] bg-[radial-gradient(ellipse_at_50%_44%,rgb(255_255_255_/_0.04),transparent_68%)] blur-xl sm:inset-x-[2%] sm:h-[52%] sm:bg-[radial-gradient(ellipse_at_50%_44%,rgb(255_255_255_/_0.065),transparent_68%)] lg:inset-x-[6%]"
               />
-              <AnimatedNiteLogo className="relative z-10 w-full max-w-[7.5rem] sm:max-w-[18rem] lg:max-w-[21rem] xl:max-w-[22rem]" />
+              <AnimatedNiteLogo className="relative z-10 w-full max-w-[9rem] min-[430px]:max-w-[10rem] sm:max-w-[18rem] lg:max-w-[21rem] xl:max-w-[22rem]" />
             </div>
           </Container>
         </section>
 
-        <section id="sobre" className="border-b border-border bg-background py-16 sm:py-24 lg:py-28">
+        <section
+          id="sobre"
+          className="border-b border-border bg-background py-16 sm:py-24 lg:py-28"
+        >
           <Container className="grid gap-10 lg:grid-cols-[0.82fr_1.18fr]">
             <SectionHeader
               eyebrow="O que é o NITE"
@@ -111,11 +126,13 @@ export default function HomePage() {
             <div className="grid gap-5">
               <article className="brand-panel rounded-lg border border-border p-6 sm:p-8">
                 <p className="font-heading text-2xl font-semibold leading-tight text-foreground sm:text-3xl">
-                  Ideias ganham forma quando tecnologia, aprendizagem e colaboração caminham juntas.
+                  Ideias ganham forma quando tecnologia, aprendizagem e
+                  colaboração caminham juntas.
                 </p>
                 <p className="mt-5 max-w-2xl text-base leading-8 text-muted-foreground">
-                  O núcleo organiza iniciativas, apresenta frentes de atuação e cria uma base visual para acompanhar a
-                  evolução de projetos acadêmicos e tecnológicos.
+                  O núcleo organiza iniciativas, apresenta frentes de atuação e
+                  cria uma base visual para acompanhar a evolução de projetos
+                  acadêmicos e tecnológicos.
                 </p>
               </article>
 
@@ -124,10 +141,20 @@ export default function HomePage() {
                   const Icon = front.icon;
 
                   return (
-                    <article key={front.title} className="rounded-lg border border-border bg-card p-5">
-                      <Icon className="text-brand-circuit-bright" aria-hidden="true" />
-                      <h3 className="mt-5 font-heading text-lg font-semibold text-foreground">{front.title}</h3>
-                      <p className="mt-3 text-sm leading-6 text-muted-foreground">{front.description}</p>
+                    <article
+                      key={front.title}
+                      className="rounded-lg border border-border bg-card p-5"
+                    >
+                      <Icon
+                        className="text-brand-circuit-bright"
+                        aria-hidden="true"
+                      />
+                      <h3 className="mt-5 font-heading text-lg font-semibold text-foreground">
+                        {front.title}
+                      </h3>
+                      <p className="mt-3 text-sm leading-6 text-muted-foreground">
+                        {front.description}
+                      </p>
                     </article>
                   );
                 })}
@@ -136,7 +163,10 @@ export default function HomePage() {
           </Container>
         </section>
 
-        <section id="projetos" className="border-b border-border py-16 sm:py-24 lg:py-28">
+        <section
+          id="projetos"
+          className="border-b border-border py-16 sm:py-24 lg:py-28"
+        >
           <Container className="flex flex-col gap-10">
             <SectionHeader
               eyebrow="Projetos"
@@ -164,7 +194,10 @@ export default function HomePage() {
           </Container>
         </section>
 
-        <section id="timeline" className="border-b border-border bg-background py-16 sm:py-24 lg:py-28">
+        <section
+          id="timeline"
+          className="border-b border-border bg-background py-16 sm:py-24 lg:py-28"
+        >
           <Container className="grid gap-10 lg:grid-cols-[0.74fr_1.26fr]">
             <div className="grid h-fit gap-5 lg:sticky lg:top-24">
               <SectionHeader
@@ -176,29 +209,40 @@ export default function HomePage() {
 
             <div className="grid gap-5">
               {timelineEvents.map((event) => (
-                <TimelineItem key={`${event.sequence}-${event.year}-${event.title}`} event={event} />
+                <TimelineItem
+                  key={`${event.sequence}-${event.year}-${event.title}`}
+                  event={event}
+                />
               ))}
             </div>
           </Container>
         </section>
 
-        <section id="contato" className="relative border-b border-border py-16 sm:py-24 lg:py-28">
+        <section
+          id="contato"
+          className="relative border-b border-border py-16 sm:py-24 lg:py-28"
+        >
           <Container className="grid gap-8 lg:grid-cols-[1fr_0.9fr] lg:items-center">
             <div className="brand-panel rounded-lg border border-border p-6 sm:p-8">
-              <ShieldCheckIcon className="text-brand-circuit-bright" aria-hidden="true" />
+              <ShieldCheckIcon
+                className="text-brand-circuit-bright"
+                aria-hidden="true"
+              />
               <h2 className="mt-6 max-w-3xl font-heading text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
                 Quer acompanhar a evolução do NITE?
               </h2>
               <p className="mt-5 max-w-2xl text-base leading-8 text-muted-foreground">
-                Comece pelos projetos e pela timeline. O Instagram reúne novidades, registros e bastidores das
-                iniciativas do núcleo.
+                Comece pelos projetos e pela timeline. O Instagram reúne
+                novidades, registros e bastidores das iniciativas do núcleo.
               </p>
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 <ButtonPrimaryLink href="#projetos">
                   Explorar projetos
                   <ArrowRightIcon data-icon="inline-end" />
                 </ButtonPrimaryLink>
-                <ButtonSecondaryLink href="#timeline">Ver timeline</ButtonSecondaryLink>
+                <ButtonSecondaryLink href="#timeline">
+                  Ver timeline
+                </ButtonSecondaryLink>
               </div>
             </div>
 
@@ -217,8 +261,12 @@ export default function HomePage() {
                       <AtSignIcon aria-hidden="true" />
                     </span>
                     <div>
-                      <h3 className="font-heading text-lg font-semibold text-foreground">{channel.label}</h3>
-                      <p className="mt-2 text-sm leading-6 text-muted-foreground">{channel.displayLabel}</p>
+                      <h3 className="font-heading text-lg font-semibold text-foreground">
+                        {channel.label}
+                      </h3>
+                      <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                        {channel.displayLabel}
+                      </p>
                     </div>
                   </div>
                 </a>
