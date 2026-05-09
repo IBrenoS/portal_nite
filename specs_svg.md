@@ -1221,16 +1221,16 @@ Objetivo: exigir uma resposta final objetiva de validação.
 Ao concluir, o agente executor deve reportar:
 
 ```txt
-[ ] Arquivos alterados.
-[ ] Como o SVG inline foi garantido.
-[ ] Resultado da validação do contrato do SVG.
-[ ] Como a intro foi dividida em atos.
-[ ] Como o idle foi implementado.
-[ ] Como reduced motion foi tratado.
-[ ] Como viewport/document.hidden foram tratados.
-[ ] Como mobile foi ajustado.
-[ ] Quais critérios visuais foram validados.
-[ ] Quais limitações ou trade-offs permaneceram.
+[x] Arquivos alterados.
+[x] Como o SVG inline foi garantido.
+[x] Resultado da validação do contrato do SVG.
+[x] Como a intro foi dividida em atos.
+[x] Como o idle foi implementado.
+[x] Como reduced motion foi tratado.
+[x] Como viewport/document.hidden foram tratados.
+[x] Como mobile foi ajustado.
+[x] Quais critérios visuais foram validados.
+[x] Quais limitações ou trade-offs permaneceram.
 ```
 
 Resposta final esperada do executor:

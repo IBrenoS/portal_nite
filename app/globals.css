@@ -14,8 +14,16 @@
   --color-brand-metal: var(--brand-metal);
   --color-brand-steel: var(--brand-steel);
   --color-brand-panel: var(--brand-panel);
+  --color-brand-panel-raised: var(--brand-panel-raised);
+  --color-brand-muted: var(--brand-muted);
+  --color-brand-electric-blue: var(--brand-electric-blue);
+  --color-brand-border-cyan-soft: var(--brand-border-cyan-soft);
   --shadow-brand-lift: var(--shadow-brand-lift);
   --shadow-brand-focus: var(--shadow-brand-focus);
+  --shadow-brand-glow: var(--shadow-brand-glow);
+  --ease-brand-out: var(--ease-brand-out);
+  --duration-brand-reveal: var(--duration-brand-reveal);
+  --duration-brand-micro: var(--duration-brand-micro);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -63,9 +71,20 @@
   --brand-panel-raised: #101821;
   --brand-circuit: #1687ff;
   --brand-circuit-bright: #33d4ff;
+  --brand-electric-blue: #299dff;
   --brand-metal: #f2f5f7;
   --brand-steel: #a8b2bd;
+  --brand-muted: #8aa3b5;
   --brand-graphite: #1d252e;
+  --brand-border-cyan-soft: rgb(51 212 255 / 0.14);
+  --brand-glow-cyan: rgb(51 212 255 / 0.18);
+  --duration-brand-reveal: 650ms;
+  --duration-brand-micro: 220ms;
+  --duration-brand-medium: 560ms;
+  --ease-brand-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --header-logo-collapse-range: 96px;
+  --parallax-range-min: 6%;
+  --parallax-range-max: 14%;
   --background: var(--brand-ink);
   --foreground: #f8fbff;
   --card: var(--brand-panel);
@@ -92,6 +111,7 @@
   --radius: 0.5rem;
   --shadow-brand-lift: 0 24px 70px rgb(0 0 0 / 0.42);
   --shadow-brand-focus: 0 0 0 1px rgb(51 212 255 / 0.72), 0 0 0 6px rgb(51 212 255 / 0.16);
+  --shadow-brand-glow: 0 0 32px var(--brand-glow-cyan);
   --sidebar: var(--brand-panel);
   --sidebar-foreground: #f5f8ff;
   --sidebar-primary: var(--brand-circuit-bright);
@@ -192,7 +212,7 @@ a {
   }
 
   .animate-brand-rise {
-    animation: brand-rise 520ms ease-out both;
+    animation: brand-rise var(--duration-brand-medium) var(--ease-brand-out) both;
   }
 }
 
