@@ -80,9 +80,10 @@ const TEXT_ASCENSION_GLOW_AT = 2.24;
 const TEXT_ASCENSION_PEAK_AT = 2.42;
 const TEXT_ASCENSION_DECAY_AT = 2.68;
 const TEXT_SHIMMER_FADE_AT = 2.9;
-const IDLE_CYCLE_DURATION = 6.7;
 const IDLE_VIEWPORT_THRESHOLD = 0.12;
 const SCROLL_SETTLE_DELAY_MS = 220;
+const SIGNATURE_PULSE_MIN_DELAY_MS = 5_000;
+const SIGNATURE_PULSE_MAX_DELAY_MS = 8_000;
 const REDUCED_MOTION_TEXT_GLOW =
   "brightness(1.03) drop-shadow(0 0 6px rgba(125, 249, 255, 0.1))";
 
@@ -96,8 +97,16 @@ const clearLifecycleDataset = (rootElement: HTMLElement) => {
   delete rootElement.dataset.niteVisibility;
   delete rootElement.dataset.niteIntro;
   delete rootElement.dataset.niteIdle;
+  delete rootElement.dataset.nitePulse;
   delete rootElement.dataset.niteScroll;
 };
+
+const getSignaturePulseDelayMs = () =>
+  Math.round(
+    SIGNATURE_PULSE_MIN_DELAY_MS +
+      Math.random() *
+        (SIGNATURE_PULSE_MAX_DELAY_MS - SIGNATURE_PULSE_MIN_DELAY_MS),
+  );
 
 const getScopedTargets = (q: ScopedSelector): NiteLogoTargets => ({
   logo: q("#nite-logo"),
@@ -374,6 +383,51 @@ const setupInitialState = (state: NiteLogoAnimationState) => {
   keepElectricBrainLayersHidden(state);
   keepTextShimmerHidden(state);
   setPathDashToHidden(state.electricPathTargets);
+};
+
+const setupPostIntroRestState = (state: NiteLogoAnimationState) => {
+  gsap.set(state.bulb, {
+    filter: state.bulbStableGlow,
+    opacity: 1,
+    scale: 1,
+    x: 0,
+    y: 0,
+    transformBox: "fill-box",
+    transformOrigin: "50% 50%",
+  });
+  gsap.set(state.brain, { opacity: 1, filter: state.brainAfterglow });
+  gsap.set(state.text, {
+    filter: state.textPremiumGlow,
+    opacity: 1,
+    scale: 1,
+    x: 0,
+    y: 0,
+    transformBox: "fill-box",
+    transformOrigin: "50% 50%",
+  });
+  gsap.set(state.energyMainRisePaths, {
+    opacity: 0.28,
+    strokeDashoffset: 0,
+    filter: state.mainRiseAfterglow,
+  });
+  gsap.set(state.energyRoutePaths, {
+    opacity: 0.2,
+    strokeDashoffset: 0,
+    filter: state.routeAfterglow,
+  });
+  gsap.set(state.electricArcPaths, {
+    opacity: 0.08,
+    strokeDashoffset: 0,
+    filter: state.arcAfterglow,
+  });
+  gsap.set(state.sparkHeads, {
+    opacity: state.isCompactViewport ? 0.08 : 0.1,
+    scale: state.isCompactViewport ? 0.42 : 0.46,
+    filter: state.sparkAfterglow,
+    transformBox: "fill-box",
+    transformOrigin: "50% 50%",
+  });
+  gsap.set(state.textShimmerPaths, { opacity: 0, strokeDashoffset: 0 });
 };
 
 const buildIntroTimeline = (state: NiteLogoAnimationState) => {
@@ -800,84 +854,99 @@ const buildIntroTimeline = (state: NiteLogoAnimationState) => {
   return introTimeline;
 };
 
-const buildIdleTimeline = (state: NiteLogoAnimationState) => {
-  const idleArcSetA = [
+const buildSignaturePulseTimeline = (state: NiteLogoAnimationState) => {
+  const pulseRoutePaths = state.energyRoutePrimaryPaths.slice(
+    0,
+    state.isCompactViewport ? 1 : 2,
+  );
+  const pulseArcSetA = [
     ...state.electricArcJumpPaths.slice(0, 1),
     ...state.electricArcBranchPaths.slice(0, 1),
   ].slice(0, 2);
-  const idleArcSetB = [
+  const pulseArcSetB = [
     ...state.electricArcMicroPaths.slice(0, 1),
     ...state.electricArcBranchPaths.slice(1, 2),
   ].slice(0, 2);
-  const idleSparkSetA = state.isCompactViewport
-    ? pickTargets(state.sparkHeads, [1, 10])
-    : pickTargets(state.sparkHeads, [1, 6, 10]);
-  const idleSparkSetB = state.isCompactViewport
-    ? pickTargets(state.sparkHeads, [3, 12])
+  const pulseSparkSetA = state.isCompactViewport
+    ? pickTargets(state.sparkHeads, [1])
+    : pickTargets(state.sparkHeads, [1, 6]);
+  const pulseSparkSetB = state.isCompactViewport
+    ? pickTargets(state.sparkHeads, [10])
     : pickTargets(state.sparkHeads, [3, 12]);
-  const idleTimeline = gsap.timeline({
+  const signaturePulseTimeline = gsap.timeline({
     paused: true,
-    repeat: -1,
     defaults: { ease: "sine.inOut" },
   });
 
-  idleTimeline
-    .set(state.electricArcPaths, {
-      opacity: 0.04,
-      filter: state.idleArcAfterglow,
-    })
-    .set(state.sparkHeads, {
-      opacity: state.isCompactViewport ? 0.08 : 0.12,
-      scale: state.isCompactViewport ? 0.42 : 0.48,
-      filter: state.idleSparkAfterglow,
-      transformBox: "fill-box",
-      transformOrigin: "50% 50%",
-    })
-    .set(state.textShimmerPaths, { opacity: 0 })
+  signaturePulseTimeline
+    .call(() => setupPostIntroRestState(state), undefined, 0)
     .to(
       state.bulb,
       {
-        filter: state.bulbIdleGlow,
-        duration: 0.38,
-      },
-      0,
-    )
-    .to(
-      state.brain,
-      {
-        filter: state.brainIdleGlow,
-        duration: 0.38,
-      },
-      0,
-    )
-    .to(
-      state.bulb,
-      {
-        filter: state.bulbIdlePulseGlow,
-        duration: 2.45,
+        filter: state.bulbIgnitionGlow,
+        scale: state.isCompactViewport ? 1.006 : 1.01,
+        duration: 0.16,
         repeat: 1,
         yoyo: true,
         ease: "sine.inOut",
       },
-      0.35,
+      0.06,
     )
     .to(
       state.brain,
       {
         filter: state.brainIdlePulseGlow,
-        duration: 2.7,
+        duration: 0.32,
         repeat: 1,
         yoyo: true,
         ease: "sine.inOut",
       },
-      0.18,
+      0.1,
     );
 
-  if (idleArcSetA.length > 0) {
-    idleTimeline.to(
-      idleArcSetA,
+  if (pulseRoutePaths.length > 0) {
+    signaturePulseTimeline
+      .set(
+        pulseRoutePaths,
+        {
+          opacity: 0,
+          strokeDasharray: 1200,
+          strokeDashoffset: 1200,
+          filter: state.routePrimaryGlow,
+        },
+        0.08,
+      )
+      .to(
+        pulseRoutePaths,
+        {
+          opacity: 0.42,
+          strokeDashoffset: 0,
+          duration: 0.42,
+          stagger: {
+            each: 0.06,
+            from: "start",
+          },
+          ease: "power3.out",
+        },
+        0.12,
+      )
+      .to(
+        pulseRoutePaths,
+        {
+          opacity: 0.2,
+          filter: state.routeAfterglow,
+          duration: 0.3,
+          ease: "sine.out",
+        },
+        0.72,
+      );
+  }
+
+  if (pulseArcSetA.length > 0) {
+    signaturePulseTimeline.to(
+      pulseArcSetA,
       {
-        opacity: 0.42,
+        opacity: 0.46,
         filter: state.idleArcFlashGlow,
         duration: 0.07,
         repeat: 1,
@@ -888,16 +957,16 @@ const buildIdleTimeline = (state: NiteLogoAnimationState) => {
         },
         ease: "steps(2)",
       },
-      1.32,
+      0.24,
     );
   }
 
-  if (idleSparkSetA.length > 0) {
-    idleTimeline.to(
-      idleSparkSetA,
+  if (pulseSparkSetA.length > 0) {
+    signaturePulseTimeline.to(
+      pulseSparkSetA,
       {
-        opacity: 0.36,
-        scale: 0.72,
+        opacity: 0.42,
+        scale: state.isCompactViewport ? 0.66 : 0.72,
         filter: state.idleSparkFlashGlow,
         duration: 0.11,
         repeat: 1,
@@ -908,35 +977,35 @@ const buildIdleTimeline = (state: NiteLogoAnimationState) => {
         },
         ease: "expo.out",
       },
-      1.46,
+      0.34,
     );
   }
 
-  if (idleArcSetB.length > 0) {
-    idleTimeline.to(
-      idleArcSetB,
+  if (pulseArcSetB.length > 0) {
+    signaturePulseTimeline.to(
+      pulseArcSetB,
       {
-        opacity: 0.34,
+        opacity: 0.38,
         filter: state.idleArcFlashGlow,
         duration: 0.065,
         repeat: 1,
         yoyo: true,
         stagger: {
-          each: 0.12,
+          each: 0.1,
           from: "end",
         },
         ease: "steps(2)",
       },
-      4.5,
+      0.88,
     );
   }
 
-  if (idleSparkSetB.length > 0) {
-    idleTimeline.to(
-      idleSparkSetB,
+  if (pulseSparkSetB.length > 0) {
+    signaturePulseTimeline.to(
+      pulseSparkSetB,
       {
-        opacity: 0.3,
-        scale: 0.66,
+        opacity: 0.34,
+        scale: state.isCompactViewport ? 0.6 : 0.66,
         filter: state.idleSparkFlashGlow,
         duration: 0.1,
         repeat: 1,
@@ -947,13 +1016,17 @@ const buildIdleTimeline = (state: NiteLogoAnimationState) => {
         },
         ease: "expo.out",
       },
-      4.72,
+      1.0,
     );
   }
 
-  idleTimeline.to({}, { duration: 0.01 }, IDLE_CYCLE_DURATION);
+  signaturePulseTimeline.call(
+    () => setupPostIntroRestState(state),
+    undefined,
+    1.34,
+  );
 
-  return idleTimeline;
+  return signaturePulseTimeline;
 };
 
 export function useNiteElectricAnimation(
@@ -989,6 +1062,7 @@ export function useNiteElectricAnimation(
           : "visible";
         rootElement.dataset.niteIntro = "static";
         rootElement.dataset.niteIdle = "disabled";
+        rootElement.dataset.nitePulse = "disabled";
 
         return () => clearLifecycleDataset(rootElement);
       });
@@ -998,16 +1072,15 @@ export function useNiteElectricAnimation(
 
         setupInitialState(state);
         const introTimeline = buildIntroTimeline(state);
-        const idleTimeline = buildIdleTimeline(state);
+        const signaturePulseTimeline = buildSignaturePulseTimeline(state);
         let introComplete = false;
-        let idleHasStarted = false;
         let isLogoInViewport = true;
         let isScrollActive = false;
         let scrollResumeTimeout: number | null = null;
+        let signaturePulseTimeout: number | null = null;
+        let isSignaturePulseActive = false;
         let wasIntroPlayingBeforeHidden = false;
-        let wasIdlePlayingBeforeHidden = false;
         let wasIntroPlayingBeforeScroll = false;
-        let wasIdlePlayingBeforeScroll = false;
 
         const updateLifecycleDataset = () => {
           rootElement.dataset.niteMotion = "no-preference";
@@ -1024,9 +1097,16 @@ export function useNiteElectricAnimation(
               : "running";
           rootElement.dataset.niteIdle = !introComplete
             ? "waiting"
-            : idleTimeline.paused()
-              ? "paused"
-              : "running";
+            : canRunPostIntro()
+              ? "running"
+              : "paused";
+          rootElement.dataset.nitePulse = !introComplete
+            ? "waiting"
+            : isSignaturePulseActive
+              ? "running"
+              : canRunPostIntro()
+                ? "armed"
+                : "paused";
           rootElement.dataset.niteScroll = isScrollActive ? "active" : "idle";
         };
 
@@ -1036,11 +1116,50 @@ export function useNiteElectricAnimation(
           !document.hidden &&
           !isScrollActive;
 
-        const canRunIdle = () =>
+        const canRunPostIntro = () =>
           introComplete &&
           isLogoInViewport &&
           !document.hidden &&
           !isScrollActive;
+
+        const clearSignaturePulseTimeout = () => {
+          if (signaturePulseTimeout) {
+            window.clearTimeout(signaturePulseTimeout);
+            signaturePulseTimeout = null;
+          }
+        };
+
+        const resetSignaturePulse = () => {
+          signaturePulseTimeline.pause(0);
+          isSignaturePulseActive = false;
+          setupPostIntroRestState(state);
+          updateLifecycleDataset();
+        };
+
+        const playSignaturePulse = () => {
+          if (!canRunPostIntro()) {
+            updateLifecycleDataset();
+            return;
+          }
+
+          clearSignaturePulseTimeout();
+          signaturePulseTimeline.restart();
+        };
+
+        const scheduleNextSignaturePulse = () => {
+          clearSignaturePulseTimeout();
+
+          if (!canRunPostIntro()) {
+            updateLifecycleDataset();
+            return;
+          }
+
+          signaturePulseTimeout = window.setTimeout(
+            playSignaturePulse,
+            getSignaturePulseDelayMs(),
+          );
+          updateLifecycleDataset();
+        };
 
         const pauseIntro = () => {
           if (!introComplete) {
@@ -1060,26 +1179,26 @@ export function useNiteElectricAnimation(
           updateLifecycleDataset();
         };
 
-        const pauseIdle = () => {
-          idleTimeline.pause();
-          updateLifecycleDataset();
+        const pausePostIntro = () => {
+          clearSignaturePulseTimeout();
+          resetSignaturePulse();
         };
 
-        const resumeIdle = () => {
-          if (!canRunIdle()) {
-            updateLifecycleDataset();
-            return;
-          }
-
-          if (!idleHasStarted) {
-            idleHasStarted = true;
-            idleTimeline.play(0);
-          } else {
-            idleTimeline.resume();
-          }
-
-          updateLifecycleDataset();
+        const resumePostIntro = () => {
+          scheduleNextSignaturePulse();
         };
+
+        signaturePulseTimeline.eventCallback("onStart", () => {
+          isSignaturePulseActive = true;
+          updateLifecycleDataset();
+        });
+
+        signaturePulseTimeline.eventCallback("onComplete", () => {
+          isSignaturePulseActive = false;
+          setupPostIntroRestState(state);
+          updateLifecycleDataset();
+          scheduleNextSignaturePulse();
+        });
 
         const handleScrollActivity = () => {
           if (document.hidden) {
@@ -1090,11 +1209,12 @@ export function useNiteElectricAnimation(
           if (!isScrollActive) {
             wasIntroPlayingBeforeScroll =
               !introComplete && !introTimeline.paused();
-            wasIdlePlayingBeforeScroll =
-              introComplete && !idleTimeline.paused();
             isScrollActive = true;
-            introTimeline.pause();
-            idleTimeline.pause();
+            if (!introComplete) {
+              introTimeline.pause();
+            } else {
+              pausePostIntro();
+            }
             updateLifecycleDataset();
           }
 
@@ -1110,17 +1230,13 @@ export function useNiteElectricAnimation(
               (wasIntroPlayingBeforeScroll || canRunIntro())
             ) {
               resumeIntro();
-            } else if (
-              introComplete &&
-              (wasIdlePlayingBeforeScroll || canRunIdle())
-            ) {
-              resumeIdle();
+            } else if (introComplete) {
+              resumePostIntro();
             } else {
               updateLifecycleDataset();
             }
 
             wasIntroPlayingBeforeScroll = false;
-            wasIdlePlayingBeforeScroll = false;
             scrollResumeTimeout = null;
           }, SCROLL_SETTLE_DELAY_MS);
         };
@@ -1129,10 +1245,11 @@ export function useNiteElectricAnimation(
           if (document.hidden) {
             wasIntroPlayingBeforeHidden =
               !introComplete && !introTimeline.paused();
-            wasIdlePlayingBeforeHidden =
-              introComplete && !idleTimeline.paused();
-            introTimeline.pause();
-            idleTimeline.pause();
+            if (!introComplete) {
+              introTimeline.pause();
+            } else {
+              pausePostIntro();
+            }
             updateLifecycleDataset();
             return;
           }
@@ -1144,19 +1261,19 @@ export function useNiteElectricAnimation(
             introTimeline.resume();
           }
 
-          if (introComplete && (wasIdlePlayingBeforeHidden || canRunIdle())) {
-            resumeIdle();
+          if (introComplete) {
+            resumePostIntro();
           } else {
             updateLifecycleDataset();
           }
 
           wasIntroPlayingBeforeHidden = false;
-          wasIdlePlayingBeforeHidden = false;
         };
 
         introTimeline.eventCallback("onComplete", () => {
           introComplete = true;
-          resumeIdle();
+          setupPostIntroRestState(state);
+          resumePostIntro();
         });
 
         let viewportObserver: IntersectionObserver | null = null;
@@ -1171,13 +1288,13 @@ export function useNiteElectricAnimation(
 
               if (isLogoInViewport) {
                 if (introComplete) {
-                  resumeIdle();
+                  resumePostIntro();
                 } else {
                   resumeIntro();
                 }
               } else {
                 if (introComplete) {
-                  pauseIdle();
+                  pausePostIntro();
                 } else {
                   pauseIntro();
                 }
@@ -1209,6 +1326,7 @@ export function useNiteElectricAnimation(
           if (scrollResumeTimeout) {
             window.clearTimeout(scrollResumeTimeout);
           }
+          clearSignaturePulseTimeout();
 
           viewportObserver?.disconnect();
           document.removeEventListener(
@@ -1220,7 +1338,7 @@ export function useNiteElectricAnimation(
           window.removeEventListener("scroll", handleScrollActivity);
           clearLifecycleDataset(rootElement);
           introTimeline.kill();
-          idleTimeline.kill();
+          signaturePulseTimeline.kill();
         };
       });
 

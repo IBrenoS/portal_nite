@@ -1724,7 +1724,7 @@ test("executa NITE Ascension com shimmer, pico metalico e decaimento premium", a
   expect(ascensionState.textLegible).toBe(true);
 });
 
-test("executa Premium Idle Loop depois da intro sem repetir a tempestade", async ({
+test("executa Signature Pulse depois da intro sem repetir a tempestade", async ({
   page,
 }) => {
   test.setTimeout(45000);
@@ -1890,7 +1890,7 @@ test("executa Premium Idle Loop depois da intro sem repetir a tempestade", async
   expect(idleState.shimmerActivatesInIdle).toBe(false);
 });
 
-test("pausa e retoma o idle por viewport sem reiniciar a intro", async ({
+test("pausa e retoma o signature pulse por viewport sem reiniciar a intro", async ({
   page,
 }) => {
   test.setTimeout(45000);
@@ -1905,7 +1905,7 @@ test("pausa e retoma o idle por viewport sem reiniciar a intro", async ({
     { timeout: 12000 },
   );
 
-  const visibleSamples = await collectNiteLifecycleSamples(page, 2600);
+  const visibleSamples = await collectNiteLifecycleSamples(page, 8200);
 
   await page.evaluate(() =>
     window.scrollTo(0, document.documentElement.scrollHeight),
@@ -1939,7 +1939,7 @@ test("pausa e retoma o idle por viewport sem reiniciar a intro", async ({
     { timeout: 8000 },
   );
 
-  const resumedSamples = await collectNiteLifecycleSamples(page, 5200);
+  const resumedSamples = await collectNiteLifecycleSamples(page, 8200);
 
   expect(
     visibleSamples.some(
@@ -2069,7 +2069,7 @@ test("pausa e retoma timelines com document.hidden sem duplicar lifecycle", asyn
     { timeout: 8000 },
   );
 
-  const resumedIdleSamples = await collectNiteLifecycleSamples(page, 5200);
+  const resumedIdleSamples = await collectNiteLifecycleSamples(page, 8200);
   const logoCount = await page.locator(".animated-nite-logo").count();
 
   expect(
