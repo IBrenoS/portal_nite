@@ -16,7 +16,7 @@ Regras respeitadas:
 - Nenhum `.env` versionado foi criado.
 - `AGENTS.md`, `specs_svg.md` e `specs_nite.md` nao foram alterados por esta execucao.
 - Falhas e avisos foram tratados como baseline; nenhuma refatoracao corretiva foi feita.
-- O milestone nao foi marcado como concluido.
+- O milestone foi marcado como aprovado somente apos confirmacao humana explicita em 2026-05-09.
 
 ## Estado inicial do Git
 
@@ -147,4 +147,19 @@ NEXT_PUBLIC_SITE_URL=https://portal-nite.vercel.app
 - `artifacts/**` deixou de ser versionado e passou a ser tratado como artefato local ignorado.
 - Todos os checks obrigatorios passaram.
 - A unica pendencia e a verificacao/configuracao da variavel de producao na Vercel por falta de credenciais locais.
-- O Milestone 0 aguarda confirmacao humana explicita para ser marcado como concluido.
+- O Milestone 0 foi aprovado por confirmacao humana explicita em 2026-05-09.
+
+## Aprovacao humana
+
+Data/hora local: 2026-05-09T01:21:50-03:00
+
+Confirmacao recebida:
+
+```txt
+Milestone 0 e Milestone 1 aprovados!
+```
+
+Status:
+
+- Milestone 0 aprovado.
+- A pendencia de Vercel permanece documentada como bloqueio externo por falta de credenciais locais.

@@ -1,5 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 
+test.describe.configure({ mode: "serial" });
+
 type NiteAnimationSample = {
   t: number;
   bulbFilter: string;
@@ -245,24 +247,108 @@ test("carrega a home pública sem rótulos internos", async ({ page }) => {
   await expect(
     page.getByRole("heading", {
       level: 1,
-      name: /NITE transforma ideias em projetos/i,
+      name: "Tecnologia aplicada, projetos reais e aprendizagem em movimento.",
     }),
   ).toBeVisible();
+
+  const hero = page.locator("[data-hero-section]");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
+  await expect(
+    hero.getByText("UNIJORGE / Núcleo de Inovação & Tecnologia"),
+  ).toBeVisible();
+  await expect(
+    hero.getByText(
+      "O NITE conecta estudantes, professores e gestão para transformar desafios acadêmicos em protótipos, produtos digitais, automações e experiências tecnológicas reais.",
+    ),
+  ).toBeVisible();
+  await expect(
+    hero.getByRole("link", { name: "Explorar frentes do NITE" }),
+  ).toHaveAttribute("href", "#projetos");
+  await expect(
+    hero.getByRole("link", { name: "Propor um desafio" }),
+  ).toHaveAttribute("href", "#contato");
+
+  const heroContract = await hero.evaluate((element) => {
+    const text = element.textContent ?? "";
+
+    return {
+      hasForbiddenText: [
+        "Projetos aplicados",
+        "Aprendizagem prática",
+        "Tecnologia responsável",
+        "Demonstrativo",
+        "Em estruturação",
+        "Em protótipo",
+        "Status",
+        "Categoria",
+        "Stack",
+        "Última atualização",
+        "Próximo passo",
+        "dashboard",
+        "painel operacional",
+      ].some((forbidden) => text.includes(forbidden)),
+      operationalPanels: element.querySelectorAll("article, [role='table']")
+        .length,
+      logoCount: element.querySelectorAll(".animated-nite-logo").length,
+    };
+  });
+
+  expect(heroContract).toEqual({
+    hasForbiddenText: false,
+    operationalPanels: 0,
+    logoCount: 1,
+  });
 
   await expect(
     page.getByText("M7 - SEO, acessibilidade e performance"),
   ).toHaveCount(0);
   await expect(page.getByText("Landing institucional")).toHaveCount(0);
+
+  const builds = page.locator("[data-builds-section]");
+  await expect(builds).toHaveAttribute("id", "sobre");
+  await expect(builds.getByText("O que o NITE constrói")).toBeVisible();
   await expect(
-    page.getByText(
-      "Um núcleo para tirar tecnologia do discurso e colocar em movimento.",
-    ),
+    builds.getByRole("heading", {
+      level: 2,
+      name: "Saídas concretas para transformar desafios acadêmicos em tecnologia aplicada.",
+    }),
+  ).toBeVisible();
+  await expect(builds.locator("article")).toHaveCount(6);
+  await expect(builds.getByText("Saídas:")).toHaveCount(6);
+
+  for (const title of [
+    "Software aplicado",
+    "Dados e IA",
+    "Robótica e prototipagem",
+    "Experiência digital",
+    "Automação e processos",
+    "Oficinas e aprendizagem prática",
+  ]) {
+    await expect(builds.getByText(title)).toBeVisible();
+  }
+
+  await expect(page.getByText("Aprendizado aplicado")).toHaveCount(0);
+  await expect(page.getByText("Tecnologia em prática")).toHaveCount(0);
+  await expect(page.getByText("Ponte institucional")).toHaveCount(0);
+  const projects = page.locator("[data-projects-operating-section]");
+  await expect(projects).toHaveAttribute("id", "projetos");
+  await expect(
+    projects.getByRole("heading", {
+      level: 2,
+      name: "Projetos em movimento",
+    }),
   ).toBeVisible();
   await expect(
-    page.getByText(
-      "Projetos em destaque para explorar tecnologia em movimento.",
+    projects.getByText(
+      "Acompanhe frentes, protótipos e entregas do NITE com contexto, status, stack e próximos passos.",
     ),
   ).toBeVisible();
+  await expect(projects.locator("[data-project-status-card]")).toHaveCount(3);
+  await expect(projects.getByText("Mapeamento da frente")).toHaveCount(3);
+  await expect(projects.getByText("Última atualização")).toHaveCount(3);
+  await expect(projects.getByText("Entregável principal")).toHaveCount(3);
+  await expect(projects.getByText("Entregável em validação.")).toHaveCount(3);
+  await expect(projects.getByText("Próximo passo")).toHaveCount(3);
   await expect(
     page.getByText("A evolução do NITE em uma narrativa visual."),
   ).toBeVisible();
@@ -273,6 +359,311 @@ test("carrega a home pública sem rótulos internos", async ({ page }) => {
   await expect(
     page.getByRole("link", { name: "Acompanhar o NITE no Instagram" }).first(),
   ).toHaveText(/@nite\.uj/);
+});
+
+test("aplica contrato visual de superfícies da home", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto("/");
+
+  await expect(page.locator("[data-hero-section]")).toHaveAttribute(
+    "data-surface",
+    "grid",
+  );
+  await expect(page.locator("[data-builds-section]")).toHaveAttribute(
+    "data-surface",
+    "clean",
+  );
+
+  for (const selector of ["#projetos", "#contato"]) {
+    await expect(page.locator(selector)).toHaveAttribute(
+      "data-surface",
+      "grid",
+    );
+  }
+
+  for (const selector of ["#timeline", "footer"]) {
+    await expect(page.locator(selector)).toHaveAttribute(
+      "data-surface",
+      "clean",
+    );
+  }
+
+  const surfaceState = await page.evaluate(() => {
+    const cleanSelectors = ["[data-builds-section]", "#timeline", "footer"];
+    const cleanBackgrounds = cleanSelectors.map((selector) => {
+      const element = document.querySelector<HTMLElement>(selector);
+
+      return element ? window.getComputedStyle(element).backgroundColor : null;
+    });
+    const alphaFromColor = (color: string) => {
+      const slashAlpha = color.match(/\/\s*([\d.]+)/);
+
+      if (slashAlpha) {
+        return Number(slashAlpha[1]);
+      }
+
+      const match = color.match(/rgba?\(([^)]+)\)/);
+
+      if (!match) {
+        return 1;
+      }
+
+      const parts = match[1].split(",").map((part) => part.trim());
+
+      return parts.length === 4 ? Number(parts[3]) : 1;
+    };
+    const heroScanline = document.querySelector<HTMLElement>(
+      "[data-hero-section] .brand-scanline",
+    );
+    const buildsScanline = document.querySelector<HTMLElement>(
+      "[data-builds-section] .brand-scanline",
+    );
+    const gridBackgrounds = [
+      "[data-hero-section]",
+      "#projetos",
+      "#contato",
+    ].map((selector) => {
+      const element = document.querySelector<HTMLElement>(selector);
+
+      return element ? window.getComputedStyle(element).backgroundColor : null;
+    });
+    const footer = document.querySelector<HTMLElement>("footer");
+    const cards = [
+      ...document.querySelectorAll<HTMLElement>(
+        "[data-builds-section] article",
+      ),
+    ];
+    const cardWidths = cards.map((card) => card.getBoundingClientRect().width);
+
+    return {
+      cleanBackgrounds,
+      heroScanlineOpacity: heroScanline
+        ? Number(window.getComputedStyle(heroScanline).opacity)
+        : 0,
+      buildsHasScanline: Boolean(buildsScanline),
+      gridBackgrounds,
+      footerBorderTopAlpha: footer
+        ? alphaFromColor(window.getComputedStyle(footer).borderTopColor)
+        : 1,
+      minBuildCardWidth: Math.min(...cardWidths),
+    };
+  });
+
+  expect(surfaceState.cleanBackgrounds).toEqual([
+    "rgb(3, 5, 7)",
+    "rgb(3, 5, 7)",
+    "rgb(3, 5, 7)",
+  ]);
+  expect(surfaceState.gridBackgrounds).toEqual([
+    "rgba(0, 0, 0, 0)",
+    "rgba(0, 0, 0, 0)",
+    "rgba(0, 0, 0, 0)",
+  ]);
+  expect(surfaceState.heroScanlineOpacity).toBeGreaterThanOrEqual(0.25);
+  expect(surfaceState.buildsHasScanline).toBe(false);
+  expect(surfaceState.footerBorderTopAlpha).toBeLessThanOrEqual(0.08);
+  expect(surfaceState.minBuildCardWidth).toBeGreaterThanOrEqual(250);
+});
+
+test("mantem a seção de construções responsiva e sem scroll horizontal", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+
+  const buildsState = await page
+    .locator("[data-builds-section]")
+    .evaluate((section) => {
+      const cards = [...section.querySelectorAll("article")];
+      const cardBoxes = cards.map((card) => card.getBoundingClientRect());
+      const sectionText = section.textContent ?? "";
+
+      return {
+        hasHorizontalScroll:
+          document.documentElement.scrollWidth > window.innerWidth,
+        cardCount: cards.length,
+        minCardWidth: Math.min(...cardBoxes.map((box) => box.width)),
+        maxCardRight: Math.max(...cardBoxes.map((box) => box.right)),
+        oldCopyIsGone: [
+          "Aprendizado aplicado",
+          "Tecnologia em prática",
+          "Ponte institucional",
+        ].every((text) => !sectionText.includes(text)),
+        outputCount: (sectionText.match(/Saídas:/g) ?? []).length,
+      };
+    });
+
+  expect(buildsState.hasHorizontalScroll).toBe(false);
+  expect(buildsState.cardCount).toBe(6);
+  expect(buildsState.outputCount).toBe(6);
+  expect(buildsState.oldCopyIsGone).toBe(true);
+  expect(buildsState.minCardWidth).toBeGreaterThanOrEqual(300);
+  expect(buildsState.maxCardRight).toBeLessThanOrEqual(390);
+});
+
+test("mantem projetos operacionais legiveis no mobile", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+
+  const projectsState = await page
+    .locator("[data-projects-operating-section]")
+    .evaluate((section) => {
+      const cards = [...section.querySelectorAll("[data-project-status-card]")];
+      const cardBoxes = cards.map((card) => card.getBoundingClientRect());
+      const sectionText = section.textContent ?? "";
+
+      return {
+        hasHorizontalScroll:
+          document.documentElement.scrollWidth > window.innerWidth,
+        cardCount: cards.length,
+        outputCount: (sectionText.match(/Entregável principal/g) ?? []).length,
+        nextStepCount: (sectionText.match(/Próximo passo/g) ?? []).length,
+        minCardWidth: Math.min(...cardBoxes.map((box) => box.width)),
+        maxCardRight: Math.max(...cardBoxes.map((box) => box.right)),
+        hasFakeMetrics:
+          sectionText.includes("Métrica") || sectionText.includes("Equipe"),
+      };
+    });
+
+  expect(projectsState.hasHorizontalScroll).toBe(false);
+  expect(projectsState.cardCount).toBe(3);
+  expect(projectsState.outputCount).toBe(3);
+  expect(projectsState.nextStepCount).toBe(3);
+  expect(projectsState.minCardWidth).toBeGreaterThanOrEqual(300);
+  expect(projectsState.maxCardRight).toBeLessThanOrEqual(390);
+  expect(projectsState.hasFakeMetrics).toBe(false);
+});
+
+test("mantem headline em coluna propria com gutter antes do visual", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto("/");
+
+  const layout = await page.locator("[data-hero-section]").evaluate((hero) => {
+    const heading = hero.querySelector("h1");
+    const visual = hero.querySelector("[data-hero-visual]");
+    const logo = hero.querySelector(".animated-nite-logo");
+    const headingBox = heading?.getBoundingClientRect();
+    const visualBox = visual?.getBoundingClientRect();
+    const logoBox = logo?.getBoundingClientRect();
+
+    return {
+      heading: headingBox
+        ? {
+            left: headingBox.left,
+            right: headingBox.right,
+            width: headingBox.width,
+          }
+        : null,
+      visual: visualBox
+        ? {
+            left: visualBox.left,
+            right: visualBox.right,
+            width: visualBox.width,
+          }
+        : null,
+      logo: logoBox
+        ? {
+            left: logoBox.left,
+            right: logoBox.right,
+            width: logoBox.width,
+          }
+        : null,
+    };
+  });
+
+  expect(layout.heading).not.toBeNull();
+  expect(layout.visual).not.toBeNull();
+  expect(layout.logo).not.toBeNull();
+  expect(layout.visual!.width).toBeGreaterThanOrEqual(320);
+  expect(layout.logo!.width).toBeLessThanOrEqual(layout.visual!.width);
+  expect(layout.heading!.right).toBeLessThanOrEqual(layout.visual!.left - 32);
+});
+
+test("executa logo morph textual do header sem deslocar a navegacao", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/");
+
+  const brandLink = page.getByRole("link", {
+    name: "Ir para a página inicial do NITE UniJorge",
+  });
+  const logo = page.locator("[data-header-logo-morph]");
+  const nav = page.locator("[data-site-nav]");
+
+  await expect(brandLink).toBeVisible();
+  await expect(logo).toHaveAttribute("data-header-logo-state", "expanded");
+  await expect(nav).toBeVisible();
+
+  const headerMarkup = await page
+    .locator("[data-site-header]")
+    .evaluate((header) => ({
+      hasImage: Boolean(header.querySelector("img")),
+      hasSvg: Boolean(header.querySelector("svg")),
+      hasHiddenLogoText: [...header.querySelectorAll("span")].some(
+        (element) =>
+          element.textContent?.trim() === "NITE" &&
+          element.getAttribute("aria-hidden") === "true",
+      ),
+      position: window.getComputedStyle(header).position,
+    }));
+
+  expect(headerMarkup).toEqual({
+    hasImage: false,
+    hasSvg: false,
+    hasHiddenLogoText: true,
+    position: "sticky",
+  });
+
+  const expandedNavBox = await nav.boundingBox();
+  expect(expandedNavBox).not.toBeNull();
+
+  await page.evaluate(() => window.scrollTo(0, 120));
+  await expect(logo).toHaveAttribute("data-header-logo-state", "collapsed");
+
+  const collapsedNavBox = await nav.boundingBox();
+  expect(collapsedNavBox).not.toBeNull();
+  expect(Math.abs(collapsedNavBox!.x - expandedNavBox!.x)).toBeLessThanOrEqual(
+    2,
+  );
+});
+
+test("mantem o header mobile sem nova arquitetura ou scroll horizontal", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+
+  const headerState = await page
+    .locator("[data-site-header]")
+    .evaluate((header) => {
+      const headerBox = header.getBoundingClientRect();
+      const nav = header.querySelector("[data-site-nav]");
+
+      return {
+        height: headerBox.height,
+        navDisplay: nav ? window.getComputedStyle(nav).display : null,
+        hasHorizontalScroll:
+          document.documentElement.scrollWidth > window.innerWidth,
+        position: window.getComputedStyle(header).position,
+      };
+    });
+
+  expect(headerState.position).toBe("sticky");
+  expect(headerState.height).toBeGreaterThanOrEqual(64);
+  expect(headerState.height).toBeLessThanOrEqual(72);
+  expect(headerState.navDisplay).toBe("none");
+  expect(headerState.hasHorizontalScroll).toBe(false);
+
+  await page.evaluate(() => window.scrollTo(0, 120));
+  await expect(page.locator("[data-header-logo-morph]")).toHaveAttribute(
+    "data-header-logo-state",
+    "collapsed",
+  );
 });
 
 test("mantem layout mobile sem scroll horizontal e com alvos de toque acessiveis", async ({
@@ -286,8 +677,10 @@ test("mantem layout mobile sem scroll horizontal e com alvos de toque acessiveis
   );
   expect(hasHorizontalScroll).toBe(false);
 
-  const primaryCta = page.getByRole("link", { name: /ver projetos/i });
-  const secondaryCta = page.getByRole("link", { name: /conhecer o nite/i });
+  const primaryCta = page.getByRole("link", {
+    name: /explorar frentes do nite/i,
+  });
+  const secondaryCta = page.getByRole("link", { name: /propor um desafio/i });
 
   await expect(primaryCta).toBeVisible();
   await expect(secondaryCta).toBeVisible();
@@ -303,14 +696,22 @@ test("mantem layout mobile sem scroll horizontal e com alvos de toque acessiveis
   const headingBox = await page
     .getByRole("heading", {
       level: 1,
-      name: /NITE transforma ideias em projetos/i,
+      name: "Tecnologia aplicada, projetos reais e aprendizagem em movimento.",
     })
     .boundingBox();
   const logoBox = await page.locator("#logo-final").boundingBox();
+  const primaryBox = await primaryCta.boundingBox();
+  const secondaryBox = await secondaryCta.boundingBox();
 
   expect(headingBox).not.toBeNull();
   expect(logoBox).not.toBeNull();
-  expect(logoBox!.y + logoBox!.height).toBeLessThanOrEqual(headingBox!.y);
+  expect(primaryBox).not.toBeNull();
+  expect(secondaryBox).not.toBeNull();
+  expect(logoBox!.y + logoBox!.height).toBeLessThan(headingBox!.y);
+  expect(headingBox!.y + headingBox!.height).toBeLessThan(primaryBox!.y);
+  expect(primaryBox!.y + primaryBox!.height).toBeLessThanOrEqual(
+    secondaryBox!.y + 1,
+  );
 });
 
 test("mantem narrativa e densidade mobile no primeiro impacto", async ({
@@ -324,11 +725,13 @@ test("mantem narrativa e densidade mobile no primeiro impacto", async ({
   const firstViewportState = await page.evaluate(() => {
     const logo = document.querySelector("#logo-final");
     const logoBox = logo?.getBoundingClientRect();
+    const heading = document.querySelector("h1");
+    const headingBox = heading?.getBoundingClientRect();
     const primaryCta = [...document.querySelectorAll("a")].find((link) =>
-      link.textContent?.includes("Ver projetos"),
+      link.textContent?.includes("Explorar frentes do NITE"),
     );
     const secondaryCta = [...document.querySelectorAll("a")].find((link) =>
-      link.textContent?.includes("Conhecer o NITE"),
+      link.textContent?.includes("Propor um desafio"),
     );
     const primaryBox = primaryCta?.getBoundingClientRect();
     const secondaryBox = secondaryCta?.getBoundingClientRect();
@@ -336,6 +739,9 @@ test("mantem narrativa e densidade mobile no primeiro impacto", async ({
     return {
       hasHorizontalScroll:
         document.documentElement.scrollWidth > window.innerWidth,
+      heading: headingBox
+        ? { y: headingBox.y, bottom: headingBox.bottom }
+        : null,
       logo: logoBox
         ? {
             x: logoBox.x,
@@ -346,25 +752,49 @@ test("mantem narrativa e densidade mobile no primeiro impacto", async ({
           }
         : null,
       primaryCta: primaryBox
-        ? { width: primaryBox.width, height: primaryBox.height }
+        ? {
+            y: primaryBox.y,
+            bottom: primaryBox.bottom,
+            width: primaryBox.width,
+            height: primaryBox.height,
+          }
         : null,
       secondaryCta: secondaryBox
-        ? { width: secondaryBox.width, height: secondaryBox.height }
+        ? {
+            y: secondaryBox.y,
+            bottom: secondaryBox.bottom,
+            width: secondaryBox.width,
+            height: secondaryBox.height,
+          }
         : null,
+      heroText:
+        document.querySelector("[data-hero-section]")?.textContent ?? "",
       viewportHeight: window.innerHeight,
     };
   });
 
   expect(firstViewportState.hasHorizontalScroll).toBe(false);
+  expect(firstViewportState.heading).not.toBeNull();
   expect(firstViewportState.logo).not.toBeNull();
-  expect(firstViewportState.logo!.width).toBeGreaterThanOrEqual(136);
-  expect(firstViewportState.logo!.height).toBeGreaterThanOrEqual(220);
+  expect(firstViewportState.logo!.width).toBeGreaterThanOrEqual(128);
+  expect(firstViewportState.logo!.height).toBeGreaterThanOrEqual(200);
   expect(firstViewportState.logo!.y).toBeGreaterThanOrEqual(0);
-  expect(firstViewportState.logo!.bottom).toBeLessThan(
-    firstViewportState.viewportHeight * 0.46,
-  );
   expect(firstViewportState.primaryCta?.height).toBeGreaterThanOrEqual(44);
   expect(firstViewportState.secondaryCta?.height).toBeGreaterThanOrEqual(44);
+  expect(firstViewportState.logo!.bottom).toBeLessThan(
+    firstViewportState.heading!.y,
+  );
+  expect(firstViewportState.heading!.bottom).toBeLessThan(
+    firstViewportState.primaryCta!.y,
+  );
+  expect(firstViewportState.primaryCta!.bottom).toBeLessThanOrEqual(
+    firstViewportState.secondaryCta!.y + 1,
+  );
+  expect(firstViewportState.logo!.y).toBeLessThan(
+    firstViewportState.viewportHeight,
+  );
+  expect(firstViewportState.heroText).not.toContain("Demonstrativo");
+  expect(firstViewportState.heroText).not.toContain("Em estruturação");
 
   const mobileSamples = await collectNiteMobileSamples(page, 8800);
   const firstBulbFilter = mobileSamples[0]?.bulbFilter ?? "";
@@ -568,14 +998,16 @@ test("mantem o hero responsivo, decorativo e navegavel por teclado", async ({
   await page.goto("/");
 
   const heroState = await page.evaluate(() => {
+    const hero = document.querySelector("[data-hero-section]");
     const logo = document.querySelector("#logo-final");
     const logoBox = logo?.getBoundingClientRect();
     const primaryCta = [...document.querySelectorAll("a")].find((link) =>
-      link.textContent?.includes("Ver projetos"),
+      link.textContent?.includes("Explorar frentes do NITE"),
     );
     const secondaryCta = [...document.querySelectorAll("a")].find((link) =>
-      link.textContent?.includes("Conhecer o NITE"),
+      link.textContent?.includes("Propor um desafio"),
     );
+    const heroText = hero?.textContent ?? "";
 
     return {
       logoVisible: Boolean(logoBox && logoBox.width > 0 && logoBox.height > 0),
@@ -587,6 +1019,17 @@ test("mantem o hero responsivo, decorativo e navegavel por teclado", async ({
         document.documentElement.scrollWidth > window.innerWidth,
       primaryText: primaryCta?.textContent ?? "",
       secondaryText: secondaryCta?.textContent ?? "",
+      heroHasOperationalText: [
+        "Demonstrativo",
+        "Em estruturação",
+        "Em protótipo",
+        "Status",
+        "Categoria",
+        "Stack",
+        "Última atualização",
+        "Próximo passo",
+      ].some((forbidden) => heroText.includes(forbidden)),
+      heroHasPanel: Boolean(hero?.querySelector("article, [role='table']")),
     };
   });
 
@@ -595,11 +1038,15 @@ test("mantem o hero responsivo, decorativo e navegavel por teclado", async ({
     logoOutsidePanel: true,
     logoDecorative: true,
     hasHorizontalScroll: false,
+    heroHasOperationalText: false,
+    heroHasPanel: false,
   });
-  expect(heroState.primaryText).toMatch(/Ver projetos/);
-  expect(heroState.secondaryText).toMatch(/Conhecer o NITE/);
+  expect(heroState.primaryText).toMatch(/Explorar frentes do NITE/);
+  expect(heroState.secondaryText).toMatch(/Propor um desafio/);
 
-  const primaryCta = page.getByRole("link", { name: /ver projetos/i }).first();
+  const primaryCta = page
+    .getByRole("link", { name: /explorar frentes do nite/i })
+    .first();
 
   for (let index = 0; index < 12; index += 1) {
     await page.keyboard.press("Tab");
@@ -1018,7 +1465,7 @@ test("executa neural storm em grupos antes da ascensao do texto", async ({
         shimmerDashoffset: firstDashoffset("#text-shimmer-mask path"),
       });
 
-      if (performance.now() - origin < 6200) {
+      if (performance.now() - origin < 7200) {
         requestAnimationFrame(collect);
       }
     };
@@ -1027,7 +1474,7 @@ test("executa neural storm em grupos antes da ascensao do texto", async ({
     window.__niteM4Samples = samples;
   });
   await page.goto("/");
-  await page.waitForTimeout(8500);
+  await page.waitForTimeout(9500);
 
   const neuralState = await page.evaluate(() => {
     const samples = window.__niteM4Samples ?? [];
@@ -1662,7 +2109,17 @@ test("abre uma pagina interna de projeto a partir do slug estruturado", async ({
     }),
   ).toBeVisible();
   await expect(page.getByText("Dados do projeto")).toBeVisible();
+  await expect(page.getByText("Status").first()).toBeVisible();
+  await expect(page.getByText("Em estruturação").first()).toBeVisible();
+  await expect(page.getByText("Mapeamento da frente").first()).toBeVisible();
+  await expect(page.getByText("Problema e contexto")).toBeVisible();
+  await expect(page.getByText("Público envolvido")).toBeVisible();
   await expect(page.getByText("Destaques")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Stack" })).toBeVisible();
+  await expect(page.getByText("Entregável em validação").first()).toBeVisible();
+  await expect(page.getByText("Evidências em estruturação")).toBeVisible();
+  await expect(page.getByText("Equipe pública em validação")).toBeVisible();
+  await expect(page.getByText("Changelog em estruturação")).toBeVisible();
   await expect(page.getByText("Galeria")).toBeVisible();
   await expect(page.getByText("Projetos relacionados")).toBeVisible();
 });

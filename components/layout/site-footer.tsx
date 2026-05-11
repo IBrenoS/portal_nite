@@ -13,7 +13,10 @@ const footerLinks = [
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-border bg-background">
+    <footer
+      className="border-t border-white/[0.06] bg-background"
+      data-surface="clean"
+    >
       <Container className="grid gap-8 py-10 text-sm text-muted-foreground lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
         <div className="flex items-start gap-4">
           <BrandMark className="size-12 shrink-0" />

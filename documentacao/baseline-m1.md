@@ -17,7 +17,7 @@ Regras respeitadas:
 - `NiteSymbol` foi criado como SVG inline.
 - `logo_final.svg` foi mantido otimizado porque o contrato do SVG/GSAP continuou passando.
 - `AGENTS.md`, `specs_svg.md` e `specs_nite.md` nao foram alterados por esta execucao.
-- O milestone nao foi marcado como concluido.
+- O milestone foi marcado como aprovado somente apos confirmacao humana explicita em 2026-05-09.
 
 ## Estado inicial relevante
 
@@ -160,7 +160,7 @@ sem resultados
 - Tokens visuais e de motion existem em CSS.
 - Contrato GSAP do logo cinematografico foi preservado.
 - Nenhum uso de `motion` foi introduzido em componentes.
-- O Milestone 1 aguarda confirmacao humana explicita para ser marcado como concluido.
+- O Milestone 1 foi aprovado por confirmacao humana explicita em 2026-05-09.
 
 ## Correcao pontual do Milestone 1
 
@@ -226,3 +226,18 @@ artifacts/correction-m1-header-hero.png
 Observacao:
 
 - Esta correcao nao inicia o Milestone 2, nao implementa logo morph e nao usa `motion` em componentes.
+
+## Aprovacao humana
+
+Data/hora local: 2026-05-09T01:21:50-03:00
+
+Confirmacao recebida:
+
+```txt
+Milestone 0 e Milestone 1 aprovados!
+```
+
+Status:
+
+- Milestone 1 aprovado apos a correcao pontual de background e header textual.
+- Milestone 2 nao foi iniciado.
