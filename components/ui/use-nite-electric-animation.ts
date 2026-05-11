@@ -82,6 +82,7 @@ const TEXT_ASCENSION_DECAY_AT = 2.68;
 const TEXT_SHIMMER_FADE_AT = 2.9;
 const IDLE_CYCLE_DURATION = 6.7;
 const IDLE_VIEWPORT_THRESHOLD = 0.12;
+const SCROLL_SETTLE_DELAY_MS = 220;
 const REDUCED_MOTION_TEXT_GLOW =
   "brightness(1.03) drop-shadow(0 0 6px rgba(125, 249, 255, 0.1))";
 
@@ -95,6 +96,7 @@ const clearLifecycleDataset = (rootElement: HTMLElement) => {
   delete rootElement.dataset.niteVisibility;
   delete rootElement.dataset.niteIntro;
   delete rootElement.dataset.niteIdle;
+  delete rootElement.dataset.niteScroll;
 };
 
 const getScopedTargets = (q: ScopedSelector): NiteLogoTargets => ({
@@ -1000,8 +1002,12 @@ export function useNiteElectricAnimation(
         let introComplete = false;
         let idleHasStarted = false;
         let isLogoInViewport = true;
+        let isScrollActive = false;
+        let scrollResumeTimeout: number | null = null;
         let wasIntroPlayingBeforeHidden = false;
         let wasIdlePlayingBeforeHidden = false;
+        let wasIntroPlayingBeforeScroll = false;
+        let wasIdlePlayingBeforeScroll = false;
 
         const updateLifecycleDataset = () => {
           rootElement.dataset.niteMotion = "no-preference";
@@ -1021,10 +1027,38 @@ export function useNiteElectricAnimation(
             : idleTimeline.paused()
               ? "paused"
               : "running";
+          rootElement.dataset.niteScroll = isScrollActive ? "active" : "idle";
         };
 
+        const canRunIntro = () =>
+          !introComplete &&
+          isLogoInViewport &&
+          !document.hidden &&
+          !isScrollActive;
+
         const canRunIdle = () =>
-          introComplete && isLogoInViewport && !document.hidden;
+          introComplete &&
+          isLogoInViewport &&
+          !document.hidden &&
+          !isScrollActive;
+
+        const pauseIntro = () => {
+          if (!introComplete) {
+            introTimeline.pause();
+          }
+
+          updateLifecycleDataset();
+        };
+
+        const resumeIntro = () => {
+          if (!canRunIntro()) {
+            updateLifecycleDataset();
+            return;
+          }
+
+          introTimeline.resume();
+          updateLifecycleDataset();
+        };
 
         const pauseIdle = () => {
           idleTimeline.pause();
@@ -1047,6 +1081,50 @@ export function useNiteElectricAnimation(
           updateLifecycleDataset();
         };
 
+        const handleScrollActivity = () => {
+          if (document.hidden) {
+            updateLifecycleDataset();
+            return;
+          }
+
+          if (!isScrollActive) {
+            wasIntroPlayingBeforeScroll =
+              !introComplete && !introTimeline.paused();
+            wasIdlePlayingBeforeScroll =
+              introComplete && !idleTimeline.paused();
+            isScrollActive = true;
+            introTimeline.pause();
+            idleTimeline.pause();
+            updateLifecycleDataset();
+          }
+
+          if (scrollResumeTimeout) {
+            window.clearTimeout(scrollResumeTimeout);
+          }
+
+          scrollResumeTimeout = window.setTimeout(() => {
+            isScrollActive = false;
+
+            if (
+              !introComplete &&
+              (wasIntroPlayingBeforeScroll || canRunIntro())
+            ) {
+              resumeIntro();
+            } else if (
+              introComplete &&
+              (wasIdlePlayingBeforeScroll || canRunIdle())
+            ) {
+              resumeIdle();
+            } else {
+              updateLifecycleDataset();
+            }
+
+            wasIntroPlayingBeforeScroll = false;
+            wasIdlePlayingBeforeScroll = false;
+            scrollResumeTimeout = null;
+          }, SCROLL_SETTLE_DELAY_MS);
+        };
+
         const handleVisibilityChange = () => {
           if (document.hidden) {
             wasIntroPlayingBeforeHidden =
@@ -1059,11 +1137,14 @@ export function useNiteElectricAnimation(
             return;
           }
 
-          if (!introComplete && wasIntroPlayingBeforeHidden) {
+          if (
+            !introComplete &&
+            (wasIntroPlayingBeforeHidden || canRunIntro())
+          ) {
             introTimeline.resume();
           }
 
-          if (introComplete && wasIdlePlayingBeforeHidden) {
+          if (introComplete && (wasIdlePlayingBeforeHidden || canRunIdle())) {
             resumeIdle();
           } else {
             updateLifecycleDataset();
@@ -1089,9 +1170,17 @@ export function useNiteElectricAnimation(
               );
 
               if (isLogoInViewport) {
-                resumeIdle();
+                if (introComplete) {
+                  resumeIdle();
+                } else {
+                  resumeIntro();
+                }
               } else {
-                pauseIdle();
+                if (introComplete) {
+                  pauseIdle();
+                } else {
+                  pauseIntro();
+                }
               }
             },
             {
@@ -1104,15 +1193,31 @@ export function useNiteElectricAnimation(
         }
 
         document.addEventListener("visibilitychange", handleVisibilityChange);
+        window.addEventListener("wheel", handleScrollActivity, {
+          passive: true,
+        });
+        window.addEventListener("touchmove", handleScrollActivity, {
+          passive: true,
+        });
+        window.addEventListener("scroll", handleScrollActivity, {
+          passive: true,
+        });
         handleVisibilityChange();
         updateLifecycleDataset();
 
         return () => {
+          if (scrollResumeTimeout) {
+            window.clearTimeout(scrollResumeTimeout);
+          }
+
           viewportObserver?.disconnect();
           document.removeEventListener(
             "visibilitychange",
             handleVisibilityChange,
           );
+          window.removeEventListener("wheel", handleScrollActivity);
+          window.removeEventListener("touchmove", handleScrollActivity);
+          window.removeEventListener("scroll", handleScrollActivity);
           clearLifecycleDataset(rootElement);
           introTimeline.kill();
           idleTimeline.kill();
