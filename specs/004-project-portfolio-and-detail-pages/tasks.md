@@ -1,0 +1,42 @@
+# Tasks - Project Portfolio & Detail Pages
+
+- [x] Definir modelo de dados de projeto. Evidencia: Modelo documental consolidado na Spec 004 com `title`, `summary`, `area`, `status`, `problem`, `objective`, `stack`, `updatedAt` e `nextStep`.
+- [x] Definir status possiveis de projeto. Evidencia: Status `draft`, `in_progress`, `validated`, `done` e `archived` documentados na Spec 004.
+- [x] Definir labels publicas dos status. Evidencia: Labels "Em estruturacao", "Em andamento", "Validado", "Finalizado" e "Arquivado" documentadas na Spec 004.
+- [x] Definir requisitos funcionais da pagina `/projetos`. Evidencia: Requisitos de listagem, filtros, grid, navegacao e estados registrados na Spec 004.
+- [x] Definir requisitos funcionais da rota `/projetos/[slug]`. Evidencia: Estrutura da pagina individual registrada na Spec 004.
+- [x] Definir requisitos nao funcionais. Evidencia: Acessibilidade, SEO, performance, responsividade e manutenibilidade registrados na Spec 004.
+- [x] Definir estrutura do ProjectCard. Evidencia: Estrutura informacional e comportamento visual documentados na Spec 004.
+- [x] Definir estrutura da pagina individual de projeto. Evidencia: Blocos obrigatorios, opcionais e condicionais documentados na Spec 004.
+- [x] Definir campos obrigatorios e opcionais da pagina de projeto. Evidencia: Decisao aprovada pelo gestor do projeto em conversa de especificacao e consolidada na Spec 004.
+- [x] Definir regra de linguagem para evitar "entregaveis" como secao obrigatoria publica. Evidencia: Regra de linguagem consolidada na Spec 004.
+- [x] Definir comportamento de filtros por status. Evidencia: Filtros por status e combinacao de filtros documentados na Spec 004.
+- [x] Definir comportamento de filtros por area. Evidencia: Filtros por area/frente e combinacao de filtros documentados na Spec 004.
+- [x] Definir estados vazios, ausentes e pendentes. Evidencia: Estados sem projetos, sem resultado, sem evidencias, sem autorizacao e status de projeto documentados na Spec 004.
+- [x] Registrar criterios de aceitacao da Milestone 4. Evidencia: Criterios de aceitacao documentados em requirements.md.
+- [x] Registrar que ADR-006 permanece Proposto. Evidencia: Nota de governanca e ADR registrada em requirements.md.
+
+- [ ] Criar pagina `/projetos`.
+- [ ] Criar rota `/projetos/[slug]`.
+- [ ] Criar componente ProjectCard.
+- [ ] Criar componente ProjectStatusBadge ou aplicar StatusBadge da Spec 003 aos status de projeto.
+- [ ] Criar layout da pagina individual de projeto.
+- [ ] Criar secao de problema/contexto.
+- [ ] Criar secao de objetivo.
+- [ ] Criar secao de stack.
+- [ ] Criar secao de responsaveis autorizados.
+- [ ] Criar secao de ultima atualizacao.
+- [ ] Criar secao de proximos passos.
+- [ ] Criar secao de evidencias.
+- [ ] Criar secao de resultado gerado, quando houver material real validado.
+- [ ] Criar fallback para projeto sem evidencias publicas.
+- [ ] Criar estado vazio para portfolio sem projetos.
+- [ ] Criar estado sem resultados para filtros.
+- [ ] Implementar filtro por status.
+- [ ] Implementar filtro por area.
+- [ ] Validar foco visivel em filtros, cards e links.
+- [ ] Validar responsividade dos cards.
+- [ ] Validar leitura em mobile.
+- [ ] Validar SEO institucional de `/projetos`.
+- [ ] Validar SEO institucional de `/projetos/[slug]`.
+- [ ] Validar que nenhum campo opcional aparece sem autorizacao ou material real.

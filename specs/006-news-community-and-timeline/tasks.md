@@ -1,0 +1,52 @@
+# Tasks - News, Community & Timeline
+
+- [x] Definir nome da secao: Atualizacoes. Evidencia: Decisao aprovada pelo gestor do projeto em conversa de especificacao.
+- [x] Definir rota MVP: `/atualizacoes`. Evidencia: Decisao aprovada pelo gestor do projeto em conversa de especificacao.
+- [x] Definir titulo sugerido: NITE em movimento. Evidencia: Decisao aprovada pelo gestor do projeto em conversa de especificacao.
+- [x] Definir descricao sugerida: Registros, novidades e bastidores das acoes do nucleo. Evidencia: Decisao aprovada pelo gestor do projeto em conversa de especificacao.
+- [x] Registrar que Instagram segue como canal de alcance/social media. Evidencia: Decisao documentada na Spec 006.
+- [x] Registrar que portal funciona como arquivo organizado e institucional. Evidencia: Decisao documentada na Spec 006.
+- [x] Registrar rotas futuras `/atualizacoes/[slug]`, `/eventos`, `/oficinas`, `/galeria` e `/comunidade`. Evidencia: Rotas futuras documentadas na Spec 006.
+- [x] Criar modelo de atualizacao. Evidencia: `Update` consolidado em requirements.md.
+- [x] Definir categorias de atualizacao. Evidencia: Categorias `bastidores`, `evento`, `oficina`, `projeto`, `comunidade`, `marco`, `oportunidade` e `registro` documentadas.
+- [x] Definir modelo de marco historico. Evidencia: `TimelineMilestone` consolidado em requirements.md.
+- [x] Definir modelo de depoimento. Evidencia: `Testimonial` consolidado em requirements.md.
+- [x] Definir modelo de midia. Evidencia: `Media` consolidado em requirements.md.
+- [x] Definir estrutura do UpdateCard. Evidencia: Estrutura informacional e visual documentada em design.md.
+- [x] Definir estrutura da Timeline. Evidencia: Estrutura informacional e visual documentada em design.md.
+- [x] Definir campo de data de publicacao. Evidencia: `publishedAt` documentado como campo opcional validado.
+- [x] Definir campo de autor/responsavel, se aplicavel. Evidencia: `author` documentado como opcional e dependente de validacao.
+- [x] Definir campo de imagem de capa. Evidencia: `image?: Media` documentado com regra de autorizacao e alt.
+- [x] Definir fallback para atualizacao sem imagem. Evidencia: Fallback documentado em requirements.md e design.md.
+- [x] Definir regras para depoimentos reais. Evidencia: Autorizacao, relacao com NITE e fala real documentadas.
+- [x] Definir regras para uso de fotos reais. Evidencia: Autorizacao, contexto, alt e privacidade documentados.
+- [x] Definir estados vazios, pendentes e ausentes. Evidencia: Estados documentados em requirements.md e design.md.
+- [x] Registrar criterios de acessibilidade, SEO, performance, responsividade, privacidade e manutenibilidade. Evidencia: Requisitos nao funcionais documentados.
+- [x] Registrar criterios de aceitacao da Milestone 6. Evidencia: Criterios documentados em requirements.md.
+
+- [ ] Criar pagina `/atualizacoes`.
+- [ ] Criar componente UpdateCard.
+- [ ] Criar componente Timeline.
+- [ ] Criar componente TestimonialCard, se houver depoimentos autorizados.
+- [ ] Criar lista ou grid de atualizacoes.
+- [ ] Criar estado vazio para ausencia de atualizacoes publicadas.
+- [ ] Criar agrupamentos ou filtros simples por categoria, se houver conteudo suficiente.
+- [ ] Criar destaque de registros recentes ou relevantes, se houver criterio validado.
+- [ ] Criar fallback visual para UpdateCard sem imagem.
+- [ ] Implementar uso de texto alternativo para imagens.
+- [ ] Implementar validacao de autorizacao para fotos reais.
+- [ ] Implementar validacao de autorizacao para depoimentos.
+- [ ] Implementar timeline com marcos reais validados.
+- [ ] Criar rota futura `/atualizacoes/[slug]`, quando aprovada para implementacao.
+- [ ] Criar template futuro de atualizacao individual.
+- [ ] Criar rota futura `/eventos`, quando aprovada para implementacao.
+- [ ] Criar rota futura `/oficinas`, quando aprovada para implementacao.
+- [ ] Criar rota futura `/galeria`, quando aprovada para implementacao.
+- [ ] Criar rota futura `/comunidade`, quando aprovada para implementacao.
+- [ ] Criar galeria futura, se houver fotos reais autorizadas.
+- [ ] Validar foco visivel em cards, filtros e links.
+- [ ] Validar leitura em mobile.
+- [ ] Validar SEO institucional de `/atualizacoes`.
+- [ ] Validar performance com imagens reais.
+- [ ] Definir governanca minima de conteudo em reuniao coletiva com o nucleo.
+- [ ] Validar que nenhum evento, foto, depoimento, autor, data ou metrica aparece sem confirmacao.

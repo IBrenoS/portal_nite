@@ -1,0 +1,47 @@
+# Tasks - Opportunities & Selection Flow
+
+- [x] Definir requisitos funcionais da pagina `/oportunidades`. Evidencia: Requisitos documentados na Spec 005.
+- [x] Definir estado "sem oportunidades abertas". Evidencia: Estado default sem processo confirmado documentado na Spec 005.
+- [x] Definir estado "processo aberto". Evidencia: Estado com processo aberto documentado com campos minimos validados.
+- [x] Definir informacoes minimas de uma oportunidade. Evidencia: Titulo, area, status, resumo, requisitos, elegibilidade, prazo validado, forma de envio e observacoes institucionais documentados.
+- [x] Definir modelo documental de oportunidade. Evidencia: `Opportunity` consolidado em requirements.md.
+- [x] Definir modelo documental do formulario. Evidencia: `OpportunityApplication` consolidado em requirements.md.
+- [x] Definir campos obrigatorios do formulario. Evidencia: Nome completo, e-mail institucional, curso, area de interesse e aceite/ciencia registrados na Spec 005.
+- [x] Definir campos opcionais/condicionais do formulario. Evidencia: Semestre, link de curriculo, upload de curriculo e mensagem opcional registrados na Spec 005.
+- [x] Definir areas possiveis: Programacao, Dados e IA, Robotica, UX/UI, Automacao, Social media, Documentacao e Experiencia digital. Evidencia: Areas documentadas na Spec 005.
+- [x] Definir CTA principal da pagina: "Acompanhar oportunidades". Evidencia: Decisao aprovada pelo gestor do projeto em conversa de especificacao.
+- [x] Definir CTA secundario "Falar com o NITE" quando aplicavel. Evidencia: CTA secundario documentado para estado sem oportunidades abertas.
+- [x] Definir canal principal de envio como formulario integrado no portal. Evidencia: Decisao aprovada pelo gestor do projeto em conversa de especificacao.
+- [x] Registrar que Google Forms e link externo nao sao canal principal no MVP. Evidencia: Regra documentada na Spec 005.
+- [x] Definir backend, armazenamento, notificacao e protecao de dados como dependencias tecnicas futuras. Evidencia: Dependencias registradas sem implementacao.
+- [x] Definir upload/link de curriculo como decisao tecnica futura. Evidencia: Campos condicionais documentados na Spec 005.
+- [x] Definir validacao de dominio institucional como regra futura. Evidencia: Dominio oficial ainda nao confirmado, regra documentada como futura.
+- [x] Definir estados loading, erro, sucesso e fallback tecnico. Evidencia: Estados documentados na Spec 005.
+- [x] Definir regras de linguagem e privacidade. Evidencia: Regras contra promessa automatica, aprovacao, acompanhamento completo e coleta sem finalidade registradas.
+- [x] Registrar criterios de aceitacao da Milestone 5. Evidencia: Criterios de aceitacao documentados em requirements.md.
+- [x] Registrar que ADR-005 permanece Proposto. Evidencia: Nota de governanca e ADR registrada em requirements.md.
+
+- [ ] Criar pagina `/oportunidades`.
+- [ ] Criar componente OpportunityBanner ou OpportunityCard.
+- [ ] Criar componente OpportunityStatus.
+- [ ] Criar formulario integrado.
+- [ ] Implementar validacao de campos obrigatorios.
+- [ ] Implementar orientacao de e-mail institucional.
+- [ ] Definir dominio institucional oficial para validacao, se aplicavel.
+- [ ] Implementar estado sem oportunidades abertas.
+- [ ] Implementar estado com processo aberto.
+- [ ] Implementar estado loading do formulario.
+- [ ] Implementar estado de sucesso do formulario sem promessa de resposta automatica.
+- [ ] Implementar estado de erro com mensagens claras.
+- [ ] Implementar fallback tecnico quando backend nao estiver disponivel.
+- [ ] Definir backend do formulario em spec tecnica futura.
+- [ ] Definir armazenamento dos dados em spec tecnica futura.
+- [ ] Definir notificacao operacional em spec tecnica futura.
+- [ ] Definir upload ou link de curriculo em spec tecnica futura.
+- [ ] Definir protecao, retencao e acesso aos dados em spec tecnica futura.
+- [ ] Criar secao "Como participar", quando houver conteudo validado.
+- [ ] Criar FAQ futura, se houver perguntas validadas.
+- [ ] Validar foco visivel em CTAs, campos e mensagens.
+- [ ] Validar leitura e conforto em mobile.
+- [ ] Validar SEO institucional de `/oportunidades`.
+- [ ] Validar que nenhum processo, data, prazo, requisito, responsavel ou vaga aparece sem confirmacao.

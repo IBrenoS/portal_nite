@@ -1,0 +1,37 @@
+# Tasks - Visual Identity & Design System
+
+- [x] Definir paleta final do portal. Evidencia: Decisao aprovada pelo gestor/desenvolvedor do projeto em conversa de especificacao.
+- [x] Definir tokens de cor. Evidencia: Decisao aprovada pelo gestor/desenvolvedor do projeto em conversa de especificacao.
+- [x] Definir escala tipografica. Evidencia: Defaults documentais do MVP registrados na Spec 003.
+- [x] Definir fonte para titulos. Evidencia: Uso da fonte atual do projeto ou fallback sans-serif registrado como orientacao do MVP.
+- [x] Definir fonte para corpo de texto. Evidencia: Uso da fonte atual do projeto ou fallback sans-serif registrado como orientacao do MVP.
+- [x] Definir uso de fonte mono para tags tecnicas, se aplicavel. Evidencia: Uso limitado a tags tecnicas, stack e metadados curtos registrado na Spec 003.
+- [x] Definir espacamentos padrao. Evidencia: Espacamento base de secoes registrado como default documental do MVP.
+- [x] Definir grid/layout base. Evidencia: Largura maxima recomendada e estrutura de superficies registradas na Spec 003.
+- [x] Definir raio de borda padrao. Evidencia: Raios 8px e 12px registrados como defaults documentais do MVP.
+- [x] Definir sombras. Evidencia: Uso discreto e secundario a superficies, bordas e contraste registrado na Spec 003.
+- [x] Definir bordas. Evidencia: Decisao aprovada pelo gestor/desenvolvedor do projeto em conversa de especificacao.
+- [x] Definir padroes de background. Evidencia: Decisao aprovada pelo gestor/desenvolvedor do projeto em conversa de especificacao.
+- [x] Definir quando usar grid visual. Evidencia: Uso moderado, intencional e nao dominante registrado na Spec 003.
+- [x] Definir quando usar glow. Evidencia: Decisao aprovada pelo gestor/desenvolvedor do projeto em conversa de especificacao.
+- [ ] Criar componente Button.
+- [ ] Criar componente Card.
+- [ ] Criar componente StatusBadge.
+- [ ] Criar componente SectionHeader.
+- [ ] Criar componente Hero.
+- [ ] Criar componente ProjectCard.
+- [ ] Criar componente TimelineItem.
+- [ ] Criar componente UpdateCard.
+- [ ] Criar componente OpportunityBanner.
+- [ ] Criar componente Header.
+- [ ] Criar componente MegaMenu.
+- [ ] Criar componente MobileAccordion.
+- [ ] Criar componente Footer institucional.
+- [x] Documentar estados: default, hover, focus, active, disabled e loading. Evidencia: Estados obrigatorios registrados na tabela de contrato de design da Spec 003.
+- [x] Definir guidelines de animacao. Evidencia: Guidelines de motion registradas na Spec 003.
+- [x] Definir suporte a prefers-reduced-motion. Evidencia: Suporte a motion reduzido registrado como adaptacao adicional na Spec 003.
+- [x] Definir e aprovar valores finais de tokens visuais do MVP Premium. Evidencia: Decisao aprovada pelo gestor/desenvolvedor do projeto em conversa de especificacao.
+- [x] Registrar baseline de contraste visual para tokens. Evidencia: Decisao aprovada pelo gestor/desenvolvedor do projeto em conversa de especificacao.
+- [x] Validar API minima dos componentes base antes de implementacao ampla. Evidencia: API minima consolidada como contrato de design, sem implementacao de codigo.
+- [x] Validar variantes e estados obrigatorios de cada componente. Evidencia: Variantes e estados obrigatorios consolidados como contrato de design.
+- [x] Registrar criterios visuais objetivos de MVP Premium. Evidencia: Decisao aprovada pelo gestor do projeto em conversa de especificacao.
