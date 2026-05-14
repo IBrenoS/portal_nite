@@ -2,15 +2,37 @@
 
 ## Status
 
-Proposto
+Aceito
+
+## Historico
+
+- 2026-05-14: Aprovada pelo gestor do projeto apos Readiness Audit para primeira implementacao controlada.
 
 ## Contexto
 
-A spec de baseline define acessibilidade, responsividade, SEO e performance como requisitos minimos para todas as features do portal.
+A Spec 007 define acessibilidade, responsividade, SEO e performance como requisitos minimos para todas as features do portal.
 
-## Decisao
+WCAG 2.2 e a referencia de acessibilidade. Contraste minimo e baseline universal de legibilidade, nao um modo acessivel opcional.
 
-Exigir baseline minimo de acessibilidade para entregas: navegacao por teclado, foco visivel, contraste adequado, headings logicos, landmarks semanticos, texto alternativo em imagens informativas e suporte a `prefers-reduced-motion`.
+## Decisao aceita
+
+Exigir baseline minima de acessibilidade para entregas do MVP:
+
+- WCAG 2.2 como referencia.
+- WCAG AA como referencia minima de contraste.
+- 4.5:1 para texto normal.
+- 3:1 para texto grande.
+- Navegacao por teclado.
+- Foco visivel.
+- Semantica HTML.
+- Headings logicos.
+- Landmarks semanticos.
+- Texto alternativo em imagens informativas.
+- Labels e mensagens claras em formularios.
+- Estados vazio, erro, loading e sucesso compreensiveis.
+- Suporte a `prefers-reduced-motion`.
+
+A validacao final ocorre na implementacao e release. Esta ADR foi aprovada para orientar a primeira implementacao controlada de base visual e tokens.
 
 ## Alternativas consideradas
 
@@ -23,12 +45,14 @@ Exigir baseline minimo de acessibilidade para entregas: navegacao por teclado, f
 - Reduz regressao em componentes compartilhados.
 - Torna validacao mais objetiva.
 - Alinha produto institucional com acesso universal.
+- Evita tratar legibilidade como preferencia opcional do usuario.
 
 ## Consequencias negativas
 
 - Aumenta custo de validacao por entrega.
 - Exige disciplina para registrar evidencias.
+- Exige revisao real em componentes, rotas e estados.
 
 ## Impacto no Portal NITE
 
-Nenhuma feature interativa deve ser considerada pronta sem validacao minima de teclado, foco e comportamento responsivo.
+Nenhuma feature interativa deve ser considerada pronta sem validacao minima de teclado, foco, contraste, semantica, responsividade e comportamento com movimento reduzido quando aplicavel.

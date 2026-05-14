@@ -17,6 +17,8 @@
 - [x] Registrar controle de escopo. Evidencia: Regras para nao alterar specs relacionadas sem atualizacao documentadas.
 - [x] Registrar criterios de aceite da Milestone 8. Evidencia: Criterios documentados em requirements.md.
 - [x] Criar guia operacional `design.md`. Evidencia: Arquivo criado com fluxo de task, PR, release, pendencias, ADR e regressao.
+- [x] Corrigir consistencia documental entre ADRs e specs aprovadas. Evidencia: Milestone 8.1 revisou ADR-001 a ADR-006 sem alterar status Proposto e sem concluir task de implementacao.
+- [x] Aprovar ADR necessaria para primeira implementacao controlada. Evidencia: ADR-004 aceita pelo gestor do projeto apos Readiness Audit para orientar a base visual e tokens; ADR-003 permanece Proposto porque a primeira task nao inclui motion em escala.
 
 ## Implementacao futura
 
