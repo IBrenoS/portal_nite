@@ -71,7 +71,7 @@ export default function HomePage() {
         <section
           id="contato"
           className="relative py-16 sm:py-24 lg:py-28"
-          data-surface="grid"
+          data-surface="clean"
         >
           <Container className="grid gap-8 lg:grid-cols-[1fr_0.9fr] lg:items-center">
             <div className="brand-panel rounded-lg border border-border p-6 sm:p-8">

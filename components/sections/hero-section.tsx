@@ -1,7 +1,10 @@
 import { ArrowRightIcon } from "lucide-react";
 
 import { Container } from "@/components/layout/container";
-import { ButtonPrimaryLink, ButtonSecondaryLink } from "@/components/ui/brand-button";
+import {
+  ButtonPrimaryLink,
+  ButtonSecondaryLink,
+} from "@/components/ui/brand-button";
 import { AnimatedNiteLogo } from "@/components/ui/animated-nite-logo";
 import { Reveal } from "@/components/ui/reveal";
 
@@ -10,11 +13,9 @@ export function HeroSection() {
     <section
       className="relative overflow-hidden"
       data-hero-section=""
-      data-surface="grid"
+      data-surface="clean"
       data-testid="hero-section"
     >
-      <div className="brand-scanline pointer-events-none absolute inset-0 opacity-30 [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_88%,transparent)]" />
-
       <Container
         size="xl"
         className="relative grid min-h-[calc(92svh-4rem)] items-center gap-8 py-10 sm:gap-12 sm:py-16 lg:grid-cols-[minmax(0,47rem)_minmax(18rem,1fr)] lg:gap-10 lg:py-20 xl:grid-cols-[minmax(0,48rem)_minmax(18rem,1fr)] xl:gap-12"
@@ -58,14 +59,6 @@ export function HeroSection() {
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-x-[12%] top-[24%] z-0 h-[44%] bg-[radial-gradient(ellipse_at_50%_44%,rgb(255_255_255_/_0.045),transparent_68%)] opacity-70 blur-xl"
-          />
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute left-[14%] top-[18%] z-0 h-px w-[62%] bg-gradient-to-r from-transparent via-brand-circuit-bright/16 to-transparent"
-          />
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute bottom-[22%] right-[8%] z-0 h-px w-[46%] bg-gradient-to-r from-transparent via-white/8 to-transparent"
           />
           <AnimatedNiteLogo className="relative z-10 w-full max-w-[8rem] min-[430px]:max-w-[9.5rem] sm:max-w-[20rem] lg:max-w-[20rem] xl:max-w-[21.5rem]" />
         </div>

@@ -14,23 +14,24 @@
 - [x] Definir padroes de background. Evidencia: Decisao aprovada pelo gestor/desenvolvedor do projeto em conversa de especificacao.
 - [x] Definir quando usar grid visual. Evidencia: Uso moderado, intencional e nao dominante registrado na Spec 003.
 - [x] Definir quando usar glow. Evidencia: Decisao aprovada pelo gestor/desenvolvedor do projeto em conversa de especificacao.
-- [ ] Criar componente Button.
-- [ ] Criar componente Card.
-- [ ] Criar componente StatusBadge.
-- [ ] Criar componente SectionHeader.
+- [x] Criar componente Button. Evidencia: componente base consolidado em `components/ui/button.tsx` com variantes `primary`, `secondary`, `ghost`, `outline` e `link`, tamanhos `sm`, `md` e `lg`, foco visivel, disabled e loading preservando nome acessivel.
+- [x] Criar componente Card. Evidencia: componente base consolidado em `components/ui/card.tsx` com estrutura `Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardContent` e `CardFooter`, variantes `default`, `elevated`, `subtle` e `interactive`, foco visivel em cards interativos e preservacao de semantica para `div`, `a` e `button`.
+- [x] Criar componente StatusBadge. Evidencia: componente base consolidado em `components/ui/status-badge.tsx` com variantes `soft` e `outline`, tamanhos `sm` e `md`, status gerais e status de projeto da Spec 004 mapeados com label textual visivel e icone decorativo opcional.
+- [x] Criar componente SectionHeader. Evidencia: componente base consolidado em `components/sections/section-header.tsx` com `eyebrow`, `title`, `description`, `as`, `align`, `actions` e `children`, heading semantico configuravel com `h2` como padrao e alinhamentos `left` e `center`.
 - [ ] Criar componente Hero.
 - [ ] Criar componente ProjectCard.
 - [ ] Criar componente TimelineItem.
 - [ ] Criar componente UpdateCard.
 - [ ] Criar componente OpportunityBanner.
-- [ ] Criar componente Header.
-- [ ] Criar componente MegaMenu.
-- [ ] Criar componente MobileAccordion.
+- [x] Criar componente Header. Evidencia: Header shell consolidado em `components/layout/site-header.tsx` com logo, links principais, CTA primario, superficies/tokens oficiais e pontos de extensao para mega menu desktop e mobile accordion.
+- [x] Criar componente MegaMenu. Evidencia: `components/layout/site-header.tsx` implementa painel desktop com superficies dark premium, borda sutil, estados aberto/ativo, foco visivel e transicao discreta respeitando reduced motion.
+- [x] Criar componente MobileAccordion/menu mobile em camadas. Evidencia: `components/layout/site-header.tsx` implementa menu mobile em camadas com grupo principal, detalhe por grupo, voltar, fechar, CTA, foco visivel e transicao reduzivel.
 - [ ] Criar componente Footer institucional.
 - [x] Documentar estados: default, hover, focus, active, disabled e loading. Evidencia: Estados obrigatorios registrados na tabela de contrato de design da Spec 003.
 - [x] Definir guidelines de animacao. Evidencia: Guidelines de motion registradas na Spec 003.
 - [x] Definir suporte a prefers-reduced-motion. Evidencia: Suporte a motion reduzido registrado como adaptacao adicional na Spec 003.
 - [x] Definir e aprovar valores finais de tokens visuais do MVP Premium. Evidencia: Decisao aprovada pelo gestor/desenvolvedor do projeto em conversa de especificacao.
+- [x] Ajustar `background.default` apos validacao visual. Evidencia: Decisao aprovada pelo gestor/desenvolvedor do projeto para atualizar o token de `#080A12` para `#0A0A0F`, reduzindo a percepcao azulada do fundo dominante.
 - [x] Registrar baseline de contraste visual para tokens. Evidencia: Decisao aprovada pelo gestor/desenvolvedor do projeto em conversa de especificacao.
 - [x] Validar API minima dos componentes base antes de implementacao ampla. Evidencia: API minima consolidada como contrato de design, sem implementacao de codigo.
 - [x] Validar variantes e estados obrigatorios de cada componente. Evidencia: Variantes e estados obrigatorios consolidados como contrato de design.

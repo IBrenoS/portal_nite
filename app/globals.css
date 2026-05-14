@@ -8,6 +8,27 @@
   --font-sans: var(--font-geist), "Bahnschrift", "Segoe UI", sans-serif;
   --font-heading: var(--font-sora), "Bahnschrift", "Segoe UI", sans-serif;
   --font-mono: var(--font-geist-mono), "Cascadia Mono", "Consolas", monospace;
+  --color-background-default: var(--background-default);
+  --color-background-section: var(--background-section);
+  --color-surface-card: var(--surface-card);
+  --color-surface-elevated: var(--surface-elevated);
+  --color-surface-soft: var(--surface-soft);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-strong: var(--border-strong);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-accent: var(--brand-accent);
+  --color-brand-glow: var(--brand-glow);
+  --color-brand-soft: var(--brand-soft);
+  --color-focus-ring: var(--focus-ring);
+  --color-status-draft: var(--status-draft);
+  --color-status-progress: var(--status-progress);
+  --color-status-validated: var(--status-validated);
+  --color-status-done: var(--status-done);
+  --color-status-warning: var(--status-warning);
+  --color-status-error: var(--status-error);
   --color-brand-ink: var(--brand-ink);
   --color-brand-circuit: var(--brand-circuit);
   --color-brand-circuit-bright: var(--brand-circuit-bright);
@@ -66,18 +87,39 @@
 
 :root {
   color-scheme: dark;
-  --brand-ink: #030507;
-  --brand-panel: #090d12;
-  --brand-panel-raised: #101821;
-  --brand-circuit: #1687ff;
-  --brand-circuit-bright: #33d4ff;
-  --brand-electric-blue: #299dff;
-  --brand-metal: #f2f5f7;
-  --brand-steel: #a8b2bd;
-  --brand-muted: #8aa3b5;
-  --brand-graphite: #1d252e;
-  --brand-border-cyan-soft: rgb(51 212 255 / 0.14);
-  --brand-glow-cyan: rgb(51 212 255 / 0.18);
+  --background-default: #0a0a0f;
+  --background-section: #0d111c;
+  --surface-card: #121826;
+  --surface-elevated: #172033;
+  --surface-soft: #f3f6fa;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.16);
+  --text-primary: #f4f7fb;
+  --text-secondary: #aab4c3;
+  --text-muted: #758195;
+  --brand-primary: #2563eb;
+  --brand-accent: #38bdf8;
+  --brand-glow: rgba(56, 189, 248, 0.22);
+  --brand-soft: rgba(37, 99, 235, 0.12);
+  --focus-ring: #7dd3fc;
+  --status-draft: #94a3b8;
+  --status-progress: #38bdf8;
+  --status-validated: #a78bfa;
+  --status-done: #34d399;
+  --status-warning: #fbbf24;
+  --status-error: #fb7185;
+  --brand-ink: var(--background-default);
+  --brand-panel: var(--surface-card);
+  --brand-panel-raised: var(--surface-elevated);
+  --brand-circuit: var(--brand-primary);
+  --brand-circuit-bright: var(--brand-accent);
+  --brand-electric-blue: var(--brand-primary);
+  --brand-metal: var(--text-primary);
+  --brand-steel: var(--text-secondary);
+  --brand-muted: var(--text-muted);
+  --brand-graphite: var(--surface-elevated);
+  --brand-border-cyan-soft: var(--border-subtle);
+  --brand-glow-cyan: var(--brand-glow);
   --duration-brand-reveal: 650ms;
   --duration-brand-micro: 220ms;
   --duration-brand-medium: 560ms;
@@ -86,40 +128,41 @@
   --parallax-range-min: 6%;
   --parallax-range-max: 14%;
   --background: var(--brand-ink);
-  --foreground: #f8fbff;
+  --foreground: var(--text-primary);
   --card: var(--brand-panel);
-  --card-foreground: #f5f8ff;
+  --card-foreground: var(--text-primary);
   --popover: var(--brand-panel-raised);
-  --popover-foreground: #f5f8ff;
-  --primary: var(--brand-circuit-bright);
-  --primary-foreground: #031018;
-  --secondary: #17202a;
-  --secondary-foreground: #eef4fb;
-  --muted: #111821;
-  --muted-foreground: #a8b2bd;
-  --accent: #0d2738;
-  --accent-foreground: #f5f8ff;
-  --destructive: #ff6b81;
-  --border: rgb(168 178 189 / 0.24);
-  --input: rgb(168 178 189 / 0.28);
-  --ring: rgb(51 212 255 / 0.58);
+  --popover-foreground: var(--text-primary);
+  --primary: var(--brand-primary);
+  --primary-foreground: var(--text-primary);
+  --secondary: var(--surface-elevated);
+  --secondary-foreground: var(--text-primary);
+  --muted: var(--background-section);
+  --muted-foreground: var(--text-secondary);
+  --accent: var(--brand-soft);
+  --accent-foreground: var(--text-primary);
+  --destructive: var(--status-error);
+  --border: var(--border-subtle);
+  --input: var(--border-strong);
+  --ring: var(--focus-ring);
   --chart-1: var(--brand-circuit-bright);
   --chart-2: var(--brand-circuit);
-  --chart-3: #68a4ff;
-  --chart-4: var(--brand-metal);
-  --chart-5: var(--brand-steel);
+  --chart-3: var(--status-validated);
+  --chart-4: var(--status-done);
+  --chart-5: var(--status-warning);
   --radius: 0.5rem;
   --shadow-brand-lift: 0 24px 70px rgb(0 0 0 / 0.42);
-  --shadow-brand-focus: 0 0 0 1px rgb(51 212 255 / 0.72), 0 0 0 6px rgb(51 212 255 / 0.16);
+  --shadow-brand-focus:
+    0 0 0 1px var(--focus-ring), 0 0 0 6px var(--brand-glow);
   --shadow-brand-glow: 0 0 32px var(--brand-glow-cyan);
   --sidebar: var(--brand-panel);
-  --sidebar-foreground: #f5f8ff;
-  --sidebar-primary: var(--brand-circuit-bright);
-  --sidebar-primary-foreground: #04111d;
-  --sidebar-accent: #17202a;
-  --sidebar-accent-foreground: #f5f8ff;
-  --sidebar-border: rgb(168 178 189 / 0.24);
-  --sidebar-ring: rgb(51 212 255 / 0.58);
+  --sidebar-foreground: var(--text-primary);
+  --sidebar-primary: var(--brand-primary);
+  --sidebar-primary-foreground: var(--text-primary);
+  --sidebar-accent: var(--surface-elevated);
+  --sidebar-accent-foreground: var(--text-primary);
+  --sidebar-border: var(--border-subtle);
+  --sidebar-ring: var(--focus-ring);
 }
 
 .dark {
@@ -138,14 +181,7 @@ html {
 body {
   min-height: 100vh;
   margin: 0;
-  background:
-    linear-gradient(90deg, rgb(255 255 255 / 0.035) 1px, transparent 1px),
-    linear-gradient(180deg, rgb(255 255 255 / 0.03) 1px, transparent 1px),
-    linear-gradient(180deg, #030507 0%, #080c11 54%, #030507 100%);
-  background-size:
-    44px 44px,
-    44px 44px,
-    auto;
+  background: var(--background);
   text-rendering: optimizeLegibility;
 }
 
@@ -173,25 +209,15 @@ a {
     cursor: pointer;
   }
   ::selection {
-    background: rgb(41 174 255 / 0.28);
+    background: var(--brand-glow);
     color: var(--foreground);
   }
 }
 
 @layer utilities {
   .brand-panel {
-    background:
-      linear-gradient(135deg, rgb(51 212 255 / 0.08), transparent 32%),
-      linear-gradient(180deg, rgb(255 255 255 / 0.055), rgb(255 255 255 / 0.018)),
-      var(--brand-panel);
+    background: var(--brand-panel);
     box-shadow: var(--shadow-brand-lift);
-  }
-
-  .brand-circuit-lines {
-    background-image:
-      linear-gradient(90deg, rgb(51 212 255 / 0.16) 1px, transparent 1px),
-      linear-gradient(180deg, rgb(168 178 189 / 0.12) 1px, transparent 1px);
-    background-size: 32px 32px;
   }
 
   .brand-metal-text {
@@ -201,18 +227,9 @@ a {
     color: transparent;
   }
 
-  .brand-scanline {
-    background: repeating-linear-gradient(
-      180deg,
-      rgb(255 255 255 / 0.035) 0,
-      rgb(255 255 255 / 0.035) 1px,
-      transparent 1px,
-      transparent 8px
-    );
-  }
-
   .animate-brand-rise {
-    animation: brand-rise var(--duration-brand-medium) var(--ease-brand-out) both;
+    animation: brand-rise var(--duration-brand-medium) var(--ease-brand-out)
+      both;
   }
 }
 

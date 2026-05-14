@@ -26,29 +26,31 @@ O portal deve transmitir:
 
 Decisao aprovada pelo gestor/desenvolvedor do projeto: o Portal NITE adotara uma paleta dark premium, tecnologica e institucional, com fundo escuro suave, superficies elevadas, azul como cor primaria e ciano como destaque. O preto absoluto nao sera usado como fundo dominante. Grid, glow e gradientes devem ser usados com moderacao e intencao.
 
-| Token | Valor aprovado | Uso principal |
-|---|---|---|
-| background.default | `#080A12` | Fundo principal |
-| background.section | `#0D111C` | Separacao de blocos e secoes |
-| surface.card | `#121826` | Cards |
-| surface.elevated | `#172033` | Mega menu, dropdowns e paineis |
-| surface.soft | `#F3F6FA` | Secoes claras pontuais |
-| border.subtle | `rgba(255, 255, 255, 0.08)` | Bordas discretas |
-| border.strong | `rgba(255, 255, 255, 0.16)` | Bordas com mais presenca |
-| text.primary | `#F4F7FB` | Texto principal |
-| text.secondary | `#AAB4C3` | Texto secundario |
-| text.muted | `#758195` | Texto de apoio |
-| brand.primary | `#2563EB` | CTAs principais e identidade |
-| brand.accent | `#38BDF8` | Highlights, icones e microdestaques |
-| brand.glow | `rgba(56, 189, 248, 0.22)` | Glow de baixa intensidade |
-| brand.soft | `rgba(37, 99, 235, 0.12)` | Destaques suaves |
-| focus.ring | `#7DD3FC` | Foco visivel |
-| status.draft | `#94A3B8` | Status rascunho |
-| status.progress | `#38BDF8` | Status em progresso |
-| status.validated | `#A78BFA` | Status validado |
-| status.done | `#34D399` | Status concluido |
-| status.warning | `#FBBF24` | Status de alerta |
-| status.error | `#FB7185` | Status de erro |
+O token `background.default` foi ajustado de `#080A12` para `#0A0A0F` apos validacao visual, para reduzir a percepcao azulada do fundo dominante e aproximar a base visual de um dark premium neutro/grafite. A decisao mantem a regra de evitar preto absoluto como fundo dominante e preservar o azul como acento de marca.
+
+| Token              | Valor aprovado              | Uso principal                       |
+| ------------------ | --------------------------- | ----------------------------------- |
+| background.default | `#0A0A0F`                   | Fundo principal                     |
+| background.section | `#0D111C`                   | Separacao de blocos e secoes        |
+| surface.card       | `#121826`                   | Cards                               |
+| surface.elevated   | `#172033`                   | Mega menu, dropdowns e paineis      |
+| surface.soft       | `#F3F6FA`                   | Secoes claras pontuais              |
+| border.subtle      | `rgba(255, 255, 255, 0.08)` | Bordas discretas                    |
+| border.strong      | `rgba(255, 255, 255, 0.16)` | Bordas com mais presenca            |
+| text.primary       | `#F4F7FB`                   | Texto principal                     |
+| text.secondary     | `#AAB4C3`                   | Texto secundario                    |
+| text.muted         | `#758195`                   | Texto de apoio                      |
+| brand.primary      | `#2563EB`                   | CTAs principais e identidade        |
+| brand.accent       | `#38BDF8`                   | Highlights, icones e microdestaques |
+| brand.glow         | `rgba(56, 189, 248, 0.22)`  | Glow de baixa intensidade           |
+| brand.soft         | `rgba(37, 99, 235, 0.12)`   | Destaques suaves                    |
+| focus.ring         | `#7DD3FC`                   | Foco visivel                        |
+| status.draft       | `#94A3B8`                   | Status rascunho                     |
+| status.progress    | `#38BDF8`                   | Status em progresso                 |
+| status.validated   | `#A78BFA`                   | Status validado                     |
+| status.done        | `#34D399`                   | Status concluido                    |
+| status.warning     | `#FBBF24`                   | Status de alerta                    |
+| status.error       | `#FB7185`                   | Status de erro                      |
 
 ## Regras de uso dos tokens
 
@@ -87,17 +89,17 @@ Decisao aprovada pelo gestor/desenvolvedor do projeto: o Portal NITE adotara uma
 
 ## Tipografia, escala e layout do MVP
 
-| Item | Default documental do MVP | Status |
-|---|---|---|
-| Fonte de corpo | Fonte atual do projeto ou fallback sans-serif | Aprovado para orientar o MVP |
-| Fonte de titulo | Fonte atual do projeto ou fallback sans-serif | Aprovado para orientar o MVP |
-| Fonte mono | Usar apenas em tags tecnicas, stack e metadados curtos, se aplicavel | Aprovado para orientar o MVP |
-| Raio pequeno | `8px` | Aprovado para orientar o MVP |
-| Raio medio | `12px` | Aprovado para orientar o MVP |
-| Grid max-width | `1120px` a `1200px` | Aprovado para orientar o MVP |
-| Espacamento de secao | `64px` desktop, `40px` mobile | Aprovado para orientar o MVP |
-| Glow | Uso pontual, nunca como fundo dominante | Aprovado para orientar o MVP |
-| Motion | Curta, discreta, nao essencial e adaptavel por `prefers-reduced-motion` | Aprovado para orientar o MVP |
+| Item                 | Default documental do MVP                                               | Status                       |
+| -------------------- | ----------------------------------------------------------------------- | ---------------------------- |
+| Fonte de corpo       | Fonte atual do projeto ou fallback sans-serif                           | Aprovado para orientar o MVP |
+| Fonte de titulo      | Fonte atual do projeto ou fallback sans-serif                           | Aprovado para orientar o MVP |
+| Fonte mono           | Usar apenas em tags tecnicas, stack e metadados curtos, se aplicavel    | Aprovado para orientar o MVP |
+| Raio pequeno         | `8px`                                                                   | Aprovado para orientar o MVP |
+| Raio medio           | `12px`                                                                  | Aprovado para orientar o MVP |
+| Grid max-width       | `1120px` a `1200px`                                                     | Aprovado para orientar o MVP |
+| Espacamento de secao | `64px` desktop, `40px` mobile                                           | Aprovado para orientar o MVP |
+| Glow                 | Uso pontual, nunca como fundo dominante                                 | Aprovado para orientar o MVP |
+| Motion               | Curta, discreta, nao essencial e adaptavel por `prefers-reduced-motion` | Aprovado para orientar o MVP |
 
 Esses valores sao defaults documentais para a implementacao do MVP. A validacao final de legibilidade, densidade e contraste por componente deve ocorrer durante a implementacao e na baseline de acessibilidade.
 
@@ -121,20 +123,20 @@ Esses valores sao defaults documentais para a implementacao do MVP. A validacao 
 
 APIs abaixo sao contrato de design da Spec 003, nao implementacao de codigo. Os nomes representam responsabilidade visual e de conteudo; a implementacao podera adaptar nomes tecnicos sem mudar o comportamento aprovado.
 
-| Componente | API minima de design | Variantes | Estados obrigatorios |
-|---|---|---|---|
-| Button | `label`, `href` ou `onAction`, `variant`, `disabled`, `loading` | `primary`, `secondary`, `ghost` | default, hover, focus, active, disabled, loading |
-| Card | `title`, `summary`, `href`, `media`, `meta` | `project`, `update`, `feature` | default, hover quando clicavel, focus quando clicavel, fallback sem conteudo validado |
-| Hero | `title`, `description`, `primaryCta`, `secondaryCta`, `visualState` | `home`, `compact` | default, foco nos CTAs, fallback sem motion |
-| StatusBadge | `label`, `status`, `icon` opcional | `draft`, `progress`, `validated`, `done`, `warning`, `error` | default, contrastado, sem depender so de cor |
-| SectionHeader | `eyebrow`, `title`, `description`, `action` opcional | `default`, `compact` | default |
-| ProjectCard | `title`, `summary`, `area`, `status`, `href`, `stack` opcional | `compact`, `featured` | default, hover, focus, active quando aplicavel, fallback sem evidencia |
-| TimelineItem | `date`, `title`, `description`, `evidence` opcional | `default`, `highlight` | default, fallback sem evidencia |
-| UpdateCard | `title`, `date`, `summary`, `href`, `image` opcional | `default`, `compact` | default, hover, focus, fallback sem imagem |
-| OpportunityBanner | `status`, `title`, `description`, `cta` | `open`, `closed`, `future` | default, estado sem vagas, CTA pendente |
-| Header | `links`, `ctaPrimary`, `ctaSecondary`, `activePath` | `desktop`, `mobile` | closed, open, hover, focus, active |
-| MegaMenu | `groups`, `open`, `activeGroup` | `desktop`, `mobileAccordion` | closed, open, hover, focus, active |
-| Footer institucional | `links`, `contact`, `social` | `default` | default, link focus |
+| Componente           | API minima de design                                                                     | Variantes                                                                                                         | Estados obrigatorios                                                                                                    |
+| -------------------- | ---------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| Button               | `label`, `href` ou `onAction`, `variant`, `size`, `disabled`, `loading`                  | `primary`, `secondary`, `ghost`, `outline`, `link`                                                                | default, hover, focus, active, disabled, loading                                                                        |
+| Card                 | `title`, `summary`, `href` ou `onAction`, `variant`, `size`, `disabled`, `media`, `meta` | `default`, `elevated`, `subtle`, `interactive`                                                                    | default, hover/focus quando interativo, active quando aplicavel, disabled/aria-disabled, fallback sem conteudo validado |
+| Hero                 | `title`, `description`, `primaryCta`, `secondaryCta`, `visualState`                      | `home`, `compact`                                                                                                 | default, foco nos CTAs, fallback sem motion                                                                             |
+| StatusBadge          | `status`, `label` opcional, `size`, `variant`, `icon` opcional                           | `soft`, `outline`; status `draft`, `progress`, `in_progress`, `validated`, `done`, `warning`, `error`, `archived` | default, label textual visivel, icone decorativo opcional, sem foco por padrao, sem depender so de cor                  |
+| SectionHeader        | `eyebrow`, `title`, `description`, `as`, `align`, `actions`                              | `left`, `center`                                                                                                  | default, heading semantico configuravel, actions com foco quando interativas                                            |
+| ProjectCard          | `title`, `summary`, `area`, `status`, `href`, `stack` opcional                           | `compact`, `featured`                                                                                             | default, hover, focus, active quando aplicavel, fallback sem evidencia                                                  |
+| TimelineItem         | `date`, `title`, `description`, `evidence` opcional                                      | `default`, `highlight`                                                                                            | default, fallback sem evidencia                                                                                         |
+| UpdateCard           | `title`, `date`, `summary`, `href`, `image` opcional                                     | `default`, `compact`                                                                                              | default, hover, focus, fallback sem imagem                                                                              |
+| OpportunityBanner    | `status`, `title`, `description`, `cta`                                                  | `open`, `closed`, `future`                                                                                        | default, estado sem vagas, CTA pendente                                                                                 |
+| Header               | `links`, `ctaPrimary`, `ctaSecondary`, `activePath`                                      | `desktop`, `mobile`                                                                                               | closed, open, hover, focus, active                                                                                      |
+| MegaMenu             | `groups`, `open`, `activeGroup`                                                          | `desktop`, `mobileAccordion`                                                                                      | closed, open, hover, focus, active                                                                                      |
+| Footer institucional | `links`, `contact`, `social`                                                             | `default`                                                                                                         | default, link focus                                                                                                     |
 
 ## Guidelines de motion
 

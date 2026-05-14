@@ -16,7 +16,7 @@ export function ProjectsOperatingSection({
       id="projetos"
       className="py-16 sm:py-24 lg:py-28"
       data-projects-operating-section=""
-      data-surface="grid"
+      data-surface="clean"
       data-testid="projects-operating-section"
     >
       <Container size="xl" className="flex flex-col gap-10">

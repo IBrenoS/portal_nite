@@ -13,10 +13,17 @@ type TimelineItemProps = {
 };
 
 export function TimelineItem({ event, className }: TimelineItemProps) {
-  const projectHref = event.projectSlug ? (`/projetos/${event.projectSlug}` as Route) : undefined;
+  const projectHref = event.projectSlug
+    ? (`/projetos/${event.projectSlug}` as Route)
+    : undefined;
 
   return (
-    <article className={cn("relative border-l border-border pb-6 pl-5 last:pb-0 sm:pl-7", className)}>
+    <article
+      className={cn(
+        "relative border-l border-border pb-6 pl-5 last:pb-0 sm:pl-7",
+        className,
+      )}
+    >
       <span className="absolute -left-[7px] top-5 size-3.5 rounded-full border border-brand-circuit-bright bg-background shadow-[0_0_22px_rgb(51_212_255_/_0.6)]" />
       <div className="brand-panel overflow-hidden rounded-lg border border-border">
         <div className="grid gap-0 md:grid-cols-[minmax(0,0.82fr)_minmax(0,1fr)]">
@@ -30,7 +37,7 @@ export function TimelineItem({ event, className }: TimelineItemProps) {
                 className="object-cover"
               />
             ) : (
-              <div className="brand-circuit-lines h-full min-h-52 bg-muted" />
+              <div className="h-full min-h-52 bg-muted" />
             )}
             <div className="absolute inset-0 bg-gradient-to-t from-background/75 via-background/10 to-transparent" />
             <Chip variant="metal" className="absolute bottom-3 left-3">
@@ -48,8 +55,12 @@ export function TimelineItem({ event, className }: TimelineItemProps) {
               <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-circuit-bright">
                 Marco {String(event.sequence).padStart(2, "0")}
               </p>
-              <h3 className="font-heading text-xl font-semibold leading-tight text-foreground">{event.title}</h3>
-              <p className="text-sm leading-6 text-muted-foreground">{event.description}</p>
+              <h3 className="font-heading text-xl font-semibold leading-tight text-foreground">
+                {event.title}
+              </h3>
+              <p className="text-sm leading-6 text-muted-foreground">
+                {event.description}
+              </p>
             </div>
 
             {projectHref ? (

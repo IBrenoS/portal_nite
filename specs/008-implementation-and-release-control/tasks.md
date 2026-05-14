@@ -18,7 +18,9 @@
 - [x] Registrar criterios de aceite da Milestone 8. Evidencia: Criterios documentados em requirements.md.
 - [x] Criar guia operacional `design.md`. Evidencia: Arquivo criado com fluxo de task, PR, release, pendencias, ADR e regressao.
 - [x] Corrigir consistencia documental entre ADRs e specs aprovadas. Evidencia: Milestone 8.1 revisou ADR-001 a ADR-006 sem alterar status Proposto e sem concluir task de implementacao.
-- [x] Aprovar ADR necessaria para primeira implementacao controlada. Evidencia: ADR-004 aceita pelo gestor do projeto apos Readiness Audit para orientar a base visual e tokens; ADR-003 permanece Proposto porque a primeira task nao inclui motion em escala.
+- [x] Aprovar ADR necessaria para primeira implementacao controlada. Evidencia: ADR-004 aceita pelo gestor do projeto apos Readiness Audit para orientar a base visual e tokens; naquele momento, ADR-003 nao foi aprovada porque a primeira task nao incluia motion em escala.
+- [x] Aprovar ADR necessaria para implementacao do Header final do MVP. Evidencia: ADR-002 aceita pelo gestor do projeto para liberar Header com mega menu desktop e mobile accordion, mantendo rotas futuras separadas das rotas MVP.
+- [x] Aprovar ADR necessaria para motion controlado do Header final. Evidencia: ADR-003 aceita pelo gestor do projeto para liberar motion controlado no Header, mega menu desktop e menu mobile em camadas, com suporte a `prefers-reduced-motion`.
 
 ## Implementacao futura
 

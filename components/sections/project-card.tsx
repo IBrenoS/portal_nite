@@ -3,7 +3,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRightIcon } from "lucide-react";
 
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Chip } from "@/components/ui/chip";
 import { cn } from "@/lib/utils";
 
@@ -32,7 +38,12 @@ export function ProjectCard({
   className,
 }: ProjectCardProps) {
   return (
-    <Card className={cn("brand-panel overflow-hidden rounded-lg border-border py-0", className)}>
+    <Card
+      className={cn(
+        "brand-panel overflow-hidden rounded-lg border-border py-0",
+        className,
+      )}
+    >
       {image ? (
         <div className="relative aspect-[16/9] overflow-hidden border-b border-border">
           <Image
@@ -50,7 +61,7 @@ export function ProjectCard({
           ) : null}
         </div>
       ) : (
-        <div className="brand-circuit-lines flex aspect-[16/9] items-end border-b border-border bg-muted p-4">
+        <div className="flex aspect-[16/9] items-end border-b border-border bg-muted p-4">
           <Chip variant="metal">Projeto NITE</Chip>
         </div>
       )}

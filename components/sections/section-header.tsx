@@ -1,20 +1,67 @@
+import type * as React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+
 import { cn } from "@/lib/utils";
 
-type SectionHeaderProps = {
-  eyebrow?: string;
-  title: string;
-  description?: string;
+const sectionHeaderVariants = cva("flex max-w-3xl flex-col gap-3", {
+  variants: {
+    align: {
+      left: "items-start text-left",
+      center: "mx-auto items-center text-center",
+    },
+  },
+  defaultVariants: {
+    align: "left",
+  },
+});
+
+type SectionHeadingLevel = "h1" | "h2" | "h3";
+
+type SectionHeaderProps = VariantProps<typeof sectionHeaderVariants> & {
+  eyebrow?: React.ReactNode;
+  title: React.ReactNode;
+  description?: React.ReactNode;
+  as?: SectionHeadingLevel;
+  actions?: React.ReactNode;
+  children?: React.ReactNode;
   className?: string;
 };
 
-export function SectionHeader({ eyebrow, title, description, className }: SectionHeaderProps) {
+export function SectionHeader({
+  eyebrow,
+  title,
+  description,
+  align = "left",
+  as = "h2",
+  actions,
+  children,
+  className,
+}: SectionHeaderProps) {
+  const Heading = as;
+  const actionContent = actions ?? children;
+
   return (
-    <div className={cn("flex max-w-3xl flex-col gap-3", className)}>
+    <div className={cn(sectionHeaderVariants({ align }), className)}>
       {eyebrow ? (
-        <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-circuit-bright">{eyebrow}</p>
+        <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-circuit-bright">
+          {eyebrow}
+        </p>
       ) : null}
-      <h2 className="font-heading text-2xl font-semibold leading-tight text-foreground sm:text-3xl">{title}</h2>
-      {description ? <p className="max-w-2xl text-base leading-7 text-muted-foreground">{description}</p> : null}
+      <Heading className="font-heading text-2xl leading-tight font-semibold text-foreground sm:text-3xl">
+        {title}
+      </Heading>
+      {description ? (
+        <p className="max-w-2xl text-base leading-7 text-muted-foreground">
+          {description}
+        </p>
+      ) : null}
+      {actionContent ? (
+        <div className="flex flex-wrap items-center gap-3 pt-2">
+          {actionContent}
+        </div>
+      ) : null}
     </div>
   );
 }
+
+export type { SectionHeaderProps };
