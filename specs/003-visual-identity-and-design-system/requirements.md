@@ -20,7 +20,7 @@ Essa decisao e referencia oficial da Spec 003 para o MVP Premium. O preto absolu
 
 Atualizacao aprovada pelo gestor/desenvolvedor apos validacao visual: o token `background.default` foi ajustado de `#080A12` para `#0A0A0F` para reduzir a percepcao azulada do fundo dominante e aproximar a base visual de um dark premium neutro/grafite. A decisao mantem a regra de evitar preto absoluto como fundo dominante e preservar o azul como acento de marca.
 
-Governanca minima de conteudo permanece Pendente de validacao coletiva. ADRs relacionados a animacao, acessibilidade e estrategia tecnica permanecem Proposto ate a milestone correspondente exigir decisao tecnica.
+Governanca minima de conteudo permanece Pendente de validacao coletiva. O status vigente das ADRs permanece definido nos proprios arquivos em `docs/adr`; esta spec nao aprova ADR automaticamente.
 
 ## Requisitos de experiencia
 
@@ -72,7 +72,8 @@ Governanca minima de conteudo permanece Pendente de validacao coletiva. ADRs rel
 - Componentes que exibem status devem evitar depender apenas de cor.
 - Componentes animados devem respeitar `prefers-reduced-motion`.
 - Tokens visuais finais do MVP Premium devem seguir a paleta aprovada pelo gestor/desenvolvedor do projeto.
-- A Spec 003 deve documentar como contrato de design, antes de implementacao, os componentes base: Header, Mega menu, Mobile accordion, Hero, Button/CTA, Card, ProjectCard, UpdateCard, OpportunityBanner, StatusBadge, TimelineItem, SectionHeader e Footer institucional.
+- A Spec 003 deve documentar como contrato de design, antes de implementacao, os componentes base: Header, MegaMenu desktop, menu mobile em camadas, Hero, Button/CTA, Card, ProjectCard, UpdateCard, OpportunityBanner, StatusBadge, TimelineItem, SectionHeader e Footer institucional.
+- O Header final deve usar MegaMenu desktop compacto, premium e integrado ao background, alem de menu mobile em camadas com primeira camada de grupos e segunda camada de links por grupo.
 - Componentes com conteudo dependente de autorizacao devem prever estado `pending`, oculto ou fallback honesto.
 
 ## Requisitos de movimento

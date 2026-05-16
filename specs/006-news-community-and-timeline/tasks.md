@@ -24,15 +24,17 @@
 - [x] Registrar criterios de acessibilidade, SEO, performance, responsividade, privacidade e manutenibilidade. Evidencia: Requisitos nao funcionais documentados.
 - [x] Registrar criterios de aceitacao da Milestone 6. Evidencia: Criterios documentados em requirements.md.
 
-- [ ] Criar pagina `/atualizacoes`.
-- [ ] Criar componente UpdateCard.
-- [ ] Criar componente Timeline.
+- [x] Criar pagina `/atualizacoes`. Evidencia: `app/atualizacoes/page.tsx` criado com label publico Atualizacoes, titulo "NITE em movimento", descricao aprovada, metadata e breadcrumb JSON-LD.
+- [x] Criar componente UpdateCard. Evidencia: `UpdateCard` consolidado em `components/sections/update-card.tsx` com titulo, resumo, categoria oficial opcional, data/autor opcionais, imagem opcional com alt, href opcional, heading configuravel e testes unitarios no design system.
+- [x] Criar componente TimelineItem. Evidencia: `TimelineItem` consolidado em `components/sections/timeline-item.tsx` com titulo, descricao, rotulo temporal opcional, categoria/status textuais opcionais, href opcional, heading configuravel e fallback sem evidencia publica.
+- [x] Sinalizar timeline narrativa da Home como pendente quando nao houver marcos confirmados. Evidencia: `app/page.tsx` filtra eventos com `sourceStatus === "confirmado"`, nao publica eventos placeholder/demonstrativos como historico real e exibe o estado textual "Linha do tempo em preparacao"; `tests/unit/home-page.test.tsx` cobre o estado pendente e a ausencia dos itens demonstrativos.
+- [ ] Criar componente Timeline. Nota: `TimelineItem` estrutural esta concluido; container/lista de timeline real e publicacao de marcos validados permanecem pendentes.
 - [ ] Criar componente TestimonialCard, se houver depoimentos autorizados.
 - [ ] Criar lista ou grid de atualizacoes.
-- [ ] Criar estado vazio para ausencia de atualizacoes publicadas.
+- [x] Criar estado vazio para ausencia de atualizacoes publicadas. Evidencia: `/atualizacoes` exibe estado textual "No momento, ainda nao ha atualizacoes publicadas." e avisa que conteudos reais dependem de validacao/autorizacao.
 - [ ] Criar agrupamentos ou filtros simples por categoria, se houver conteudo suficiente.
 - [ ] Criar destaque de registros recentes ou relevantes, se houver criterio validado.
-- [ ] Criar fallback visual para UpdateCard sem imagem.
+- [x] Criar fallback visual para UpdateCard sem imagem. Evidencia: `UpdateCard` renderiza mensagem textual "Imagem nao publicada" e mantem superficie consistente quando nao ha imagem autorizada.
 - [ ] Implementar uso de texto alternativo para imagens.
 - [ ] Implementar validacao de autorizacao para fotos reais.
 - [ ] Implementar validacao de autorizacao para depoimentos.
@@ -46,7 +48,7 @@
 - [ ] Criar galeria futura, se houver fotos reais autorizadas.
 - [ ] Validar foco visivel em cards, filtros e links.
 - [ ] Validar leitura em mobile.
-- [ ] Validar SEO institucional de `/atualizacoes`.
+- [x] Validar SEO institucional de `/atualizacoes`. Evidencia: metadata basica com title, description, canonical, Open Graph/Twitter e breadcrumb JSON-LD; teste unitario cobre metadata.
 - [ ] Validar performance com imagens reais.
 - [ ] Definir governanca minima de conteudo em reuniao coletiva com o nucleo.
-- [ ] Validar que nenhum evento, foto, depoimento, autor, data ou metrica aparece sem confirmacao.
+- [x] Validar que nenhum evento, foto, depoimento, autor, data ou metrica aparece sem confirmacao. Evidencia: teste unitario confirma estado vazio honesto, ausencia de rotas futuras e ausencia de conteudo ficticio publicado como real.

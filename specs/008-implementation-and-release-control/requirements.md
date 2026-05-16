@@ -43,7 +43,7 @@ Governanca minima de conteudo permanece Pendente de validacao coletiva. A releas
 - Estruturar componentes base.
 - Implementar Header.
 - Implementar navegacao desktop.
-- Implementar navegacao mobile.
+- Implementar menu mobile em camadas.
 - Implementar Footer institucional.
 
 ### Fase 2 - Home premium
@@ -176,7 +176,7 @@ Evidencias so podem ser registradas quando existirem de fato. Nao inventar print
 ## Checklist de release MVP Premium
 
 - Home revisada.
-- Header e navegacao funcionando em desktop/mobile.
+- Header, MegaMenu desktop e menu mobile em camadas funcionando em desktop/mobile.
 - CTAs aprovados funcionando.
 - `/projetos` funcionando ou documentadamente planejado para implementacao.
 - `/projetos/[slug]` funcionando ou documentadamente planejado.

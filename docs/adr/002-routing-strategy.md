@@ -6,7 +6,7 @@ Aceito
 
 ## Historico
 
-- 2026-05-14: Aprovada pelo gestor do projeto para liberar implementacao do Header final do MVP com mega menu desktop e mobile accordion.
+- 2026-05-14: Aprovada pelo gestor do projeto para liberar implementacao do Header final do MVP com MegaMenu desktop compacto e menu mobile em camadas.
 
 ## Contexto
 
@@ -14,7 +14,9 @@ A arquitetura de informacao consolidada define rotas publicas para home, projeto
 
 Termos equivalentes podem aparecer apenas como contexto editorial, nunca como label principal nem rota principal do MVP.
 
-Para a implementacao do Header final do MVP, a Spec 002 descarta o header simples e exige navegacao com logo, links principais, CTA principal, mega menu desktop com grupos expansivos e mobile accordion com os mesmos grupos.
+Para a implementacao do Header final do MVP, a Spec 002 descarta o header simples e exige navegacao com logo, links principais, CTA principal, MegaMenu desktop compacto com grupos expansivos e menu mobile em camadas com os mesmos grupos.
+
+Essa decisao substitui a nomenclatura anterior de mobile accordion para o Header final. No mobile, o usuario abre o painel principal, visualiza os grupos principais, acessa uma segunda camada com os links do grupo selecionado e pode voltar ou fechar o menu.
 
 ## Decisao aceita
 
@@ -45,8 +47,8 @@ Implementar o Header final do MVP com:
 - Logo.
 - Links principais.
 - CTA principal.
-- Mega menu desktop com grupos expansivos.
-- Mobile accordion com os mesmos grupos.
+- MegaMenu desktop compacto, nao full-width, com grupos expansivos.
+- Menu mobile em camadas com os mesmos grupos.
 - Separacao clara entre rotas MVP e rotas futuras.
 - Itens futuros sem aparencia de funcionalidade pronta.
 
@@ -78,7 +80,7 @@ Manter fora de escopo do MVP:
 - Manter apenas landing page unica.
 - Criar rotas profundas para todas as secoes desde o inicio.
 - Adotar rotas principais do MVP e manter paginas de detalhe/comunidade como futuras.
-- Manter header simples sem mega menu nem accordion mobile.
+- Manter header simples sem MegaMenu nem menu mobile em camadas.
 
 ## Consequencias positivas
 
@@ -94,10 +96,12 @@ Manter fora de escopo do MVP:
 - Aumenta necessidade de validacao de regressao por rota.
 - Exige estado vazio coerente para paginas sem conteudo real.
 - Exige atualizacao da spec se alguma rota futura virar MVP.
-- Exige validacao de teclado, foco, fechamento e responsividade do mega menu e do accordion mobile.
+- Exige validacao de teclado, foco, fechamento e responsividade do MegaMenu desktop e do menu mobile em camadas.
 
 ## Impacto no Portal NITE
 
 Toda nova rota publica deve estar ligada a uma spec, ter estado vazio coerente quando aplicavel, nao fingir conteudo real inexistente e respeitar Atualizacoes como label principal do MVP para registros, novidades e bastidores.
 
 O Header final do MVP deve usar esta ADR como referencia para links principais, CTA, separacao de rotas MVP/futuras e grupos de navegacao. Itens futuros podem aparecer apenas quando forem apresentados como roadmap, pendente ou nao disponivel, sem parecer funcionalidade pronta.
+
+O MegaMenu desktop deve permanecer compacto e acessivel, fechando por mouseleave, Escape e clique fora. O menu mobile em camadas deve usar botoes reais para grupos expansivos, links reais para navegacao, botao voltar na segunda camada, botao fechar, foco visivel e estado expandido comunicado quando aplicavel.

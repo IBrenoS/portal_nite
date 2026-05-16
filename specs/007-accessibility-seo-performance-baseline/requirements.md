@@ -37,7 +37,7 @@ Esta Spec consolida requisitos documentais. Nao implementa codigo, nao cria `sit
 - Criterios de aceite globais.
 - Checklist transversal para implementacao futura.
 
-Governanca minima de conteudo permanece Pendente de validacao coletiva. ADR-004 e demais ADRs permanecem Proposto ate revisao explicita. Esta baseline orienta o MVP, mas nao aprova automaticamente decisoes tecnicas.
+Governanca minima de conteudo permanece Pendente de validacao coletiva. O status vigente das ADRs permanece definido nos proprios arquivos em `docs/adr`; esta baseline orienta o MVP, mas nao aprova automaticamente decisoes tecnicas.
 
 ## Referencias
 
@@ -54,15 +54,15 @@ Core Web Vitals devem ser tratados como indicadores de qualidade. Pontuacoes Lig
 
 ## Rotas MVP com baseline obrigatoria
 
-| Rota | Baseline obrigatoria |
-|---|---|
-| `/` | Acessibilidade, SEO institucional, performance, responsividade, Open Graph planejado |
-| `/#sobre` | Heading claro, foco preservado ao navegar por ancora, conteudo textual indexavel |
-| `/projetos` | Filtros acessiveis, cards com foco visivel, SEO de portfolio, estado vazio/sem resultado |
+| Rota               | Baseline obrigatoria                                                                         |
+| ------------------ | -------------------------------------------------------------------------------------------- |
+| `/`                | Acessibilidade, SEO institucional, performance, responsividade, Open Graph planejado         |
+| `/#sobre`          | Heading claro, foco preservado ao navegar por ancora, conteudo textual indexavel             |
+| `/projetos`        | Filtros acessiveis, cards com foco visivel, SEO de portfolio, estado vazio/sem resultado     |
 | `/projetos/[slug]` | Conteudo semantico por projeto, status acessivel, SEO por projeto, imagens opcionais com alt |
-| `/oportunidades` | Estados claros, formulario acessivel quando houver, SEO, privacidade e mobile |
-| `/atualizacoes` | Cards e timeline acessiveis, alt text, SEO, estado vazio e mobile |
-| `/contato` | Formas de contato claras, labels quando houver formulario, SEO institucional e foco visivel |
+| `/oportunidades`   | Estados claros, formulario acessivel quando houver, SEO, privacidade e mobile                |
+| `/atualizacoes`    | Cards e timeline acessiveis, alt text, SEO, estado vazio e mobile                            |
+| `/contato`         | Formas de contato claras, labels quando houver formulario, SEO institucional e foco visivel  |
 
 ## Rotas futuras documentadas
 
@@ -97,13 +97,21 @@ Quando forem implementadas, devem herdar a mesma baseline transversal.
 - CTAs principais e secundarios devem manter hierarquia clara.
 - Estados disabled, loading e active devem ser comunicados por texto, atributo, estrutura ou label, nao apenas cor.
 
-## Requisitos de acessibilidade - header, menu e accordion mobile
+## Requisitos de acessibilidade - header, MegaMenu e menu mobile em camadas
 
-- Header, mega menu e accordion mobile devem ser navegaveis por teclado.
+- Header, MegaMenu desktop e menu mobile em camadas devem ser navegaveis por teclado.
 - Ordem de foco deve seguir a ordem visual/logica da navegacao.
 - Estado aberto/fechado deve ser compreensivel para tecnologias assistivas na implementacao.
 - Escape, clique fora e fechamento por navegacao devem ser considerados na implementacao.
-- Menu mobile deve funcionar com toque e teclado, sem prender o usuario.
+- MegaMenu desktop deve fechar por mouseleave, Escape e clique fora.
+- Menu mobile em camadas deve funcionar com toque e teclado, sem prender o usuario.
+- Menu mobile em camadas nao deve depender de hover nem criar scroll horizontal.
+- A primeira camada mobile deve conter logo/marca, CTA principal, botao fechar e grupos principais.
+- A segunda camada mobile deve conter botao voltar, botao fechar, titulo do grupo e links do grupo.
+- Controles expansivos devem seguir o padrao de disclosure navigation do W3C APG: botoes reais, estado expandido comunicado e conteudo expansivel previsivel.
+- Nao usar `role="menu"` ou `role="menubar"` sem necessidade.
+- Grupos expansivos devem usar botoes reais; navegacao deve usar links reais.
+- `aria-expanded` e `aria-controls` devem ser usados quando aplicavel.
 - Links ativos devem ser comunicados sem depender apenas de cor.
 
 ## Requisitos de acessibilidade - cards
@@ -158,7 +166,7 @@ Quando forem implementadas, devem herdar a mesma baseline transversal.
 
 ## Requisitos de acessibilidade - teclado, foco e motion
 
-- Header, CTAs, cards, filtros, menus, accordion mobile, formularios e links devem ser navegaveis por teclado.
+- Header, CTAs, cards, filtros, menus, menu mobile em camadas, formularios e links devem ser navegaveis por teclado.
 - Foco visivel deve usar o token aprovado `focus.ring` ou equivalente consistente.
 - Foco nao deve ficar escondido por overlays, menus ou animacoes.
 - `prefers-reduced-motion` deve reduzir ou desativar animacoes nao essenciais.
@@ -167,15 +175,15 @@ Quando forem implementadas, devem herdar a mesma baseline transversal.
 
 ## Requisitos de SEO - rotas MVP
 
-| Rota | Requisito SEO |
-|---|---|
-| `/` | Title e description institucionais, H1 unico, conteudo textual sobre o NITE |
-| `/projetos` | Title e description de portfolio, texto indexavel e headings por secao |
-| `/projetos/[slug]` | Title e description por projeto, slug claro, conteudo textual do projeto |
-| `/oportunidades` | Title e description de oportunidades, estado sem oportunidades indexavel sem parecer erro |
-| `/atualizacoes` | Title e description de atualizacoes, cards com texto indexavel |
-| `/contato` | Title e description de contato, informacoes institucionais claras |
-| `/#sobre` | Secao com heading claro e conteudo textual compreensivel |
+| Rota               | Requisito SEO                                                                             |
+| ------------------ | ----------------------------------------------------------------------------------------- |
+| `/`                | Title e description institucionais, H1 unico, conteudo textual sobre o NITE               |
+| `/projetos`        | Title e description de portfolio, texto indexavel e headings por secao                    |
+| `/projetos/[slug]` | Title e description por projeto, slug claro, conteudo textual do projeto                  |
+| `/oportunidades`   | Title e description de oportunidades, estado sem oportunidades indexavel sem parecer erro |
+| `/atualizacoes`    | Title e description de atualizacoes, cards com texto indexavel                            |
+| `/contato`         | Title e description de contato, informacoes institucionais claras                         |
+| `/#sobre`          | Secao com heading claro e conteudo textual compreensivel                                  |
 
 ## Requisitos de SEO - estrutura
 
@@ -211,7 +219,7 @@ Quando forem implementadas, devem herdar a mesma baseline transversal.
 - Navegacao touch deve ter areas de toque confortaveis.
 - Cards devem reorganizar conteudo sem quebrar metadados ou CTAs.
 - Formularios devem empilhar campos de forma legivel em mobile.
-- Menus e accordion mobile devem abrir/fechar sem cobrir conteudo de forma incoerente.
+- Menus e menu mobile em camadas devem abrir/fechar sem cobrir conteudo de forma incoerente.
 - Timeline deve permanecer legivel sem depender de layout horizontal amplo.
 
 ## Criterios objetivos de MVP Premium

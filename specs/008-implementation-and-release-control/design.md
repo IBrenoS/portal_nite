@@ -32,14 +32,14 @@ Cada task de implementacao deve seguir o fluxo:
 
 ## Matriz de validacao por spec
 
-| Spec | Validacao obrigatoria na implementacao |
-|---|---|
-| Spec 002 - Information Architecture & Navigation | Rotas, header, mega menu, mobile accordion, CTAs e estados de navegacao |
-| Spec 003 - Visual Identity & Design System | Tokens, componentes base, variantes, estados, contraste, motion e responsividade visual |
-| Spec 004 - Project Portfolio & Detail Pages | Modelo de projeto, ProjectCard, status, filtros, paginas de detalhe e conteudo autorizado |
-| Spec 005 - Opportunities & Selection Flow | Estado sem oportunidades, formulario integrado, e-mail institucional, privacidade e dependencias tecnicas |
-| Spec 006 - News, Community & Timeline | Atualizacoes, UpdateCard, timeline, fotos/depoimentos autorizados e rotas futuras |
-| Spec 007 - Accessibility, SEO & Performance Baseline | Teclado, foco, contraste, headings, alt text, SEO, performance, responsividade e estados |
+| Spec                                                 | Validacao obrigatoria na implementacao                                                                    |
+| ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| Spec 002 - Information Architecture & Navigation     | Rotas, header, MegaMenu desktop, menu mobile em camadas, CTAs e estados de navegacao                      |
+| Spec 003 - Visual Identity & Design System           | Tokens, componentes base, variantes, estados, contraste, motion e responsividade visual                   |
+| Spec 004 - Project Portfolio & Detail Pages          | Modelo de projeto, ProjectCard, status, filtros, paginas de detalhe e conteudo autorizado                 |
+| Spec 005 - Opportunities & Selection Flow            | Estado sem oportunidades, formulario integrado, e-mail institucional, privacidade e dependencias tecnicas |
+| Spec 006 - News, Community & Timeline                | Atualizacoes, UpdateCard, timeline, fotos/depoimentos autorizados e rotas futuras                         |
+| Spec 007 - Accessibility, SEO & Performance Baseline | Teclado, foco, contraste, headings, alt text, SEO, performance, responsividade e estados                  |
 
 ## Fluxo de PR
 

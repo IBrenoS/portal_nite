@@ -15,12 +15,14 @@ Esta baseline deve ser usada como guia de validacao antes de implementar ou libe
 
 ## Foco e teclado
 
-- Header, mega menu, accordion mobile, CTAs, cards clicaveis, filtros, formularios e links devem funcionar por teclado.
+- Header, MegaMenu desktop, menu mobile em camadas, CTAs, cards clicaveis, filtros, formularios e links devem funcionar por teclado.
 - Foco visivel deve ser claro e consistente.
 - Foco nao deve ficar oculto atras de overlays, menus ou elementos fixos.
 - Ordem de tabulacao deve seguir a leitura esperada.
-- Estados aberto/fechado de menus e accordions devem ser claros na implementacao.
+- Estados aberto/fechado de menus e camadas devem ser claros na implementacao.
 - Usuario deve conseguir sair de menus, overlays e formularios sem perder contexto.
+- MegaMenu desktop deve fechar por mouseleave, Escape e clique fora. Menu mobile em camadas deve oferecer botao fechar na primeira camada e botao voltar/fechar na segunda camada.
+- Controles expansivos devem seguir disclosure navigation: botoes reais, `aria-expanded`/`aria-controls` quando aplicavel, conteudo previsivel e foco visivel. `role="menu"` e `role="menubar"` nao devem ser usados sem necessidade.
 
 ## Contraste e tokens
 
@@ -83,15 +85,15 @@ Esta baseline deve ser usada como guia de validacao antes de implementar ou libe
 
 ## Metadados por rota MVP
 
-| Rota | Metadados planejados |
-|---|---|
-| `/` | Title e description do Portal NITE, imagem OG institucional quando disponivel |
-| `/#sobre` | Ancora com heading claro dentro da home |
-| `/projetos` | Title e description para portfolio de projetos |
-| `/projetos/[slug]` | Title e description derivados de nome e resumo do projeto |
-| `/oportunidades` | Title e description para oportunidades, com estado sem oportunidades indexavel |
-| `/atualizacoes` | Title e description para registros, novidades e bastidores |
-| `/contato` | Title e description para contato institucional |
+| Rota               | Metadados planejados                                                           |
+| ------------------ | ------------------------------------------------------------------------------ |
+| `/`                | Title e description do Portal NITE, imagem OG institucional quando disponivel  |
+| `/#sobre`          | Ancora com heading claro dentro da home                                        |
+| `/projetos`        | Title e description para portfolio de projetos                                 |
+| `/projetos/[slug]` | Title e description derivados de nome e resumo do projeto                      |
+| `/oportunidades`   | Title e description para oportunidades, com estado sem oportunidades indexavel |
+| `/atualizacoes`    | Title e description para registros, novidades e bastidores                     |
+| `/contato`         | Title e description para contato institucional                                 |
 
 Metadados planejados nao sao arquivos tecnicos implementados nesta milestone.
 
@@ -124,7 +126,8 @@ Nenhuma pontuacao Lighthouse, medicao de Core Web Vitals ou dado de trafego deve
 - Tablets devem manter cards, filtros e formularios organizados.
 - Desktop deve preservar largura de leitura e hierarquia.
 - Navegacao touch deve ter areas de toque confortaveis.
-- Menus e accordions devem abrir sem cobrir conteudo de forma incoerente.
+- Menus e menu mobile em camadas devem abrir sem cobrir conteudo de forma incoerente.
+- Menu mobile em camadas nao deve depender de hover, nao deve criar scroll horizontal e deve manter areas de toque confortaveis.
 - Cards devem manter estrutura e metadados legiveis.
 - Formularios devem empilhar campos sem perda de labels, mensagens ou CTAs.
 - Timeline deve permanecer compreensivel em layout vertical.

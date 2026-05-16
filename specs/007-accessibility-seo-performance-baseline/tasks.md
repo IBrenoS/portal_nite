@@ -12,7 +12,7 @@
 - [x] Registrar Core Web Vitals como referencia. Evidencia: LCP, INP e CLS documentados sem metricas inventadas.
 - [x] Registrar criterio contra metricas inventadas. Evidencia: Pontuacoes Lighthouse, Core Web Vitals, trafego e resultados medidos proibidos sem auditoria real.
 - [x] Registrar criterios globais de aceite. Evidencia: Criterios documentados em requirements.md.
-- [x] Registrar que ADR-004 permanece Proposto. Evidencia: ADRs mantidas como contexto, sem aprovacao automatica.
+- [x] Registrar politica de status das ADRs. Evidencia: O status vigente das ADRs permanece nos arquivos em `docs/adr`; esta spec nao aprova ADR automaticamente.
 
 ## Acessibilidade - implementacao futura
 
@@ -28,7 +28,7 @@
 - [ ] Validar que status nao dependem apenas de cor.
 - [ ] Validar headings em ordem logica.
 - [ ] Validar landmarks semanticos.
-- [ ] Validar header, mega menu e accordion mobile por teclado.
+- [ ] Validar header, MegaMenu desktop e menu mobile em camadas por teclado.
 - [ ] Validar cards de projeto, atualizacao e oportunidade por teclado.
 - [ ] Validar filtros por teclado e estado ativo acessivel.
 - [ ] Validar timeline sem dependencia de animacao.

@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  motion,
-  type MotionValue,
-  useTransform,
-} from "motion/react";
+import { motion, type MotionValue, useTransform } from "motion/react";
 
 import { cn } from "@/lib/utils";
 
@@ -48,7 +44,7 @@ export function HeaderLogoMorph({
     <span
       aria-hidden="true"
       className={cn(
-        "relative block h-11 w-[10.75rem] overflow-hidden sm:w-[12rem] md:h-12 md:w-[15rem]",
+        "relative block h-10 w-[9.25rem] overflow-hidden sm:w-[10rem] md:h-10 md:w-[11rem]",
         className,
       )}
       data-header-logo-morph=""
@@ -61,21 +57,22 @@ export function HeaderLogoMorph({
       >
         <span
           aria-hidden="true"
-          className="font-heading text-base font-bold tracking-tight text-foreground md:text-lg"
+          className="font-heading text-sm font-bold tracking-tight text-foreground md:text-base"
         >
           NITE
         </span>
         <span
           aria-hidden="true"
-          className="mt-1 text-[0.68rem] font-medium uppercase tracking-[0.14em] text-muted-foreground md:text-xs"
+          className="mt-0.5 text-[0.7rem] font-bold uppercase tracking-[0.14em] md:text-xs"
         >
-          UNIJORGE
+          <span className="text-[#ad3327]">UNI</span>
+          <span className="text-[#23497f]">JORGE</span>
         </span>
       </motion.span>
 
       <motion.span
         aria-hidden="true"
-        className="absolute inset-y-0 left-0 flex origin-left items-center font-heading text-2xl font-bold leading-none tracking-tight text-foreground will-change-[opacity]"
+        className="absolute inset-y-0 left-0 flex origin-left items-center font-heading text-xl font-bold leading-none tracking-tight text-foreground will-change-[opacity]"
         style={{ opacity: collapsedOpacity }}
       >
         <span aria-hidden="true">N</span>

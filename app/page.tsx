@@ -20,12 +20,16 @@ import {
   ButtonPrimaryLink,
   ButtonSecondaryLink,
 } from "@/components/ui/brand-button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export const metadata: Metadata = buildHomeMetadata();
 
 export default function HomePage() {
   const featuredProjects = getFeaturedProjects();
   const timelineEvents = getTimelineEvents();
+  const confirmedTimelineEvents = timelineEvents.filter(
+    (event) => event.sourceStatus === "confirmado",
+  );
   const homeJsonLd = buildHomeJsonLd();
 
   return (
@@ -51,19 +55,41 @@ export default function HomePage() {
           <Container className="grid gap-10 lg:grid-cols-[0.74fr_1.26fr]">
             <div className="grid h-fit gap-5 lg:sticky lg:top-24">
               <SectionHeader
-                eyebrow="Timeline"
-                title="A evolução do NITE em uma narrativa visual."
-                description="Marcos organizados em sequência para mostrar contexto, conexões e caminhos de crescimento do núcleo."
+                eyebrow="Linha do tempo"
+                title="Linha do tempo em preparação."
+                description="Marcos históricos do NITE serão publicados nesta seção apenas após validação/autorização institucional."
               />
             </div>
 
             <div className="grid gap-5">
-              {timelineEvents.map((event) => (
-                <TimelineItem
-                  key={`${event.sequence}-${event.year}-${event.title}`}
-                  event={event}
-                />
-              ))}
+              {confirmedTimelineEvents.length > 0 ? (
+                confirmedTimelineEvents.map((event) => (
+                  <TimelineItem
+                    key={`${event.sequence}-${event.year}-${event.title}`}
+                    event={event}
+                  />
+                ))
+              ) : (
+                <Card className="rounded-lg">
+                  <CardHeader className="p-5 sm:p-6">
+                    <CardTitle>
+                      <h3 className="font-heading text-xl font-semibold leading-snug text-foreground">
+                        Marcos ainda não publicados
+                      </h3>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="grid gap-3 px-5 pb-5 text-sm leading-6 text-muted-foreground sm:px-6 sm:pb-6">
+                    <p>
+                      Os registros demonstrativos permanecem fora da interface
+                      pública para não parecerem histórico real validado.
+                    </p>
+                    <p>
+                      Conteúdos reais serão adicionados quando houver marcos,
+                      datas e evidências confirmadas.
+                    </p>
+                  </CardContent>
+                </Card>
+              )}
             </div>
           </Container>
         </section>
@@ -83,8 +109,8 @@ export default function HomePage() {
                 Quer acompanhar a evolução do NITE?
               </h2>
               <p className="mt-5 max-w-2xl text-base leading-8 text-muted-foreground">
-                Comece pelos projetos e pela timeline. O Instagram reúne
-                novidades, registros e bastidores das iniciativas do núcleo.
+                Comece pelos projetos e pela área de Atualizações. A linha do
+                tempo institucional será exibida quando houver marcos validados.
               </p>
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 <ButtonPrimaryLink href="#projetos">
@@ -92,7 +118,7 @@ export default function HomePage() {
                   <ArrowRightIcon data-icon="inline-end" />
                 </ButtonPrimaryLink>
                 <ButtonSecondaryLink href="#timeline">
-                  Ver timeline
+                  Ver linha do tempo
                 </ButtonSecondaryLink>
               </div>
             </div>

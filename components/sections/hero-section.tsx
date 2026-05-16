@@ -27,23 +27,23 @@ export function HeroSection() {
             </p>
             <h1 className="max-w-[11.4em] font-heading text-[2.35rem] font-semibold leading-[1.04] text-foreground [text-wrap:balance] min-[390px]:text-[2.45rem] sm:text-[3.15rem] sm:leading-[1.03] lg:max-w-[14.9em] lg:text-[3.08rem] lg:leading-[1.04] xl:text-[3.18rem]">
               <span className="brand-metal-text">
-                Tecnologia aplicada, projetos reais e aprendizagem em movimento.
+                Tecnologia aplicada, aprendizagem e projetos em evolução.
               </span>
             </h1>
             <p className="mx-auto max-w-[36rem] text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8 lg:mx-0 lg:text-xl">
-              O NITE conecta estudantes, professores e gestão para transformar
-              desafios acadêmicos em protótipos, produtos digitais, automações e
-              experiências tecnológicas reais.
+              O NITE conecta estudantes, professores e desafios institucionais
+              em um portal para acompanhar frentes, oportunidades e movimentos
+              do núcleo com contexto e transparência.
             </p>
           </div>
 
           <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
-            <ButtonPrimaryLink href="#projetos" className="w-full sm:w-fit">
-              Explorar frentes do NITE
+            <ButtonPrimaryLink href="/projetos" className="w-full sm:w-fit">
+              Explorar projetos
               <ArrowRightIcon data-icon="inline-end" />
             </ButtonPrimaryLink>
-            <ButtonSecondaryLink href="#contato" className="w-full sm:w-fit">
-              Propor um desafio
+            <ButtonSecondaryLink href="#sobre" className="w-full sm:w-fit">
+              Conhecer o NITE
             </ButtonSecondaryLink>
           </div>
         </Reveal>

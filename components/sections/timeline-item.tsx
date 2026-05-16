@@ -1,18 +1,237 @@
 import type { Route } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRightIcon } from "lucide-react";
+import {
+  ArchiveIcon,
+  ArrowRightIcon,
+  CalendarDaysIcon,
+  CheckCircle2Icon,
+  Clock3Icon,
+  LinkIcon,
+} from "lucide-react";
 
 import type { TimelineEvent } from "@/biblioteca/esquemas";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Chip } from "@/components/ui/chip";
 import { cn } from "@/lib/utils";
 
-type TimelineItemProps = {
+type TimelineItemStatus = "planned" | "validated" | "archived";
+type TimelineItemHeadingLevel = "h2" | "h3" | "h4";
+
+type TimelineItemBaseProps = {
+  title: string;
+  description?: string;
+  dateLabel?: string;
+  category?: string;
+  status?: TimelineItemStatus;
+  href?: Route | string;
+  headingLevel?: TimelineItemHeadingLevel;
+  className?: string;
+};
+
+type TimelineItemLegacyProps = {
   event: TimelineEvent;
   className?: string;
 };
 
-export function TimelineItem({ event, className }: TimelineItemProps) {
+type TimelineItemProps = TimelineItemBaseProps | TimelineItemLegacyProps;
+
+const timelineStatusConfig = {
+  planned: {
+    label: "Planejado",
+    Icon: Clock3Icon,
+    className: "border-border bg-muted/40 text-muted-foreground",
+  },
+  validated: {
+    label: "Validado",
+    Icon: CheckCircle2Icon,
+    className: "border-status-done/30 bg-status-done/10 text-status-done",
+  },
+  archived: {
+    label: "Arquivado",
+    Icon: ArchiveIcon,
+    className: "border-border bg-muted/40 text-muted-foreground",
+  },
+} satisfies Record<
+  TimelineItemStatus,
+  {
+    label: string;
+    Icon: typeof Clock3Icon;
+    className: string;
+  }
+>;
+
+function TimelineItem(props: TimelineItemProps) {
+  if ("event" in props) {
+    return (
+      <LegacyTimelineItem event={props.event} className={props.className} />
+    );
+  }
+
+  return <StructuredTimelineItem {...props} />;
+}
+
+function StructuredTimelineItem({
+  title,
+  description,
+  dateLabel,
+  category,
+  status,
+  href,
+  headingLevel = "h3",
+  className,
+}: TimelineItemBaseProps) {
+  const Heading = headingLevel;
+  const CardRoot = href ? LinkedTimelineItemRoot : StaticTimelineItemRoot;
+  const statusConfig = status ? timelineStatusConfig[status] : null;
+  const StatusIcon = statusConfig?.Icon;
+
+  return (
+    <CardRoot href={href} className={className} status={status}>
+      <CardHeader className="gap-4 p-5 sm:p-6">
+        <div className="flex gap-4">
+          <span
+            className="mt-1 inline-flex size-4 shrink-0 rounded-full border border-brand-circuit-bright bg-background shadow-[0_0_20px_rgb(51_212_255_/_0.45)]"
+            aria-hidden="true"
+          />
+
+          <div className="grid min-w-0 flex-1 gap-3">
+            <div className="flex flex-wrap gap-2">
+              {dateLabel ? (
+                <span
+                  data-slot="timeline-item-date"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-border bg-muted/40 px-3 py-1 font-mono text-[0.68rem] font-medium uppercase tracking-[0.14em] text-muted-foreground"
+                >
+                  <CalendarDaysIcon className="size-3" aria-hidden="true" />
+                  {dateLabel}
+                </span>
+              ) : null}
+
+              {category ? (
+                <span
+                  data-slot="timeline-item-category"
+                  className="rounded-full border border-border bg-muted/40 px-3 py-1 font-mono text-[0.68rem] font-medium uppercase tracking-[0.14em] text-muted-foreground"
+                >
+                  {category}
+                </span>
+              ) : null}
+
+              {statusConfig && StatusIcon ? (
+                <span
+                  data-slot="timeline-item-status"
+                  className={cn(
+                    "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 font-mono text-[0.68rem] font-medium uppercase tracking-[0.14em]",
+                    statusConfig.className,
+                  )}
+                >
+                  <StatusIcon className="size-3" aria-hidden="true" />
+                  {statusConfig.label}
+                </span>
+              ) : null}
+            </div>
+
+            <CardTitle>
+              <Heading className="font-heading text-xl font-semibold leading-snug text-foreground">
+                {title}
+              </Heading>
+            </CardTitle>
+          </div>
+        </div>
+      </CardHeader>
+
+      <CardContent className="grid gap-4 px-5 pb-5 sm:px-6 sm:pb-6">
+        {description ? (
+          <p className="text-sm leading-6 text-muted-foreground">
+            {description}
+          </p>
+        ) : (
+          <p className="text-sm leading-6 text-muted-foreground">
+            Descrição pendente de validação pública.
+          </p>
+        )}
+
+        {!href ? (
+          <p
+            data-slot="timeline-item-evidence-fallback"
+            className="inline-flex w-fit items-center gap-2 rounded-lg border border-border bg-background/42 px-3 py-2 text-xs leading-5 text-muted-foreground"
+          >
+            <LinkIcon className="size-3.5" aria-hidden="true" />
+            Evidência pública ainda não vinculada.
+          </p>
+        ) : null}
+      </CardContent>
+
+      {href ? (
+        <CardFooter>
+          <span className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-brand-circuit-bright transition-colors group-hover/card:text-foreground">
+            Abrir registro
+            <ArrowRightIcon className="size-4" aria-hidden="true" />
+          </span>
+        </CardFooter>
+      ) : null}
+    </CardRoot>
+  );
+}
+
+function LinkedTimelineItemRoot({
+  href,
+  status,
+  className,
+  children,
+}: {
+  href?: Route | string;
+  status?: TimelineItemStatus;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <Card
+      as="a"
+      href={href ?? "#"}
+      variant="interactive"
+      data-component="timeline-item"
+      data-status={status ?? "none"}
+      className={cn("min-h-full rounded-lg py-0", className)}
+    >
+      {children}
+    </Card>
+  );
+}
+
+function StaticTimelineItemRoot({
+  status,
+  className,
+  children,
+}: {
+  href?: Route | string;
+  status?: TimelineItemStatus;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <Card
+      data-component="timeline-item"
+      data-status={status ?? "none"}
+      className={cn("min-h-full rounded-lg py-0", className)}
+    >
+      {children}
+    </Card>
+  );
+}
+
+function LegacyTimelineItem({
+  event,
+  className,
+}: {
+  event: TimelineEvent;
+  className?: string;
+}) {
   const projectHref = event.projectSlug
     ? (`/projetos/${event.projectSlug}` as Route)
     : undefined;
@@ -79,3 +298,12 @@ export function TimelineItem({ event, className }: TimelineItemProps) {
     </article>
   );
 }
+
+export { TimelineItem, timelineStatusConfig };
+export type {
+  TimelineItemBaseProps,
+  TimelineItemHeadingLevel,
+  TimelineItemLegacyProps,
+  TimelineItemProps,
+  TimelineItemStatus,
+};

@@ -12,23 +12,24 @@
 - [x] Definir CTA principal da pagina: "Acompanhar oportunidades". Evidencia: Decisao aprovada pelo gestor do projeto em conversa de especificacao.
 - [x] Definir CTA secundario "Falar com o NITE" quando aplicavel. Evidencia: CTA secundario documentado para estado sem oportunidades abertas.
 - [x] Definir canal principal de envio como formulario integrado no portal. Evidencia: Decisao aprovada pelo gestor do projeto em conversa de especificacao.
-- [x] Registrar que Google Forms e link externo nao sao canal principal no MVP. Evidencia: Regra documentada na Spec 005.
+- [x] Registrar que Google Forms, link externo e WhatsApp nao sao canal principal no MVP. Evidencia: Regra documentada na Spec 005 e consolidada na ADR-005 aceita.
 - [x] Definir backend, armazenamento, notificacao e protecao de dados como dependencias tecnicas futuras. Evidencia: Dependencias registradas sem implementacao.
 - [x] Definir upload/link de curriculo como decisao tecnica futura. Evidencia: Campos condicionais documentados na Spec 005.
 - [x] Definir validacao de dominio institucional como regra futura. Evidencia: Dominio oficial ainda nao confirmado, regra documentada como futura.
 - [x] Definir estados loading, erro, sucesso e fallback tecnico. Evidencia: Estados documentados na Spec 005.
 - [x] Definir regras de linguagem e privacidade. Evidencia: Regras contra promessa automatica, aprovacao, acompanhamento completo e coleta sem finalidade registradas.
 - [x] Registrar criterios de aceitacao da Milestone 5. Evidencia: Criterios de aceitacao documentados em requirements.md.
-- [x] Registrar que ADR-005 permanece Proposto. Evidencia: Nota de governanca e ADR registrada em requirements.md.
+- [x] Registrar aprovacao da ADR-005 antes da implementacao da Spec 005. Evidencia: ADR-005 aceita pelo gestor do projeto para liberar formulario integrado como canal principal do MVP, mantendo backend, armazenamento, notificacao e privacidade como dependencias tecnicas futuras.
 
-- [ ] Criar pagina `/oportunidades`.
-- [ ] Criar componente OpportunityBanner ou OpportunityCard.
+- [x] Criar pagina `/oportunidades`. Evidencia: `app/oportunidades/page.tsx` criado com estado inicial, metadata e renderizacao testada em `tests/unit/opportunities-page.test.tsx`.
+- [x] Criar componente OpportunityBanner ou OpportunityCard. Evidencia: `OpportunityBanner` consolidado em `components/sections/opportunity-banner.tsx`, aplicado em `/oportunidades` para o estado sem oportunidades abertas e validado em testes unitarios.
 - [ ] Criar componente OpportunityStatus.
-- [ ] Criar formulario integrado.
+- [x] Preparar estrutura visual futura do formulario integrado sem envio real. Evidencia: `OpportunityInterestFormPreview` consolidado em `components/sections/opportunity-interest-form-preview.tsx`, aplicado em `/oportunidades`, sem `<form>`, sem campos ativos, sem envio e validado em testes unitarios.
+- [ ] Criar formulario integrado funcional.
 - [ ] Implementar validacao de campos obrigatorios.
-- [ ] Implementar orientacao de e-mail institucional.
+- [ ] Implementar orientacao de e-mail institucional no formulario. Nota: a pagina inicial ja orienta uso de e-mail institucional no estado sem oportunidades; falta aplicar ao formulario quando ele existir.
 - [ ] Definir dominio institucional oficial para validacao, se aplicavel.
-- [ ] Implementar estado sem oportunidades abertas.
+- [x] Implementar estado sem oportunidades abertas. Evidencia: `/oportunidades` exibe mensagem textual "No momento, nao ha oportunidades abertas.", CTA seguro para `/contato` apos criacao da rota institucional e nao renderiza formulario real.
 - [ ] Implementar estado com processo aberto.
 - [ ] Implementar estado loading do formulario.
 - [ ] Implementar estado de sucesso do formulario sem promessa de resposta automatica.
@@ -43,5 +44,5 @@
 - [ ] Criar FAQ futura, se houver perguntas validadas.
 - [ ] Validar foco visivel em CTAs, campos e mensagens.
 - [ ] Validar leitura e conforto em mobile.
-- [ ] Validar SEO institucional de `/oportunidades`.
-- [ ] Validar que nenhum processo, data, prazo, requisito, responsavel ou vaga aparece sem confirmacao.
+- [x] Validar SEO institucional de `/oportunidades`. Evidencia: metadata basica com title, description, canonical, Open Graph/Twitter e breadcrumb JSON-LD.
+- [x] Validar que nenhum processo, data, prazo, requisito, responsavel ou vaga aparece sem confirmacao. Evidencia: teste unitario confirma estado sem vagas, ausencia de formulario real e ausencia de textos de vaga/prazo/responsavel/automacao.

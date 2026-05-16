@@ -11,7 +11,7 @@ describe("HomePage", () => {
     const headings = screen.getAllByRole("heading", { level: 1 });
     expect(headings).toHaveLength(1);
     expect(headings[0]).toHaveTextContent(
-      "Tecnologia aplicada, projetos reais e aprendizagem em movimento.",
+      "Tecnologia aplicada, aprendizagem e projetos em evolução.",
     );
 
     const hero = within(screen.getByTestId("hero-section"));
@@ -20,17 +20,20 @@ describe("HomePage", () => {
     ).toBeInTheDocument();
     expect(
       hero.getByText(
-        "O NITE conecta estudantes, professores e gestão para transformar desafios acadêmicos em protótipos, produtos digitais, automações e experiências tecnológicas reais.",
+        "O NITE conecta estudantes, professores e desafios institucionais em um portal para acompanhar frentes, oportunidades e movimentos do núcleo com contexto e transparência.",
       ),
     ).toBeInTheDocument();
     expect(
-      hero.getByRole("link", { name: /Explorar frentes do NITE/i }),
-    ).toHaveAttribute("href", "#projetos");
+      hero.getByRole("link", { name: /Explorar projetos/i }),
+    ).toHaveAttribute("href", "/projetos");
     expect(
-      hero.getByRole("link", { name: /Propor um desafio/i }),
-    ).toHaveAttribute("href", "#contato");
+      hero.getByRole("link", { name: /Conhecer o NITE/i }),
+    ).toHaveAttribute("href", "#sobre");
 
     for (const forbidden of [
+      "Explorar frentes do NITE",
+      "Propor um desafio",
+      "projetos reais",
       "Projetos aplicados",
       "Aprendizagem prática",
       "Tecnologia responsável",
@@ -93,23 +96,71 @@ describe("HomePage", () => {
         "Acompanhe frentes, protótipos e entregas do NITE com contexto, status, stack e próximos passos.",
       ),
     ).toBeInTheDocument();
-    expect(projects.getAllByText("Em estruturação")).toHaveLength(6);
-    expect(projects.getAllByText("Mapeamento da frente")).toHaveLength(3);
-    expect(projects.getAllByText("Última atualização")).toHaveLength(3);
-    expect(projects.getAllByText("Entregável principal")).toHaveLength(3);
-    expect(projects.getAllByText("Entregável em validação.")).toHaveLength(3);
+    expect(
+      screen
+        .getByTestId("projects-operating-section")
+        .querySelectorAll("[data-slot='card']"),
+    ).toHaveLength(3);
+    expect(
+      screen
+        .getByTestId("projects-operating-section")
+        .querySelectorAll("[data-slot='status-badge'][data-status='draft']"),
+    ).toHaveLength(3);
+    expect(projects.getAllByText("Em estruturação")).toHaveLength(3);
+    expect(projects.getAllByText("Objetivo")).toHaveLength(3);
     expect(projects.getAllByText("Próximo passo")).toHaveLength(3);
+    expect(projects.getAllByText("Stack")).toHaveLength(3);
+    expect(
+      projects.getAllByText("Imagem ou evidência pública ainda indisponível."),
+    ).toHaveLength(3);
+    expect(
+      projects.getAllByText("Última atualização pendente de dado validado."),
+    ).toHaveLength(3);
+    expect(projects.getAllByText("Ver projeto")).toHaveLength(3);
+    expect(
+      projects.getAllByRole("link", { name: /Ver projeto/i }),
+    ).toHaveLength(3);
+    expect(
+      projects.queryByText("Entregável principal"),
+    ).not.toBeInTheDocument();
+    expect(
+      projects.queryByText("Entregável em validação."),
+    ).not.toBeInTheDocument();
     expect(projects.queryByText("Equipe")).not.toBeInTheDocument();
     expect(projects.queryByText("Métrica")).not.toBeInTheDocument();
     expect(
-      screen.getByText("A evolução do NITE em uma narrativa visual."),
+      screen.getByText("Linha do tempo em preparação."),
     ).toBeInTheDocument();
     expect(
-      screen.getByText("Primeiros projetos aplicados"),
+      screen.getByText(
+        "Marcos históricos do NITE serão publicados nesta seção apenas após validação/autorização institucional.",
+      ),
     ).toBeInTheDocument();
+    expect(screen.getByText("Marcos ainda não publicados")).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Os registros demonstrativos permanecem fora da interface pública para não parecerem histórico real validado.",
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Conteúdos reais serão adicionados quando houver marcos, datas e evidências confirmadas.",
+      ),
+    ).toBeInTheDocument();
+    expect(screen.queryByText("Primeiros projetos aplicados")).toBeNull();
+    expect(screen.queryByText("Estruturação do NITE")).toBeNull();
+    expect(screen.queryByText("Vitrine para a comunidade")).toBeNull();
     expect(
       screen.getByText("Quer acompanhar a evolução do NITE?"),
     ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Comece pelos projetos e pela área de Atualizações. A linha do tempo institucional será exibida quando houver marcos validados.",
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: "Ver linha do tempo" }),
+    ).toHaveAttribute("href", "#timeline");
     expect(screen.getAllByText("@nite.uj")).toHaveLength(2);
 
     for (const id of [
@@ -156,8 +207,65 @@ describe("HomePage", () => {
       document.querySelector("header")?.querySelector("img"),
     ).not.toBeInTheDocument();
     expect(
-      document.querySelector("header")?.querySelector("svg"),
+      document.querySelector("[data-header-logo-morph]")?.querySelector("svg"),
     ).not.toBeInTheDocument();
+    const header = within(document.querySelector("header") as HTMLElement);
+    for (const group of [
+      "O NITE",
+      "Projetos",
+      "Atualizações",
+      "Oportunidades",
+      "Contato",
+    ]) {
+      expect(header.getByRole("button", { name: group })).toHaveAttribute(
+        "aria-expanded",
+        "false",
+      );
+    }
+    expect(
+      header.getByRole("link", { name: "Falar com o NITE" }),
+    ).toHaveAttribute("href", "/contato");
+
+    const footerElement = screen.getByRole("contentinfo");
+    const footer = within(footerElement);
+    expect(footer.getByText("NITE | UNIJORGE")).toBeInTheDocument();
+    expect(
+      footer.getByText(
+        "Portal institucional do Núcleo de Inovação, Tecnologia e Empreendedorismo.",
+      ),
+    ).toBeInTheDocument();
+    expect(
+      footer.getByText(
+        "Conteúdos e oportunidades dependem de validação/autorização institucional.",
+      ),
+    ).toBeInTheDocument();
+    expect(footer.getByRole("link", { name: "Início" })).toHaveAttribute(
+      "href",
+      "/",
+    );
+    expect(footer.getByRole("link", { name: "Projetos" })).toHaveAttribute(
+      "href",
+      "/projetos",
+    );
+    expect(footer.getByRole("link", { name: "Oportunidades" })).toHaveAttribute(
+      "href",
+      "/oportunidades",
+    );
+    expect(footer.getByRole("link", { name: "Atualizações" })).toHaveAttribute(
+      "href",
+      "/atualizacoes",
+    );
+    expect(footer.getByRole("link", { name: "Contato" })).toHaveAttribute(
+      "href",
+      "/contato",
+    );
+    expect(footer.queryByRole("link", { name: "Sobre" })).toBeNull();
+    expect(footer.queryByRole("link", { name: "Timeline" })).toBeNull();
+    expect(document.querySelector("footer a[href='/noticias']")).toBeNull();
+    expect(document.querySelector("footer a[href='/sobre']")).toBeNull();
+    expect(
+      document.querySelector("footer a[href='/contato?tipo=desafio']"),
+    ).toBeNull();
 
     expect(validateNiteSvgContract(document.body)).toEqual({
       mainRise: 3,

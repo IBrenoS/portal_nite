@@ -28,14 +28,14 @@ Preparar o Portal NITE para funcionar como canal institucional de divulgacao de 
 
 Esta Spec consolida requisitos documentais. Nao cria rota real, componente real, backend, envio de e-mail, processo seletivo, vaga, data, prazo, requisito, responsavel ou canal operacional.
 
-Governanca minima de conteudo permanece Pendente de validacao coletiva. O ADR-005 - Canal de submissao de oportunidades permanece Proposto; a decisao de produto do formulario integrado orienta o MVP, mas nao aprova automaticamente a arquitetura tecnica.
+Governanca minima de conteudo permanece Pendente de validacao coletiva. A ADR-005 - Canal de submissao de oportunidades esta Aceito para liberar a Spec 005 com formulario integrado como canal principal do MVP, mas nao aprova automaticamente backend, armazenamento, notificacao ou arquitetura tecnica.
 
 ## Decisao de canal
 
 O MVP usara formulario integrado no proprio portal.
 
 - O formulario deve priorizar o uso de e-mail institucional do estudante.
-- O canal principal nao sera Google Forms nem link externo.
+- O canal principal nao sera Google Forms, link externo ou WhatsApp.
 - O objetivo do formulario e permitir envio de interesse, curriculo ou dados necessarios ao processo seletivo, quando houver oportunidade aberta.
 - Backend, armazenamento, notificacao, upload ou link de curriculo, validacao de dominio institucional, protecao de dados e fluxo operacional sao dependencias tecnicas futuras.
 - O portal nao deve prometer resposta automatica, aprovacao, acompanhamento completo de candidatura ou area autenticada no MVP.
@@ -43,10 +43,10 @@ O MVP usara formulario integrado no proprio portal.
 
 ## CTA oficial
 
-| Contexto | Texto | Destino | Status |
-|---|---|---|---|
-| Area de oportunidades | Acompanhar oportunidades | `/oportunidades` | Aprovado pelo gestor do projeto |
-| Estado sem oportunidades abertas | Falar com o NITE | `/contato` | Secundario, quando aplicavel |
+| Contexto                         | Texto                    | Destino          | Status                          |
+| -------------------------------- | ------------------------ | ---------------- | ------------------------------- |
+| Area de oportunidades            | Acompanhar oportunidades | `/oportunidades` | Aprovado pelo gestor do projeto |
+| Estado sem oportunidades abertas | Falar com o NITE         | `/contato`       | Secundario, quando aplicavel    |
 
 ## Requisitos funcionais - `/oportunidades`
 
@@ -131,46 +131,46 @@ Regras do formulario:
 
 ```ts
 type Opportunity = {
-  id: string
-  slug?: string
-  title: string
-  area: string
-  status: 'closed' | 'open' | 'draft' | 'archived'
-  summary: string
-  description?: string
-  eligibility?: string[]
-  requirements?: string[]
-  deadline?: string
-  formEnabled: boolean
-  contactChannel?: string
-  updatedAt: string
-}
+  id: string;
+  slug?: string;
+  title: string;
+  area: string;
+  status: "closed" | "open" | "draft" | "archived";
+  summary: string;
+  description?: string;
+  eligibility?: string[];
+  requirements?: string[];
+  deadline?: string;
+  formEnabled: boolean;
+  contactChannel?: string;
+  updatedAt: string;
+};
 ```
 
 ## Modelo de formulario
 
 ```ts
 type OpportunityApplication = {
-  fullName: string
-  institutionalEmail: string
-  course: string
-  semester?: string
-  interestArea: string
-  resumeUrl?: string
-  resumeFile?: File
-  message?: string
-  consentAccepted: boolean
-}
+  fullName: string;
+  institutionalEmail: string;
+  course: string;
+  semester?: string;
+  interestArea: string;
+  resumeUrl?: string;
+  resumeFile?: File;
+  message?: string;
+  consentAccepted: boolean;
+};
 ```
 
 ## Status de oportunidade
 
-| Status tecnico | Label publica | Uso esperado |
-|---|---|---|
-| `closed` | Sem oportunidades abertas | Estado default quando nao ha processo confirmado |
-| `open` | Processo aberto | Processo validado, com informacoes minimas publicaveis |
-| `draft` | Em preparacao | Conteudo interno ou pendente, nao anunciado como aberto |
-| `archived` | Encerrado | Processo historico ou encerrado, sem candidatura ativa |
+| Status tecnico | Label publica             | Uso esperado                                            |
+| -------------- | ------------------------- | ------------------------------------------------------- |
+| `closed`       | Sem oportunidades abertas | Estado default quando nao ha processo confirmado        |
+| `open`         | Processo aberto           | Processo validado, com informacoes minimas publicaveis  |
+| `draft`        | Em preparacao             | Conteudo interno ou pendente, nao anunciado como aberto |
+| `archived`     | Encerrado                 | Processo historico ou encerrado, sem candidatura ativa  |
 
 Status devem usar texto e, quando houver cor ou icone, nao depender apenas de cor.
 

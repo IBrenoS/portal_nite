@@ -1,12 +1,35 @@
 import type { Project } from "@/biblioteca/esquemas";
 import { Container } from "@/components/layout/container";
-import { ProjectStatusCard } from "@/components/sections/project-status-card";
+import {
+  ProjectCard,
+  type ProjectCardStatus,
+} from "@/components/sections/project-card";
 import { SectionHeader } from "@/components/sections/section-header";
 import { EmptyState } from "@/components/ui/empty-state";
 
 type ProjectsOperatingSectionProps = {
   projects: Project[];
 };
+
+const projectCardStatusByProjectStatus = {
+  placeholder: "draft",
+  planejado: "draft",
+  "em-descoberta": "in_progress",
+  "em-prototipo": "in_progress",
+  ativo: "in_progress",
+  concluido: "done",
+} satisfies Record<Project["status"], ProjectCardStatus>;
+
+const publicationReadyContentStates = new Set<Project["contentState"]>([
+  "real",
+]);
+
+const projectDateFormatter = new Intl.DateTimeFormat("pt-BR", {
+  day: "2-digit",
+  month: "2-digit",
+  timeZone: "UTC",
+  year: "numeric",
+});
 
 export function ProjectsOperatingSection({
   projects,
@@ -35,13 +58,52 @@ export function ProjectsOperatingSection({
 
         {projects.length > 0 ? (
           <div className="grid gap-5 lg:grid-cols-3">
-            {projects.map((project, index) => (
-              <ProjectStatusCard
-                key={project.slug}
-                project={project}
-                priority={index === 0}
-              />
-            ))}
+            {projects.map((project) => {
+              const isPublicationReady = publicationReadyContentStates.has(
+                project.contentState,
+              );
+              const hasPublicEvidence =
+                isPublicationReady &&
+                (project.deliverables.some(
+                  (deliverable) =>
+                    deliverable.status === "disponivel" &&
+                    Boolean(deliverable.href),
+                ) ||
+                  project.gallery.length > 0 ||
+                  project.links.length > 0);
+
+              return (
+                <ProjectCard
+                  key={project.slug}
+                  title={project.title}
+                  summary={project.summary}
+                  area={project.category}
+                  status={projectCardStatusByProjectStatus[project.status]}
+                  problem={project.problem}
+                  objective={
+                    project.objective ??
+                    "Objetivo em validação editorial antes de publicação pública."
+                  }
+                  stack={project.technologies}
+                  nextStep={project.nextStep}
+                  updatedAt={
+                    isPublicationReady
+                      ? projectDateFormatter.format(
+                          new Date(`${project.lastUpdated}T00:00:00Z`),
+                        )
+                      : undefined
+                  }
+                  href={`/projetos/${project.slug}`}
+                  image={
+                    isPublicationReady
+                      ? { src: project.coverImage, alt: project.alt }
+                      : undefined
+                  }
+                  hasPublicEvidence={hasPublicEvidence}
+                  headingLevel={3}
+                />
+              );
+            })}
           </div>
         ) : (
           <EmptyState

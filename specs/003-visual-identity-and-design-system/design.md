@@ -106,8 +106,8 @@ Esses valores sao defaults documentais para a implementacao do MVP. A validacao 
 ## Componentes base
 
 - Header.
-- Mega menu.
-- Mobile accordion.
+- MegaMenu desktop.
+- Menu mobile em camadas.
 - Hero section.
 - Button/CTA.
 - Card generico.
@@ -123,6 +123,8 @@ Esses valores sao defaults documentais para a implementacao do MVP. A validacao 
 
 APIs abaixo sao contrato de design da Spec 003, nao implementacao de codigo. Os nomes representam responsabilidade visual e de conteudo; a implementacao podera adaptar nomes tecnicos sem mudar o comportamento aprovado.
 
+O Header final do MVP utiliza MegaMenu desktop compacto e menu mobile em camadas. O MegaMenu deve permanecer compacto, nao full-width, premium e integrado ao background. O menu mobile nao e accordion simples: a primeira camada contem logo/marca, CTA principal, botao fechar e grupos principais; a segunda camada contem botao voltar, botao fechar, titulo do grupo e links do grupo.
+
 | Componente           | API minima de design                                                                     | Variantes                                                                                                         | Estados obrigatorios                                                                                                    |
 | -------------------- | ---------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | Button               | `label`, `href` ou `onAction`, `variant`, `size`, `disabled`, `loading`                  | `primary`, `secondary`, `ghost`, `outline`, `link`                                                                | default, hover, focus, active, disabled, loading                                                                        |
@@ -135,7 +137,8 @@ APIs abaixo sao contrato de design da Spec 003, nao implementacao de codigo. Os 
 | UpdateCard           | `title`, `date`, `summary`, `href`, `image` opcional                                     | `default`, `compact`                                                                                              | default, hover, focus, fallback sem imagem                                                                              |
 | OpportunityBanner    | `status`, `title`, `description`, `cta`                                                  | `open`, `closed`, `future`                                                                                        | default, estado sem vagas, CTA pendente                                                                                 |
 | Header               | `links`, `ctaPrimary`, `ctaSecondary`, `activePath`                                      | `desktop`, `mobile`                                                                                               | closed, open, hover, focus, active                                                                                      |
-| MegaMenu             | `groups`, `open`, `activeGroup`                                                          | `desktop`, `mobileAccordion`                                                                                      | closed, open, hover, focus, active                                                                                      |
+| MegaMenu             | `groups`, `open`, `activeGroup`                                                          | `desktopCompact`                                                                                                  | closed, open, hover, focus, active                                                                                      |
+| MobileLayeredMenu    | `groups`, `open`, `activeGroup`, `onBack`, `onClose`                                     | `mobile`                                                                                                          | closed, open, groupSelected, back, focus, active                                                                        |
 | Footer institucional | `links`, `contact`, `social`                                                             | `default`                                                                                                         | default, link focus                                                                                                     |
 
 ## Guidelines de motion
@@ -143,6 +146,7 @@ APIs abaixo sao contrato de design da Spec 003, nao implementacao de codigo. Os 
 - Motion deve ser curta, discreta e nao essencial para compreender conteudo.
 - Animacoes devem priorizar opacity, transform e transicoes leves, evitando deslocamentos longos ou efeitos que atrapalhem leitura.
 - Hero, menu, timeline e estados interativos podem usar movimento para orientar atencao, desde que o conteudo esteja disponivel sem animacao.
+- Motion do MegaMenu desktop e do menu mobile em camadas deve ser curto, funcional, subordinado a navegacao e respeitar `prefers-reduced-motion`.
 - Movimento nao deve ser o unico meio de comunicar estado; usar tambem texto, icone, posicao, foco ou estrutura.
 - Quando `prefers-reduced-motion` estiver ativo, animacoes nao essenciais devem ser reduzidas ou desativadas.
 - Foco por teclado deve permanecer claramente visivel com ou sem motion.
@@ -152,6 +156,7 @@ APIs abaixo sao contrato de design da Spec 003, nao implementacao de codigo. Os 
 - Botoes primarios devem ser reservados para acao principal da tela.
 - Botoes secundarios devem apoiar navegacao sem competir com primario.
 - Cards clicaveis devem ter foco visivel e area de clique previsivel.
+- Header, MegaMenu desktop e menu mobile em camadas devem usar botoes reais para grupos expansivos, links reais para navegacao, foco visivel e controles compreensiveis por toque e teclado.
 - Badges de status devem combinar texto e cor.
 - Depoimentos, fotos e responsaveis devem ficar ocultos ou pendentes quando nao houver validacao.
 - Animacoes devem ser curtas, discretas e nao essenciais para compreender conteudo.

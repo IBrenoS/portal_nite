@@ -65,10 +65,16 @@ function Card({
   const cardClassName = cn(cardVariants({ variant, size }), className);
 
   if (as === "a") {
-    const { onClick, tabIndex, ...anchorProps } = props as Omit<
+    const { href, onClick, tabIndex, ...anchorProps } = props as Omit<
       CardAnchorProps,
       keyof CardSharedProps | "as"
     >;
+    const anchorEventProps =
+      onClick && !disabled
+        ? {
+            onClick,
+          }
+        : {};
 
     return (
       <a
@@ -78,16 +84,9 @@ function Card({
         aria-disabled={disabled || undefined}
         tabIndex={disabled ? -1 : tabIndex}
         className={cardClassName}
-        onClick={(event) => {
-          if (disabled) {
-            event.preventDefault();
-            event.stopPropagation();
-            return;
-          }
-
-          onClick?.(event);
-        }}
+        href={disabled ? undefined : href}
         {...anchorProps}
+        {...anchorEventProps}
       />
     );
   }

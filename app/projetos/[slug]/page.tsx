@@ -26,18 +26,16 @@ import { Container } from "@/components/layout/container";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import {
-  formatProjectDate,
-  getProjectContentStateLabel,
-  getProjectPrimaryDeliverable,
-  getProjectStatusMeta,
-  ProjectStatusCard,
-} from "@/components/sections/project-status-card";
+  ProjectCard,
+  type ProjectCardStatus,
+} from "@/components/sections/project-card";
 import {
   ButtonPrimaryLink,
   ButtonSecondaryLink,
 } from "@/components/ui/brand-button";
 import { Chip } from "@/components/ui/chip";
 import { EmptyState } from "@/components/ui/empty-state";
+import { StatusBadge } from "@/components/ui/status-badge";
 import ProjectNotFound from "./not-found";
 
 type ProjectPageProps = {
@@ -52,6 +50,58 @@ const deliverableStatusLabels = {
   interno: "Interno",
   indisponivel: "Indisponível",
 } satisfies Record<Project["deliverables"][number]["status"], string>;
+
+const projectStatusBadgeByProjectStatus = {
+  placeholder: "draft",
+  planejado: "draft",
+  "em-descoberta": "in_progress",
+  "em-prototipo": "in_progress",
+  ativo: "in_progress",
+  concluido: "done",
+} satisfies Record<Project["status"], ProjectCardStatus>;
+
+const projectContentStateLabels = {
+  real: "Real",
+  demonstrativo: "Demonstrativo",
+  "em-estruturacao": "Em estruturação",
+} satisfies Record<Project["contentState"], string>;
+
+const projectDateFormatter = new Intl.DateTimeFormat("pt-BR", {
+  day: "2-digit",
+  month: "2-digit",
+  timeZone: "UTC",
+  year: "numeric",
+});
+
+function getProjectContentStateLabel(contentState: Project["contentState"]) {
+  return projectContentStateLabels[contentState];
+}
+
+function getProjectPrimaryDeliverable(project: Project) {
+  return project.deliverables.find(
+    (deliverable) => deliverable.status !== "indisponivel",
+  );
+}
+
+function formatProjectDate(date: string) {
+  return projectDateFormatter.format(new Date(`${date}T00:00:00Z`));
+}
+
+function isProjectPublicationReady(project: Project) {
+  return project.contentState === "real";
+}
+
+function hasProjectPublicEvidence(project: Project) {
+  return (
+    isProjectPublicationReady(project) &&
+    (project.deliverables.some(
+      (deliverable) =>
+        deliverable.status === "disponivel" && Boolean(deliverable.href),
+    ) ||
+      project.gallery.length > 0 ||
+      project.links.length > 0)
+  );
+}
 
 export function generateStaticParams() {
   return getProjectSlugs();
@@ -85,8 +135,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   }
 
   const relatedProjects = getRelatedProjects(project.slug);
-  const status = getProjectStatusMeta(project.status);
-  const StatusIcon = status.icon;
+  const status = projectStatusBadgeByProjectStatus[project.status];
+  const isPublicationReady = isProjectPublicationReady(project);
   const primaryDeliverable = getProjectPrimaryDeliverable(project);
   const publicTeam = project.team.filter((member) => member.public);
   const breadcrumbJsonLd = buildBreadcrumbJsonLd([
@@ -137,12 +187,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               </nav>
 
               <div className="flex flex-wrap gap-2">
-                <span
-                  className={`inline-flex min-h-8 items-center gap-2 rounded-md border px-2.5 py-1 font-mono text-xs uppercase tracking-[0.14em] ${status.className}`}
-                >
-                  <StatusIcon className="size-3.5" aria-hidden="true" />
-                  {status.label}
-                </span>
+                <StatusBadge status={status} size="sm" />
                 <Chip>{project.category}</Chip>
                 <Chip variant="metal">
                   {getProjectContentStateLabel(project.contentState)}
@@ -180,16 +225,24 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             </div>
 
             <div className="brand-panel overflow-hidden rounded-lg border border-border">
-              <div className="relative aspect-[16/10]">
-                <Image
-                  src={project.coverImage}
-                  alt={project.alt}
-                  fill
-                  priority
-                  sizes="(max-width: 1024px) 100vw, 760px"
-                  className="object-cover"
+              {isPublicationReady ? (
+                <div className="relative aspect-[16/10]">
+                  <Image
+                    src={project.coverImage}
+                    alt={project.alt}
+                    fill
+                    priority
+                    sizes="(max-width: 1024px) 100vw, 760px"
+                    className="object-cover"
+                  />
+                </div>
+              ) : (
+                <EmptyState
+                  className="min-h-full rounded-none border-0 bg-transparent"
+                  title="Imagem ou evidência pública ainda indisponível."
+                  description="Esta frente está em estruturação editorial. Quando houver imagem, registro ou evidência pública validada, o material será exibido aqui."
                 />
-              </div>
+              )}
             </div>
           </Container>
         </section>
@@ -206,7 +259,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               <dl className="grid gap-4 text-sm">
                 <div>
                   <dt className="text-muted-foreground">Status</dt>
-                  <dd className="mt-1 text-foreground">{status.label}</dd>
+                  <dd className="mt-1">
+                    <StatusBadge status={status} variant="outline" size="sm" />
+                  </dd>
                 </div>
                 <div>
                   <dt className="text-muted-foreground">Fase atual</dt>
@@ -217,7 +272,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 <div>
                   <dt className="text-muted-foreground">Última atualização</dt>
                   <dd className="mt-1 text-foreground">
-                    {formatProjectDate(project.lastUpdated)}
+                    {isPublicationReady
+                      ? formatProjectDate(project.lastUpdated)
+                      : "Pendente de validação pública"}
                   </dd>
                 </div>
                 <div>
@@ -504,7 +561,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 </section>
               ) : null}
 
-              {project.gallery.length > 0 ? (
+              {isPublicationReady && project.gallery.length > 0 ? (
                 <section className="grid gap-3">
                   <h2 className="font-heading text-2xl font-semibold text-foreground">
                     Galeria
@@ -567,12 +624,47 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 </h2>
               </div>
               <div className="grid gap-5 lg:grid-cols-2">
-                {relatedProjects.map((relatedProject) => (
-                  <ProjectStatusCard
-                    key={relatedProject.slug}
-                    project={relatedProject}
-                  />
-                ))}
+                {relatedProjects.map((relatedProject) => {
+                  const relatedIsPublicationReady =
+                    isProjectPublicationReady(relatedProject);
+
+                  return (
+                    <ProjectCard
+                      key={relatedProject.slug}
+                      title={relatedProject.title}
+                      summary={relatedProject.summary}
+                      area={relatedProject.category}
+                      status={
+                        projectStatusBadgeByProjectStatus[relatedProject.status]
+                      }
+                      problem={relatedProject.problem}
+                      objective={
+                        relatedProject.objective ??
+                        "Objetivo em validação editorial antes de publicação pública."
+                      }
+                      stack={relatedProject.technologies}
+                      nextStep={relatedProject.nextStep}
+                      updatedAt={
+                        relatedIsPublicationReady
+                          ? formatProjectDate(relatedProject.lastUpdated)
+                          : undefined
+                      }
+                      href={`/projetos/${relatedProject.slug}`}
+                      image={
+                        relatedIsPublicationReady
+                          ? {
+                              src: relatedProject.coverImage,
+                              alt: relatedProject.alt,
+                            }
+                          : undefined
+                      }
+                      hasPublicEvidence={hasProjectPublicEvidence(
+                        relatedProject,
+                      )}
+                      headingLevel={3}
+                    />
+                  );
+                })}
               </div>
             </Container>
           </section>

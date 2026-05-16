@@ -27,7 +27,7 @@ Transformar a secao de projetos em um portfolio institucional robusto, objetivo 
 
 Esta Spec consolida requisitos documentais. Nao cria rotas reais, componentes reais, dados reais, projetos, responsaveis, metricas, depoimentos, imagens, links de repositorio ou links de demo.
 
-Governanca minima de conteudo permanece Pendente de validacao coletiva. O ADR-006 - Modelo de Status de Projetos permanece Proposto; a taxonomia abaixo orienta o MVP, mas nao aprova automaticamente o ADR.
+Governanca minima de conteudo permanece Pendente de validacao coletiva. O ADR-006 - Modelo de Status de Projetos esta Aceito para liberar ProjectCard, StatusBadge aplicado e portfolio de projetos com a taxonomia abaixo.
 
 ## Requisitos funcionais - `/projetos`
 
@@ -71,26 +71,26 @@ Governanca minima de conteudo permanece Pendente de validacao coletiva. O ADR-00
 
 ```ts
 type Project = {
-  id: string
-  slug: string
-  title: string
-  summary: string
-  area: string
-  status: 'draft' | 'in_progress' | 'validated' | 'done' | 'archived'
-  problem: string
-  objective: string
-  stack: string[]
-  responsible?: string[]
-  updatedAt: string
-  nextStep: string
-  evidences?: Evidence[]
-  repositoryUrl?: string
-  demoUrl?: string
-  testimonial?: Testimonial
-  result?: string
-  gallery?: Media[]
-  documents?: DocumentLink[]
-}
+  id: string;
+  slug: string;
+  title: string;
+  summary: string;
+  area: string;
+  status: "draft" | "in_progress" | "validated" | "done" | "archived";
+  problem: string;
+  objective: string;
+  stack: string[];
+  responsible?: string[];
+  updatedAt: string;
+  nextStep: string;
+  evidences?: Evidence[];
+  repositoryUrl?: string;
+  demoUrl?: string;
+  testimonial?: Testimonial;
+  result?: string;
+  gallery?: Media[];
+  documents?: DocumentLink[];
+};
 ```
 
 ## Campos obrigatorios no MVP
@@ -122,13 +122,13 @@ Campos opcionais so devem aparecer quando houver material real, publico e autori
 
 ## Status de projeto
 
-| Status tecnico | Label publica | Uso esperado |
-|---|---|---|
-| `draft` | Em estruturacao | Projeto ainda sendo organizado, sem parecer finalizado |
-| `in_progress` | Em andamento | Projeto ativo ou em desenvolvimento |
-| `validated` | Validado | Projeto revisado ou validado internamente, quando aplicavel |
-| `done` | Finalizado | Projeto concluido com resultado validado |
-| `archived` | Arquivado | Projeto historico ou sem evolucao ativa |
+| Status tecnico | Label publica   | Uso esperado                                                |
+| -------------- | --------------- | ----------------------------------------------------------- |
+| `draft`        | Em estruturacao | Projeto ainda sendo organizado, sem parecer finalizado      |
+| `in_progress`  | Em andamento    | Projeto ativo ou em desenvolvimento                         |
+| `validated`    | Validado        | Projeto revisado ou validado internamente, quando aplicavel |
+| `done`         | Finalizado      | Projeto concluido com resultado validado                    |
+| `archived`     | Arquivado       | Projeto historico ou sem evolucao ativa                     |
 
 Status devem usar texto e, quando houver cor, icone ou badge visual, nao depender apenas de cor.
 

@@ -19,8 +19,54 @@
 - [x] Criar guia operacional `design.md`. Evidencia: Arquivo criado com fluxo de task, PR, release, pendencias, ADR e regressao.
 - [x] Corrigir consistencia documental entre ADRs e specs aprovadas. Evidencia: Milestone 8.1 revisou ADR-001 a ADR-006 sem alterar status Proposto e sem concluir task de implementacao.
 - [x] Aprovar ADR necessaria para primeira implementacao controlada. Evidencia: ADR-004 aceita pelo gestor do projeto apos Readiness Audit para orientar a base visual e tokens; naquele momento, ADR-003 nao foi aprovada porque a primeira task nao incluia motion em escala.
-- [x] Aprovar ADR necessaria para implementacao do Header final do MVP. Evidencia: ADR-002 aceita pelo gestor do projeto para liberar Header com mega menu desktop e mobile accordion, mantendo rotas futuras separadas das rotas MVP.
+- [x] Aprovar ADR necessaria para implementacao do Header final do MVP. Evidencia: ADR-002 aceita pelo gestor do projeto para liberar Header com MegaMenu desktop compacto e menu mobile em camadas, mantendo rotas futuras separadas das rotas MVP.
 - [x] Aprovar ADR necessaria para motion controlado do Header final. Evidencia: ADR-003 aceita pelo gestor do projeto para liberar motion controlado no Header, mega menu desktop e menu mobile em camadas, com suporte a `prefers-reduced-motion`.
+- [x] Aprovar ADR necessaria para ProjectCard, StatusBadge aplicado e portfolio de projetos. Evidencia: ADR-006 aceita pelo gestor do projeto para liberar o modelo de status `draft`, `in_progress`, `validated`, `done` e `archived` sem inventar dados reais.
+- [x] Aprovar ADR necessaria para oportunidades e fluxo de selecao. Evidencia: ADR-005 aceita pelo gestor do projeto para liberar a Spec 005 com formulario integrado como canal principal do MVP, mantendo backend, armazenamento, notificacao e privacidade como dependencias tecnicas futuras.
+- [x] Fechar inconsistencia de navegacao MVP para `/contato`. Evidencia: microauditoria de rotas confirmou Header CTA `Falar com o NITE` e Footer apontando para `/contato`, `/contato` renderizando com H1 unico e sem formulario/canal ficticio, rotas MVP respondendo em browser local e build listando `/`, `/projetos`, `/projetos/[slug]`, `/oportunidades`, `/atualizacoes` e `/contato`.
+
+## Homologação controlada do MVP Premium
+
+- [x] Registrar status final da auditoria de homologacao. Status: Aprovado para homologação controlada. Evidencia: auditoria final curta confirmou ausencia de pendencias bloqueantes conhecidas, copy global sem "projetos reais", snapshot visual da Home atualizado, rotas MVP confirmadas e rotas futuras nao publicadas.
+
+### Evidencias tecnicas registradas
+
+- `npm run lint`: passou.
+- `npm run typecheck`: passou.
+- `npm run build`: passou.
+- `npm run test`: passou com 9 arquivos e 38 testes.
+- `npx playwright test tests/visual/home.visual.spec.ts --reporter=list`: passou com 1 teste.
+
+### Rotas MVP confirmadas
+
+- `/`.
+- `/projetos`.
+- `/projetos/[slug]`.
+- `/oportunidades`.
+- `/atualizacoes`.
+- `/contato`.
+
+### Rotas futuras nao publicadas
+
+- `/noticias`.
+- `/sobre`.
+- `/contato?tipo=desafio` como fluxo dedicado.
+- `/atualizacoes/[slug]`.
+- `/eventos`.
+- `/oficinas`.
+- `/galeria`.
+- `/comunidade`.
+
+### Pendencias futuras e externas preservadas
+
+- ADR-001 permanece `Proposto`.
+- Governança mínima de conteudo permanece `Pendente de validação coletiva`.
+- Backend, storage, notificacao e privacidade operacional de oportunidades permanecem pendentes.
+- Formulario funcional de oportunidades permanece futuro.
+- Timeline real, Living Timeline futura e marcos validados permanecem pendentes.
+- Fotos e depoimentos autorizados permanecem pendentes.
+- Homologacao controlada nao equivale a publicacao ampla ou producao sem validacao institucional.
+- Conteudo real adicional exige validacao/autorizacao antes de publicacao.
 
 ## Implementacao futura
 

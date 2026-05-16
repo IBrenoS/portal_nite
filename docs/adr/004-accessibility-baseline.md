@@ -31,6 +31,8 @@ Exigir baseline minima de acessibilidade para entregas do MVP:
 - Labels e mensagens claras em formularios.
 - Estados vazio, erro, loading e sucesso compreensiveis.
 - Suporte a `prefers-reduced-motion`.
+- Padrao de disclosure navigation para controles expansivos quando aplicavel: botoes reais, estado expandido comunicado e conteudo expansivel previsivel.
+- Nao usar `role="menu"` ou `role="menubar"` sem necessidade em navegacao comum.
 
 A validacao final ocorre na implementacao e release. Esta ADR foi aprovada para orientar a primeira implementacao controlada de base visual e tokens.
 
@@ -56,3 +58,5 @@ A validacao final ocorre na implementacao e release. Esta ADR foi aprovada para 
 ## Impacto no Portal NITE
 
 Nenhuma feature interativa deve ser considerada pronta sem validacao minima de teclado, foco, contraste, semantica, responsividade e comportamento com movimento reduzido quando aplicavel.
+
+Header, MegaMenu desktop e menu mobile em camadas devem preservar navegacao por teclado, foco visivel, controles expansivos com botoes reais, links reais para navegacao, fechamento previsivel e suporte a `prefers-reduced-motion`.

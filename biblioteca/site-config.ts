@@ -3,7 +3,7 @@ export const siteConfig = {
   name: "NITE",
   locale: "pt-BR",
   description:
-    "O NITE é o núcleo que conecta universidade, inovação, prática e desenvolvimento tecnológico em experiências e projetos reais.",
+    "Portal institucional do NITE para acompanhar projetos em evolução, oportunidades e atualizações do núcleo.",
   lastUpdated: "2026-04-24",
   publicChannels: [
     {

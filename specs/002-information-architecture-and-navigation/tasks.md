@@ -7,7 +7,7 @@
 - [x] Definir rotas futuras. Evidencia: Decisao aprovada pelo gestor do projeto em conversa de especificacao.
 - [x] Definir itens principais do header. Evidencia: Revisao documental registrada em 2026-05-13.
 - [x] Definir agrupamentos do mega menu. Evidencia: Revisao documental registrada em 2026-05-13.
-- [x] Definir comportamento mobile em accordion. Evidencia: Revisao documental registrada em 2026-05-13.
+- [x] Definir comportamento mobile em camadas. Evidencia: Revisao documental registrada em 2026-05-13 e alinhada a decisao final do Header.
 - [x] Definir CTA principal do header. Evidencia: Decisao aprovada pelo gestor do projeto em conversa de especificacao.
 - [x] Definir CTAs oficiais da home, oportunidades e professores/gestores. Evidencia: Decisao aprovada pelo gestor do projeto em conversa de especificacao.
 - [x] Definir estados de menu aberto, fechado, hover, focus e active. Evidencia: Revisao documental registrada em 2026-05-13.
@@ -20,7 +20,8 @@
 
 ## Implementacao controlada
 
-- [x] Implementar Header shell final do MVP. Evidencia: `components/layout/site-header.tsx` consolidado com logo, links principais, CTA `Falar com o NITE`, estrutura de mega menu desktop e mobile accordion baseada em `biblioteca/navigation.ts`.
+- [x] Implementar Header shell final do MVP. Evidencia: `components/layout/site-header.tsx` consolidado com logo, links principais, CTA `Falar com o NITE`, MegaMenu desktop compacto e menu mobile em camadas baseado em `biblioteca/navigation.ts`.
 - [x] Centralizar configuracao de navegacao do Header. Evidencia: `biblioteca/navigation.ts` registra grupos aprovados da Spec 002, CTA principal, rotas MVP e rotas futuras sem renderizar futuras como funcionalidades prontas.
 - [x] Completar comportamento avancado do mega menu desktop. Evidencia: `components/layout/site-header.tsx` implementa abertura por hover/foco/clique, troca entre grupos, fechamento por Escape e clique fora, `aria-expanded`/`aria-controls`, motion controlado e links reais limitados a rotas MVP aprovadas.
 - [x] Completar comportamento avancado do menu mobile em camadas. Evidencia: `components/layout/site-header.tsx` implementa camada principal, camada interna por grupo, botao voltar, botao fechar, CTA principal, fechamento por Escape e clique fora, foco visivel e motion reduzido quando aplicavel.
+- [x] Criar rota `/contato` institucional. Evidencia: `app/contato/page.tsx` criado com metadata, breadcrumb JSON-LD, H1 unico, estado institucional honesto, links reais para rotas MVP/canais configurados e sem formulario funcional ou dados de contato inventados.
