@@ -31,6 +31,7 @@ import { cn } from "@/lib/utils";
 
 const HEADER_COLLAPSE_END = 96;
 const HEADER_COLLAPSE_STATE_AT = 72;
+const HEADER_EFFECT_STATE_AT = 10;
 const HEADER_MOTION_EASE = [0.22, 1, 0.36, 1] as const;
 type HeaderGroupId = SiteNavigationGroup["id"];
 type HeaderMotionTransition = {
@@ -48,6 +49,7 @@ export function SiteHeader() {
   const shouldReduceMotion = useReducedMotion();
   const reduceMotion = shouldReduceMotion ?? false;
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState(false);
   const [activeDesktopGroup, setActiveDesktopGroup] =
     useState<HeaderGroupId | null>(null);
   const [desktopDirection, setDesktopDirection] = useState(1);
@@ -118,7 +120,10 @@ export function SiteHeader() {
 
   useEffect(() => {
     const updateCollapsedState = () => {
-      setIsCollapsed(window.scrollY >= HEADER_COLLAPSE_STATE_AT);
+      const nextScrollY = window.scrollY;
+
+      setHasScrolled(nextScrollY > HEADER_EFFECT_STATE_AT);
+      setIsCollapsed(nextScrollY >= HEADER_COLLAPSE_STATE_AT);
     };
 
     const frame = window.requestAnimationFrame(updateCollapsedState);
@@ -141,6 +146,7 @@ export function SiteHeader() {
   }, [activeDesktopGroup]);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
+    setHasScrolled(latest > HEADER_EFFECT_STATE_AT);
     setIsCollapsed(latest >= HEADER_COLLAPSE_STATE_AT);
   });
 
@@ -258,17 +264,15 @@ export function SiteHeader() {
     <motion.header
       ref={headerRef}
       className={cn(
-        "sticky top-0 z-40 border-b backdrop-blur-xl transition-colors duration-brand-micro ease-brand-out",
-        isCollapsed
-          ? "border-border bg-background/88"
-          : "border-border/80 bg-background/78",
+        "sticky top-0 z-40 overflow-visible bg-transparent transition-colors duration-brand-micro ease-brand-out before:z-50 before:backdrop-blur-2xl before:backdrop-brightness-200 after:z-0 after:backdrop-blur-md",
       )}
       data-header-collapsed={isCollapsed ? "true" : "false"}
+      data-header-scrolled={hasScrolled ? "true" : "false"}
       data-site-header=""
       onMouseEnter={cancelDesktopClose}
       onMouseLeave={scheduleDesktopClose}
     >
-      <Container className="grid min-h-14 max-w-[1240px] grid-cols-[minmax(9.25rem,1fr)_auto] items-center gap-4 py-1.5 sm:min-h-[58px] lg:grid-cols-[11rem_minmax(0,1fr)_auto] lg:gap-6 lg:py-0">
+      <Container className="relative z-10 grid min-h-14 max-w-[1240px] grid-cols-[minmax(9.25rem,1fr)_auto] items-center gap-4 py-1.5 sm:min-h-[58px] lg:grid-cols-[11rem_minmax(0,1fr)_auto] lg:gap-6 lg:py-0">
         <Link
           href="/"
           aria-label="Ir para a página inicial do NITE UniJorge"
@@ -323,7 +327,7 @@ export function SiteHeader() {
           <motion.div
             id={`site-mega-menu-${activeDesktopNavigationGroup.id}`}
             className={cn(
-              "absolute top-full hidden rounded-2xl border border-border/80 bg-background/95 p-2 shadow-[0_20px_56px_rgb(0_0_0_/_0.42)] backdrop-blur-xl lg:block",
+              "absolute top-full z-20 hidden rounded-2xl border border-border/80 bg-background/95 p-2 shadow-[0_20px_56px_rgb(0_0_0_/_0.42)] backdrop-blur-xl lg:block",
               isMultiColumnDesktopMenu
                 ? "w-[min(34rem,calc(100vw-2rem))]"
                 : "w-[min(22rem,calc(100vw-2rem))]",
