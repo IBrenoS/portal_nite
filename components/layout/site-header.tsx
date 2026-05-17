@@ -26,6 +26,7 @@ import {
 import { Container } from "@/components/layout/container";
 import { ButtonPrimaryLink } from "@/components/ui/brand-button";
 import { HeaderLogoMorph } from "@/components/ui/header-logo-morph";
+import { UnijorgeBrandText } from "@/components/ui/unijorge-brand-text";
 import { cn } from "@/lib/utils";
 
 const HEADER_COLLAPSE_END = 96;
@@ -528,10 +529,7 @@ function MobileNavigationRoot({
           <p className="font-heading text-base font-bold text-foreground">
             NITE
           </p>
-          <p className="text-xs font-bold uppercase tracking-[0.14em]">
-            <span className="text-[#ad3327]">UNI</span>
-            <span className="text-[#23497f]">JORGE</span>
-          </p>
+          <UnijorgeBrandText className="text-xs font-bold uppercase tracking-[0.14em]" />
         </div>
         <button
           type="button"

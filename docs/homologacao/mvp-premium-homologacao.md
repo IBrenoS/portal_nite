@@ -140,8 +140,6 @@ Use uma linha por achado. A triagem deve classificar cada item como `bloqueante`
 
 ## Observação Sobre Preview/Deploy
 
-Se houver URL de preview, registrar manualmente neste documento após o deploy.
-
-URL de preview: _registrar manualmente, se houver_.
+URL de preview/homologação controlada: <https://portal-nite-breno-cs-projects-d1b25706.vercel.app?_vercel_share=roXcOKz6c3u3lnAqHBhIQgadlV6sLAQ7>
 
 Não inventar URL, data de homologação, nomes de validadores, aprovação institucional, produção final ou governança resolvida.

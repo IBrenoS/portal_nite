@@ -3,6 +3,7 @@
 import { motion, type MotionValue, useTransform } from "motion/react";
 
 import { cn } from "@/lib/utils";
+import { UnijorgeBrandText } from "@/components/ui/unijorge-brand-text";
 
 type HeaderLogoMorphProps = {
   progress: MotionValue<number>;
@@ -61,13 +62,7 @@ export function HeaderLogoMorph({
         >
           NITE
         </span>
-        <span
-          aria-hidden="true"
-          className="mt-0.5 text-[0.7rem] font-bold uppercase tracking-[0.14em] md:text-xs"
-        >
-          <span className="text-[#ad3327]">UNI</span>
-          <span className="text-[#23497f]">JORGE</span>
-        </span>
+        <UnijorgeBrandText className="mt-0.5 text-[0.7rem] font-bold uppercase tracking-[0.14em] md:text-xs" />
       </motion.span>
 
       <motion.span

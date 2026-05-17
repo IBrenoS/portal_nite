@@ -26,11 +26,11 @@ O portal deve transmitir:
 
 Decisao aprovada pelo gestor/desenvolvedor do projeto: o Portal NITE adotara uma paleta dark premium, tecnologica e institucional, com fundo escuro suave, superficies elevadas, azul como cor primaria e ciano como destaque. O preto absoluto nao sera usado como fundo dominante. Grid, glow e gradientes devem ser usados com moderacao e intencao.
 
-O token `background.default` foi ajustado de `#080A12` para `#0A0A0F` apos validacao visual, para reduzir a percepcao azulada do fundo dominante e aproximar a base visual de um dark premium neutro/grafite. A decisao mantem a regra de evitar preto absoluto como fundo dominante e preservar o azul como acento de marca.
+O token `background.default` foi ajustado de `#0A0A0F` para `#09090a` apos validacao visual, para reduzir a percepcao azulada do fundo dominante e aproximar a base visual de um dark premium neutro/grafite. A decisao mantem a regra de evitar preto absoluto como fundo dominante e preservar o azul como acento de marca.
 
 | Token              | Valor aprovado              | Uso principal                       |
 | ------------------ | --------------------------- | ----------------------------------- |
-| background.default | `#0A0A0F`                   | Fundo principal                     |
+| background.default | `#09090a`                   | Fundo principal                     |
 | background.section | `#0D111C`                   | Separacao de blocos e secoes        |
 | surface.card       | `#121826`                   | Cards                               |
 | surface.elevated   | `#172033`                   | Mega menu, dropdowns e paineis      |

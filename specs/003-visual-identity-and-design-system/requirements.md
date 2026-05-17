@@ -18,7 +18,7 @@ Decisao aprovada pelo gestor/desenvolvedor do projeto em conversa de especificac
 
 Essa decisao e referencia oficial da Spec 003 para o MVP Premium. O preto absoluto nao deve ser usado como fundo dominante. Grid, glow e gradientes devem ser usados com moderacao e intencao.
 
-Atualizacao aprovada pelo gestor/desenvolvedor apos validacao visual: o token `background.default` foi ajustado de `#080A12` para `#0A0A0F` para reduzir a percepcao azulada do fundo dominante e aproximar a base visual de um dark premium neutro/grafite. A decisao mantem a regra de evitar preto absoluto como fundo dominante e preservar o azul como acento de marca.
+Atualizacao aprovada pelo gestor/desenvolvedor apos validacao visual: o token `background.default` foi ajustado de `#0A0A0F` para `#09090a` para reduzir a percepcao azulada do fundo dominante e aproximar a base visual de um dark premium neutro/grafite. A decisao mantem a regra de evitar preto absoluto como fundo dominante e preservar o azul como acento de marca.
 
 Governanca minima de conteudo permanece Pendente de validacao coletiva. O status vigente das ADRs permanece definido nos proprios arquivos em `docs/adr`; esta spec nao aprova ADR automaticamente.
 

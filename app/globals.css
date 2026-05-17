@@ -87,7 +87,7 @@
 
 :root {
   color-scheme: dark;
-  --background-default: #0a0a0f;
+  --background-default: #09090a;
   --background-section: #0d111c;
   --surface-card: #121826;
   --surface-elevated: #172033;
@@ -227,6 +227,36 @@ a {
     color: transparent;
   }
 
+  .unijorge-lit {
+    isolation: isolate;
+  }
+
+  .unijorge-lit-word {
+    color: var(--unijorge-lit-color);
+    text-shadow:
+      0 0 0.08rem var(--unijorge-lit-core),
+      0 0 0.32rem var(--unijorge-lit-soft),
+      0 0 0.74rem var(--unijorge-lit-wide);
+    animation: unijorge-lit-pulse 3.7s var(--ease-brand-out) infinite;
+    filter: brightness(1.08) saturate(1.16);
+    will-change: filter, text-shadow;
+  }
+
+  .unijorge-lit-word-red {
+    --unijorge-lit-color: #f15a4d;
+    --unijorge-lit-core: rgb(255 128 108 / 0.88);
+    --unijorge-lit-soft: rgb(241 90 77 / 0.48);
+    --unijorge-lit-wide: rgb(173 51 39 / 0.32);
+  }
+
+  .unijorge-lit-word-blue {
+    --unijorge-lit-color: #6ea1ff;
+    --unijorge-lit-core: rgb(130 174 255 / 0.9);
+    --unijorge-lit-soft: rgb(74 119 199 / 0.54);
+    --unijorge-lit-wide: rgb(35 73 127 / 0.42);
+    animation-delay: 0.35s;
+  }
+
   .animate-brand-rise {
     animation: brand-rise var(--duration-brand-medium) var(--ease-brand-out)
       both;
@@ -244,6 +274,27 @@ a {
   }
 }
 
+@keyframes unijorge-lit-pulse {
+  0%,
+  100% {
+    filter: brightness(1.02) saturate(1.1);
+    text-shadow:
+      0 0 0.07rem var(--unijorge-lit-core),
+      0 0 0.24rem var(--unijorge-lit-soft),
+      0 0 0.62rem var(--unijorge-lit-wide);
+  }
+  46% {
+    filter: brightness(1.28) saturate(1.34);
+    text-shadow:
+      0 0 0.11rem var(--unijorge-lit-core),
+      0 0 0.44rem var(--unijorge-lit-soft),
+      0 0 1rem var(--unijorge-lit-wide);
+  }
+  62% {
+    filter: brightness(1.12) saturate(1.2);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -252,5 +303,10 @@ a {
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .unijorge-lit-word {
+    animation: none !important;
+    will-change: auto;
   }
 }

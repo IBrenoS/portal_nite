@@ -31,7 +31,7 @@
 - [x] Definir guidelines de animacao. Evidencia: Guidelines de motion registradas na Spec 003.
 - [x] Definir suporte a prefers-reduced-motion. Evidencia: Suporte a motion reduzido registrado como adaptacao adicional na Spec 003.
 - [x] Definir e aprovar valores finais de tokens visuais do MVP Premium. Evidencia: Decisao aprovada pelo gestor/desenvolvedor do projeto em conversa de especificacao.
-- [x] Ajustar `background.default` apos validacao visual. Evidencia: Decisao aprovada pelo gestor/desenvolvedor do projeto para atualizar o token de `#080A12` para `#0A0A0F`, reduzindo a percepcao azulada do fundo dominante.
+- [x] Ajustar `background.default` apos validacao visual. Evidencia: Decisao aprovada pelo gestor/desenvolvedor do projeto para atualizar o token de `#0A0A0F` para `#09090a`, reduzindo a percepcao azulada do fundo dominante e aproximando a base visual de um dark premium neutro/grafite.
 - [x] Registrar baseline de contraste visual para tokens. Evidencia: Decisao aprovada pelo gestor/desenvolvedor do projeto em conversa de especificacao.
 - [x] Validar API minima dos componentes base antes de implementacao ampla. Evidencia: API minima consolidada como contrato de design, sem implementacao de codigo.
 - [x] Validar variantes e estados obrigatorios de cada componente. Evidencia: Variantes e estados obrigatorios consolidados como contrato de design.
