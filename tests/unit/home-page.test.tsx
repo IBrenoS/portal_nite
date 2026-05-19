@@ -90,7 +90,7 @@ describe("HomePage", () => {
     }
 
     const projects = within(screen.getByTestId("projects-operating-section"));
-    expect(projects.getByText("Projetos em movimento")).toBeInTheDocument();
+    expect(projects.getByText("Projetos em destaque")).toBeInTheDocument();
     expect(
       projects.getByText(
         "Acompanhe frentes, protótipos e entregas do NITE com contexto, status, stack e próximos passos.",
@@ -225,6 +225,14 @@ describe("HomePage", () => {
     expect(
       header.getByRole("link", { name: "Falar com o NITE" }),
     ).toHaveAttribute("href", "/contato");
+    const themeGroup = header.getByRole("group", {
+      name: "Tema da interface",
+    });
+    for (const themeOption of ["Sistema", "Claro", "Escuro"]) {
+      expect(
+        within(themeGroup).getByRole("radio", { name: themeOption }),
+      ).toBeInTheDocument();
+    }
 
     const footerElement = screen.getByRole("contentinfo");
     const footer = within(footerElement);

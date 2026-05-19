@@ -43,8 +43,7 @@ const headerNavigationGroups: SiteNavigationGroup[] = [
     href: "/#sobre",
     items: [
       { label: "Sobre", href: "/#sobre", status: "mvp" },
-      { label: "Missão", href: "/#sobre", status: "mvp" },
-      { label: "Frentes de atuação", href: "/#projetos", status: "mvp" },
+      { label: "Destaques", href: "/#projetos", status: "mvp" },
       { label: "Timeline", href: "/#timeline", status: "mvp" },
     ],
   },

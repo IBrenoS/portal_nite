@@ -28,6 +28,17 @@
 ## Homologação controlada do MVP Premium
 
 - [x] Registrar status final da auditoria de homologacao. Status: Aprovado para homologação controlada. Evidencia: auditoria final curta confirmou ausencia de pendencias bloqueantes conhecidas, copy global sem "projetos reais", snapshot visual da Home atualizado, rotas MVP confirmadas e rotas futuras nao publicadas.
+- [x] Registrar fechamento da homologacao controlada atual. Status: Homologação controlada validada/aprovada para o estado atual. Evidencia: feedback inicial aplicado e revalidado; estado homologado definido como MVP Premium em dark mode; Light Mode preservado como evolucao planejada posterior na Spec 003, sem implementacao runtime neste ciclo.
+
+### Fechamento da homologacao controlada atual
+
+- Status: `Homologação controlada validada/aprovada para o estado atual`.
+- Estado homologado: `MVP Premium em dark mode`.
+- Feedback inicial: aplicado e revalidado.
+- Light Mode: evolucao planejada posterior, documentada na Spec 003, sem implementacao runtime neste ciclo.
+- O estado atual pode seguir como base para decisao de release ou divulgacao controlada.
+- Homologacao controlada nao equivale a publicacao ampla, producao final ou aprovacao institucional definitiva de conteudo.
+- Qualquer ciclo visual posterior, incluindo Light Mode, deve passar por nova implementacao, testes, validacao de contraste e snapshots proprios.
 
 ### Evidencias tecnicas registradas
 
@@ -65,6 +76,8 @@
 - Formulario funcional de oportunidades permanece futuro.
 - Timeline real, Living Timeline futura e marcos validados permanecem pendentes.
 - Fotos e depoimentos autorizados permanecem pendentes.
+- Conteudo real futuro permanece dependente de validacao/autorizacao institucional.
+- Light Mode permanece como evolucao planejada posterior, sem implementacao runtime no estado homologado atual.
 - Homologacao controlada nao equivale a publicacao ampla ou producao sem validacao institucional.
 - Conteudo real adicional exige validacao/autorizacao antes de publicacao.
 

@@ -77,12 +77,8 @@ export default function ProjectsPage() {
                 id="lista-projetos"
                 className="font-heading text-2xl font-semibold text-foreground sm:text-3xl"
               >
-                Lista de projetos e frentes
+                Lista de projetos
               </h2>
-              <p className="max-w-2xl text-sm leading-7 text-muted-foreground">
-                Cada card apresenta status público, área, objetivo, stack e
-                próximo passo usando apenas dados cadastrados no conteúdo atual.
-              </p>
             </div>
 
             <ProjectsFilterableList projects={projects} />

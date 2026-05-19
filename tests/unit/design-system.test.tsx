@@ -1,6 +1,8 @@
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, render, screen, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it } from "vitest";
 
+import { THEME_STORAGE_KEY } from "@/biblioteca/theme";
 import { Container } from "@/components/layout/container";
 import { OpportunityBanner } from "@/components/sections/opportunity-banner";
 import { OpportunityInterestFormPreview } from "@/components/sections/opportunity-interest-form-preview";
@@ -21,9 +23,14 @@ import {
 import { Chip } from "@/components/ui/chip";
 import { EmptyState } from "@/components/ui/empty-state";
 import { StatusBadge } from "@/components/ui/status-badge";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 afterEach(() => {
   cleanup();
+  window.localStorage.clear();
+  document.documentElement.removeAttribute("data-theme");
+  document.documentElement.removeAttribute("data-theme-preference");
+  document.documentElement.classList.remove("dark");
 });
 
 describe("design system base", () => {
@@ -131,6 +138,51 @@ describe("design system base", () => {
     expect(
       screen.getByRole("button", { name: "Link visual" }),
     ).toBeInTheDocument();
+  });
+
+  it("permite escolher e persistir tema visual manualmente", async () => {
+    const user = userEvent.setup();
+
+    render(<ThemeToggle id="theme-toggle-test" />);
+
+    const group = screen.getByRole("group", { name: "Tema da interface" });
+    const systemOption = within(group).getByRole("radio", {
+      name: "Sistema",
+    });
+    const lightOption = within(group).getByRole("radio", { name: "Claro" });
+    const darkOption = within(group).getByRole("radio", { name: "Escuro" });
+
+    expect(systemOption).toBeChecked();
+
+    await user.click(lightOption);
+
+    expect(window.localStorage.getItem(THEME_STORAGE_KEY)).toBe("light");
+    expect(document.documentElement).toHaveAttribute("data-theme", "light");
+    expect(document.documentElement).toHaveAttribute(
+      "data-theme-preference",
+      "light",
+    );
+    expect(document.documentElement).not.toHaveClass("dark");
+
+    await user.click(darkOption);
+
+    expect(window.localStorage.getItem(THEME_STORAGE_KEY)).toBe("dark");
+    expect(document.documentElement).toHaveAttribute("data-theme", "dark");
+    expect(document.documentElement).toHaveAttribute(
+      "data-theme-preference",
+      "dark",
+    );
+    expect(document.documentElement).toHaveClass("dark");
+
+    await user.click(systemOption);
+
+    expect(window.localStorage.getItem(THEME_STORAGE_KEY)).toBe("system");
+    expect(document.documentElement).toHaveAttribute("data-theme", "dark");
+    expect(document.documentElement).toHaveAttribute(
+      "data-theme-preference",
+      "system",
+    );
+    expect(document.documentElement).toHaveClass("dark");
   });
 
   it("renderiza Card nao interativo sem foco desnecessario", () => {

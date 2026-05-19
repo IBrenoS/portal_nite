@@ -6,6 +6,18 @@
 
 Este plano orienta a validação controlada do MVP Premium por stakeholders do NITE/UNIJORGE. Homologação controlada não equivale a publicação ampla, produção final ou aprovação institucional definitiva de conteúdo.
 
+## Fechamento Da Homologação Controlada Atual
+
+Status registrado: `Homologação controlada validada/aprovada para o estado atual`.
+
+Estado homologado: `MVP Premium em dark mode`.
+
+O feedback inicial recebido durante a homologação controlada foi aplicado e revalidado no estado atual do portal. O dark mode permanece como baseline principal e como estado homologado do MVP Premium.
+
+Light Mode permanece como evolução planejada posterior do Design System, documentada na Spec 003. Nenhuma implementação runtime de Light Mode foi aplicada neste ciclo. Qualquer ciclo visual posterior, incluindo Light Mode, deve passar por nova implementação controlada, testes, validação de contraste e snapshots próprios.
+
+O estado atual pode seguir como base para decisão de release ou divulgação controlada, sem equivaler a publicação ampla ou aprovação institucional final.
+
 ## Objetivo
 
 Validar experiência, clareza, navegação, conteúdo institucional, acessibilidade percebida e adequação ao MVP Premium antes de qualquer decisão de publicação ampla.
@@ -90,6 +102,7 @@ Validar experiência, clareza, navegação, conteúdo institucional, acessibilid
 - Backend, storage, notificação, provider, webhook ou envio real.
 - Timeline real.
 - Living Timeline.
+- Light Mode runtime.
 - Fotos e depoimentos autorizados.
 - Posts reais.
 - Governança mínima de conteúdo.
@@ -107,7 +120,9 @@ Validar experiência, clareza, navegação, conteúdo institucional, acessibilid
 - Formulário funcional de oportunidades permanece futuro.
 - Timeline real e marcos validados permanecem pendentes.
 - Fotos e depoimentos autorizados permanecem pendentes.
+- Conteúdo real futuro permanece dependente de validação/autorização institucional.
 - Living Timeline permanece como possibilidade futura, sem implementação no MVP atual.
+- Light Mode permanece como evolução planejada posterior, sem implementação runtime no estado homologado atual.
 
 ## Critérios de Aprovação
 

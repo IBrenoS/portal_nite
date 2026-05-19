@@ -32,7 +32,20 @@
 - [x] Definir suporte a prefers-reduced-motion. Evidencia: Suporte a motion reduzido registrado como adaptacao adicional na Spec 003.
 - [x] Definir e aprovar valores finais de tokens visuais do MVP Premium. Evidencia: Decisao aprovada pelo gestor/desenvolvedor do projeto em conversa de especificacao.
 - [x] Ajustar `background.default` apos validacao visual. Evidencia: Decisao aprovada pelo gestor/desenvolvedor do projeto para atualizar o token de `#0A0A0F` para `#09090a`, reduzindo a percepcao azulada do fundo dominante e aproximando a base visual de um dark premium neutro/grafite.
+- [x] Definir estrategia documental de Light Mode / Theme System. Evidencia: dark mode homologado mantido como baseline principal; light mode registrado como evolucao planejada para ciclo posterior, com toggle manual, opcao Sistema, tokens light propostos, criterios AA e snapshots dedicados antes de implementacao.
+- [x] Implementar base runtime do Light Mode sem toggle manual. Evidencia: tokens light adicionados em `app/globals.css` com remapeamento por `@media (prefers-color-scheme: light)`, dark homologado mantido como fallback e `app/layout.tsx` ajustado para declarar `color-scheme` `dark light` e `themeColor` por preferencia do sistema.
 - [x] Registrar baseline de contraste visual para tokens. Evidencia: Decisao aprovada pelo gestor/desenvolvedor do projeto em conversa de especificacao.
 - [x] Validar API minima dos componentes base antes de implementacao ampla. Evidencia: API minima consolidada como contrato de design, sem implementacao de codigo.
 - [x] Validar variantes e estados obrigatorios de cada componente. Evidencia: Variantes e estados obrigatorios consolidados como contrato de design.
 - [x] Registrar criterios visuais objetivos de MVP Premium. Evidencia: Decisao aprovada pelo gestor do projeto em conversa de especificacao.
+
+## Planejamento futuro - Light Mode / Theme System
+
+- [x] Implementar infraestrutura de tema sem alterar o dark mode homologado. Evidencia: base runtime adicionada com tokens CSS light e ativacao automatica por preferencia do sistema, sem provider, localStorage ou toggle manual.
+- [x] Definir controle manual de tema com opcoes `Escuro`, `Claro` e `Sistema`. Evidencia: `components/ui/theme-toggle.tsx` implementa controle por radios acessiveis, `localStorage` persiste `system`/`light`/`dark`, `app/layout.tsx` aplica bootstrap antes da hidratacao e `components/layout/site-header.tsx` exibe o controle no Header desktop e no menu mobile.
+- [ ] Aplicar tokens light em CSS apenas apos revisao de contraste.
+- [ ] Auditar e remover dependencias visuais hardcoded de dark mode, como `white/[...]`, sombras escuras e gradientes sobre fundo escuro.
+- [ ] Validar Header, MegaMenu e menu mobile em dark/light, desktop/mobile e teclado.
+- [ ] Validar Button, Card, StatusBadge, ProjectCard, UpdateCard e OpportunityBanner em dark/light.
+- [x] Criar snapshots visuais dedicados para dark e light. Evidencia: `tests/visual/home.visual.spec.ts` separado em casos explicitos `home visual baseline - dark` e `home visual baseline - light`, com snapshots nomeados `home-dark-chromium-win32.png` e `home-light-chromium-win32.png`, tema fixado por `colorScheme`, reduced motion e estabilizacao de overlay/fontes/scroll.
+- [ ] Revisar `themeColor`, manifest e Open Graph em task propria.

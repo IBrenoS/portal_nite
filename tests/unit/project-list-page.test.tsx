@@ -19,7 +19,7 @@ describe("ProjectsPage", () => {
     expect(
       screen.getByRole("heading", {
         level: 2,
-        name: "Lista de projetos e frentes",
+        name: "Lista de projetos",
       }),
     ).toBeInTheDocument();
 

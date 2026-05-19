@@ -327,10 +327,10 @@ export function SiteHeader() {
           <motion.div
             id={`site-mega-menu-${activeDesktopNavigationGroup.id}`}
             className={cn(
-              "absolute top-full z-20 hidden rounded-2xl border border-border/80 bg-background/95 p-2 shadow-[0_20px_56px_rgb(0_0_0_/_0.42)] backdrop-blur-xl lg:block",
+              "absolute top-full z-20 hidden rounded-xl border border-border bg-background p-1.5 shadow-[var(--shadow-brand-lift)] backdrop-blur-xl lg:block",
               isMultiColumnDesktopMenu
-                ? "w-[min(34rem,calc(100vw-2rem))]"
-                : "w-[min(22rem,calc(100vw-2rem))]",
+                ? "w-[min(31rem,calc(100vw-2rem))]"
+                : "w-[min(19rem,calc(100vw-2rem))]",
             )}
             data-mega-menu-shell=""
             style={{ left: desktopPanelAnchor }}
@@ -343,10 +343,6 @@ export function SiteHeader() {
             }
             transition={menuTransition}
           >
-            <p className="px-3 pb-2 pt-2.5 text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-              {activeDesktopNavigationGroup.label}
-            </p>
-
             <AnimatePresence mode="wait" initial={false}>
               <motion.div
                 key={activeDesktopNavigationGroup.id}
@@ -372,6 +368,7 @@ export function SiteHeader() {
                   <HeaderNavigationItemLink
                     key={item.label}
                     item={item}
+                    variant="desktop"
                     onNavigate={closeAllMenus}
                   />
                 ))}
@@ -437,8 +434,8 @@ function HeaderNavigationGroupControl({
       <button
         type="button"
         className={cn(
-          "inline-flex min-h-10 items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-card hover:text-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50",
-          isOpen && "bg-card text-foreground",
+          "inline-flex min-h-10 items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/40",
+          isOpen && "text-foreground",
         )}
         aria-controls={`site-mega-menu-${group.id}`}
         aria-expanded={isOpen}
@@ -447,7 +444,10 @@ function HeaderNavigationGroupControl({
         <span>{group.label}</span>
         <ChevronDownIcon
           aria-hidden="true"
-          className={cn("size-3 transition-transform", isOpen && "rotate-180")}
+          className={cn(
+            "size-3 text-muted-foreground transition-[color,transform]",
+            isOpen && "rotate-180 text-brand-circuit-bright",
+          )}
         />
       </button>
     </div>
@@ -457,12 +457,17 @@ function HeaderNavigationGroupControl({
 function HeaderNavigationItemLink({
   item,
   onNavigate,
+  variant = "mobile",
 }: {
   item: SiteNavigationItem;
   onNavigate?: () => void;
+  variant?: "desktop" | "mobile";
 }) {
   const className = cn(
-    "group relative flex min-h-11 items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-sm text-foreground transition-colors hover:bg-card focus-visible:bg-card focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50",
+    "group relative flex items-center justify-between gap-3 rounded-lg px-3 text-sm text-foreground transition-colors focus-visible:border-ring focus-visible:ring-3",
+    variant === "desktop"
+      ? "min-h-10 py-2 hover:bg-accent hover:text-foreground focus-visible:bg-accent focus-visible:ring-ring/40"
+      : "min-h-11 py-2.5 hover:bg-card focus-visible:bg-card focus-visible:ring-ring/50",
     item.status === "planned" && "text-muted-foreground",
   );
 
@@ -481,7 +486,10 @@ function HeaderNavigationItemLink({
       ) : (
         <ChevronRightIcon
           aria-hidden="true"
-          className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5"
+          className={cn(
+            "size-4 shrink-0 text-muted-foreground transition-[color,transform] group-hover:translate-x-0.5",
+            variant === "desktop" && "group-hover:text-brand-circuit-bright",
+          )}
         />
       )}
     </>

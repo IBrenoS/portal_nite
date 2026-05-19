@@ -46,7 +46,7 @@ export function ProjectsOperatingSection({
         <div className="grid gap-6 lg:grid-cols-[minmax(22rem,34rem)_minmax(0,1fr)] lg:items-end">
           <SectionHeader
             eyebrow="Projetos"
-            title="Projetos em movimento"
+            title="Projetos em destaque"
             description="Acompanhe frentes, protótipos e entregas do NITE com contexto, status, stack e próximos passos."
           />
           <p className="max-w-2xl text-sm leading-7 text-muted-foreground lg:justify-self-end">

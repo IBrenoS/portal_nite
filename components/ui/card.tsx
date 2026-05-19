@@ -9,8 +9,7 @@ const cardVariants = cva(
     variants: {
       variant: {
         default: "border-border bg-card",
-        elevated:
-          "border-border bg-popover shadow-[0_24px_70px_rgb(0_0_0_/_0.26)]",
+        elevated: "border-border bg-popover shadow-[var(--shadow-brand-lift)]",
         subtle: "border-border bg-muted/70",
         interactive:
           "border-border bg-card hover:border-ring hover:bg-secondary active:translate-y-px aria-disabled:pointer-events-none aria-disabled:opacity-60",

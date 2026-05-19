@@ -207,7 +207,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               </div>
 
               {project.contentNotice ? (
-                <p className="rounded-lg border border-white/[0.07] bg-card/58 p-4 text-sm leading-6 text-muted-foreground">
+                <p className="rounded-lg border border-border bg-card/70 p-4 text-sm leading-6 text-muted-foreground">
                   {project.contentNotice}
                 </p>
               ) : null}

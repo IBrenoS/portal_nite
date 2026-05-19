@@ -86,7 +86,32 @@
 }
 
 :root {
-  color-scheme: dark;
+  color-scheme: dark light;
+  --background-default-light: #f7f3ea;
+  --background-section-light: #efe8dc;
+  --surface-card-light: #fffbf5;
+  --surface-elevated-light: #f2ebdd;
+  --surface-soft-light: #eaf1fa;
+  --border-subtle-light: rgba(17, 24, 39, 0.12);
+  --border-strong-light: rgba(17, 24, 39, 0.22);
+  --text-primary-light: #111827;
+  --text-secondary-light: #334155;
+  --text-muted-light: #5b6472;
+  --brand-primary-light: #1d4ed8;
+  --brand-accent-light: #0369a1;
+  --brand-unijorge-red-light: #c24132;
+  --brand-glow-light: rgba(29, 78, 216, 0.14);
+  --brand-soft-light: rgba(29, 78, 216, 0.1);
+  --brand-unijorge-red-soft-light: rgba(194, 65, 50, 0.12);
+  --focus-ring-light: #1d4ed8;
+  --status-draft-light: #475569;
+  --status-progress-light: #0369a1;
+  --status-validated-light: #6d28d9;
+  --status-done-light: #047857;
+  --status-warning-light: #92400e;
+  --status-error-light: #be123c;
+  --primary-foreground-light: #fffaf0;
+  --shadow-brand-lift-light: 0 18px 48px rgb(15 23 42 / 0.14);
   --background-default: #09090a;
   --background-section: #0d111c;
   --surface-card: #121826;
@@ -165,8 +190,67 @@
   --sidebar-ring: var(--focus-ring);
 }
 
+:root[data-theme="dark"],
 .dark {
   color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --background-default: var(--background-default-light);
+  --background-section: var(--background-section-light);
+  --surface-card: var(--surface-card-light);
+  --surface-elevated: var(--surface-elevated-light);
+  --surface-soft: var(--surface-soft-light);
+  --border-subtle: var(--border-subtle-light);
+  --border-strong: var(--border-strong-light);
+  --text-primary: var(--text-primary-light);
+  --text-secondary: var(--text-secondary-light);
+  --text-muted: var(--text-muted-light);
+  --brand-primary: var(--brand-primary-light);
+  --brand-accent: var(--brand-accent-light);
+  --brand-glow: var(--brand-glow-light);
+  --brand-soft: var(--brand-soft-light);
+  --focus-ring: var(--focus-ring-light);
+  --status-draft: var(--status-draft-light);
+  --status-progress: var(--status-progress-light);
+  --status-validated: var(--status-validated-light);
+  --status-done: var(--status-done-light);
+  --status-warning: var(--status-warning-light);
+  --status-error: var(--status-error-light);
+  --primary-foreground: var(--primary-foreground-light);
+  --sidebar-primary-foreground: var(--primary-foreground-light);
+  --shadow-brand-lift: var(--shadow-brand-lift-light);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+    --background-default: var(--background-default-light);
+    --background-section: var(--background-section-light);
+    --surface-card: var(--surface-card-light);
+    --surface-elevated: var(--surface-elevated-light);
+    --surface-soft: var(--surface-soft-light);
+    --border-subtle: var(--border-subtle-light);
+    --border-strong: var(--border-strong-light);
+    --text-primary: var(--text-primary-light);
+    --text-secondary: var(--text-secondary-light);
+    --text-muted: var(--text-muted-light);
+    --brand-primary: var(--brand-primary-light);
+    --brand-accent: var(--brand-accent-light);
+    --brand-glow: var(--brand-glow-light);
+    --brand-soft: var(--brand-soft-light);
+    --focus-ring: var(--focus-ring-light);
+    --status-draft: var(--status-draft-light);
+    --status-progress: var(--status-progress-light);
+    --status-validated: var(--status-validated-light);
+    --status-done: var(--status-done-light);
+    --status-warning: var(--status-warning-light);
+    --status-error: var(--status-error-light);
+    --primary-foreground: var(--primary-foreground-light);
+    --sidebar-primary-foreground: var(--primary-foreground-light);
+    --shadow-brand-lift: var(--shadow-brand-lift-light);
+  }
 }
 
 * {
@@ -212,19 +296,28 @@ body {
   -webkit-mask-size: 100% 1px;
 }
 
+:root[data-theme="light"] [data-site-header]::after {
+  background: rgb(247 243 234 / 0.82);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) [data-site-header]::after {
+    background: rgb(247 243 234 / 0.82);
+  }
+}
+
 [data-site-header][data-header-scrolled="true"]::before,
 [data-site-header][data-header-scrolled="true"]::after {
   opacity: 1 !important;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
   }
   html {
     @apply font-sans;
@@ -261,6 +354,30 @@ a {
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+  }
+
+  :root[data-theme="light"] .brand-metal-text {
+    background: linear-gradient(
+      to right bottom,
+      var(--text-primary) 28%,
+      var(--text-secondary) 72%,
+      var(--brand-accent) 118%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) .brand-metal-text {
+      background: linear-gradient(
+        to right bottom,
+        var(--text-primary) 28%,
+        var(--text-secondary) 72%,
+        var(--brand-accent) 118%
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
   }
 
   .unijorge-lit {

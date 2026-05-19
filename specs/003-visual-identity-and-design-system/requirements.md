@@ -20,6 +20,24 @@ Essa decisao e referencia oficial da Spec 003 para o MVP Premium. O preto absolu
 
 Atualizacao aprovada pelo gestor/desenvolvedor apos validacao visual: o token `background.default` foi ajustado de `#0A0A0F` para `#09090a` para reduzir a percepcao azulada do fundo dominante e aproximar a base visual de um dark premium neutro/grafite. A decisao mantem a regra de evitar preto absoluto como fundo dominante e preservar o azul como acento de marca.
 
+## Estrategia futura de Light Mode / Theme System
+
+Decisao documental aprovada para ciclo posterior: o dark mode homologado permanece como baseline principal do MVP Premium. Light mode sera tratado como evolucao planejada do Design System, sem alterar o dark mode homologado nesta etapa.
+
+O theme system futuro deve suportar tema manual e preferencia do sistema, com comportamento recomendado:
+
+- Manter dark como tema padrao inicial enquanto o light mode nao for validado visualmente.
+- Oferecer controle manual de tema quando a implementacao existir.
+- Permitir opcao "Sistema" para respeitar `prefers-color-scheme` depois que light mode estiver implementado e validado.
+- Persistir a escolha manual do usuario, quando houver, sem substituir `prefers-reduced-motion`.
+- Preservar `prefers-reduced-motion` como decisao independente de tema visual.
+
+Light mode nao entra no MVP atual homologado. A implementacao deve ocorrer em ciclo posterior, com task propria, snapshots proprios e validacao desktop/mobile antes de release.
+
+O light mode deve usar fundo off-white premium, levemente quente/neutro, sem branco absoluto como fundo dominante. A identidade deve continuar institucional, tecnologica e premium, preservando azul como acento de marca e vermelho UNIJORGE como acento institucional pontual, nao como fundo dominante nem substituto do CTA principal.
+
+Tokens light devem ser documentados e validados antes da implementacao. Eles devem manter contraste WCAG AA, especialmente para textos, links, CTAs, badges, filtros, Header, MegaMenu, cards e estados de status.
+
 Governanca minima de conteudo permanece Pendente de validacao coletiva. O status vigente das ADRs permanece definido nos proprios arquivos em `docs/adr`; esta spec nao aprova ADR automaticamente.
 
 ## Requisitos de experiencia

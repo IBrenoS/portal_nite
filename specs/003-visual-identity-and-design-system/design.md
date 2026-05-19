@@ -52,6 +52,69 @@ O token `background.default` foi ajustado de `#0A0A0F` para `#09090a` apos valid
 | status.warning     | `#FBBF24`                   | Status de alerta                    |
 | status.error       | `#FB7185`                   | Status de erro                      |
 
+## Theme System e Light Mode planejado
+
+Dark mode permanece o baseline principal e homologado do MVP Premium. Light mode e uma evolucao planejada para ciclo posterior, sem alteracao do dark mode nesta decisao documental.
+
+### Estrategia de tema
+
+- Tema padrao do MVP atual: dark.
+- Estrategia recomendada para implementacao futura: toggle manual com opcoes `Escuro`, `Claro` e `Sistema`.
+- A opcao `Sistema` deve respeitar `prefers-color-scheme` apenas quando light mode estiver implementado e validado.
+- A escolha manual do usuario deve ter prioridade sobre a preferencia do sistema.
+- `prefers-reduced-motion` deve continuar independente do tema visual.
+- `color-scheme` deve acompanhar o tema ativo para controles nativos, sem forcar light mode antes da validacao.
+
+### Tokens light propostos
+
+Os valores abaixo sao proposta documental inicial para orientar a futura implementacao. Eles nao alteram os tokens dark homologados.
+
+| Token light             | Valor proposto                     | Uso principal                                          |
+| ----------------------- | ---------------------------------- | ------------------------------------------------------ |
+| background.default      | `#F7F3EA`                          | Fundo principal off-white premium, sem branco absoluto |
+| background.section      | `#EFE8DC`                          | Separacao de blocos e secoes                           |
+| surface.card            | `#FFFBF5`                          | Cards e superficies principais                         |
+| surface.elevated        | `#F2EBDD`                          | MegaMenu, dropdowns e paineis elevados                 |
+| surface.soft            | `#EAF1FA`                          | Destaques suaves e secoes pontuais                     |
+| border.subtle           | `rgba(17, 24, 39, 0.12)`           | Bordas discretas                                       |
+| border.strong           | `rgba(17, 24, 39, 0.22)`           | Bordas com mais presenca                               |
+| text.primary            | `#111827`                          | Texto principal                                        |
+| text.secondary          | `#334155`                          | Texto secundario                                       |
+| text.muted              | `#5B6472`                          | Texto de apoio                                         |
+| brand.primary           | `#1D4ED8`                          | CTAs principais e links em light mode                  |
+| brand.accent            | `#0369A1`                          | Highlights, icones e microdestaques                    |
+| brand.unijorge-red      | `#C24132`                          | Acento institucional UNIJORGE pontual                  |
+| brand.glow              | `rgba(29, 78, 216, 0.14)`          | Glow reduzido e nao dominante                          |
+| brand.soft              | `rgba(29, 78, 216, 0.10)`          | Destaques suaves                                       |
+| brand.unijorge-red-soft | `rgba(194, 65, 50, 0.12)`          | Destaque vermelho suave, sem substituir status de erro |
+| focus.ring              | `#1D4ED8`                          | Foco visivel                                           |
+| status.draft            | `#475569`                          | Status rascunho/estrutura                              |
+| status.progress         | `#0369A1`                          | Status em progresso                                    |
+| status.validated        | `#6D28D9`                          | Status validado                                        |
+| status.done             | `#047857`                          | Status concluido                                       |
+| status.warning          | `#92400E`                          | Status de alerta                                       |
+| status.error            | `#BE123C`                          | Status de erro                                         |
+| shadow.brand.lift       | `0 18px 48px rgb(15 23 42 / 0.14)` | Elevacao suave em superficies                          |
+
+### Comportamento por componente
+
+- Header e MegaMenu: devem trocar overlays `white/[...]`, bordas translúcidas claras e sombras escuras por tokens de superficie, borda e sombra do tema ativo. MegaMenu deve continuar compacto, acessivel e sem depender apenas de hover.
+- Menu mobile em camadas: deve preservar contraste de botoes, foco visivel, leitura de grupos e ausencia de scroll horizontal.
+- Button e CTAs: `brand.primary` continua sendo a cor principal. Azul deve ter contraste AA com texto do botao. Vermelho UNIJORGE deve ser reservado para acento institucional pontual, nao para CTA principal nem estados de erro.
+- Card, ProjectCard, UpdateCard e OpportunityBanner: devem usar tokens `background`, `card`, `popover`, `muted`, `border`, `foreground` e status tokens; fallbacks sem imagem/evidencia devem continuar honestos e legiveis.
+- StatusBadge: deve manter label textual visivel. Cores light de status devem ser recalibradas para contraste AA em texto e borda, sem depender apenas de cor.
+- Hero: deve reduzir glow e gradientes para nao transformar azul em fundo dominante no light mode. A logo/efeito visual deve ser validado separadamente para legibilidade em fundo claro.
+- Footer: deve preservar landmark `<footer>`, links reais, foco visivel e contraste de texto secundario.
+
+### Validacao exigida antes de implementar
+
+- Validar contraste AA para texto normal, texto grande, CTAs, links, badges, filtros e estados.
+- Validar foco visivel em Header, MegaMenu, menu mobile, cards, filtros, CTAs e links.
+- Validar desktop e mobile nas rotas `/`, `/projetos`, `/projetos/[slug]`, `/oportunidades`, `/atualizacoes` e `/contato`.
+- Criar snapshots visuais separados para dark e light, no minimo `home-desktop-dark`, `home-desktop-light`, `home-mobile-dark` e `home-mobile-light`, mantendo `prefers-reduced-motion` nos testes visuais.
+- Revisar `opengraph-image`, `themeColor`, `manifest` e assets de marca apenas em task propria, sem misturar com a primeira implementacao CSS do tema.
+- Auditar casos hardcoded como `white/[...]`, `rgb(...)`, sombras e gradientes antes de habilitar o tema claro publicamente.
+
 ## Regras de uso dos tokens
 
 - `background.default` deve ser o fundo principal.
