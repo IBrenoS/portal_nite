@@ -20,7 +20,10 @@ export function HeroSection() {
         size="xl"
         className="relative grid min-h-[calc(92svh-4rem)] items-center gap-8 py-10 sm:gap-12 sm:py-16 lg:grid-cols-[minmax(0,47rem)_minmax(18rem,1fr)] lg:gap-10 lg:py-20 xl:grid-cols-[minmax(0,48rem)_minmax(18rem,1fr)] xl:gap-12"
       >
-        <Reveal className="relative z-10 order-2 flex max-w-[43rem] flex-col items-center gap-8 text-center sm:order-none sm:gap-9 lg:max-w-[47rem] lg:items-start lg:text-left xl:max-w-[48rem]">
+        <Reveal
+          className="relative z-10 order-2 flex max-w-[43rem] flex-col items-center gap-8 text-center sm:order-none sm:gap-9 lg:max-w-[47rem] lg:items-start lg:pl-16 lg:text-left xl:max-w-[48rem]"
+          data-hero-copy=""
+        >
           <div className="flex flex-col gap-5 sm:gap-6">
             <p className="mx-auto max-w-[40rem] font-mono text-xs uppercase tracking-[0.18em] text-brand-circuit-bright lg:mx-0">
               UNIJORGE / Núcleo de Inovação & Tecnologia

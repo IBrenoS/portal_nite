@@ -45,6 +45,7 @@ export function ProjectsOperatingSection({
       <Container size="xl" className="flex flex-col gap-10">
         <div className="grid gap-6 lg:grid-cols-[minmax(22rem,34rem)_minmax(0,1fr)] lg:items-end">
           <SectionHeader
+            className="lg:pl-16"
             eyebrow="Projetos"
             title="Projetos em destaque"
             description="Acompanhe frentes, protótipos e entregas do NITE com contexto, status, stack e próximos passos."

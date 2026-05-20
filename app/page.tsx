@@ -53,7 +53,7 @@ export default function HomePage() {
           data-surface="clean"
         >
           <Container className="grid gap-10 lg:grid-cols-[0.74fr_1.26fr]">
-            <div className="grid h-fit gap-5 lg:sticky lg:top-24">
+            <div className="grid h-fit gap-5 lg:sticky lg:top-24 lg:pl-16">
               <SectionHeader
                 eyebrow="Linha do tempo"
                 title="Linha do tempo em preparação."

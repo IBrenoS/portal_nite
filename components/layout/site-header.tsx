@@ -272,7 +272,10 @@ export function SiteHeader() {
       onMouseEnter={cancelDesktopClose}
       onMouseLeave={scheduleDesktopClose}
     >
-      <Container className="relative z-10 grid min-h-14 max-w-[1240px] grid-cols-[minmax(9.25rem,1fr)_auto] items-center gap-4 py-1.5 sm:min-h-[58px] lg:grid-cols-[11rem_minmax(0,1fr)_auto] lg:gap-6 lg:py-0">
+      <Container
+        size="xl"
+        className="relative z-10 grid min-h-14 grid-cols-[minmax(9.25rem,1fr)_auto] items-center gap-4 py-1.5 sm:min-h-[58px] lg:grid-cols-[11rem_minmax(0,1fr)_auto] lg:gap-6 lg:py-0"
+      >
         <Link
           href="/"
           aria-label="Ir para a página inicial do NITE UniJorge"
@@ -327,7 +330,7 @@ export function SiteHeader() {
           <motion.div
             id={`site-mega-menu-${activeDesktopNavigationGroup.id}`}
             className={cn(
-              "absolute top-full z-20 hidden rounded-xl border border-border bg-background p-1.5 shadow-[var(--shadow-brand-lift)] backdrop-blur-xl lg:block",
+              "absolute top-full z-20 hidden rounded-xl border border-border/90 bg-background/92 p-1.5 shadow-[var(--shadow-brand-lift)] backdrop-blur-xl lg:block",
               isMultiColumnDesktopMenu
                 ? "w-[min(31rem,calc(100vw-2rem))]"
                 : "w-[min(19rem,calc(100vw-2rem))]",
