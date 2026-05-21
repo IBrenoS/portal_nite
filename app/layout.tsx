@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Sora } from "next/font/google";
+import Script from "next/script";
 
 import "@/app/globals.css";
 import { buildPageTitle, defaultMetadata } from "@/biblioteca/seo";
@@ -81,9 +82,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
       suppressHydrationWarning
     >
       <head>
-        <script
+        <Script
           dangerouslySetInnerHTML={{ __html: themeBootstrapScript }}
           id="theme-bootstrap"
+          strategy="beforeInteractive"
         />
       </head>
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">

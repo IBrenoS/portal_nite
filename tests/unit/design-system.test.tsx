@@ -23,7 +23,7 @@ import {
 import { Chip } from "@/components/ui/chip";
 import { EmptyState } from "@/components/ui/empty-state";
 import { StatusBadge } from "@/components/ui/status-badge";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { ThemeToggle, ThemeToggleButton } from "@/components/ui/theme-toggle";
 
 afterEach(() => {
   cleanup();
@@ -183,6 +183,34 @@ describe("design system base", () => {
       "system",
     );
     expect(document.documentElement).toHaveClass("dark");
+  });
+
+  it("abre o seletor compacto de tema sem expor as opcoes na barra", async () => {
+    const user = userEvent.setup();
+
+    render(<ThemeToggleButton id="theme-toggle-button-test" />);
+
+    const trigger = screen.getByRole("button", {
+      name: /Alterar tema da interface/i,
+    });
+
+    expect(trigger).toHaveAttribute("aria-expanded", "false");
+    expect(
+      screen.queryByRole("group", { name: "Tema da interface" }),
+    ).not.toBeInTheDocument();
+
+    await user.click(trigger);
+
+    expect(trigger).toHaveAttribute("aria-expanded", "true");
+    expect(
+      screen.getByRole("group", { name: "Tema da interface" }),
+    ).toBeInTheDocument();
+
+    await user.click(screen.getByRole("radio", { name: "Claro" }));
+
+    expect(trigger).toHaveAttribute("aria-expanded", "false");
+    expect(window.localStorage.getItem(THEME_STORAGE_KEY)).toBe("light");
+    expect(document.documentElement).toHaveAttribute("data-theme", "light");
   });
 
   it("renderiza Card nao interativo sem foco desnecessario", () => {

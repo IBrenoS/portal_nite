@@ -225,14 +225,9 @@ describe("HomePage", () => {
     expect(
       header.getByRole("link", { name: "Falar com o NITE" }),
     ).toHaveAttribute("href", "/contato");
-    const themeGroup = header.getByRole("group", {
-      name: "Tema da interface",
-    });
-    for (const themeOption of ["Sistema", "Claro", "Escuro"]) {
-      expect(
-        within(themeGroup).getByRole("radio", { name: themeOption }),
-      ).toBeInTheDocument();
-    }
+    expect(
+      header.getByRole("button", { name: /Alterar tema da interface/i }),
+    ).toHaveAttribute("aria-expanded", "false");
 
     const footerElement = screen.getByRole("contentinfo");
     const footer = within(footerElement);

@@ -26,6 +26,10 @@ import {
 import { Container } from "@/components/layout/container";
 import { ButtonPrimaryLink } from "@/components/ui/brand-button";
 import { HeaderLogoMorph } from "@/components/ui/header-logo-morph";
+import {
+  ThemeToggleButton,
+  ThemeTogglePanel,
+} from "@/components/ui/theme-toggle";
 import { UnijorgeBrandText } from "@/components/ui/unijorge-brand-text";
 import { cn } from "@/lib/utils";
 
@@ -59,6 +63,7 @@ export function SiteHeader() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeMobileGroup, setActiveMobileGroup] =
     useState<HeaderGroupId | null>(null);
+  const [isThemePopoverOpen, setIsThemePopoverOpen] = useState(false);
 
   const activeDesktopNavigationGroup = headerNavigationGroups.find(
     (group) => group.id === activeDesktopGroup,
@@ -160,6 +165,7 @@ export function SiteHeader() {
       setActiveDesktopGroup(null);
       setIsMobileMenuOpen(false);
       setActiveMobileGroup(null);
+      setIsThemePopoverOpen(false);
     };
     const closeOnOutsidePointer = (event: PointerEvent) => {
       if (
@@ -230,6 +236,7 @@ export function SiteHeader() {
     setDesktopDirection(
       currentIndex === -1 || nextIndex >= currentIndex ? 1 : -1,
     );
+    setIsThemePopoverOpen(false);
     setActiveDesktopGroup(groupId);
     setIsMobileMenuOpen(false);
     setActiveMobileGroup(null);
@@ -243,6 +250,7 @@ export function SiteHeader() {
         setActiveMobileGroup(null);
       } else {
         setActiveDesktopGroup(null);
+        setIsThemePopoverOpen(false);
       }
 
       return !isOpen;
@@ -255,6 +263,7 @@ export function SiteHeader() {
 
   const closeAllMenus = () => {
     cancelDesktopClose();
+    setIsThemePopoverOpen(false);
     setActiveDesktopGroup(null);
     setIsMobileMenuOpen(false);
     setActiveMobileGroup(null);
@@ -305,6 +314,22 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center justify-end gap-2">
+          <ThemeToggleButton
+            id="theme-toggle-desktop"
+            className="hidden lg:block"
+            open={isThemePopoverOpen}
+            onOpenChange={(isOpen) => {
+              setIsThemePopoverOpen(isOpen);
+
+              if (!isOpen) {
+                return;
+              }
+
+              cancelDesktopClose();
+              setActiveDesktopGroup(null);
+            }}
+          />
+
           <ButtonPrimaryLink
             href={headerCta.href}
             className="hidden min-h-10 rounded-lg px-4 py-2 text-sm shadow-none sm:inline-flex"
@@ -575,6 +600,8 @@ function MobileNavigationRoot({
           </button>
         ))}
       </nav>
+
+      <ThemeTogglePanel id="theme-toggle-mobile" className="mt-1" />
     </motion.div>
   );
 }

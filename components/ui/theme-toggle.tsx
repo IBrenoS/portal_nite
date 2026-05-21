@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { CheckIcon, MonitorIcon, MoonIcon, SunIcon } from "lucide-react";
 
 import {
@@ -17,6 +17,25 @@ type ThemeToggleProps = {
   id: string;
   className?: string;
 };
+
+type ThemeTogglePanelProps = ThemeToggleProps & {
+  onPreferenceChange?: (preference: ThemePreference) => void;
+};
+
+type ThemeToggleButtonProps = ThemeToggleProps & {
+  open?: boolean;
+  onOpenChange?: (isOpen: boolean) => void;
+};
+
+type ThemePreferenceOptionProps = {
+  id: string;
+  isSelected: boolean;
+  name: string;
+  preference: ThemePreference;
+  onSelect: (preference: ThemePreference) => void;
+};
+
+const THEME_CHANGE_EVENT = "nite-theme-change";
 
 const themePreferenceIcons = {
   system: MonitorIcon,
@@ -57,18 +76,34 @@ const readStoredThemePreference = () => {
     return "system";
   }
 
-  const storedPreference = normalizeThemePreference(
-    window.localStorage.getItem(THEME_STORAGE_KEY),
-  );
+  try {
+    const storedPreference = normalizeThemePreference(
+      window.localStorage.getItem(THEME_STORAGE_KEY),
+    );
 
-  if (window.localStorage.getItem(THEME_STORAGE_KEY) !== storedPreference) {
-    window.localStorage.setItem(THEME_STORAGE_KEY, storedPreference);
+    if (window.localStorage.getItem(THEME_STORAGE_KEY) !== storedPreference) {
+      window.localStorage.setItem(THEME_STORAGE_KEY, storedPreference);
+    }
+
+    return storedPreference;
+  } catch {
+    return "system";
   }
-
-  return storedPreference;
 };
 
-export function ThemeToggle({ id, className }: ThemeToggleProps) {
+const persistThemePreference = (preference: ThemePreference) => {
+  try {
+    window.localStorage.setItem(THEME_STORAGE_KEY, preference);
+  } catch {
+    return;
+  }
+};
+
+const dispatchThemeChange = () => {
+  window.dispatchEvent(new Event(THEME_CHANGE_EVENT));
+};
+
+function useThemePreference() {
   const [preference, setPreference] = useState<ThemePreference>("system");
 
   useEffect(() => {
@@ -79,71 +114,208 @@ export function ThemeToggle({ id, className }: ThemeToggleProps) {
       applyThemePreference(nextPreference);
     };
 
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: light)");
+    const mediaQuery =
+      typeof window.matchMedia === "function"
+        ? window.matchMedia("(prefers-color-scheme: light)")
+        : null;
     const handleStorage = (event: StorageEvent) => {
-      if (event.key === THEME_STORAGE_KEY) {
+      if (event.key === THEME_STORAGE_KEY || event.key === null) {
         syncTheme();
       }
     };
 
     syncTheme();
-    mediaQuery.addEventListener("change", syncTheme);
+    mediaQuery?.addEventListener("change", syncTheme);
     window.addEventListener("storage", handleStorage);
+    window.addEventListener(THEME_CHANGE_EVENT, syncTheme);
 
     return () => {
-      mediaQuery.removeEventListener("change", syncTheme);
+      mediaQuery?.removeEventListener("change", syncTheme);
       window.removeEventListener("storage", handleStorage);
+      window.removeEventListener(THEME_CHANGE_EVENT, syncTheme);
     };
   }, []);
 
   const updatePreference = (nextPreference: ThemePreference) => {
-    window.localStorage.setItem(THEME_STORAGE_KEY, nextPreference);
+    persistThemePreference(nextPreference);
     setPreference(nextPreference);
     applyThemePreference(nextPreference);
+    dispatchThemeChange();
+  };
+
+  return { preference, updatePreference };
+}
+
+function ThemePreferenceOption({
+  id,
+  isSelected,
+  name,
+  preference,
+  onSelect,
+}: ThemePreferenceOptionProps) {
+  const Icon = themePreferenceIcons[preference];
+
+  return (
+    <label htmlFor={id} className="min-w-0">
+      <input
+        id={id}
+        type="radio"
+        name={name}
+        value={preference}
+        checked={isSelected}
+        className="peer sr-only"
+        onChange={() => onSelect(preference)}
+      />
+      <span
+        className={cn(
+          "flex min-h-10 items-center justify-between gap-3 rounded-md border border-transparent px-3 py-2 text-sm transition-colors peer-focus-visible:border-ring peer-focus-visible:ring-3 peer-focus-visible:ring-ring/50",
+          isSelected
+            ? "bg-primary text-[var(--primary-foreground)]"
+            : "text-muted-foreground hover:bg-secondary hover:text-foreground",
+        )}
+      >
+        <span className="flex min-w-0 items-center gap-2">
+          <Icon className="size-4 shrink-0" aria-hidden="true" />
+          <span className="truncate">{themePreferenceLabels[preference]}</span>
+        </span>
+        {isSelected ? (
+          <CheckIcon className="size-4 shrink-0" aria-hidden="true" />
+        ) : null}
+      </span>
+    </label>
+  );
+}
+
+export function ThemeTogglePanel({
+  id,
+  className,
+  onPreferenceChange,
+}: ThemeTogglePanelProps) {
+  const { preference, updatePreference } = useThemePreference();
+  const selectPreference = (nextPreference: ThemePreference) => {
+    updatePreference(nextPreference);
+    onPreferenceChange?.(nextPreference);
   };
 
   return (
     <fieldset
-      className={cn("min-w-0", className)}
+      className={cn(
+        "min-w-0 rounded-xl border border-border/80 bg-card/80 p-2",
+        className,
+      )}
       data-theme-toggle=""
       data-theme-preference={preference}
     >
       <legend className="sr-only">Tema da interface</legend>
-      <div className="inline-flex max-w-full flex-wrap items-center gap-1 rounded-lg border border-border bg-card/80 p-1 text-xs font-semibold text-muted-foreground">
+      <p className="px-1 pb-2 text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+        Tema da interface
+      </p>
+      <div className="grid gap-1">
         {themePreferences.map((themePreference) => {
-          const Icon = themePreferenceIcons[themePreference];
-          const isSelected = preference === themePreference;
           const inputId = `${id}-${themePreference}`;
 
           return (
-            <label key={themePreference} htmlFor={inputId} className="min-w-0">
-              <input
-                id={inputId}
-                type="radio"
-                name={id}
-                value={themePreference}
-                checked={isSelected}
-                className="peer sr-only"
-                onChange={() => updatePreference(themePreference)}
-              />
-              <span
-                className={cn(
-                  "inline-flex min-h-9 items-center gap-1.5 rounded-md border border-transparent px-2.5 py-1.5 transition-colors peer-focus-visible:border-ring peer-focus-visible:ring-3 peer-focus-visible:ring-ring/50",
-                  isSelected
-                    ? "bg-primary text-[var(--primary-foreground)]"
-                    : "text-muted-foreground hover:bg-secondary hover:text-foreground",
-                )}
-              >
-                <Icon className="size-3.5" aria-hidden="true" />
-                <span>{themePreferenceLabels[themePreference]}</span>
-                {isSelected ? (
-                  <CheckIcon className="size-3.5" aria-hidden="true" />
-                ) : null}
-              </span>
-            </label>
+            <ThemePreferenceOption
+              key={themePreference}
+              id={inputId}
+              name={id}
+              preference={themePreference}
+              isSelected={preference === themePreference}
+              onSelect={selectPreference}
+            />
           );
         })}
       </div>
     </fieldset>
   );
+}
+
+export function ThemeToggleButton({
+  id,
+  className,
+  open,
+  onOpenChange,
+}: ThemeToggleButtonProps) {
+  const { preference } = useThemePreference();
+  const [internalOpen, setInternalOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const Icon = themePreferenceIcons[preference];
+  const isOpen = open ?? internalOpen;
+
+  const setPopoverOpen = useCallback(
+    (nextOpen: boolean) => {
+      if (open === undefined) {
+        setInternalOpen(nextOpen);
+      }
+
+      onOpenChange?.(nextOpen);
+    },
+    [onOpenChange, open],
+  );
+
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
+    const closePopover = () => setPopoverOpen(false);
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") {
+        return;
+      }
+
+      closePopover();
+      buttonRef.current?.focus();
+    };
+    const closeOnOutsidePointer = (event: PointerEvent) => {
+      if (rootRef.current?.contains(event.target as Node)) {
+        return;
+      }
+
+      closePopover();
+    };
+
+    window.addEventListener("keydown", closeOnEscape);
+    document.addEventListener("pointerdown", closeOnOutsidePointer);
+
+    return () => {
+      window.removeEventListener("keydown", closeOnEscape);
+      document.removeEventListener("pointerdown", closeOnOutsidePointer);
+    };
+  }, [isOpen, setPopoverOpen]);
+
+  return (
+    <div ref={rootRef} className={cn("relative", className)}>
+      <button
+        ref={buttonRef}
+        type="button"
+        className="inline-flex min-h-10 min-w-10 items-center justify-center rounded-lg border border-border/80 bg-card/80 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+        aria-controls={`${id}-panel`}
+        aria-expanded={isOpen}
+        aria-haspopup="dialog"
+        aria-label={`Alterar tema da interface. Tema atual: ${themePreferenceLabels[preference]}`}
+        onClick={() => setPopoverOpen(!isOpen)}
+      >
+        <Icon aria-hidden="true" className="size-4" />
+      </button>
+
+      {isOpen ? (
+        <div
+          id={`${id}-panel`}
+          className="absolute right-0 top-full z-30 mt-2 w-56"
+        >
+          <ThemeTogglePanel
+            id={`${id}-options`}
+            className="bg-background/98 shadow-[var(--shadow-brand-lift)]"
+            onPreferenceChange={() => setPopoverOpen(false)}
+          />
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+export function ThemeToggle(props: ThemeTogglePanelProps) {
+  return <ThemeTogglePanel {...props} />;
 }

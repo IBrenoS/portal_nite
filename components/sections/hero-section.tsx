@@ -22,7 +22,6 @@ export function HeroSection() {
       >
         <Reveal
           className="relative z-10 order-2 flex max-w-[43rem] flex-col items-center gap-8 text-center sm:order-none sm:gap-9 lg:max-w-[47rem] lg:items-start lg:pl-16 lg:text-left xl:max-w-[48rem]"
-          data-hero-copy=""
         >
           <div className="flex flex-col gap-5 sm:gap-6">
             <p className="mx-auto max-w-[40rem] font-mono text-xs uppercase tracking-[0.18em] text-brand-circuit-bright lg:mx-0">
