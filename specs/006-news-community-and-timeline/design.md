@@ -97,6 +97,56 @@ Comportamento visual:
 - Evidencia ausente nao deve ser simulada.
 - Nenhum marco deve ser inventado.
 
+## Living Timeline Premium
+
+A Living Timeline e a evolucao premium da timeline institucional. O nome interno e `Living Timeline`; o nome publico sugerido deve ser validado entre "Linha do tempo do NITE" e "NITE em evolucao".
+
+Seu papel e construir uma narrativa historica viva do nucleo. Ela nao duplica Projetos, Atualizacoes nem Oportunidades:
+
+- Projetos mostram frentes e iniciativas.
+- Atualizacoes mostram registros publicados e movimento recente.
+- Oportunidades mostram processos e participacao.
+- Living Timeline mostra marcos institucionais em sequencia cronologica validada.
+
+### Conteudo
+
+A experiencia deve aceitar apenas marcos validados: fundacao ou inicio formal, mudancas institucionais, abertura de frentes, maturidade, parcerias autorizadas, eventos institucionais, entregas publicas validadas, publicacoes e reconhecimentos autorizados.
+
+Nao deve exibir projetos como finalizados sem validacao, resultados nao comprovados, datas incertas como oficiais, fotos sem autorizacao, depoimentos sem autorizacao, metricas nao verificadas, eventos ou oficinas nao confirmados, nem conteudo demonstrativo ou placeholder como historico real.
+
+### Desktop
+
+No desktop, a secao pode ganhar protagonismo visual:
+
+- Card ou viewport expandido dentro da pagina.
+- Maior area de leitura e foco visual quando a secao entra na viewport.
+- Progressao de marcos ligada ao scroll, quando tecnicamente seguro.
+- Avanco e retrocesso de marcos pelo scroll.
+- Transicoes suaves de entrada e saida.
+- Botoes ou controles equivalentes para avancar, voltar e acessar marcos por teclado.
+- Saida natural da secao, sem prender o usuario.
+- Proibido scroll hijacking agressivo.
+
+### Mobile
+
+No mobile, a Living Timeline deve priorizar leitura:
+
+- Cards verticais ou sequenciais.
+- Sem autoplay obrigatorio.
+- Sem parallax pesado.
+- Sem travar scroll.
+- Navegacao simples por toque e teclado.
+- Conteudo textual sempre compreensivel sem efeito visual.
+- Baixo custo de JavaScript e imagens.
+
+### Motion e reduced motion
+
+Motion e opcional e subordinado ao conteudo. A timeline deve funcionar como lista ou cards estaticos com `prefers-reduced-motion`. Nenhuma informacao pode existir apenas no movimento. Periodos, status e tipos de marco devem ser textuais, foco deve ser visivel, contraste deve seguir AA e a ordem semantica deve permanecer compreensivel.
+
+### Hipoteses tecnicas futuras
+
+A implementacao futura pode avaliar `view-timeline`, `scroll-timeline`, `IntersectionObserver` e Framer Motion, desde que a solucao respeite reduced motion, nao use listeners de scroll pesados e seja validada em desktop, mobile, teclado e performance antes de release.
+
 ## Depoimentos
 
 Depoimentos sao opcionais.
@@ -135,15 +185,15 @@ As rotas abaixo devem aparecer apenas como roadmap documental, sem parecer funci
 
 ## Estados esperados
 
-| Estado | Comportamento esperado |
-|---|---|
-| Sem atualizacoes publicadas | Informa ausencia de registros sem parecer erro |
-| Atualizacoes publicadas | Exibe cards com titulo, resumo, categoria e data quando disponivel |
-| Atualizacao sem imagem | Mantem card consistente com fallback visual |
-| Imagem sem autorizacao | Nao exibe a imagem |
-| Depoimento sem autorizacao | Nao exibe o depoimento |
-| Timeline sem marcos validados | Omite timeline ou marca como pendente |
-| Rota futura | Mantem como futura, sem link obrigatorio |
+| Estado                        | Comportamento esperado                                             |
+| ----------------------------- | ------------------------------------------------------------------ |
+| Sem atualizacoes publicadas   | Informa ausencia de registros sem parecer erro                     |
+| Atualizacoes publicadas       | Exibe cards com titulo, resumo, categoria e data quando disponivel |
+| Atualizacao sem imagem        | Mantem card consistente com fallback visual                        |
+| Imagem sem autorizacao        | Nao exibe a imagem                                                 |
+| Depoimento sem autorizacao    | Nao exibe o depoimento                                             |
+| Timeline sem marcos validados | Omite timeline ou marca como pendente                              |
+| Rota futura                   | Mantem como futura, sem link obrigatorio                           |
 
 ## Regras de linguagem
 

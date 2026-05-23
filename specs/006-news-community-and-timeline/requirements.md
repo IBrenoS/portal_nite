@@ -107,6 +107,95 @@ A timeline deve prever:
 
 A timeline nao deve inventar acontecimentos, datas, oficinas, eventos, publicacoes ou resultados. Textos devem ser curtos e permitir entender a evolucao historica sem depender de blocos longos.
 
+## Living Timeline Premium
+
+Nome interno: `Living Timeline`.
+
+Nome publico sugerido, a validar antes da implementacao: "Linha do tempo do NITE" ou "NITE em evolucao".
+
+A Living Timeline e uma narrativa institucional viva. Ela nao e feed de noticias, nao e lista de projetos e nao substitui a pagina de oportunidades. Seu papel e mostrar a evolucao historica e institucional do NITE por marcos validados, com contexto suficiente para reforcar credibilidade, continuidade e maturidade.
+
+### Diferenca entre areas
+
+- Projetos: portfolio de frentes, iniciativas e projetos com status proprio.
+- Atualizacoes: registros publicados, noticias/contextos e movimento recente quando houver conteudo validado.
+- Oportunidades: processos, participacao e estados de selecao.
+- Living Timeline: narrativa historica/cronologica institucional, com marcos que explicam evolucao e maturidade do nucleo.
+
+### Conteudo permitido
+
+A Living Timeline pode exibir apenas marcos validados e autorizados, como:
+
+- Fundacao ou inicio formal do nucleo.
+- Mudancas institucionais relevantes.
+- Abertura de frentes de atuacao.
+- Marcos de maturidade.
+- Parcerias autorizadas.
+- Eventos institucionais relevantes.
+- Entregas publicas validadas.
+- Publicacoes ou reconhecimentos autorizados.
+
+### Conteudo proibido sem validacao
+
+A Living Timeline nao pode publicar:
+
+- Projetos como se fossem finalizados sem validacao.
+- Resultados nao comprovados.
+- Datas incertas como datas oficiais.
+- Fotos sem autorizacao.
+- Depoimentos sem autorizacao.
+- Metricas nao verificadas.
+- Eventos ou oficinas nao confirmados.
+- Conteudo demonstrativo ou placeholder como se fosse historico real.
+
+### Comportamento desktop desejado
+
+No desktop, a Living Timeline deve ter protagonismo visual:
+
+- Secao premium com card ou viewport expandido.
+- Ao entrar na area, a timeline ganha mais presenca na viewport sem esconder o restante da pagina.
+- Progressao de marcos pode estar ligada ao scroll.
+- Scroll pode avancar ou retroceder marcos, desde que o usuario mantenha controle.
+- Transicoes suaves podem orientar entrada e saida de marcos.
+- Scroll hijacking agressivo e proibido.
+- A experiencia nao deve prender o usuario indefinidamente na secao.
+- Deve existir fallback de navegacao por botoes e teclado.
+
+### Comportamento mobile desejado
+
+No mobile, a experiencia deve ser simples e leve:
+
+- Sem autoplay obrigatorio.
+- Sem parallax pesado.
+- Sem travar o scroll do usuario.
+- Leitura vertical ou cards sequenciais.
+- Navegacao simples por toque e teclado.
+- Baixo custo de performance.
+- Conteudo textual acima do efeito visual.
+
+### Motion, acessibilidade e reduced motion
+
+- Respeitar `prefers-reduced-motion`.
+- Em reduced motion, exibir a timeline como lista ou cards estaticos.
+- Todos os marcos devem ser acessiveis por teclado.
+- Periodos, status e tipos de marco devem ser textuais.
+- Nenhuma informacao pode depender apenas de animacao, scroll ou parallax.
+- Foco visivel deve ser preservado.
+- Contraste deve seguir WCAG AA e Specs 003/007.
+- A ordem semantica deve permitir leitura completa sem executar animacao.
+
+### Estrategia tecnica futura
+
+A implementacao futura deve ser validada antes de publicar e pode considerar:
+
+- CSS scroll-driven animations, como `view-timeline` ou `scroll-timeline`, quando houver suporte suficiente.
+- `IntersectionObserver` para ativacao, progresso e fallback sem listeners de scroll pesados.
+- Framer Motion apenas se continuar no stack e com suporte claro a `prefers-reduced-motion`.
+- Evitar listeners de scroll caros ou atualizacoes por frame sem necessidade.
+- Validar desktop, mobile, teclado, reduced motion e performance antes de release.
+
+Quando nao houver marcos validados, a Living Timeline deve manter o fallback honesto ja previsto: estado pendente ou omissao da timeline, sem marcos ficticios.
+
 ## Requisitos funcionais - depoimentos autorizados
 
 Depoimentos sao conteudo opcional.
@@ -152,57 +241,71 @@ Galeria futura nao deve ser tratada como requisito obrigatorio do MVP.
 
 ```ts
 type Update = {
-  id: string
-  slug?: string
-  title: string
-  summary: string
-  category: 'bastidores' | 'evento' | 'oficina' | 'projeto' | 'comunidade' | 'marco' | 'oportunidade' | 'registro'
-  publishedAt?: string
-  image?: Media
-  author?: string
-  relatedProjectSlug?: string
-  content?: string
-  status: 'draft' | 'published' | 'archived'
-}
+  id: string;
+  slug?: string;
+  title: string;
+  summary: string;
+  category:
+    | "bastidores"
+    | "evento"
+    | "oficina"
+    | "projeto"
+    | "comunidade"
+    | "marco"
+    | "oportunidade"
+    | "registro";
+  publishedAt?: string;
+  image?: Media;
+  author?: string;
+  relatedProjectSlug?: string;
+  content?: string;
+  status: "draft" | "published" | "archived";
+};
 ```
 
 ## Modelo de marco da timeline
 
 ```ts
 type TimelineMilestone = {
-  id: string
-  title: string
-  period: string
-  description: string
-  type?: 'estruturacao' | 'projeto' | 'evento' | 'oficina' | 'publicacao' | 'marco'
-  evidenceUrl?: string
-}
+  id: string;
+  title: string;
+  period: string;
+  description: string;
+  type?:
+    | "estruturacao"
+    | "projeto"
+    | "evento"
+    | "oficina"
+    | "publicacao"
+    | "marco";
+  evidenceUrl?: string;
+};
 ```
 
 ## Modelo de depoimento
 
 ```ts
 type Testimonial = {
-  id: string
-  personName: string
-  roleOrRelation: string
-  quote: string
-  authorized: boolean
-  image?: Media
-  publishedAt?: string
-}
+  id: string;
+  personName: string;
+  roleOrRelation: string;
+  quote: string;
+  authorized: boolean;
+  image?: Media;
+  publishedAt?: string;
+};
 ```
 
 ## Modelo de midia
 
 ```ts
 type Media = {
-  id: string
-  url: string
-  alt: string
-  caption?: string
-  authorized: boolean
-}
+  id: string;
+  url: string;
+  alt: string;
+  caption?: string;
+  authorized: boolean;
+};
 ```
 
 ## Categorias sugeridas
@@ -220,11 +323,11 @@ Categorias so devem organizar conteudo real validado; nao devem sugerir publicac
 
 ## Status de atualizacao
 
-| Status tecnico | Label publica | Uso esperado |
-|---|---|---|
-| `draft` | Em preparacao | Conteudo interno ou pendente de validacao |
-| `published` | Publicado | Conteudo validado e publicavel |
-| `archived` | Arquivado | Conteudo historico ou retirado de destaque |
+| Status tecnico | Label publica | Uso esperado                               |
+| -------------- | ------------- | ------------------------------------------ |
+| `draft`        | Em preparacao | Conteudo interno ou pendente de validacao  |
+| `published`    | Publicado     | Conteudo validado e publicavel             |
+| `archived`     | Arquivado     | Conteudo historico ou retirado de destaque |
 
 ## Estados vazios, pendentes e ausentes
 

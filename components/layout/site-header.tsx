@@ -37,14 +37,45 @@ const HEADER_COLLAPSE_END = 96;
 const HEADER_COLLAPSE_STATE_AT = 72;
 const HEADER_EFFECT_STATE_AT = 10;
 const HEADER_MOTION_EASE = [0.22, 1, 0.36, 1] as const;
+const MOBILE_MENU_FOCUSABLE_SELECTOR = [
+  "a[href]",
+  "button:not([disabled])",
+  "input:not([disabled])",
+  "select:not([disabled])",
+  "textarea:not([disabled])",
+  '[tabindex]:not([tabindex="-1"])',
+].join(",");
 type HeaderGroupId = SiteNavigationGroup["id"];
 type HeaderMotionTransition = {
   duration: number;
   ease?: typeof HEADER_MOTION_EASE;
 };
 
+function getFocusableMenuElements(container: HTMLElement | null) {
+  if (!container) {
+    return [];
+  }
+
+  return Array.from(
+    container.querySelectorAll<HTMLElement>(MOBILE_MENU_FOCUSABLE_SELECTOR),
+  ).filter((element) => {
+    const isDisabled =
+      element.getAttribute("aria-disabled") === "true" ||
+      element.hasAttribute("disabled");
+    const isHidden =
+      element.getAttribute("aria-hidden") === "true" ||
+      element.closest('[aria-hidden="true"]');
+
+    return !isDisabled && !isHidden && element.tabIndex >= 0;
+  });
+}
+
 export function SiteHeader() {
   const headerRef = useRef<HTMLElement | null>(null);
+  const mobileMenuRef = useRef<HTMLDivElement | null>(null);
+  const mobileMenuButtonRef = useRef<HTMLButtonElement | null>(null);
+  const lastMobileTabDirectionRef = useRef<"forward" | "backward">("forward");
+  const wasMobileMenuOpenRef = useRef(false);
   const activeDesktopGroupRef = useRef<HeaderGroupId | null>(null);
   const desktopCloseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
     null,
@@ -155,17 +186,27 @@ export function SiteHeader() {
     setIsCollapsed(latest >= HEADER_COLLAPSE_STATE_AT);
   });
 
+  const closeAllMenus = useCallback(() => {
+    cancelDesktopClose();
+    setIsThemePopoverOpen(false);
+    setActiveDesktopGroup(null);
+    setIsMobileMenuOpen(false);
+    setActiveMobileGroup(null);
+  }, [
+    cancelDesktopClose,
+    setActiveDesktopGroup,
+    setActiveMobileGroup,
+    setIsMobileMenuOpen,
+    setIsThemePopoverOpen,
+  ]);
+
   useEffect(() => {
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key !== "Escape") {
         return;
       }
 
-      cancelDesktopClose();
-      setActiveDesktopGroup(null);
-      setIsMobileMenuOpen(false);
-      setActiveMobileGroup(null);
-      setIsThemePopoverOpen(false);
+      closeAllMenus();
     };
     const closeOnOutsidePointer = (event: PointerEvent) => {
       if (
@@ -220,7 +261,106 @@ export function SiteHeader() {
       document.removeEventListener("pointermove", closeOnOutsidePointerMove);
       document.removeEventListener("mousemove", closeOnOutsideMouseMove);
     };
-  }, [cancelDesktopClose, scheduleDesktopClose]);
+  }, [cancelDesktopClose, closeAllMenus, scheduleDesktopClose]);
+
+  useEffect(() => {
+    if (!isMobileMenuOpen) {
+      if (wasMobileMenuOpenRef.current) {
+        window.requestAnimationFrame(() => {
+          mobileMenuButtonRef.current?.focus();
+        });
+      }
+
+      wasMobileMenuOpenRef.current = false;
+      return;
+    }
+
+    wasMobileMenuOpenRef.current = true;
+  }, [isMobileMenuOpen]);
+
+  useEffect(() => {
+    if (!isMobileMenuOpen) {
+      return;
+    }
+
+    const keepFocusInsideMobileMenu = (event: KeyboardEvent) => {
+      if (event.key !== "Tab") {
+        return;
+      }
+
+      lastMobileTabDirectionRef.current = event.shiftKey
+        ? "backward"
+        : "forward";
+      const focusableElements = getFocusableMenuElements(mobileMenuRef.current);
+
+      if (focusableElements.length === 0) {
+        event.preventDefault();
+        mobileMenuRef.current?.focus();
+        return;
+      }
+
+      const firstFocusable = focusableElements[0];
+      const lastFocusable = focusableElements[focusableElements.length - 1];
+      const activeElement = document.activeElement;
+
+      if (!firstFocusable || !lastFocusable) {
+        return;
+      }
+
+      if (!mobileMenuRef.current?.contains(activeElement)) {
+        event.preventDefault();
+        (event.shiftKey ? lastFocusable : firstFocusable).focus();
+        return;
+      }
+
+      if (event.shiftKey && activeElement === firstFocusable) {
+        event.preventDefault();
+        lastFocusable.focus();
+        return;
+      }
+
+      if (!event.shiftKey && activeElement === lastFocusable) {
+        event.preventDefault();
+        firstFocusable.focus();
+      }
+    };
+
+    document.addEventListener("keydown", keepFocusInsideMobileMenu);
+
+    return () => {
+      document.removeEventListener("keydown", keepFocusInsideMobileMenu);
+    };
+  }, [isMobileMenuOpen]);
+
+  useEffect(() => {
+    if (!isMobileMenuOpen) {
+      return;
+    }
+
+    const redirectFocusToMobileMenu = (event: FocusEvent) => {
+      if (
+        !mobileMenuRef.current ||
+        (event.target instanceof Node &&
+          mobileMenuRef.current.contains(event.target))
+      ) {
+        return;
+      }
+
+      const focusableElements = getFocusableMenuElements(mobileMenuRef.current);
+      const fallbackTarget =
+        lastMobileTabDirectionRef.current === "backward"
+          ? focusableElements[focusableElements.length - 1]
+          : focusableElements[0];
+
+      fallbackTarget?.focus();
+    };
+
+    document.addEventListener("focusin", redirectFocusToMobileMenu);
+
+    return () => {
+      document.removeEventListener("focusin", redirectFocusToMobileMenu);
+    };
+  }, [isMobileMenuOpen]);
 
   const openDesktopGroup = (groupId: HeaderGroupId) => {
     cancelDesktopClose();
@@ -259,14 +399,6 @@ export function SiteHeader() {
 
   const openMobileGroup = (groupId: HeaderGroupId) => {
     setActiveMobileGroup(groupId);
-  };
-
-  const closeAllMenus = () => {
-    cancelDesktopClose();
-    setIsThemePopoverOpen(false);
-    setActiveDesktopGroup(null);
-    setIsMobileMenuOpen(false);
-    setActiveMobileGroup(null);
   };
 
   return (
@@ -338,6 +470,7 @@ export function SiteHeader() {
           </ButtonPrimaryLink>
 
           <button
+            ref={mobileMenuButtonRef}
             type="button"
             className="inline-flex min-h-11 items-center justify-center rounded-md border border-border bg-card px-3 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-secondary focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 lg:hidden"
             aria-controls="site-mobile-navigation"
@@ -409,9 +542,14 @@ export function SiteHeader() {
       <AnimatePresence>
         {isMobileMenuOpen ? (
           <motion.div
+            ref={mobileMenuRef}
             id="site-mobile-navigation"
             className="fixed inset-x-0 top-0 z-50 min-h-dvh overflow-y-auto border-b border-border bg-background/98 backdrop-blur-xl lg:hidden"
             data-mobile-layered-menu=""
+            role="dialog"
+            aria-modal="true"
+            aria-label="Navegação principal mobile"
+            tabIndex={-1}
             initial={reduceMotion ? false : { opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
@@ -555,6 +693,12 @@ function MobileNavigationRoot({
   reduceMotion: boolean;
   transition: HeaderMotionTransition;
 }) {
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  useEffect(() => {
+    closeButtonRef.current?.focus();
+  }, []);
+
   return (
     <motion.div
       className="grid gap-4"
@@ -572,6 +716,7 @@ function MobileNavigationRoot({
           <UnijorgeBrandText className="text-xs font-bold uppercase tracking-[0.14em]" />
         </div>
         <button
+          ref={closeButtonRef}
           type="button"
           className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-border bg-card text-foreground transition-colors hover:bg-secondary focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
           aria-label="Fechar menu"
@@ -619,6 +764,12 @@ function MobileNavigationDetail({
   reduceMotion: boolean;
   transition: HeaderMotionTransition;
 }) {
+  const backButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  useEffect(() => {
+    backButtonRef.current?.focus();
+  }, []);
+
   return (
     <motion.div
       id={`site-mobile-group-${group.id}`}
@@ -631,6 +782,7 @@ function MobileNavigationDetail({
     >
       <div className="flex min-h-12 items-center justify-between gap-3">
         <button
+          ref={backButtonRef}
           type="button"
           className="inline-flex min-h-11 items-center gap-2 rounded-md border border-border bg-card px-3 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-secondary focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
           onClick={onBack}

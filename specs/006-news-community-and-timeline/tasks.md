@@ -14,6 +14,12 @@
 - [x] Definir modelo de midia. Evidencia: `Media` consolidado em requirements.md.
 - [x] Definir estrutura do UpdateCard. Evidencia: Estrutura informacional e visual documentada em design.md.
 - [x] Definir estrutura da Timeline. Evidencia: Estrutura informacional e visual documentada em design.md.
+- [x] Definir conceito da Living Timeline Premium. Evidencia: Spec 006 registra nome interno `Living Timeline`, nomes publicos sugeridos "Linha do tempo do NITE" ou "NITE em evolucao" a validar, e papel como narrativa historica institucional viva.
+- [x] Separar Living Timeline de Projetos, Atualizacoes e Oportunidades. Evidencia: requirements.md e design.md distinguem portfolio de projetos, registros publicados, processos de participacao e narrativa cronologica institucional.
+- [x] Definir regras de conteudo permitido e proibido para Living Timeline. Evidencia: Spec 006 limita marcos a conteudo validado/autorizado e proibe datas incertas, resultados nao comprovados, fotos/depoimentos sem autorizacao, metricas nao verificadas e placeholders como historico real.
+- [x] Definir comportamento premium desktop e comportamento simplificado mobile. Evidencia: design.md registra secao com card/viewport expandido, progressao por scroll sem scroll hijacking agressivo, controles por teclado, e mobile em cards/lista leve sem autoplay, parallax pesado ou travamento de scroll.
+- [x] Definir requisitos de motion, acessibilidade e reduced motion da Living Timeline. Evidencia: Spec 006 exige `prefers-reduced-motion`, experiencia estatica em lista/cards, foco visivel, contraste AA, periodos/status textuais e conteudo independente de animacao.
+- [x] Registrar hipoteses tecnicas futuras da Living Timeline sem implementar. Evidencia: Spec 006 registra avaliacao futura de `view-timeline`, `scroll-timeline`, `IntersectionObserver` e Framer Motion apenas com performance, reduced motion e validacao desktop/mobile.
 - [x] Definir campo de data de publicacao. Evidencia: `publishedAt` documentado como campo opcional validado.
 - [x] Definir campo de autor/responsavel, se aplicavel. Evidencia: `author` documentado como opcional e dependente de validacao.
 - [x] Definir campo de imagem de capa. Evidencia: `image?: Media` documentado com regra de autorizacao e alt.
@@ -28,7 +34,12 @@
 - [x] Criar componente UpdateCard. Evidencia: `UpdateCard` consolidado em `components/sections/update-card.tsx` com titulo, resumo, categoria oficial opcional, data/autor opcionais, imagem opcional com alt, href opcional, heading configuravel e testes unitarios no design system.
 - [x] Criar componente TimelineItem. Evidencia: `TimelineItem` consolidado em `components/sections/timeline-item.tsx` com titulo, descricao, rotulo temporal opcional, categoria/status textuais opcionais, href opcional, heading configuravel e fallback sem evidencia publica.
 - [x] Sinalizar timeline narrativa da Home como pendente quando nao houver marcos confirmados. Evidencia: `app/page.tsx` filtra eventos com `sourceStatus === "confirmado"`, nao publica eventos placeholder/demonstrativos como historico real e exibe o estado textual "Linha do tempo em preparacao"; `tests/unit/home-page.test.tsx` cobre o estado pendente e a ausencia dos itens demonstrativos.
-- [ ] Criar componente Timeline. Nota: `TimelineItem` estrutural esta concluido; container/lista de timeline real e publicacao de marcos validados permanecem pendentes.
+- [ ] Criar componente Living Timeline. Nota: `TimelineItem` estrutural esta concluido; container premium, progressao visual, controles acessiveis e publicacao de marcos validados permanecem pendentes.
+- [ ] Validar prototipo da Living Timeline em desktop sem scroll hijacking agressivo.
+- [ ] Validar versao mobile simplificada da Living Timeline sem autoplay obrigatorio, parallax pesado ou travamento de scroll.
+- [ ] Validar experiencia da Living Timeline com `prefers-reduced-motion` como lista/cards estaticos.
+- [ ] Validar navegacao por teclado, foco visivel e controles de avancar/voltar da Living Timeline.
+- [ ] Validar custo de performance da Living Timeline antes de publicar.
 - [ ] Criar componente TestimonialCard, se houver depoimentos autorizados.
 - [ ] Criar lista ou grid de atualizacoes.
 - [x] Criar estado vazio para ausencia de atualizacoes publicadas. Evidencia: `/atualizacoes` exibe estado textual "No momento, ainda nao ha atualizacoes publicadas." e avisa que conteudos reais dependem de validacao/autorizacao.

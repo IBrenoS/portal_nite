@@ -1,8 +1,23 @@
-import { render, screen, within } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import {
+  cleanup,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { afterEach, describe, expect, it } from "vitest";
 
 import HomePage from "@/app/page";
 import { validateNiteSvgContract } from "@/components/ui/validate-nite-svg-contract";
+
+afterEach(() => {
+  cleanup();
+  window.localStorage.clear();
+  document.documentElement.removeAttribute("data-theme");
+  document.documentElement.removeAttribute("data-theme-preference");
+  document.documentElement.classList.remove("dark");
+});
 
 describe("HomePage", () => {
   it("renderiza a home pública sem rótulos internos", () => {
@@ -278,5 +293,89 @@ describe("HomePage", () => {
       shimmer: 3,
       overlays: 1,
     });
+  });
+
+  it("mantem o foco dentro do menu mobile em camadas", async () => {
+    const user = userEvent.setup();
+
+    render(<HomePage />);
+
+    const menuButton = screen.getByRole("button", { name: "Menu" });
+
+    await user.click(menuButton);
+
+    const mobileMenu = screen.getByRole("dialog", {
+      name: "Navegação principal mobile",
+    });
+    const closeButton = within(mobileMenu).getByRole("button", {
+      name: "Fechar menu",
+    });
+    const darkThemeOption = within(mobileMenu).getByRole("radio", {
+      name: "Escuro",
+    });
+
+    await waitFor(() => expect(closeButton).toHaveFocus());
+
+    await user.tab({ shift: true });
+
+    expect(darkThemeOption).toHaveFocus();
+
+    await user.tab();
+
+    expect(closeButton).toHaveFocus();
+
+    await user.click(
+      within(mobileMenu).getByRole("button", { name: "Projetos" }),
+    );
+
+    const backButton = await within(mobileMenu).findByRole("button", {
+      name: /Voltar/i,
+    });
+
+    await waitFor(() => expect(backButton).toHaveFocus());
+
+    await user.click(backButton);
+
+    await waitFor(() =>
+      expect(
+        within(mobileMenu).getByRole("button", { name: "Fechar menu" }),
+      ).toHaveFocus(),
+    );
+
+    const lightThemeOption = within(mobileMenu).getByRole("radio", {
+      name: "Claro",
+    });
+
+    await user.click(lightThemeOption);
+
+    expect(window.localStorage.getItem("nite-theme")).toBe("light");
+    expect(document.documentElement).toHaveAttribute("data-theme", "light");
+
+    await user.keyboard("{Escape}");
+
+    await waitFor(() =>
+      expect(
+        screen.queryByRole("dialog", { name: "Navegação principal mobile" }),
+      ).not.toBeInTheDocument(),
+    );
+
+    await waitFor(() => expect(menuButton).toHaveFocus());
+
+    await user.click(menuButton);
+
+    const reopenedMobileMenu = screen.getByRole("dialog", {
+      name: "Navegação principal mobile",
+    });
+
+    await user.click(
+      within(reopenedMobileMenu).getByRole("button", { name: "Fechar menu" }),
+    );
+
+    await waitFor(() =>
+      expect(
+        screen.queryByRole("dialog", { name: "Navegação principal mobile" }),
+      ).not.toBeInTheDocument(),
+    );
+    await waitFor(() => expect(menuButton).toHaveFocus());
   });
 });

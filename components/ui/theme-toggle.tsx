@@ -206,10 +206,6 @@ export function ThemeTogglePanel({
       data-theme-toggle=""
       data-theme-preference={preference}
     >
-      <legend className="sr-only">Tema da interface</legend>
-      <p className="px-1 pb-2 text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-        Tema da interface
-      </p>
       <div className="grid gap-1">
         {themePreferences.map((themePreference) => {
           const inputId = `${id}-${themePreference}`;

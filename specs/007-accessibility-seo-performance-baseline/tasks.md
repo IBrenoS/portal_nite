@@ -28,7 +28,7 @@
 - [ ] Validar que status nao dependem apenas de cor.
 - [ ] Validar headings em ordem logica.
 - [ ] Validar landmarks semanticos.
-- [ ] Validar header, MegaMenu desktop e menu mobile em camadas por teclado.
+- [x] Validar header, MegaMenu desktop e menu mobile em camadas por teclado. Evidencia: menu mobile em camadas validado com contencao de foco `Tab`/`Shift+Tab`, Escape, Fechar, Voltar e Theme Toggle interno; Header/MegaMenu desktop preservados sem alteracao de comportamento.
 - [ ] Validar cards de projeto, atualizacao e oportunidade por teclado.
 - [ ] Validar filtros por teclado e estado ativo acessivel.
 - [ ] Validar timeline sem dependencia de animacao.
