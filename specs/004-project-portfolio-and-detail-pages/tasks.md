@@ -31,23 +31,24 @@
 - [x] Criar secao de ultima atualizacao. Evidencia: painel lateral exibe data formatada quando `contentState` e real e fallback "Pendente de validacao publica" para frentes em estruturacao.
 - [x] Criar secao de proximos passos. Evidencia: pagina individual renderiza secao "Proximo passo" com `project.nextStep`.
 - [x] Criar secao de evidencias. Evidencia: pagina individual renderiza "Evidencias e metricas" e usa `EmptyState` quando nao ha metricas ou resultados validados.
-- [ ] Criar secao de resultado gerado, quando houver material real validado. Parcial: existe secao condicional "Resultados", mas o conteudo atual do JSON permanece em estruturacao editorial; manter aberta ate haver resultado real validado e autorizado.
+- [ ] Criar secao de resultado gerado, quando houver material real validado. Parcial: `/projetos/[slug]` renderiza "Resultados" somente quando `contentState === "real"` e `results` existe, com fixture real coberta em teste; manter aberta ate haver resultado real validado e autorizado no conteudo oficial.
 - [x] Criar fallback para projeto sem evidencias publicas. Evidencia: ProjectCard, pagina de detalhe e teste `project-detail-page` exibem fallback textual para imagem/evidencia publica indisponivel.
 - [x] Criar estado vazio para portfolio sem projetos. Evidencia: `/projetos` renderiza `EmptyState` textual quando a colecao de projetos estiver vazia.
 - [x] Criar estado sem resultados para filtros. Evidencia: `/projetos` exibe `EmptyState` textual quando a combinacao de status e area nao retorna cards.
 - [x] Implementar filtro por status. Evidencia: `/projetos` usa controles de botao com `aria-pressed`, opcao "Todos", contagens derivadas dos dados e status oficiais da ADR-006.
 - [x] Implementar filtro por area. Evidencia: `/projetos` gera opcoes de area a partir das categorias existentes no JSON, inclui opcao "Todas" e combina area com status.
 - [x] Validar foco visivel em filtros, cards e links. Evidencia: validacao browser em `/projetos` confirmou foco programatico em filtro e link de card com classes `focus-visible` do sistema.
-- [ ] Validar responsividade dos cards. Parcial: auditoria browser confirmou ausencia de scroll horizontal em desktop e mobile, mas responsividade ampla e aceite visual formal permanecem pendentes.
-- [ ] Validar leitura em mobile. Parcial: auditoria browser cobriu viewport mobile e ausencia de scroll horizontal, mas leitura mobile completa permanece pendente de validacao dedicada.
+- [x] Validar responsividade dos cards. Evidencia: validacao browser em `/`, `/projetos` e `/projetos/software-aplicado` confirmou desktop 1440px e mobile 390px sem scroll horizontal, com `ProjectCard` preservado na Home e na listagem.
+- [x] Validar leitura em mobile. Evidencia: validacao browser em mobile 390px confirmou H1 unico, cards como links reais, filtros operaveis, status textual visivel e detalhe legivel sem overflow horizontal.
 - [x] Validar SEO institucional de `/projetos`. Evidencia: pagina define metadata com titulo, descricao, canonical e JSON-LD de breadcrumb para portfolio.
 - [x] Validar SEO institucional de `/projetos/[slug]`. Evidencia: pagina individual usa `generateMetadata` com `buildProjectMetadata`, canonical por slug, Open Graph/Twitter por projeto e build validado.
-- [ ] Validar que nenhum campo opcional aparece sem autorizacao ou material real. Parcial: listagem, detalhe e testes preservam fallbacks honestos para equipe, evidencias, metricas e datas; validacao completa permanece aberta ate haver conteudo real/autorizado.
+- [x] Validar que nenhum campo opcional aparece sem autorizacao ou material real. Evidencia: detalhe de projeto agora condiciona capa, galeria, resultados, links, entregaveis, metricas e changelog ao modo real quando aplicavel; testes usam fixture real controlada sem alterar o JSON oficial e preservam fallbacks honestos para projetos em estruturacao.
 
 ## Notas de auditoria e pendencias nao bloqueantes
 
 - Auditoria de fechamento da frente de projetos registrada como aprovada com ressalvas documentais. Evidencia: tasks atualizadas para refletir rota `/projetos`, rota `/projetos/[slug]`, ProjectCard, StatusBadge, filtros, estados, SEO e fallbacks ja implementados.
 - Microtask documental executada sem alterar codigo, testes, JSON ou ADRs. Evidencia: apenas este `tasks.md` foi atualizado nesta etapa.
+- Microtask de preparacao da estrutura real executada sem alterar o JSON oficial. Evidencia: detalhe de projeto, metadata social e testes de projeto validam modo real por fixture controlada e preservam modo em estruturacao sem capa, galeria, resultados, entregaveis, links, metricas ou changelog publicos.
 - Pendencia nao bloqueante: avaliar migracao futura do status editorial interno `placeholder` para o modelo ADR-006. Hoje `placeholder` e mapeado para `draft` na UI, sem erro funcional.
 - Pendencia nao bloqueante: avaliar decisao futura de UX para breadcrumbs e links de retorno em `/projetos/[slug]`. Hoje apontam para `/#projetos`; revisar se devem apontar para `/projetos`.
-- Pendencia nao bloqueante: manter responsividade ampla, leitura mobile completa e aceite visual formal como validacoes futuras antes de release.
+- Pendencia nao bloqueante: manter aceite visual formal de release como validacao futura, porque a responsividade dos cards e a leitura mobile basica foram validadas nesta preparacao.

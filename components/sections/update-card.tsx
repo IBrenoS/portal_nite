@@ -193,7 +193,7 @@ function UpdateCardMedia({ image }: { image?: UpdateCardImage }) {
           alt={image.alt}
           fill
           sizes="(max-width: 768px) 100vw, 560px"
-          className="object-cover transition-transform duration-brand-slow ease-brand-out group-hover/card:scale-[1.025]"
+          className="object-cover transition-transform duration-brand-micro ease-brand-out group-hover/card:scale-[1.025]"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-background/12 to-transparent" />
       </div>

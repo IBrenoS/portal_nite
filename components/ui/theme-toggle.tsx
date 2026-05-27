@@ -199,6 +199,7 @@ export function ThemeTogglePanel({
 
   return (
     <fieldset
+      aria-label="Tema da interface"
       className={cn(
         "min-w-0 rounded-xl border border-border/80 bg-card/80 p-2",
         className,

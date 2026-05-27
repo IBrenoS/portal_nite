@@ -103,6 +103,13 @@ function hasProjectPublicEvidence(project: Project) {
   );
 }
 
+function hasProjectResults(project: Project) {
+  return (
+    isProjectPublicationReady(project) &&
+    Boolean(project.results?.trim().length)
+  );
+}
+
 export function generateStaticParams() {
   return getProjectSlugs();
 }
@@ -137,8 +144,17 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const relatedProjects = getRelatedProjects(project.slug);
   const status = projectStatusBadgeByProjectStatus[project.status];
   const isPublicationReady = isProjectPublicationReady(project);
-  const primaryDeliverable = getProjectPrimaryDeliverable(project);
-  const publicTeam = project.team.filter((member) => member.public);
+  const primaryDeliverable = isPublicationReady
+    ? getProjectPrimaryDeliverable(project)
+    : undefined;
+  const publicTeam = isPublicationReady
+    ? project.team.filter((member) => member.public)
+    : [];
+  const hasDeliverables = isPublicationReady && project.deliverables.length > 0;
+  const hasMetrics = isPublicationReady && project.metrics.length > 0;
+  const hasChangelog = isPublicationReady && project.changelog.length > 0;
+  const hasResults = hasProjectResults(project);
+  const hasLinks = isPublicationReady && project.links.length > 0;
   const breadcrumbJsonLd = buildBreadcrumbJsonLd([
     { name: "Início", path: "/" },
     { name: "Projetos", path: "/#projetos" },
@@ -285,16 +301,16 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                   <dt className="text-muted-foreground">Ano</dt>
                   <dd className="mt-1 text-foreground">{project.year}</dd>
                 </div>
-                <div>
-                  <dt className="text-muted-foreground">
-                    Entregável principal
-                  </dt>
-                  <dd className="mt-1 text-foreground">
-                    {primaryDeliverable
-                      ? primaryDeliverable.label
-                      : "Entregável em validação"}
-                  </dd>
-                </div>
+                {primaryDeliverable ? (
+                  <div>
+                    <dt className="text-muted-foreground">
+                      Entregável principal
+                    </dt>
+                    <dd className="mt-1 text-foreground">
+                      {primaryDeliverable.label}
+                    </dd>
+                  </div>
+                ) : null}
               </dl>
             </aside>
 
@@ -391,11 +407,11 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 </section>
               ) : null}
 
-              <section className="grid gap-3">
-                <h2 className="font-heading text-2xl font-semibold text-foreground">
-                  Entregáveis
-                </h2>
-                {project.deliverables.length > 0 ? (
+              {hasDeliverables ? (
+                <section className="grid gap-3">
+                  <h2 className="font-heading text-2xl font-semibold text-foreground">
+                    Entregáveis
+                  </h2>
                   <div className="grid gap-3">
                     {project.deliverables.map((deliverable) => (
                       <article
@@ -429,19 +445,14 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                       </article>
                     ))}
                   </div>
-                ) : (
-                  <EmptyState
-                    title="Entregável em validação"
-                    description="Nenhum entregável público foi associado a esta frente. Quando houver material aprovado, ele será exibido aqui sem link falso."
-                  />
-                )}
-              </section>
+                </section>
+              ) : null}
 
               <section className="grid gap-3">
                 <h2 className="font-heading text-2xl font-semibold text-foreground">
                   Evidências e métricas
                 </h2>
-                {project.metrics.length > 0 ? (
+                {hasMetrics ? (
                   <div className="grid gap-3 sm:grid-cols-3">
                     {project.metrics.map((metric) => (
                       <article
@@ -464,8 +475,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                   </div>
                 ) : (
                   <EmptyState
-                    title="Evidências em estruturação"
-                    description="Métricas e resultados só serão publicados quando houver fonte validada. Esta página não inventa números."
+                    title="Evidências públicas em validação"
+                    description="Resultados, métricas e materiais públicos só serão exibidos quando houver fonte validada. Esta página não inventa números."
                   />
                 )}
               </section>
@@ -504,11 +515,11 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 )}
               </section>
 
-              <section className="grid gap-3">
-                <h2 className="font-heading text-2xl font-semibold text-foreground">
-                  Changelog
-                </h2>
-                {project.changelog.length > 0 ? (
+              {hasChangelog ? (
+                <section className="grid gap-3">
+                  <h2 className="font-heading text-2xl font-semibold text-foreground">
+                    Changelog
+                  </h2>
                   <ol className="grid gap-3">
                     {project.changelog.map((entry) => (
                       <li
@@ -531,13 +542,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                       </li>
                     ))}
                   </ol>
-                ) : (
-                  <EmptyState
-                    title="Changelog em estruturação"
-                    description="As evoluções públicas serão registradas quando houver mudança validada no projeto."
-                  />
-                )}
-              </section>
+                </section>
+              ) : null}
 
               {project.objective ? (
                 <section className="grid gap-3">
@@ -550,7 +556,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 </section>
               ) : null}
 
-              {project.results ? (
+              {hasResults ? (
                 <section className="grid gap-3">
                   <h2 className="font-heading text-2xl font-semibold text-foreground">
                     Resultados
@@ -587,7 +593,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 </section>
               ) : null}
 
-              {project.links.length > 0 ? (
+              {hasLinks ? (
                 <section className="grid gap-3">
                   <h2 className="font-heading text-2xl font-semibold text-foreground">
                     Links

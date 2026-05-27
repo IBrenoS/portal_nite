@@ -2,11 +2,60 @@ import { cleanup, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it } from "vitest";
 
+import type { Project } from "@/biblioteca/esquemas";
 import ProjectsPage, { metadata } from "@/app/projetos/page";
+import { ProjectsFilterableList } from "@/components/sections/projects-filterable-list";
 
 afterEach(() => {
   cleanup();
 });
+
+const realProjectFixture = {
+  slug: "projeto-real-lista",
+  title: "Projeto real na lista",
+  summary:
+    "Resumo controlado para validar card real com capa pública autorizada.",
+  description:
+    "Descrição controlada para validar a listagem de projetos em modo real.",
+  problem:
+    "Confirmar que a listagem usa imagem e data somente para conteúdo real.",
+  context:
+    "Fixture unitária isolada do JSON oficial para preparar o caminho de publicação real.",
+  audience: ["Estudantes"],
+  category: "Programação",
+  year: 2026,
+  status: "ativo",
+  contentState: "real",
+  currentPhase: "Validação pública",
+  lastUpdated: "2026-05-18",
+  nextStep: "Manter evidências públicas revisadas antes de ampliar a página.",
+  coverImage: "/images/projetos/programacao-lab-card.png",
+  alt: "Capa autorizada de teste para projeto real na lista.",
+  featured: true,
+  technologies: ["Next.js", "TypeScript"],
+  deliverables: [
+    {
+      type: "demo",
+      label: "Demo validada",
+      href: "https://example.com/demo",
+      status: "disponivel",
+    },
+  ],
+  metrics: [],
+  team: [],
+  changelog: [],
+  gallery: [
+    {
+      src: "/images/projetos/programacao-lab-card.png",
+      alt: "Galeria autorizada de teste para projeto real na lista.",
+    },
+  ],
+  highlights: [],
+  objective:
+    "Objetivo validado de teste para comprovar a renderização real do card.",
+  results: "Resultado validado de teste para a listagem.",
+  links: [],
+} satisfies Project;
 
 describe("ProjectsPage", () => {
   it("renderiza listagem com ProjectCard, StatusBadge e links reais", () => {
@@ -122,5 +171,22 @@ describe("ProjectsPage", () => {
     expect(metadata.title).toBe("Projetos | NITE");
     expect(metadata.description).toContain("frentes e projetos do NITE");
     expect(metadata.alternates?.canonical?.toString()).toContain("/projetos");
+  });
+
+  it("renderiza ProjectCard em modo real com capa e data via fixture controlada", () => {
+    render(<ProjectsFilterableList projects={[realProjectFixture]} />);
+
+    const card = screen.getByRole("link", { name: /Projeto real na lista/i });
+    const cardContent = within(card);
+
+    expect(card).toHaveAttribute("href", "/projetos/projeto-real-lista");
+    expect(screen.getByAltText(realProjectFixture.alt)).toBeInTheDocument();
+    expect(cardContent.getByText("Em andamento")).toBeInTheDocument();
+    expect(
+      cardContent.getByText("Última atualização: 18/05/2026"),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByText("Imagem ou evidência pública ainda indisponível."),
+    ).not.toBeInTheDocument();
   });
 });

@@ -86,8 +86,14 @@ export function buildProjectMetadata(project: Project): Metadata {
   const title = buildPageTitle(project.seo?.title ?? project.title);
   const description = project.seo?.description ?? project.summary;
   const canonical = absoluteUrl(`/projetos/${project.slug}`);
-  const image = absoluteUrl(project.coverImage);
   const isPlaceholder = project.status === "placeholder";
+  const hasPublicCoverImage = project.contentState === "real";
+  const image = absoluteUrl(
+    hasPublicCoverImage ? project.coverImage : socialImage,
+  );
+  const imageAlt = hasPublicCoverImage
+    ? project.alt
+    : "NITE UNIJORGE com visual tecnológico azul e fundo escuro.";
 
   return {
     ...defaultMetadata,
@@ -119,7 +125,7 @@ export function buildProjectMetadata(project: Project): Metadata {
       images: [
         {
           url: image,
-          alt: project.alt,
+          alt: imageAlt,
         },
       ],
     },
@@ -166,7 +172,9 @@ export function buildHomeJsonLd() {
   };
 }
 
-export function buildBreadcrumbJsonLd(items: Array<{ name: string; path: string }>) {
+export function buildBreadcrumbJsonLd(
+  items: Array<{ name: string; path: string }>,
+) {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",

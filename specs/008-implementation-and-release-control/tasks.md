@@ -30,17 +30,17 @@
 ## Homologação controlada do MVP Premium
 
 - [x] Registrar status final da auditoria de homologacao. Status: Aprovado para homologação controlada. Evidencia: auditoria final curta confirmou ausencia de pendencias bloqueantes conhecidas, copy global sem "projetos reais", snapshot visual da Home atualizado, rotas MVP confirmadas e rotas futuras nao publicadas.
-- [x] Registrar fechamento da homologacao controlada atual. Status: Homologação controlada validada/aprovada para o estado atual. Evidencia: feedback inicial aplicado e revalidado; estado homologado definido como MVP Premium em dark mode; Light Mode preservado como evolucao planejada posterior na Spec 003, sem implementacao runtime neste ciclo.
+- [x] Registrar fechamento da homologacao controlada atual. Status: Homologação controlada validada/aprovada para o estado atual. Evidencia: feedback inicial aplicado e revalidado; estado homologado definido como MVP Premium em dark mode; atualizacao posterior da Spec 003 concluiu Light Mode e Theme Toggle, preservando o dark mode como baseline principal.
 
 ### Fechamento da homologacao controlada atual
 
 - Status: `Homologação controlada validada/aprovada para o estado atual`.
 - Estado homologado: `MVP Premium em dark mode`.
 - Feedback inicial: aplicado e revalidado.
-- Light Mode: evolucao planejada posterior, documentada na Spec 003, sem implementacao runtime neste ciclo.
+- Light Mode: na homologacao controlada original, o estado validado era o MVP Premium em dark mode; atualizacao posterior da Spec 003 concluiu Light Mode e Theme Toggle com seletor `Escuro`, `Claro` e `Sistema`.
 - O estado atual pode seguir como base para decisao de release ou divulgacao controlada.
 - Homologacao controlada nao equivale a publicacao ampla, producao final ou aprovacao institucional definitiva de conteudo.
-- Qualquer ciclo visual posterior, incluindo Light Mode, deve passar por nova implementacao, testes, validacao de contraste e snapshots proprios.
+- Ciclos visuais posteriores ao estado homologado, incluindo revisoes sobre Light Mode ja implementado, devem passar por task propria, testes, validacao de contraste e snapshots proprios quando aplicavel.
 
 ### Evidencias tecnicas registradas
 
@@ -79,7 +79,7 @@
 - Timeline historica completa, marcos reais validados, contrato de dados e governanca de conteudo permanecem pendentes.
 - Fotos e depoimentos autorizados permanecem pendentes.
 - Conteudo real futuro permanece dependente de validacao/autorizacao institucional.
-- Light Mode permanece como evolucao planejada posterior, sem implementacao runtime no estado homologado atual.
+- Light Mode e Theme Toggle estao concluidos na Spec 003; permanecem abertas apenas as pendencias documentadas de auditoria hardcoded de dark mode, validacao de componentes em dark/light, metadados visuais e P2s nao bloqueantes.
 - Homologacao controlada nao equivale a publicacao ampla ou producao sem validacao institucional.
 - Conteudo real adicional exige validacao/autorizacao antes de publicacao.
 

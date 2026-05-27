@@ -14,7 +14,7 @@ Estado homologado: `MVP Premium em dark mode`.
 
 O feedback inicial recebido durante a homologação controlada foi aplicado e revalidado no estado atual do portal. O dark mode permanece como baseline principal e como estado homologado do MVP Premium.
 
-Light Mode permanece como evolução planejada posterior do Design System, documentada na Spec 003. Nenhuma implementação runtime de Light Mode foi aplicada neste ciclo. Qualquer ciclo visual posterior, incluindo Light Mode, deve passar por nova implementação controlada, testes, validação de contraste e snapshots próprios.
+Atualização documental: o ciclo posterior da Spec 003 implementou Light Mode e Theme Toggle. O seletor de tema suporta `Escuro`, `Claro` e `Sistema`, e a infraestrutura de tema está concluída. Este plano preserva o histórico de que a homologação controlada original validou o MVP Premium em dark mode, sem tratar o tema claro como pendente.
 
 O estado atual pode seguir como base para decisão de release ou divulgação controlada, sem equivaler a publicação ampla ou aprovação institucional final.
 
@@ -102,7 +102,7 @@ Validar experiência, clareza, navegação, conteúdo institucional, acessibilid
 - Backend, storage, notificação, provider, webhook ou envio real.
 - Timeline real.
 - Living Timeline.
-- Light Mode runtime.
+- Fechamento total da Spec 003, incluindo auditoria visual hardcoded, validação de todos os componentes em dark/light e metadados visuais.
 - Fotos e depoimentos autorizados.
 - Posts reais.
 - Governança mínima de conteúdo.
@@ -122,7 +122,7 @@ Validar experiência, clareza, navegação, conteúdo institucional, acessibilid
 - Fotos e depoimentos autorizados permanecem pendentes.
 - Conteúdo real futuro permanece dependente de validação/autorização institucional.
 - Living Timeline permanece como possibilidade futura, sem implementação no MVP atual.
-- Light Mode permanece como evolução planejada posterior, sem implementação runtime no estado homologado atual.
+- Light Mode e Theme Toggle estão concluídos na Spec 003; permanecem abertas as pendências documentadas de auditoria hardcoded de dark mode, validação de Button, Card, StatusBadge, ProjectCard, UpdateCard e OpportunityBanner em dark/light, revisão de `themeColor`, manifest e Open Graph, e P2s não bloqueantes.
 
 ## Critérios de Aprovação
 

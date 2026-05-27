@@ -20,23 +20,23 @@ Essa decisao e referencia oficial da Spec 003 para o MVP Premium. O preto absolu
 
 Atualizacao aprovada pelo gestor/desenvolvedor apos validacao visual: o token `background.default` foi ajustado de `#0A0A0F` para `#09090a` para reduzir a percepcao azulada do fundo dominante e aproximar a base visual de um dark premium neutro/grafite. A decisao mantem a regra de evitar preto absoluto como fundo dominante e preservar o azul como acento de marca.
 
-## Estrategia futura de Light Mode / Theme System
+## Estado atual de Light Mode / Theme System
 
-Decisao documental aprovada para ciclo posterior: o dark mode homologado permanece como baseline principal do MVP Premium. Light mode sera tratado como evolucao planejada do Design System, sem alterar o dark mode homologado nesta etapa.
+O dark mode homologado permanece como baseline principal do MVP Premium. O ciclo posterior de Light Mode e Theme Toggle foi implementado e fechado na Spec 003, sem remover o dark mode homologado.
 
-O theme system futuro deve suportar tema manual e preferencia do sistema, com comportamento recomendado:
+O theme system implementado suporta tema manual e preferencia do sistema, com comportamento registrado em `tasks.md`:
 
-- Manter dark como tema padrao inicial enquanto o light mode nao for validado visualmente.
-- Oferecer controle manual de tema quando a implementacao existir.
-- Permitir opcao "Sistema" para respeitar `prefers-color-scheme` depois que light mode estiver implementado e validado.
-- Persistir a escolha manual do usuario, quando houver, sem substituir `prefers-reduced-motion`.
+- Manter dark como baseline principal e fallback homologado.
+- Oferecer controle manual de tema com opcoes `Escuro`, `Claro` e `Sistema`.
+- Permitir opcao "Sistema" para respeitar `prefers-color-scheme`.
+- Persistir a escolha manual do usuario sem substituir `prefers-reduced-motion`.
 - Preservar `prefers-reduced-motion` como decisao independente de tema visual.
 
-Light mode nao entra no MVP atual homologado. A implementacao deve ocorrer em ciclo posterior, com task propria, snapshots proprios e validacao desktop/mobile antes de release.
+Light Mode e Theme Toggle nao sao mais itens futuros nesta Spec. A infraestrutura de tema ja existe e esta concluida, com ressalvas P2 nao bloqueantes registradas em `tasks.md`.
 
-O light mode deve usar fundo off-white premium, levemente quente/neutro, sem branco absoluto como fundo dominante. A identidade deve continuar institucional, tecnologica e premium, preservando azul como acento de marca e vermelho UNIJORGE como acento institucional pontual, nao como fundo dominante nem substituto do CTA principal.
+O light mode usa fundo off-white premium, levemente quente/neutro, sem branco absoluto como fundo dominante. A identidade deve continuar institucional, tecnologica e premium, preservando azul como acento de marca e vermelho UNIJORGE como acento institucional pontual, nao como fundo dominante nem substituto do CTA principal.
 
-Tokens light devem ser documentados e validados antes da implementacao. Eles devem manter contraste WCAG AA, especialmente para textos, links, CTAs, badges, filtros, Header, MegaMenu, cards e estados de status.
+Tokens light foram documentados e aplicados na implementacao. A validacao de Button, Card, StatusBadge, ProjectCard, UpdateCard e OpportunityBanner em dark/light foi concluida, assim como a revisao de `themeColor`, manifest e Open Graph em task propria. A Spec 003 ainda preserva pendencias reais para auditar dependencias visuais hardcoded de dark mode, melhorar o texto persistente do botao desktop fechado do Theme Toggle e configurar `allowedDevOrigins` para `127.0.0.1` no ambiente dev. Essas pendencias nao tornam Light Mode ou Theme Toggle itens futuros e nao fecham a Spec 003 como 100% concluida.
 
 Governanca minima de conteudo permanece Pendente de validacao coletiva. O status vigente das ADRs permanece definido nos proprios arquivos em `docs/adr`; esta spec nao aprova ADR automaticamente.
 

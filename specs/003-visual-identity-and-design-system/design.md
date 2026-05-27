@@ -52,24 +52,24 @@ O token `background.default` foi ajustado de `#0A0A0F` para `#09090a` apos valid
 | status.warning     | `#FBBF24`                   | Status de alerta                    |
 | status.error       | `#FB7185`                   | Status de erro                      |
 
-## Theme System e Light Mode planejado
+## Theme System e Light Mode implementado
 
-Dark mode permanece o baseline principal e homologado do MVP Premium. Light mode e uma evolucao planejada para ciclo posterior, sem alteracao do dark mode nesta decisao documental.
+Dark mode permanece o baseline principal e homologado do MVP Premium. Light Mode foi implementado no ciclo posterior da Spec 003, junto com o Theme Toggle, sem remover o dark mode homologado.
 
 ### Estrategia de tema
 
-- Tema padrao do MVP atual: dark.
-- Estrategia recomendada para implementacao futura: toggle manual com opcoes `Escuro`, `Claro` e `Sistema`.
-- A opcao `Sistema` deve respeitar `prefers-color-scheme` apenas quando light mode estiver implementado e validado.
+- Baseline principal do MVP atual: dark.
+- Controle manual de tema implementado com opcoes `Escuro`, `Claro` e `Sistema`.
+- A opcao `Sistema` respeita `prefers-color-scheme`.
 - A escolha manual do usuario deve ter prioridade sobre a preferencia do sistema.
 - `prefers-reduced-motion` deve continuar independente do tema visual.
-- `color-scheme` deve acompanhar o tema ativo para controles nativos, sem forcar light mode antes da validacao.
+- `color-scheme` deve acompanhar o tema ativo para controles nativos.
 
-### Tokens light propostos
+### Tokens light implementados
 
-Os valores abaixo sao proposta documental inicial para orientar a futura implementacao. Eles nao alteram os tokens dark homologados.
+Os valores abaixo sao o baseline documental do Light Mode implementado. Eles nao removem nem substituem os tokens dark homologados.
 
-| Token light             | Valor proposto                     | Uso principal                                          |
+| Token light             | Valor aplicado                     | Uso principal                                          |
 | ----------------------- | ---------------------------------- | ------------------------------------------------------ |
 | background.default      | `#F7F3EA`                          | Fundo principal off-white premium, sem branco absoluto |
 | background.section      | `#EFE8DC`                          | Separacao de blocos e secoes                           |
@@ -106,14 +106,15 @@ Os valores abaixo sao proposta documental inicial para orientar a futura impleme
 - Hero: deve reduzir glow e gradientes para nao transformar azul em fundo dominante no light mode. A logo/efeito visual deve ser validado separadamente para legibilidade em fundo claro.
 - Footer: deve preservar landmark `<footer>`, links reais, foco visivel e contraste de texto secundario.
 
-### Validacao exigida antes de implementar
+### Validacao e pendencias preservadas
 
-- Validar contraste AA para texto normal, texto grande, CTAs, links, badges, filtros e estados.
-- Validar foco visivel em Header, MegaMenu, menu mobile, cards, filtros, CTAs e links.
-- Validar desktop e mobile nas rotas `/`, `/projetos`, `/projetos/[slug]`, `/oportunidades`, `/atualizacoes` e `/contato`.
-- Criar snapshots visuais separados para dark e light, no minimo `home-desktop-dark`, `home-desktop-light`, `home-mobile-dark` e `home-mobile-light`, mantendo `prefers-reduced-motion` nos testes visuais.
-- Revisar `opengraph-image`, `themeColor`, `manifest` e assets de marca apenas em task propria, sem misturar com a primeira implementacao CSS do tema.
-- Auditar casos hardcoded como `white/[...]`, `rgb(...)`, sombras e gradientes antes de habilitar o tema claro publicamente.
+- Light Mode e Theme Toggle estao implementados e fechados na Spec 003, conforme `tasks.md`.
+- A infraestrutura de tema existe e o seletor suporta `Escuro`, `Claro` e `Sistema`.
+- A auditoria e remocao de dependencias visuais hardcoded de dark mode, como `white/[...]`, sombras escuras e gradientes sobre fundo escuro, permanece aberta.
+- A validacao de Button, Card, StatusBadge, ProjectCard, UpdateCard e OpportunityBanner em dark/light foi concluida nesta task, mantendo foco visivel, estados textuais e contraste AA nos tokens avaliados.
+- A revisao de `themeColor`, manifest e Open Graph foi concluida nesta task; `themeColor` considera dark/light no viewport, manifest usa o dark premium homologado e Open Graph/Twitter permanecem com titulo, descricao e asset gerado existente, sem imagem institucional inventada.
+- A melhoria P2 do texto persistente no botao desktop fechado do Theme Toggle permanece nao bloqueante.
+- A configuracao P2 de `allowedDevOrigins` para `127.0.0.1` no ambiente dev permanece nao bloqueante.
 
 ## Regras de uso dos tokens
 
