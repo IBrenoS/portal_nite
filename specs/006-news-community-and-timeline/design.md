@@ -99,7 +99,7 @@ Comportamento visual:
 
 ## Living Timeline Premium
 
-A Living Timeline e a evolucao premium da timeline institucional. O nome interno e `Living Timeline`; o nome publico sugerido deve ser validado entre "Linha do tempo do NITE" e "NITE em evolucao".
+A Living Timeline e a evolucao premium da timeline institucional. O nome interno e `Living Timeline`; o nome publico sugerido para publicacao historica completa deve ser validado entre "Linha do tempo do NITE" e "NITE em evolucao". No shell visual atual da Home, a copy implementada e "Timeline" como eyebrow e "O NITE em trajetoria" como titulo.
 
 Seu papel e construir uma narrativa historica viva do nucleo. Ela nao duplica Projetos, Atualizacoes nem Oportunidades:
 
@@ -146,6 +146,182 @@ Motion e opcional e subordinado ao conteudo. A timeline deve funcionar como list
 ### Hipoteses tecnicas futuras
 
 A implementacao futura pode avaliar `view-timeline`, `scroll-timeline`, `IntersectionObserver` e Framer Motion, desde que a solucao respeite reduced motion, nao use listeners de scroll pesados e seja validada em desktop, mobile, teclado e performance antes de release.
+
+### Estado real auditado em 2026-05-27
+
+O codigo atual da Home implementa a Living Timeline como shell visual premium, nao como timeline historica completa.
+
+Arquitetura real:
+
+- `app/page.tsx` carrega `getTimelineEvents()` e injeta os eventos em `LivingTimelineSection`.
+- `components/sections/living-timeline-section.tsx` e um client component.
+- O componente filtra `events` com `sourceStatus === "confirmado"` e expoe a contagem em `data-public-milestones`.
+- O componente nao renderiza cards de marco, `TimelineItem`, controles anterior/proximo nem indicador de progresso por marco.
+- O link de acao e um `<a>` absoluto cobrindo a composicao visual e apontando para `/atualizacoes`, com `aria-label` textual.
+- A arte visual usa `NiteSymbol`, grid visual e textos "Acervo em curadoria" e "Marcos validados" como composicao decorativa marcada com `aria-hidden`.
+- O CSS da experiencia vive em `app/globals.css` com classes `timeline-premium-*`.
+
+Interacao e motion reais:
+
+- Desktop: secao com card/viewport expandido, fundo animado de margem/borda/raio e revelacao de textos/asset ao entrar na viewport.
+- Mobile: layout responsivo em uma coluna, conteudo centralizado, sem lista/cards de marcos e sem controles especificos.
+- Scroll: usa GSAP `ScrollTrigger` com `scrub: 0.8` para progressao visual curta; nao prende o usuario nem troca marcos por scroll.
+- Reduced motion: `window.matchMedia("(prefers-reduced-motion: reduce)")` remove a progressao animada via GSAP e o CSS `@media (prefers-reduced-motion: reduce)` deixa os elementos visiveis e reduz transicoes/animacoes.
+- Nao ha autoplay.
+- Nao ha `IntersectionObserver`.
+- Nao ha `view-timeline` nem `scroll-timeline`.
+
+Dados reais:
+
+- O schema atual aceita `sourceStatus: "placeholder" | "confirmado"`.
+- O JSON atual nao possui `sourceStatus`, portanto usa o default `placeholder`.
+- Como nao ha marcos confirmados, `data-public-milestones` fica `0` e nenhum item demonstrativo e publicado como marco real.
+- O campo `isPublic` permanece apenas como proposta de modelo futuro.
+
+Pendencias do estado real:
+
+- Exibir fallback textual explicito quando `data-public-milestones` for `0`.
+- Renderizar marcos confirmados com conteudo, periodo, evidencia e midia autorizada.
+- Implementar controles reais de anterior/proximo somente quando houver marcos navegaveis.
+- Implementar indicador de progresso por marco somente quando houver marcos navegaveis.
+- Cobrir reduced motion, teclado/foco da secao, mobile e visual dark/light em testes especificos.
+- Validar performance da combinacao `gsap` + `ScrollTrigger` em mobile antes de considerar a experiencia pronta para release com conteudo real.
+
+### Arquitetura tecnica alvo
+
+A arquitetura abaixo permanece alvo para o ciclo com marcos publicos validados. Ela nao representa integralmente o codigo atual:
+
+- `LivingTimelineSection`: secao raiz, heading, descricao, estado sem marcos, escolha entre experiencia desktop/mobile/reduced motion e integracao com dados filtrados.
+- `LivingTimelineViewport`: area desktop de protagonismo visual, responsavel por layout expandido e composicao dos marcos ativos, sem controlar o scroll global de forma agressiva.
+- `LivingTimelineProgress`: indicador textual/visual de progresso, com estado atual e total de marcos.
+- `LivingTimelineMilestone`: card de marco individual, derivado do contrato de `TimelineItem`, com periodo, titulo, resumo, descricao opcional, categoria, evidencia e midia autorizada.
+- `LivingTimelineControls`: botoes reais de anterior/proximo e atalhos de teclado quando apropriados.
+- `LivingTimelineFallback`: estado honesto quando nao houver marcos publicos validados ou quando reduced motion/suporte tecnico exigir versao estatica.
+
+Essa arquitetura nao cria rota nova e nao substitui `UpdateCard`, `ProjectCard` ou componentes de oportunidades.
+
+### Modelo de dados futuro
+
+O modelo futuro da Living Timeline deve usar, no minimo:
+
+```ts
+type LivingTimelineMilestone = {
+  id: string;
+  title: string;
+  periodLabel: string;
+  summary: string;
+  description?: string;
+  sourceStatus: "placeholder" | "rascunho" | "validado" | "confirmado";
+  evidence?: {
+    label: string;
+    href: string;
+  };
+  category?:
+    | "institucional"
+    | "frente"
+    | "parceria"
+    | "evento"
+    | "entrega"
+    | "publicacao"
+    | "reconhecimento";
+  media?: Media;
+  order: number;
+  isPublic: boolean;
+};
+```
+
+Regras de renderizacao:
+
+- Renderizar publicamente apenas marcos com `isPublic: true` e `sourceStatus` validado/confirmado.
+- Manter placeholders fora da UI publica.
+- Nao publicar data oficial quando o periodo ainda nao estiver validado.
+- Ordenar marcos por `order`, nao por inferencia textual de datas.
+- Omitir midia sem autorizacao ou sem alt adequado.
+
+### Estados da experiencia
+
+- Sem marcos publicos validados: mostrar mensagem honesta ou omitir a area imersiva; nunca publicar placeholder.
+- Conteudo pendente: sinalizar que a linha do tempo esta em preparacao e depende de marcos validados.
+- Com marcos validados: renderizar sequencia completa, navegavel por scroll, controles e teclado.
+- Reduced motion: renderizar lista/cards estaticos, sem scroll-driven motion, autoplay ou deslocamentos amplos.
+- Falha de suporte tecnico: usar `LivingTimelineFallback` com cards/lista e preservar todo o conteudo.
+
+### Interacao desktop
+
+No desktop, a experiencia recomendada e progressive enhancement:
+
+- A secao ocupa area de protagonismo, mas permanece dentro do fluxo normal da pagina.
+- O scroll pode atualizar o marco ativo, progresso e transicoes leves.
+- O scroll nunca deve impedir a saida natural da secao.
+- Controles anterior/proximo devem permitir navegacao sem depender do scroll.
+- Teclado deve operar os controles e permitir acesso a todos os marcos.
+- Setas podem ser consideradas apenas quando o foco estiver dentro dos controles ou da regiao da timeline, sem sequestrar navegacao global.
+- O indicador de progresso deve ser textual ou ter texto auxiliar, nao apenas cor ou movimento.
+
+### Interacao mobile
+
+No mobile, a implementacao inicial deve preferir simplicidade:
+
+- Lista vertical ou cards sequenciais.
+- Controles simples opcionais, sem obrigar uso.
+- Sem autoplay obrigatorio.
+- Sem parallax pesado.
+- Sem travar ou substituir scroll nativo.
+- Midias futuras devem usar lazy loading e dimensoes reservadas.
+- Blur, glow e sobreposicoes devem ser reduzidos para preservar leitura e performance.
+
+### Estrategia tecnica recomendada
+
+- CSS scroll-driven animations (`view-timeline`/`scroll-timeline`): usar apenas como progressive enhancement quando houver suporte suficiente; nunca como unica forma de acessar conteudo.
+- `IntersectionObserver`: estrategia recomendada para ativar marco atual, progresso e fallback, por ter custo controlavel e boa degradacao.
+- Framer Motion: permitido apenas para transicoes leves ja compativeis com ADR-003 e `prefers-reduced-motion`.
+- JS scroll listeners: evitar. Usar somente se houver necessidade comprovada, com throttle/`requestAnimationFrame`, sem leitura/escrita de layout em loop e com medicao de performance.
+
+Alternativas rejeitadas para primeira implementacao:
+
+- Scroll hijacking com area presa por longo periodo.
+- Parallax pesado como experiencia principal.
+- Autoplay obrigatorio.
+- Dependencia exclusiva de scroll-driven animations.
+- Publicacao de dataset demonstrativo como se fosse historico real.
+
+### Requisitos de acessibilidade
+
+- Todos os marcos devem ser alcancaveis por teclado.
+- Anterior/proximo devem ser botoes reais.
+- Foco visivel deve usar o padrao da Spec 003.
+- Headings devem preservar ordem semantica.
+- `aria-live` deve ser evitado por padrao; usar apenas se a troca de marco atualizar conteudo critico sem mover foco, e sempre com cautela.
+- Periodos, categorias, status e progresso devem ter texto.
+- Conteudo completo deve existir no DOM em ordem logica ou possuir fallback estatico equivalente.
+- Movimento nao pode ser requisito para compreender informacao.
+- Contraste deve seguir WCAG AA.
+
+### Requisitos de performance
+
+- Nao usar listener de scroll pesado.
+- Evitar layout thrashing.
+- Reservar dimensoes de midia futura.
+- Lazy-load de midia abaixo da dobra.
+- Reduzir blur, glow e camadas translucidas no mobile.
+- Respeitar `prefers-reduced-motion` tambem como reducao de custo.
+- Testar em mobile real antes de publicar.
+
+### Estrategia de testes futuros
+
+- Unit: estado sem marcos publicos validados.
+- Unit: filtro de `sourceStatus`, `isPublic` e exclusao de `placeholder`.
+- Unit: renderizacao de marcos validados com periodo, titulo, resumo e evidencia.
+- Unit: reduced motion renderizando lista/cards estaticos.
+- Browser/e2e: controles anterior/proximo, teclado, foco e saida natural da secao.
+- Browser/e2e: mobile sem travar scroll e sem overflow horizontal.
+- Visual: dark/light.
+- Visual ou browser: reduced motion.
+- Anti-placeholder publico: garantir que conteudo demonstrativo nao aparece como historico real.
+
+### Primeira implementacao segura
+
+A primeira implementacao aceita ausencia de conteudo real sem criar dataset novo e sem inventar marcos. No estado auditado, a Home mostra um shell premium da Living Timeline, filtra placeholders por `sourceStatus`, mantem os eventos demonstrativos fora da UI publica e direciona o usuario para `/atualizacoes`. A publicacao da experiencia com marcos continua dependente de governanca, validacao de conteudo e autorizacao de midia/depoimentos.
 
 ## Depoimentos
 

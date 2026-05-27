@@ -111,7 +111,9 @@ A timeline nao deve inventar acontecimentos, datas, oficinas, eventos, publicaco
 
 Nome interno: `Living Timeline`.
 
-Nome publico sugerido, a validar antes da implementacao: "Linha do tempo do NITE" ou "NITE em evolucao".
+Nome publico sugerido originalmente, a validar antes de uma publicacao historica completa: "Linha do tempo do NITE" ou "NITE em evolucao".
+
+Na implementacao atual auditada, a Home usa o eyebrow publico "Timeline" e o titulo "O NITE em trajetoria". Essa copy descreve a secao visual premium atual, mas nao aprova publicacao de marcos historicos sem validacao.
 
 A Living Timeline e uma narrativa institucional viva. Ela nao e feed de noticias, nao e lista de projetos e nao substitui a pagina de oportunidades. Seu papel e mostrar a evolucao historica e institucional do NITE por marcos validados, com contexto suficiente para reforcar credibilidade, continuidade e maturidade.
 
@@ -195,6 +197,24 @@ A implementacao futura deve ser validada antes de publicar e pode considerar:
 - Validar desktop, mobile, teclado, reduced motion e performance antes de release.
 
 Quando nao houver marcos validados, a Living Timeline deve manter o fallback honesto ja previsto: estado pendente ou omissao da timeline, sem marcos ficticios.
+
+### Estado implementado auditado em 2026-05-27
+
+A Home ja renderiza `LivingTimelineSection` como uma secao visual premium. A implementacao atual:
+
+- Usa `conteudo/linha-do-tempo/eventos.json` via `getTimelineEvents()`.
+- Filtra marcos publicos por `sourceStatus === "confirmado"`.
+- Nao usa `isPublic`, pois esse campo ainda nao existe no schema/runtime atual.
+- Nao renderiza `TimelineItem` nem cards de marco enquanto nao houver marcos confirmados.
+- Nao publica os eventos demonstrativos do JSON como historico real.
+- Exibe uma composicao institucional com titulo "O NITE em trajetoria", CTA visual "Continuar leitura" e link real para `/atualizacoes`.
+- Usa `data-public-milestones` para expor a contagem de marcos confirmados no DOM.
+- Usa GSAP com `ScrollTrigger` para transicao de entrada/protagonismo visual da secao.
+- Nao usa `IntersectionObserver`, `view-timeline` ou `scroll-timeline`.
+- Nao possui autoplay nem scroll hijacking com travamento da pagina.
+- Possui tratamento de `prefers-reduced-motion` para remover a progressao animada e manter o conteudo visivel.
+
+Esta implementacao deve ser tratada como shell premium da Living Timeline, nao como timeline historica completa. Permanecem pendentes: fallback textual explicito para zero marcos, renderizacao de marcos validados, controles anterior/proximo, indicador de progresso por marco, validacao de teclado/foco especifica da secao, teste de reduced motion, teste visual dark/light e validacao de performance/mobile antes de publicar conteudo historico real.
 
 ## Requisitos funcionais - depoimentos autorizados
 

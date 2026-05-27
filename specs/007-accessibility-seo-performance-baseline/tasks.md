@@ -31,7 +31,7 @@
 - [x] Validar header, MegaMenu desktop e menu mobile em camadas por teclado. Evidencia: menu mobile em camadas validado com contencao de foco `Tab`/`Shift+Tab`, Escape, Fechar, Voltar e Theme Toggle interno; Header/MegaMenu desktop preservados sem alteracao de comportamento.
 - [ ] Validar cards de projeto, atualizacao e oportunidade por teclado.
 - [ ] Validar filtros por teclado e estado ativo acessivel.
-- [ ] Validar timeline sem dependencia de animacao.
+- [x] Validar Living Timeline sem dependencia de animacao. Evidencia: auditoria Browser/Playwright confirmou que, com `prefers-reduced-motion: reduce`, titulo, descricao, asset e CTA permanecem visiveis, a progressao animada e reduzida/removida, e o CTA `/atualizacoes` segue operavel por foco e teclado.
 
 ## SEO - implementacao futura
 
@@ -61,7 +61,7 @@
 - [ ] Otimizar imagens.
 - [ ] Revisar dimensoes e reserva de layout para imagens.
 - [ ] Revisar SVGs.
-- [ ] Revisar impacto de animacoes.
+- [ ] Revisar impacto de animacoes, incluindo GSAP `ScrollTrigger` da Living Timeline. Nota: aceite visual atual confirmou ausencia de erro, travamento, scroll horizontal e loop visivel; medicao real de performance e Core Web Vitals segue pendente.
 - [ ] Revisar fontes.
 - [ ] Reduzir JavaScript nao essencial.
 - [ ] Usar lazy loading quando aplicavel.
@@ -84,7 +84,7 @@
 - [ ] Validar cards.
 - [ ] Validar formularios.
 - [ ] Validar menus.
-- [ ] Validar timeline.
+- [x] Validar Living Timeline em mobile no estado visual atual. Evidencia: Browser em 390px confirmou layout em uma coluna, textos legiveis, CTA acessivel, sem scroll horizontal, dark/light coerentes e sem console errors relevantes. Custo medido de motion/glow segue pendente em performance.
 - [ ] Validar ausencia de corte relevante em rotas MVP.
 - [ ] Validar leitura e hierarquia visual em mobile real.
 

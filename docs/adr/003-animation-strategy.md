@@ -7,6 +7,7 @@ Aceito
 ## Historico
 
 - 2026-05-14: Aprovada pelo gestor do projeto para liberar motion controlado no Header final do MVP, incluindo mega menu desktop e menu mobile em camadas.
+- 2026-05-27: Auditoria reversa registrou que a Living Timeline atual usa GSAP `ScrollTrigger` para protagonismo visual por scroll, exigindo documentacao explicita de reduced motion, performance e ausencia de scroll hijacking.
 
 ## Contexto
 
@@ -37,6 +38,13 @@ Diretrizes:
 - Motion de Header, MegaMenu e menu mobile deve ser funcional, acessivel e subordinado a navegacao.
 
 Esta ADR libera motion controlado para Header final, mega menu desktop e menu mobile em camadas, mantendo a obrigacao de validacao na implementacao e release.
+
+Registro de implementacao atual:
+
+- A Living Timeline da Home usa GSAP `ScrollTrigger` para uma progressao visual curta de entrada/protagonismo da secao.
+- O uso atual nao troca marcos por scroll, nao prende o usuario na secao e nao implementa autoplay.
+- A implementacao atual deve manter fallback com `prefers-reduced-motion` e precisa de validacao especifica de teclado, foco, mobile e performance antes de ser considerada pronta com conteudo historico real.
+- `IntersectionObserver`, `view-timeline` e `scroll-timeline` continuam alternativas futuras, nao tecnicas usadas pela Living Timeline atual.
 
 ## Alternativas consideradas
 

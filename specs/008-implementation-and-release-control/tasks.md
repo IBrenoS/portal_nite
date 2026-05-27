@@ -24,6 +24,8 @@
 - [x] Aprovar ADR necessaria para ProjectCard, StatusBadge aplicado e portfolio de projetos. Evidencia: ADR-006 aceita pelo gestor do projeto para liberar o modelo de status `draft`, `in_progress`, `validated`, `done` e `archived` sem inventar dados reais.
 - [x] Aprovar ADR necessaria para oportunidades e fluxo de selecao. Evidencia: ADR-005 aceita pelo gestor do projeto para liberar a Spec 005 com formulario integrado como canal principal do MVP, mantendo backend, armazenamento, notificacao e privacidade como dependencias tecnicas futuras.
 - [x] Fechar inconsistencia de navegacao MVP para `/contato`. Evidencia: microauditoria de rotas confirmou Header CTA `Falar com o NITE` e Footer apontando para `/contato`, `/contato` renderizando com H1 unico e sem formulario/canal ficticio, rotas MVP respondendo em browser local e build listando `/`, `/projetos`, `/projetos/[slug]`, `/oportunidades`, `/atualizacoes` e `/contato`.
+- [x] Executar auditoria reversa da Living Timeline. Evidencia: codigo atual mapeado como shell visual premium na Home com GSAP `ScrollTrigger`, filtro anti-placeholder por `sourceStatus === "confirmado"`, sem marcos reais publicados, sem novas rotas e com pendencias documentadas na Spec 006/007.
+- [x] Registrar aceite visual da Living Timeline premium no estado atual. Status: visual aceito com ressalvas de produto/conteudo preservadas. Evidencia: auditoria tecnica confirmou desktop/mobile, dark/light, reduced motion, CTA `/atualizacoes` por foco/teclado, ausencia de placeholder publico, ausencia de autoplay, ausencia de scroll hijacking/travamento e GSAP `ScrollTrigger` sem erro visivel nem loop aparente. O warning dev de reduced motion da lib Motion foi classificado como nao bloqueante para o aceite visual atual.
 
 ## Homologação controlada do MVP Premium
 
@@ -74,7 +76,7 @@
 - Governança mínima de conteudo permanece `Pendente de validação coletiva`.
 - Backend, storage, notificacao e privacidade operacional de oportunidades permanecem pendentes.
 - Formulario funcional de oportunidades permanece futuro.
-- Timeline real, Living Timeline futura e marcos validados permanecem pendentes.
+- Timeline historica completa, marcos reais validados, contrato de dados e governanca de conteudo permanecem pendentes.
 - Fotos e depoimentos autorizados permanecem pendentes.
 - Conteudo real futuro permanece dependente de validacao/autorizacao institucional.
 - Light Mode permanece como evolucao planejada posterior, sem implementacao runtime no estado homologado atual.

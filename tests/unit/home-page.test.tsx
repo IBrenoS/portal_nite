@@ -143,39 +143,56 @@ describe("HomePage", () => {
     ).not.toBeInTheDocument();
     expect(projects.queryByText("Equipe")).not.toBeInTheDocument();
     expect(projects.queryByText("Métrica")).not.toBeInTheDocument();
+    const timeline = document.querySelector(
+      "[data-component='living-timeline-section']",
+    ) as HTMLElement;
+
+    expect(timeline).toBeInTheDocument();
+    expect(timeline).toHaveAttribute("data-scroll", "section");
+    expect(timeline).toHaveAttribute("data-public-milestones", "0");
+    expect(within(timeline).getByText("Timeline")).toBeInTheDocument();
     expect(
-      screen.getByText("Linha do tempo em preparação."),
+      within(timeline).getByText("O NITE em trajetória"),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(
-        "Marcos históricos do NITE serão publicados nesta seção apenas após validação/autorização institucional.",
+      within(timeline).getByText(
+        "Uma leitura visual dos marcos que estruturam o núcleo, suas frentes e seus próximos passos.",
       ),
     ).toBeInTheDocument();
-    expect(screen.getByText("Marcos ainda não publicados")).toBeInTheDocument();
+    expect(within(timeline).getByText("Continuar leitura")).toBeInTheDocument();
     expect(
-      screen.getByText(
-        "Os registros demonstrativos permanecem fora da interface pública para não parecerem histórico real validado.",
-      ),
+      within(timeline).getByRole("link", {
+        name: "Continuar leitura sobre a timeline do NITE",
+      }),
+    ).toHaveAttribute("href", "/atualizacoes");
+    expect(timeline.querySelector("[data-scroll='bg']")).toBeInTheDocument();
+    expect(
+      timeline.querySelector("[data-scroll='container']"),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(
-        "Conteúdos reais serão adicionados quando houver marcos, datas e evidências confirmadas.",
-      ),
+      timeline.querySelector(".timeline-premium-asset-image"),
     ).toBeInTheDocument();
+    expect(screen.queryByText("Marcos ainda não publicados")).toBeNull();
     expect(screen.queryByText("Primeiros projetos aplicados")).toBeNull();
     expect(screen.queryByText("Estruturação do NITE")).toBeNull();
     expect(screen.queryByText("Vitrine para a comunidade")).toBeNull();
+    expect(
+      screen.queryByAltText(
+        "Mesa de trabalho tecnológica com notebook, placa eletrônica e luzes azuis em ambiente institucional.",
+      ),
+    ).toBeNull();
     expect(
       screen.getByText("Quer acompanhar a evolução do NITE?"),
     ).toBeInTheDocument();
     expect(
       screen.getByText(
-        "Comece pelos projetos e pela área de Atualizações. A linha do tempo institucional será exibida quando houver marcos validados.",
+        "Comece pelos projetos e pela área de Atualizações. A Timeline do NITE dará forma aos marcos validados do núcleo.",
       ),
     ).toBeInTheDocument();
-    expect(
-      screen.getByRole("link", { name: "Ver linha do tempo" }),
-    ).toHaveAttribute("href", "#timeline");
+    expect(screen.getByRole("link", { name: "Ver Timeline" })).toHaveAttribute(
+      "href",
+      "#timeline",
+    );
     expect(screen.getAllByText("@nite.uj")).toHaveLength(2);
 
     for (const id of [
