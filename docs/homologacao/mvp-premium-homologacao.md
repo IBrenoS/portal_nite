@@ -102,7 +102,7 @@ Validar experiência, clareza, navegação, conteúdo institucional, acessibilid
 - Backend, storage, notificação, provider, webhook ou envio real.
 - Timeline real.
 - Living Timeline.
-- Fechamento total da Spec 003, incluindo auditoria visual hardcoded, validação de todos os componentes em dark/light e metadados visuais.
+- Novas revisões da Spec 003 fora do escopo MVP fechado.
 - Fotos e depoimentos autorizados.
 - Posts reais.
 - Governança mínima de conteúdo.
@@ -122,7 +122,7 @@ Validar experiência, clareza, navegação, conteúdo institucional, acessibilid
 - Fotos e depoimentos autorizados permanecem pendentes.
 - Conteúdo real futuro permanece dependente de validação/autorização institucional.
 - Living Timeline permanece como possibilidade futura, sem implementação no MVP atual.
-- Light Mode e Theme Toggle estão concluídos na Spec 003; permanecem abertas as pendências documentadas de auditoria hardcoded de dark mode, validação de Button, Card, StatusBadge, ProjectCard, UpdateCard e OpportunityBanner em dark/light, revisão de `themeColor`, manifest e Open Graph, e P2s não bloqueantes.
+- Spec 003 está fechada para o escopo MVP: Light Mode, Theme Toggle, auditoria hardcoded de dark mode, validação de componentes em dark/light e metadados visuais foram concluídos; as duas P2 remanescentes foram descartadas do backlog ativo por decisão de escopo, sem implementação.
 
 ## Critérios de Aprovação
 

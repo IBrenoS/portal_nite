@@ -2,7 +2,7 @@
 
 ## Status
 
-Milestone 3 iniciada oficialmente - identidade visual e design system em consolidacao
+Milestone 3 concluida para o escopo MVP - identidade visual e design system fechados
 
 ## Milestone
 
@@ -32,11 +32,13 @@ O theme system implementado suporta tema manual e preferencia do sistema, com co
 - Persistir a escolha manual do usuario sem substituir `prefers-reduced-motion`.
 - Preservar `prefers-reduced-motion` como decisao independente de tema visual.
 
-Light Mode e Theme Toggle nao sao mais itens futuros nesta Spec. A infraestrutura de tema ja existe e esta concluida, com ressalvas P2 nao bloqueantes registradas em `tasks.md`.
+Light Mode e Theme Toggle nao sao mais itens futuros nesta Spec. A infraestrutura de tema ja existe e esta concluida.
 
 O light mode usa fundo off-white premium, levemente quente/neutro, sem branco absoluto como fundo dominante. A identidade deve continuar institucional, tecnologica e premium, preservando azul como acento de marca e vermelho UNIJORGE como acento institucional pontual, nao como fundo dominante nem substituto do CTA principal.
 
-Tokens light foram documentados e aplicados na implementacao. A validacao de Button, Card, StatusBadge, ProjectCard, UpdateCard e OpportunityBanner em dark/light foi concluida, assim como a revisao de `themeColor`, manifest e Open Graph em task propria. A Spec 003 ainda preserva pendencias reais para auditar dependencias visuais hardcoded de dark mode, melhorar o texto persistente do botao desktop fechado do Theme Toggle e configurar `allowedDevOrigins` para `127.0.0.1` no ambiente dev. Essas pendencias nao tornam Light Mode ou Theme Toggle itens futuros e nao fecham a Spec 003 como 100% concluida.
+Tokens light foram documentados e aplicados na implementacao. A validacao de Button, Card, StatusBadge, ProjectCard, UpdateCard e OpportunityBanner em dark/light foi concluida, assim como a revisao de `themeColor`, manifest e Open Graph em task propria. A auditoria de dependencias visuais hardcoded de dark mode foi concluida em task propria, com correcoes pontuais no Hero, texto metalico de marca, glows de logo e marcadores de timeline, alem da preservacao justificada de assets controlados e da cena escura isolada da timeline premium.
+
+As melhorias P2 antes registradas para texto persistente do botao desktop fechado do Theme Toggle e `allowedDevOrigins` para `127.0.0.1` foram removidas do escopo MVP por decisao tecnica. Elas nao foram implementadas, nao permanecem no backlog ativo da Spec 003 e nao bloqueiam producao, acessibilidade essencial, SEO, performance, conteudo institucional nem o funcionamento publico do Portal NITE.
 
 Governanca minima de conteudo permanece Pendente de validacao coletiva. O status vigente das ADRs permanece definido nos proprios arquivos em `docs/adr`; esta spec nao aprova ADR automaticamente.
 

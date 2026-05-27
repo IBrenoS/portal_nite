@@ -933,7 +933,7 @@ Como isso afeta produto, UX, UI, código, conteúdo ou operação?
 - [ ] Milestone 0 — Foundation SDD
 - [ ] Milestone 1 — Product Vision & Scope
 - [ ] Milestone 2 — Information Architecture & Navigation
-- [ ] Milestone 3 — Visual Identity & Design System
+- [x] Milestone 3 — Visual Identity & Design System
 - [ ] Milestone 4 — Project Portfolio & Detail Pages
 - [ ] Milestone 5 — Opportunities & Selection Flow
 - [ ] Milestone 6 — News, Community & Timeline
@@ -970,4 +970,3 @@ A sequência recomendada é:
 5. Implementar por milestones e validar por checklist.
 
 A partir deste documento, cada nova implementação do Portal NITE deve nascer de uma spec específica e só deve ser considerada concluída quando seus checkboxes, critérios de aceitação e evidências forem preenchidos.
-

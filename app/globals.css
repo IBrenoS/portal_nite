@@ -348,36 +348,30 @@ body {
   .brand-metal-text {
     background: linear-gradient(
       to right bottom,
-      #ffffff 30%,
-      rgb(255 255 255 / 0.52)
-    );
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-
-  :root[data-theme="light"] .brand-metal-text {
-    background: linear-gradient(
-      to right bottom,
       var(--text-primary) 28%,
       var(--text-secondary) 72%,
       var(--brand-accent) 118%
     );
     -webkit-background-clip: text;
     background-clip: text;
+    color: transparent;
   }
 
-  @media (prefers-color-scheme: light) {
-    :root:not([data-theme="dark"]) .brand-metal-text {
-      background: linear-gradient(
-        to right bottom,
-        var(--text-primary) 28%,
-        var(--text-secondary) 72%,
-        var(--brand-accent) 118%
-      );
-      -webkit-background-clip: text;
-      background-clip: text;
-    }
+  .hero-brand-glow {
+    background: radial-gradient(
+      ellipse at 50% 42%,
+      var(--brand-glow),
+      var(--brand-soft) 34%,
+      transparent 68%
+    );
+  }
+
+  .hero-surface-glow {
+    background: radial-gradient(
+      ellipse at 50% 44%,
+      color-mix(in srgb, var(--surface-soft) 18%, transparent),
+      transparent 68%
+    );
   }
 
   .unijorge-lit {

@@ -20,9 +20,7 @@ export function HeroSection() {
         size="xl"
         className="relative grid min-h-[calc(92svh-4rem)] items-center gap-8 py-10 sm:gap-12 sm:py-16 lg:grid-cols-[minmax(0,47rem)_minmax(18rem,1fr)] lg:gap-10 lg:py-20 xl:grid-cols-[minmax(0,48rem)_minmax(18rem,1fr)] xl:gap-12"
       >
-        <Reveal
-          className="relative z-10 order-2 flex max-w-[43rem] flex-col items-center gap-8 text-center sm:order-none sm:gap-9 lg:max-w-[47rem] lg:items-start lg:pl-16 lg:text-left xl:max-w-[48rem]"
-        >
+        <Reveal className="relative z-10 order-2 flex max-w-[43rem] flex-col items-center gap-8 text-center sm:order-none sm:gap-9 lg:max-w-[47rem] lg:items-start lg:pl-16 lg:text-left xl:max-w-[48rem]">
           <div className="flex flex-col gap-5 sm:gap-6">
             <p className="mx-auto max-w-[40rem] font-mono text-xs uppercase tracking-[0.18em] text-brand-circuit-bright lg:mx-0">
               UNIJORGE / Núcleo de Inovação & Tecnologia
@@ -56,11 +54,11 @@ export function HeroSection() {
         >
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-x-[2%] top-[12%] z-0 h-[62%] bg-[radial-gradient(ellipse_at_50%_42%,rgb(51_212_255_/_0.1),rgb(22_135_255_/_0.035)_34%,transparent_68%)] blur-3xl"
+            className="hero-brand-glow pointer-events-none absolute inset-x-[2%] top-[12%] z-0 h-[62%] blur-3xl"
           />
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-x-[12%] top-[24%] z-0 h-[44%] bg-[radial-gradient(ellipse_at_50%_44%,rgb(255_255_255_/_0.045),transparent_68%)] opacity-70 blur-xl"
+            className="hero-surface-glow pointer-events-none absolute inset-x-[12%] top-[24%] z-0 h-[44%] opacity-70 blur-xl"
           />
           <AnimatedNiteLogo className="relative z-10 w-full max-w-[8rem] min-[430px]:max-w-[9.5rem] sm:max-w-[20rem] lg:max-w-[20rem] xl:max-w-[21.5rem]" />
         </div>

@@ -106,15 +106,15 @@ Os valores abaixo sao o baseline documental do Light Mode implementado. Eles nao
 - Hero: deve reduzir glow e gradientes para nao transformar azul em fundo dominante no light mode. A logo/efeito visual deve ser validado separadamente para legibilidade em fundo claro.
 - Footer: deve preservar landmark `<footer>`, links reais, foco visivel e contraste de texto secundario.
 
-### Validacao e pendencias preservadas
+### Validacao e fechamento do escopo MVP
 
 - Light Mode e Theme Toggle estao implementados e fechados na Spec 003, conforme `tasks.md`.
 - A infraestrutura de tema existe e o seletor suporta `Escuro`, `Claro` e `Sistema`.
-- A auditoria e remocao de dependencias visuais hardcoded de dark mode, como `white/[...]`, sombras escuras e gradientes sobre fundo escuro, permanece aberta.
+- A auditoria e remocao de dependencias visuais hardcoded de dark mode foi concluida nesta task: hardcodes runtime em Hero, texto metalico de marca, glows de logo e marcadores de timeline foram trocados por tokens/variaveis semanticas; assets SVG/OG/manifest foram preservados como ativos controlados; a cena escura da timeline premium foi preservada como composicao visual isolada e validada em dark/light.
 - A validacao de Button, Card, StatusBadge, ProjectCard, UpdateCard e OpportunityBanner em dark/light foi concluida nesta task, mantendo foco visivel, estados textuais e contraste AA nos tokens avaliados.
 - A revisao de `themeColor`, manifest e Open Graph foi concluida nesta task; `themeColor` considera dark/light no viewport, manifest usa o dark premium homologado e Open Graph/Twitter permanecem com titulo, descricao e asset gerado existente, sem imagem institucional inventada.
-- A melhoria P2 do texto persistente no botao desktop fechado do Theme Toggle permanece nao bloqueante.
-- A configuracao P2 de `allowedDevOrigins` para `127.0.0.1` no ambiente dev permanece nao bloqueante.
+- As melhorias P2 de texto persistente no botao desktop fechado do Theme Toggle e `allowedDevOrigins` para `127.0.0.1` foram descartadas por decisao de escopo MVP; nao foram implementadas e nao permanecem como pendencias ativas.
+- A Spec 003 esta fechada para o escopo MVP.
 
 ## Regras de uso dos tokens
 

@@ -97,7 +97,7 @@ function StructuredTimelineItem({
       <CardHeader className="gap-4 p-5 sm:p-6">
         <div className="flex gap-4">
           <span
-            className="mt-1 inline-flex size-4 shrink-0 rounded-full border border-brand-circuit-bright bg-background shadow-[0_0_20px_rgb(51_212_255_/_0.45)]"
+            className="mt-1 inline-flex size-4 shrink-0 rounded-full border border-brand-circuit-bright bg-background shadow-[0_0_20px_var(--brand-glow)]"
             aria-hidden="true"
           />
 
@@ -243,7 +243,7 @@ function LegacyTimelineItem({
         className,
       )}
     >
-      <span className="absolute -left-[7px] top-5 size-3.5 rounded-full border border-brand-circuit-bright bg-background shadow-[0_0_22px_rgb(51_212_255_/_0.6)]" />
+      <span className="absolute -left-[7px] top-5 size-3.5 rounded-full border border-brand-circuit-bright bg-background shadow-[0_0_22px_var(--brand-glow)]" />
       <div className="brand-panel overflow-hidden rounded-lg border border-border">
         <div className="grid gap-0 md:grid-cols-[minmax(0,0.82fr)_minmax(0,1fr)]">
           <div className="relative min-h-52 overflow-hidden border-b border-border md:min-h-full md:border-b-0 md:border-r">

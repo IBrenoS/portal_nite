@@ -5,7 +5,7 @@
 - [ ] Milestone 0 - Foundation SDD
 - [ ] Milestone 1 - Product Vision & Scope
 - [ ] Milestone 2 - Information Architecture & Navigation
-- [ ] Milestone 3 - Visual Identity & Design System
+- [x] Milestone 3 - Visual Identity & Design System
 - [ ] Milestone 4 - Project Portfolio & Detail Pages
 - [ ] Milestone 5 - Opportunities & Selection Flow
 - [ ] Milestone 6 - News, Community & Timeline

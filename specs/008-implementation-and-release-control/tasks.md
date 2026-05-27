@@ -79,7 +79,7 @@
 - Timeline historica completa, marcos reais validados, contrato de dados e governanca de conteudo permanecem pendentes.
 - Fotos e depoimentos autorizados permanecem pendentes.
 - Conteudo real futuro permanece dependente de validacao/autorizacao institucional.
-- Light Mode e Theme Toggle estao concluidos na Spec 003; permanecem abertas apenas as pendencias documentadas de auditoria hardcoded de dark mode, validacao de componentes em dark/light, metadados visuais e P2s nao bloqueantes.
+- Spec 003 esta fechada para o escopo MVP: Light Mode, Theme Toggle, auditoria hardcoded de dark mode, validacao de componentes em dark/light e metadados visuais foram concluidos; as duas P2 remanescentes foram removidas do backlog ativo por decisao de escopo, sem implementacao.
 - Homologacao controlada nao equivale a publicacao ampla ou producao sem validacao institucional.
 - Conteudo real adicional exige validacao/autorizacao antes de publicacao.
 

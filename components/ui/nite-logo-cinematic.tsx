@@ -10,7 +10,10 @@ type NiteLogoCinematicProps = {
   svgMarkup: string;
 };
 
-export function NiteLogoCinematic({ className, svgMarkup }: NiteLogoCinematicProps) {
+export function NiteLogoCinematic({
+  className,
+  svgMarkup,
+}: NiteLogoCinematicProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   useNiteElectricAnimation(containerRef);
@@ -20,7 +23,7 @@ export function NiteLogoCinematic({ className, svgMarkup }: NiteLogoCinematicPro
       ref={containerRef}
       aria-hidden="true"
       className={cn(
-        "animated-nite-logo mx-auto flex w-full items-center justify-center drop-shadow-[0_0_24px_rgb(51_212_255_/_0.16)] sm:drop-shadow-[0_0_36px_rgb(51_212_255_/_0.2)] lg:drop-shadow-[0_0_44px_rgb(51_212_255_/_0.22)] [&_svg]:h-auto [&_svg]:w-full",
+        "animated-nite-logo mx-auto flex w-full items-center justify-center drop-shadow-[0_0_24px_var(--brand-glow)] sm:drop-shadow-[0_0_36px_var(--brand-glow)] lg:drop-shadow-[0_0_44px_var(--brand-glow)] [&_svg]:h-auto [&_svg]:w-full",
         className,
       )}
       dangerouslySetInnerHTML={{ __html: svgMarkup }}
