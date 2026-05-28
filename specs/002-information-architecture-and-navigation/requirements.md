@@ -98,9 +98,10 @@ Itens principais:
 - Oportunidades.
 - Contato.
 
-CTA do header:
+Regra de CTA do header:
 
-- Falar com o NITE -> `/contato`.
+- O header nao deve exibir CTA global isolado.
+- A rota `/contato` permanece acessivel pelo grupo "Contato" da navegacao.
 
 ## Regras de navegacao
 
@@ -108,7 +109,7 @@ CTA do header:
 - MegaMenu desktop deve ser compacto, premium, integrado ao background e agrupar links por intencao do usuario.
 - MegaMenu desktop nao deve ser full-width e deve fechar por mouseleave, Escape e clique fora quando aberto.
 - Navegacao mobile deve usar menu em camadas para grupos com subitens, sem depender de hover e sem criar scroll horizontal.
-- A primeira camada mobile deve conter logo/marca, CTA principal, botao fechar e grupos principais.
+- A primeira camada mobile deve conter logo/marca, botao fechar e grupos principais.
 - A segunda camada mobile deve conter botao voltar, botao fechar, titulo do grupo e links do grupo.
 - Itens futuros podem aparecer apenas como roadmap/pendente, sem parecer funcionalidade pronta.
 - Rotas sem conteudo real devem ter estado vazio honesto.
@@ -127,7 +128,7 @@ Textos oficiais aprovados pelo gestor para a Spec 002:
 | -------------------- | ------------------------ | --------------------------------------------------- | ----------------------------------------------------------------------- |
 | Hero primario        | Explorar projetos        | `/projetos`                                         | Aprovado pelo gestor                                                    |
 | Hero secundario      | Conhecer o NITE          | Secao Sobre na home ou rota futura `/sobre`         | Aprovado pelo gestor; `/sobre` e rota futura                            |
-| Header               | Falar com o NITE         | `/contato`                                          | Aprovado pelo gestor                                                    |
+| Header               | Sem CTA global isolado   | N/A                                                 | Removido do header em 2026-05-28; contato permanece no grupo Contato    |
 | Oportunidades        | Acompanhar oportunidades | `/oportunidades`                                    | Aprovado pelo gestor                                                    |
 | Professores/gestores | Propor desafio           | `/contato?tipo=desafio` ou fluxo equivalente futuro | Aprovado pelo gestor; detalhe de fluxo pendente de implementacao futura |
 

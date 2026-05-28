@@ -1,5 +1,4 @@
 import {
-  ArrowRightIcon,
   BellIcon,
   CheckCircle2Icon,
   ClipboardListIcon,
@@ -24,7 +23,7 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { OpportunityInterestFormPreview } from "@/components/sections/opportunity-interest-form-preview";
 import { OpportunityStatus } from "@/components/sections/opportunity-status";
-import { buttonVariants } from "@/components/ui/button";
+import { Chip } from "@/components/ui/chip";
 import { NiteSymbol } from "@/components/ui/nite-symbol";
 import { cn } from "@/lib/utils";
 
@@ -123,6 +122,47 @@ const processNotes = [
   },
 ] as const;
 
+const careersCtaBase = cn(
+  "relative inline-flex shrink-0 select-none items-center justify-center rounded-[1rem] border-[2px] border-white/5 bg-[linear-gradient(104deg,rgba(253,253,253,0.05)_5%,rgba(240,240,228,0.1)_100%)] bg-origin-border font-sans font-semibold text-white shadow-sm backdrop-blur-[25px] transition-all duration-200 ease-in-out hover:bg-white/90 hover:text-black hover:shadow-[0_18px_48px_rgb(255_255_255_/_0.12),0_1px_3px_rgb(0_0_0_/_0.1),0_1px_2px_-1px_rgb(0_0_0_/_0.1)] focus-visible:bg-white/90 focus-visible:text-black focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/30",
+);
+
+const seeOpenPositionsCta = cn(
+  careersCtaBase,
+  "h-12 w-[190px] gap-1 px-5 text-base leading-6",
+);
+
+const seeHowWeHireCta = cn(
+  careersCtaBase,
+  "h-10 w-40 gap-2 px-4 text-sm leading-5",
+);
+
+const resendGradientText =
+  "bg-[linear-gradient(to_right_bottom,#fff_30%,rgba(255,255,255,0.5))] bg-clip-text text-transparent";
+
+const resendSupportText = "text-[rgb(161,164,165)]";
+
+const resendHeroTitle = cn(
+  resendGradientText,
+  "mb-2 w-full text-balance pb-3 font-heading text-[clamp(3rem,8.8vw,4rem)] font-normal leading-[100%] tracking-normal md:text-[4.8rem]",
+);
+
+const resendSectionTitle =
+  "font-heading text-[2.25rem] font-normal leading-[130%] tracking-normal text-[rgba(252,253,255,0.937)]";
+
+const resendCardTitle =
+  "font-heading text-[2.25rem] font-normal leading-none tracking-normal text-[rgba(252,253,255,0.937)]";
+
+const resendCardSubtitle = cn(
+  resendGradientText,
+  "mt-1 font-sans text-[2.25rem] font-normal leading-none tracking-normal opacity-50",
+);
+
+const resendCardFrame =
+  "group relative min-h-[421px] overflow-hidden rounded-[1rem] border border-[rgba(217,237,254,0.145)] bg-transparent px-8 py-12 text-center transition duration-brand-micro ease-brand-out hover:border-[rgba(217,237,254,0.26)] focus-visible:ring-4 focus-visible:ring-white/30";
+
+const resendInnerFrame =
+  "border border-[rgba(217,237,254,0.145)] bg-transparent";
+
 export const metadata: Metadata = {
   ...defaultMetadata,
   title: buildPageTitle(pageTitle),
@@ -159,64 +199,55 @@ export default function OpportunitiesPage() {
       />
       <main
         id="conteudo-principal"
-        className="overflow-hidden bg-black text-white"
+        className="overflow-hidden bg-background text-foreground"
       >
-        <section className="relative px-6 pb-12 pt-16 text-center sm:pb-20 sm:pt-24 lg:pb-24">
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-x-0 top-0 h-80 bg-[radial-gradient(ellipse_at_top,_rgba(255,255,255,0.16),_transparent_62%)]"
-          />
+        <section className="relative px-6 pb-7 pt-12 text-center sm:pb-10 sm:pt-24 lg:pb-5">
           <Container
             size="xl"
             className="relative z-10 grid justify-items-center"
           >
-            <h1 className="max-w-4xl text-balance font-heading text-5xl font-semibold leading-[0.96] tracking-[-0.03em] text-white sm:text-7xl lg:text-8xl">
-              Faça parte do NITE
-            </h1>
-            <p className="mt-6 max-w-2xl text-balance text-base leading-8 text-white/58 sm:text-lg">
-              {pageDescription}
-            </p>
-            <a
-              href="#open-positions"
+            <h1 className={resendHeroTitle}>Faça parte do NITE</h1>
+            <p
               className={cn(
-                buttonVariants({ variant: "secondary", size: "lg" }),
-                "mt-8 rounded-2xl border-white/10 bg-white/[0.07] px-6 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] hover:bg-white/12",
+                resendSupportText,
+                "mb-6 w-full text-balance text-base font-normal leading-[1.5] tracking-normal md:text-[1.125rem]",
               )}
             >
+              {pageDescription}
+            </p>
+            <a href="#open-positions" className={seeOpenPositionsCta}>
               Ver oportunidades
-              <ArrowRightIcon aria-hidden="true" className="size-4" />
             </a>
           </Container>
         </section>
 
         <section className="px-6 py-10 sm:py-14" aria-label="Contexto">
-          <Container size="xl" className="grid gap-6 lg:grid-cols-2 lg:px-14">
-            <a
-              href="#open-positions"
-              className="group relative min-h-[24rem] overflow-hidden rounded-2xl border border-white/10 bg-white/[0.015] px-8 py-10 text-center transition duration-300 hover:border-white/18 hover:bg-white/[0.035] focus-visible:ring-3 focus-visible:ring-white/40"
-            >
-              <h2 className="font-heading text-4xl font-semibold tracking-[-0.04em] text-white">
-                Processos
-              </h2>
-              <p className="mt-2 text-4xl tracking-[-0.04em] text-white/32">
-                Como participar
-              </p>
-              <div className="mx-auto mt-10 grid max-w-sm place-items-center rounded-xl border border-white/10 bg-[linear-gradient(145deg,rgba(255,255,255,0.08),rgba(255,255,255,0.015))] p-10 grayscale transition duration-300 group-hover:grayscale-0">
-                <NiteSymbol className="h-auto w-40 text-white/78" />
+          <Container
+            size="xl"
+            className="grid max-w-[1024px] gap-8 lg:grid-cols-2 lg:px-0"
+          >
+            <a href="#open-positions" className={resendCardFrame}>
+              <h2 className={resendCardTitle}>Processos</h2>
+              <p className={resendCardSubtitle}>Como participar</p>
+              <div
+                className={cn(
+                  resendInnerFrame,
+                  "mx-auto mt-10 grid max-w-sm place-items-center rounded-xl p-10 grayscale transition duration-brand-micro ease-brand-out group-hover:grayscale-0",
+                )}
+              >
+                <NiteSymbol className="h-auto w-40 text-brand-circuit-bright" />
               </div>
             </a>
 
-            <Link
-              href="/projetos"
-              className="group relative min-h-[24rem] overflow-hidden rounded-2xl border border-white/10 bg-white/[0.015] px-8 py-10 text-center transition duration-300 hover:border-white/18 hover:bg-white/[0.035] focus-visible:ring-3 focus-visible:ring-white/40"
-            >
-              <h2 className="font-heading text-4xl font-semibold tracking-[-0.04em] text-white">
-                Projetos
-              </h2>
-              <p className="mt-2 text-4xl tracking-[-0.04em] text-white/32">
-                Onde atuar
-              </p>
-              <div className="mx-auto mt-10 max-w-sm overflow-hidden rounded-xl border border-white/10 grayscale transition duration-300 group-hover:grayscale-0">
+            <Link href="/projetos" className={resendCardFrame}>
+              <h2 className={resendCardTitle}>Projetos</h2>
+              <p className={resendCardSubtitle}>Onde atuar</p>
+              <div
+                className={cn(
+                  resendInnerFrame,
+                  "mx-auto mt-10 max-w-sm overflow-hidden rounded-xl grayscale transition duration-brand-micro ease-brand-out group-hover:grayscale-0",
+                )}
+              >
                 <Image
                   src="/images/projetos/programacao-lab-card.png"
                   alt="Interface visual de projeto do NITE"
@@ -232,10 +263,12 @@ export default function OpportunitiesPage() {
         <section className="px-6 py-16 sm:py-20" aria-labelledby="areas-nite">
           <Container size="xl" className="grid justify-items-center gap-12">
             <div className="grid justify-items-center gap-3 text-center">
-              <p id="areas-nite" className="text-sm text-white/46">
+              <p id="areas-nite" className={cn("text-sm", resendSupportText)}>
                 Frentes acompanhadas pelo portal
               </p>
-              <p className="max-w-2xl text-sm leading-7 text-white/44">
+              <p
+                className={cn(resendSupportText, "max-w-2xl text-sm leading-7")}
+              >
                 Elas indicam possibilidades de atuação do núcleo. Elas não
                 representam vagas abertas sem confirmação.
               </p>
@@ -244,7 +277,7 @@ export default function OpportunitiesPage() {
               {opportunityAreas.map((area) => (
                 <li
                   key={area}
-                  className="font-heading text-xl font-semibold tracking-[-0.03em] text-white sm:text-2xl"
+                  className="font-heading text-xl font-normal text-[rgba(252,253,255,0.937)] sm:text-2xl"
                 >
                   {area}
                 </li>
@@ -256,45 +289,48 @@ export default function OpportunitiesPage() {
         <section className="px-6 py-16 sm:py-24" aria-labelledby="beneficios">
           <Container size="xl" className="grid gap-14 lg:px-14">
             <div className="grid justify-items-center gap-3 text-center">
-              <h2
-                id="beneficios"
-                className="font-heading text-4xl font-semibold tracking-[-0.04em] text-white"
-              >
+              <h2 id="beneficios" className={resendSectionTitle}>
                 Benefícios & garantias
               </h2>
-              <p className="max-w-2xl text-base leading-7 text-white/48">
+              <p
+                className={cn(
+                  resendSupportText,
+                  "max-w-2xl text-base leading-[1.5] md:text-[1.125rem]",
+                )}
+              >
                 A experiência precisa parecer pronta mesmo quando não existe
                 processo aberto.
               </p>
             </div>
 
-            <ul className="grid border-y border-white/10 lg:grid-cols-3">
+            <ul className="grid border-y border-border lg:grid-cols-3">
               {benefitItems.map((item, index) => (
                 <li
                   key={item.title}
                   className={cn(
-                    "min-h-48 border-white/10 px-0 py-8 sm:px-8 lg:px-10",
+                    "min-h-48 border-border px-0 py-8 sm:px-8 lg:px-10",
                     index > 0 && "border-t lg:border-t-0",
                     index % 3 !== 0 && "lg:border-l",
                     index > 2 && "lg:border-t",
                   )}
                 >
-                  <h3 className="font-heading text-xl font-semibold tracking-[-0.03em] text-white">
+                  <h3 className="font-heading text-xl font-normal text-[rgba(252,253,255,0.937)]">
                     {item.title}
                   </h3>
-                  <p className="mt-4 max-w-xs text-sm leading-7 text-white/46">
-                    {item.description}
-                  </p>
-                  <span
+                  <p
                     className={cn(
-                      "mt-4 inline-flex rounded-full border px-2.5 py-1 text-xs font-medium",
-                      index < 6
-                        ? "border-emerald-400/20 bg-emerald-400/10 text-emerald-200"
-                        : "border-blue-400/20 bg-blue-400/10 text-blue-200",
+                      resendSupportText,
+                      "mt-4 max-w-xs text-sm leading-7",
                     )}
                   >
+                    {item.description}
+                  </p>
+                  <Chip
+                    variant={index < 6 ? "default" : "quiet"}
+                    className="mt-4"
+                  >
                     {item.badge}
-                  </span>
+                  </Chip>
                 </li>
               ))}
             </ul>
@@ -306,26 +342,24 @@ export default function OpportunitiesPage() {
           className="scroll-mt-24 px-6 py-20 sm:py-24"
           aria-labelledby="estado-oportunidades-titulo"
         >
-          <Container size="xl" className="grid max-w-4xl gap-12">
-            <div className="grid justify-items-center gap-4 text-center">
+          <Container size="xl" className="grid max-w-[768px] gap-12">
+            <div className="text-center">
               <h2
                 id="estado-oportunidades-titulo"
-                className="font-heading text-4xl font-semibold tracking-[-0.04em] text-white"
+                className={cn("mx-auto", resendSectionTitle)}
               >
                 Oportunidades abertas
               </h2>
-              <p className="max-w-2xl text-base leading-7 text-white/48">
-                Comece por aqui quando houver processo validado.
-              </p>
-              <Link
-                href="/contato"
+              <p
                 className={cn(
-                  buttonVariants({ variant: "secondary", size: "lg" }),
-                  "mt-2 rounded-2xl border-white/10 bg-white/[0.07] text-white hover:bg-white/12",
+                  resendSupportText,
+                  "mb-6 text-base font-normal leading-[1.5] md:text-[1.125rem]",
                 )}
               >
+                Comece por aqui quando houver processo validado.
+              </p>
+              <Link href="/contato" className={seeHowWeHireCta}>
                 Falar com o NITE
-                <ArrowRightIcon aria-hidden="true" className="size-4" />
               </Link>
             </div>
 
@@ -333,20 +367,30 @@ export default function OpportunitiesPage() {
               data-component="opportunity-banner"
               data-slot="card"
               data-status="closed"
-              className="border-y border-white/12"
+              className="border-y border-border"
             >
               <div className="grid gap-5 py-8 sm:grid-cols-[1fr_auto] sm:items-center">
                 <div className="grid gap-3">
                   <OpportunityStatus status="closed" />
-                  <h3 className="font-heading text-2xl font-semibold tracking-[-0.03em] text-white">
+                  <h3 className="font-heading text-2xl font-normal text-[rgba(252,253,255,0.937)]">
                     No momento, não há oportunidades abertas.
                   </h3>
-                  <p className="max-w-2xl text-sm leading-7 text-white/48">
+                  <p
+                    className={cn(
+                      resendSupportText,
+                      "max-w-2xl text-sm leading-7",
+                    )}
+                  >
                     Quando houver processo seletivo, esta página será o canal
                     principal para acompanhar orientações e manifestar
                     interesse.
                   </p>
-                  <p className="max-w-2xl text-sm leading-7 text-white/42">
+                  <p
+                    className={cn(
+                      resendSupportText,
+                      "max-w-2xl text-sm leading-7",
+                    )}
+                  >
                     Acompanhe esta página ou fale com o NITE para dúvidas
                     institucionais. Nenhum envio de interesse ou currículo está
                     ativo agora; quando houver processo validado, use e-mail
@@ -355,7 +399,7 @@ export default function OpportunitiesPage() {
                   </p>
                 </div>
                 <span
-                  className="inline-flex size-12 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-white/64"
+                  className="inline-flex size-12 items-center justify-center rounded-full border border-border bg-muted/40 text-brand-circuit-bright"
                   aria-hidden="true"
                 >
                   <BellIcon className="size-5" />
@@ -372,7 +416,10 @@ export default function OpportunitiesPage() {
           <Container size="xl" className="lg:px-14">
             <OpportunityInterestFormPreview
               titleId="estrutura-formulario-oportunidades"
-              className="border-white/10 bg-white/[0.03] text-white [&_[data-slot=card-description]]:text-white/52 [&_dd]:text-white/46 [&_dt]:text-white [&_p]:text-white/52"
+              className={cn(
+                "border-[rgba(217,237,254,0.145)] bg-transparent shadow-none",
+                "[&_[data-slot=card-description]]:text-[rgb(161,164,165)] [&_dd]:text-[rgb(161,164,165)] [&_dt]:font-normal [&_dt]:text-[rgba(252,253,255,0.937)] [&_p]:text-[rgb(161,164,165)]",
+              )}
             />
           </Container>
         </section>
@@ -388,13 +435,18 @@ export default function OpportunitiesPage() {
                   aria-hidden={
                     index >= processNotes.length ? "true" : undefined
                   }
-                  className="w-[min(28rem,calc(100vw-3rem))] shrink-0 rounded-2xl border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.07),rgba(255,255,255,0.01)_72%)] px-8 py-7"
+                  className="w-[min(28rem,calc(100vw-3rem))] shrink-0 rounded-[1rem] border border-[rgba(217,237,254,0.145)] bg-transparent px-8 py-7"
                 >
-                  <Icon className="size-5 text-white/46" aria-hidden="true" />
-                  <h2 className="mt-8 font-heading text-xl font-semibold tracking-[-0.03em] text-white">
+                  <Icon
+                    className="size-5 text-brand-circuit-bright"
+                    aria-hidden="true"
+                  />
+                  <h2 className="mt-8 font-heading text-xl font-normal text-[rgba(252,253,255,0.937)]">
                     {note.title}
                   </h2>
-                  <p className="mt-3 text-sm leading-7 text-white/48">
+                  <p
+                    className={cn(resendSupportText, "mt-3 text-sm leading-7")}
+                  >
                     {note.text}
                   </p>
                 </article>
@@ -406,11 +458,14 @@ export default function OpportunitiesPage() {
         <section className="px-6 pb-24 pt-6" aria-label="Compromissos">
           <Container
             size="xl"
-            className="grid gap-4 border-t border-white/10 pt-10 text-sm leading-7 text-white/48 md:grid-cols-3 lg:px-14"
+            className={cn(
+              resendSupportText,
+              "grid gap-4 border-t border-border pt-10 text-sm leading-7 md:grid-cols-3 lg:px-14",
+            )}
           >
             <div className="flex gap-3">
               <CheckCircle2Icon
-                className="mt-1 size-4 shrink-0 text-emerald-200"
+                className="mt-1 size-4 shrink-0 text-status-done"
                 aria-hidden="true"
               />
               <p>
@@ -420,7 +475,7 @@ export default function OpportunitiesPage() {
             </div>
             <div className="flex gap-3">
               <MailCheckIcon
-                className="mt-1 size-4 shrink-0 text-emerald-200"
+                className="mt-1 size-4 shrink-0 text-status-done"
                 aria-hidden="true"
               />
               <p>
@@ -430,7 +485,7 @@ export default function OpportunitiesPage() {
             </div>
             <div className="flex gap-3">
               <FileTextIcon
-                className="mt-1 size-4 shrink-0 text-emerald-200"
+                className="mt-1 size-4 shrink-0 text-status-done"
                 aria-hidden="true"
               />
               <p>

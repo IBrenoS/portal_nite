@@ -92,11 +92,6 @@ const headerNavigationGroups: SiteNavigationGroup[] = [
   },
 ];
 
-const headerCta = {
-  label: "Falar com o NITE",
-  href: "/contato",
-} as const;
-
 const futureNavigationRoutes = [
   "/sobre",
   "/atualizacoes/[slug]",
@@ -109,5 +104,5 @@ const futureNavigationRoutes = [
   "/contato?tipo=desafio",
 ] as const;
 
-export { futureNavigationRoutes, headerCta, headerNavigationGroups };
+export { futureNavigationRoutes, headerNavigationGroups };
 export type { SiteNavigationGroup, SiteNavigationItem, NavigationItemStatus };

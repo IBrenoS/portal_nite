@@ -8,7 +8,6 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import type { TimelineEvent } from "@/biblioteca/esquemas";
-import { NiteSymbol } from "@/components/ui/nite-symbol";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -52,10 +51,7 @@ export function LivingTimelineSection({ events }: LivingTimelineSectionProps) {
       const button = section.querySelector<HTMLElement>(
         "[data-scroll='button']",
       );
-      const asset = section.querySelector<HTMLElement>(
-        ".timeline-premium-asset-image",
-      );
-      const revealTargets = [eyebrow, title, asset, description, button].filter(
+      const revealTargets = [eyebrow, title, description, button].filter(
         Boolean,
       );
 
@@ -157,10 +153,6 @@ export function LivingTimelineSection({ events }: LivingTimelineSectionProps) {
         revealTimeline.to(title, { duration: 0.7, opacity: 1, y: "0%" }, 0.05);
       }
 
-      if (asset) {
-        revealTimeline.to(asset, { duration: 0.7, opacity: 1, y: "0%" }, 0.05);
-      }
-
       if (description) {
         revealTimeline.to(
           description,
@@ -245,19 +237,6 @@ export function LivingTimelineSection({ events }: LivingTimelineSectionProps) {
             <div className="timeline-premium-button" data-scroll="button">
               <span>Continuar leitura</span>
               <ArrowRightIcon aria-hidden="true" />
-            </div>
-          </div>
-
-          <div className="timeline-premium-asset-wrap" aria-hidden="true">
-            <div className="timeline-premium-asset-image">
-              <div className="timeline-premium-asset-grid" />
-              <div className="timeline-premium-asset-card">
-                <NiteSymbol className="timeline-premium-symbol" />
-              </div>
-              <div className="timeline-premium-asset-meta">
-                <span>Acervo em curadoria</span>
-                <span>Marcos validados</span>
-              </div>
             </div>
           </div>
 

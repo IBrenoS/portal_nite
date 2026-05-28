@@ -18,13 +18,11 @@ import {
 } from "motion/react";
 
 import {
-  headerCta,
   headerNavigationGroups,
   type SiteNavigationGroup,
   type SiteNavigationItem,
 } from "@/biblioteca/navigation";
 import { Container } from "@/components/layout/container";
-import { ButtonPrimaryLink } from "@/components/ui/brand-button";
 import { HeaderLogoMorph } from "@/components/ui/header-logo-morph";
 import {
   ThemeToggleButton,
@@ -37,6 +35,7 @@ const HEADER_COLLAPSE_END = 96;
 const HEADER_COLLAPSE_STATE_AT = 72;
 const HEADER_EFFECT_STATE_AT = 10;
 const HEADER_MOTION_EASE = [0.22, 1, 0.36, 1] as const;
+const RESEND_MENU_EASE = [0.4, 0, 0.2, 1] as const;
 const MOBILE_MENU_FOCUSABLE_SELECTOR = [
   "a[href]",
   "button:not([disabled])",
@@ -88,9 +87,6 @@ export function SiteHeader() {
   const [activeDesktopGroup, setActiveDesktopGroup] =
     useState<HeaderGroupId | null>(null);
   const [desktopDirection, setDesktopDirection] = useState(1);
-  const [desktopPanelAnchor, setDesktopPanelAnchor] = useState<number | string>(
-    "50%",
-  );
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeMobileGroup, setActiveMobileGroup] =
     useState<HeaderGroupId | null>(null);
@@ -109,8 +105,18 @@ export function SiteHeader() {
   const contentTransition = reduceMotion
     ? { duration: 0 }
     : { duration: 0.18, ease: HEADER_MOTION_EASE };
-  const isMultiColumnDesktopMenu =
-    (activeDesktopNavigationGroup?.items.length ?? 0) > 5;
+  const desktopMenuTransition = reduceMotion
+    ? { duration: 0 }
+    : { duration: 0.2, ease: RESEND_MENU_EASE };
+  const desktopContentTransition = reduceMotion
+    ? { duration: 0 }
+    : { duration: 0.2, ease: RESEND_MENU_EASE };
+  const desktopMenuItemCount = activeDesktopNavigationGroup?.items.length ?? 0;
+  const isTwoColumnDesktopMenu = desktopMenuItemCount > 4;
+  const desktopMenuHeightClass =
+    !isTwoColumnDesktopMenu && desktopMenuItemCount > 3
+      ? "h-[10.75rem]"
+      : "h-[8.25rem]";
 
   const collapseProgress = useTransform(
     scrollY,
@@ -135,24 +141,6 @@ export function SiteHeader() {
       desktopCloseTimerRef.current = null;
     }, 120);
   }, [cancelDesktopClose]);
-
-  const updateDesktopPanelAnchor = (groupId: HeaderGroupId) => {
-    const trigger = headerRef.current?.querySelector<HTMLElement>(
-      `[data-nav-trigger="${groupId}"]`,
-    );
-
-    if (!headerRef.current || !trigger) {
-      setDesktopPanelAnchor("50%");
-      return;
-    }
-
-    const headerBox = headerRef.current.getBoundingClientRect();
-    const triggerBox = trigger.getBoundingClientRect();
-
-    setDesktopPanelAnchor(
-      triggerBox.left - headerBox.left + triggerBox.width / 2,
-    );
-  };
 
   useEffect(() => {
     const updateCollapsedState = () => {
@@ -364,7 +352,6 @@ export function SiteHeader() {
 
   const openDesktopGroup = (groupId: HeaderGroupId) => {
     cancelDesktopClose();
-    updateDesktopPanelAnchor(groupId);
 
     const currentIndex = headerNavigationGroups.findIndex(
       (group) => group.id === activeDesktopGroup,
@@ -415,23 +402,25 @@ export function SiteHeader() {
     >
       <Container
         size="xl"
-        className="relative z-10 grid min-h-14 grid-cols-[minmax(9.25rem,1fr)_auto] items-center gap-4 py-1.5 sm:min-h-[58px] lg:grid-cols-[11rem_minmax(0,1fr)_auto] lg:gap-6 lg:py-0"
+        className="relative z-10 flex h-[58px] min-h-[58px] items-center gap-0 py-0"
       >
-        <Link
-          href="/"
-          aria-label="Ir para a página inicial do NITE UniJorge"
-          className="inline-flex min-h-10 w-[9.25rem] items-center rounded-md sm:w-[10rem] md:w-[11rem]"
-        >
-          <HeaderLogoMorph
-            progress={collapseProgress}
-            isCollapsed={isCollapsed}
-            reduceMotion={reduceMotion}
-          />
-        </Link>
+        <div className="flex flex-1 lg:w-[225px]">
+          <Link
+            href="/"
+            aria-label="Ir para a página inicial do NITE UniJorge"
+            className="inline-flex min-h-10 w-[9.25rem] items-center rounded-md sm:w-[10rem] md:w-[11rem]"
+          >
+            <HeaderLogoMorph
+              progress={collapseProgress}
+              isCollapsed={isCollapsed}
+              reduceMotion={reduceMotion}
+            />
+          </Link>
+        </div>
 
         <nav
           aria-label="Navegação principal"
-          className="hidden items-center justify-self-end lg:flex lg:gap-2"
+          className="hidden items-center lg:flex"
           data-site-nav=""
         >
           {headerNavigationGroups.map((group) => (
@@ -445,7 +434,7 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="flex items-center justify-end gap-2">
+        <div className="flex flex-1 items-center justify-end gap-4">
           <ThemeToggleButton
             id="theme-toggle-desktop"
             className="hidden lg:block"
@@ -461,13 +450,6 @@ export function SiteHeader() {
               setActiveDesktopGroup(null);
             }}
           />
-
-          <ButtonPrimaryLink
-            href={headerCta.href}
-            className="hidden min-h-10 rounded-lg px-4 py-2 text-sm shadow-none sm:inline-flex"
-          >
-            {headerCta.label}
-          </ButtonPrimaryLink>
 
           <button
             ref={mobileMenuButtonRef}
@@ -486,55 +468,92 @@ export function SiteHeader() {
       <AnimatePresence>
         {activeDesktopNavigationGroup ? (
           <motion.div
-            id={`site-mega-menu-${activeDesktopNavigationGroup.id}`}
-            className={cn(
-              "absolute top-full z-20 hidden rounded-xl border border-border/90 bg-background/92 p-1.5 shadow-[var(--shadow-brand-lift)] backdrop-blur-xl lg:block",
-              isMultiColumnDesktopMenu
-                ? "w-[min(31rem,calc(100vw-2rem))]"
-                : "w-[min(19rem,calc(100vw-2rem))]",
-            )}
-            data-mega-menu-shell=""
-            style={{ left: desktopPanelAnchor }}
-            initial={reduceMotion ? false : { opacity: 0, x: "-50%", y: -8 }}
-            animate={{ opacity: 1, x: "-50%", y: 0 }}
+            className="absolute left-0 top-full z-50 hidden w-full justify-center [perspective:2000px] lg:flex"
+            data-mega-menu-stage=""
+            initial={reduceMotion ? false : { opacity: 0 }}
+            animate={{ opacity: 1 }}
             exit={
               reduceMotion
-                ? { opacity: 0, x: "-50%" }
-                : { opacity: 0, x: "-50%", y: -6 }
+                ? { opacity: 0 }
+                : { opacity: 0, transition: { duration: 0.16 } }
             }
-            transition={menuTransition}
+            transition={desktopMenuTransition}
           >
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.div
-                key={activeDesktopNavigationGroup.id}
-                className={cn(
-                  "grid gap-1.5",
-                  isMultiColumnDesktopMenu && "sm:grid-cols-2",
-                )}
-                data-mega-menu-panel=""
-                initial={
-                  reduceMotion
-                    ? false
-                    : { opacity: 0, x: 10 * desktopDirection }
-                }
-                animate={{ opacity: 1, x: 0 }}
-                exit={
-                  reduceMotion
-                    ? { opacity: 0 }
-                    : { opacity: 0, x: -8 * desktopDirection }
-                }
-                transition={contentTransition}
-              >
-                {activeDesktopNavigationGroup.items.map((item) => (
-                  <HeaderNavigationItemLink
-                    key={item.label}
-                    item={item}
-                    variant="desktop"
-                    onNavigate={closeAllMenus}
-                  />
-                ))}
-              </motion.div>
-            </AnimatePresence>
+            <motion.div
+              id={`site-mega-menu-${activeDesktopNavigationGroup.id}`}
+              className={cn(
+                "relative w-[24rem] origin-[top_center] overflow-hidden rounded-3xl border border-[rgba(176,199,217,0.145)] bg-black/60 backdrop-blur-md transition-[width,height] duration-300 ease-out",
+                desktopMenuHeightClass,
+              )}
+              data-mega-menu-shell=""
+              initial={reduceMotion ? false : { rotateX: -10, scale: 0.9 }}
+              animate={{
+                rotateX: 0,
+                scale: 1,
+                opacity: 1,
+                filter: "blur(0px)",
+              }}
+              exit={
+                reduceMotion
+                  ? { opacity: 0 }
+                  : {
+                      opacity: 0,
+                      rotateX: -10,
+                      scale: 0.9,
+                      filter: "blur(10px)",
+                    }
+              }
+              transition={desktopMenuTransition}
+            >
+              <AnimatePresence initial={false}>
+                <motion.div
+                  key={activeDesktopNavigationGroup.id}
+                  className="absolute left-0 top-0 flex h-full w-full"
+                  data-mega-menu-panel=""
+                  initial={
+                    reduceMotion
+                      ? false
+                      : {
+                          opacity: 0,
+                          x: 100 * desktopDirection,
+                          filter: "blur(5px)",
+                        }
+                  }
+                  animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                  exit={
+                    reduceMotion
+                      ? { opacity: 0 }
+                      : {
+                          opacity: 0,
+                          x: -100 * desktopDirection,
+                          filter: "blur(5px)",
+                        }
+                  }
+                  transition={desktopContentTransition}
+                >
+                  <div className="flex h-full w-full flex-row items-stretch justify-between gap-16 p-5">
+                    <ul
+                      className={cn(
+                        "grid content-start gap-x-10 gap-y-3",
+                        isTwoColumnDesktopMenu
+                          ? "grid-flow-col grid-rows-3"
+                          : "grid-flow-row",
+                      )}
+                    >
+                      {activeDesktopNavigationGroup.items.map((item) => (
+                        <li key={item.label}>
+                          <HeaderNavigationItemLink
+                            item={item}
+                            variant="desktop"
+                            onNavigate={closeAllMenus}
+                          />
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </motion.div>
           </motion.div>
         ) : null}
       </AnimatePresence>
@@ -600,8 +619,8 @@ function HeaderNavigationGroupControl({
       <button
         type="button"
         className={cn(
-          "inline-flex min-h-10 items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/40",
-          isOpen && "text-foreground",
+          "inline-flex h-[58px] select-none items-center gap-1.5 px-3 py-1 text-sm font-medium text-[rgb(135,141,143)] outline-hidden transition duration-150 ease-in-out hover:text-[rgb(240,240,240)] focus-visible:text-[rgb(240,240,240)] focus-visible:ring-2 focus-visible:ring-ring/40",
+          isOpen && "text-[rgb(240,240,240)]",
         )}
         aria-controls={`site-mega-menu-${group.id}`}
         aria-expanded={isOpen}
@@ -611,8 +630,8 @@ function HeaderNavigationGroupControl({
         <ChevronDownIcon
           aria-hidden="true"
           className={cn(
-            "size-3 text-muted-foreground transition-[color,transform]",
-            isOpen && "rotate-180 text-brand-circuit-bright",
+            "size-3.5 text-[rgb(135,141,143)] transition-[color,transform] duration-150 ease-in-out",
+            isOpen && "translate-y-0.5 text-[rgb(240,240,240)]",
           )}
         />
       </button>
@@ -629,11 +648,13 @@ function HeaderNavigationItemLink({
   onNavigate?: () => void;
   variant?: "desktop" | "mobile";
 }) {
+  if (variant === "desktop") {
+    return <DesktopNavigationItemLink item={item} onNavigate={onNavigate} />;
+  }
+
   const className = cn(
     "group relative flex items-center justify-between gap-3 rounded-lg px-3 text-sm text-foreground transition-colors focus-visible:border-ring focus-visible:ring-3",
-    variant === "desktop"
-      ? "min-h-10 py-2 hover:bg-accent hover:text-foreground focus-visible:bg-accent focus-visible:ring-ring/40"
-      : "min-h-11 py-2.5 hover:bg-card focus-visible:bg-card focus-visible:ring-ring/50",
+    "min-h-11 py-2.5 hover:bg-card focus-visible:bg-card focus-visible:ring-ring/50",
     item.status === "planned" && "text-muted-foreground",
   );
 
@@ -654,10 +675,52 @@ function HeaderNavigationItemLink({
           aria-hidden="true"
           className={cn(
             "size-4 shrink-0 text-muted-foreground transition-[color,transform] group-hover:translate-x-0.5",
-            variant === "desktop" && "group-hover:text-brand-circuit-bright",
           )}
         />
       )}
+    </>
+  );
+
+  if (item.external) {
+    return (
+      <a
+        href={item.href}
+        target="_blank"
+        rel="noreferrer"
+        className={className}
+        onClick={onNavigate}
+      >
+        {content}
+      </a>
+    );
+  }
+
+  return (
+    <a href={item.href} className={className} onClick={onNavigate}>
+      {content}
+    </a>
+  );
+}
+
+function DesktopNavigationItemLink({
+  item,
+  onNavigate,
+}: {
+  item: SiteNavigationItem;
+  onNavigate?: () => void;
+}) {
+  const className = cn(
+    "inline-flex items-center gap-2 font-heading text-base font-light leading-[1.3125rem] text-[rgb(161,164,165)] outline-hidden transition duration-150 ease-in-out hover:text-[rgb(240,240,240)] focus-visible:text-[rgb(240,240,240)] focus-visible:ring-2 focus-visible:ring-ring/40",
+    item.status === "planned" && "text-[rgb(135,141,143)]",
+  );
+  const content = (
+    <>
+      <span>{item.label}</span>
+      {item.status === "planned" ? (
+        <span className="rounded-full border border-[rgba(176,199,217,0.145)] px-1.5 py-0.5 text-[0.62rem] font-semibold uppercase text-[rgb(135,141,143)]">
+          Planejado
+        </span>
+      ) : null}
     </>
   );
 
@@ -725,10 +788,6 @@ function MobileNavigationRoot({
           <XIcon aria-hidden="true" className="size-4" />
         </button>
       </div>
-
-      <ButtonPrimaryLink href={headerCta.href} onClick={onClose}>
-        {headerCta.label}
-      </ButtonPrimaryLink>
 
       <nav aria-label="Navegação principal mobile" className="grid gap-1.5">
         {headerNavigationGroups.map((group) => (

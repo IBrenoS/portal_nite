@@ -169,9 +169,9 @@ describe("HomePage", () => {
     expect(
       timeline.querySelector("[data-scroll='container']"),
     ).toBeInTheDocument();
-    expect(
-      timeline.querySelector(".timeline-premium-asset-image"),
-    ).toBeInTheDocument();
+    expect(timeline.querySelector(".timeline-premium-asset-image")).toBeNull();
+    expect(within(timeline).queryByText("Acervo em curadoria")).toBeNull();
+    expect(within(timeline).queryByText("Marcos validados")).toBeNull();
     expect(screen.queryByText("Marcos ainda não publicados")).toBeNull();
     expect(screen.queryByText("Primeiros projetos aplicados")).toBeNull();
     expect(screen.queryByText("Estruturação do NITE")).toBeNull();
@@ -255,8 +255,8 @@ describe("HomePage", () => {
       );
     }
     expect(
-      header.getByRole("link", { name: "Falar com o NITE" }),
-    ).toHaveAttribute("href", "/contato");
+      header.queryByRole("link", { name: "Falar com o NITE" }),
+    ).not.toBeInTheDocument();
     expect(
       header.getByRole("button", { name: /Alterar tema da interface/i }),
     ).toHaveAttribute("aria-expanded", "false");

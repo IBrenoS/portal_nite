@@ -7,6 +7,7 @@ Aceito
 ## Historico
 
 - 2026-05-14: Aprovada pelo gestor do projeto para liberar implementacao do Header final do MVP com MegaMenu desktop compacto e menu mobile em camadas.
+- 2026-05-28: CTA global `Falar com o NITE` removido do Header; contato permanece acessivel pelo grupo Contato.
 
 ## Contexto
 
@@ -14,7 +15,7 @@ A arquitetura de informacao consolidada define rotas publicas para home, projeto
 
 Termos equivalentes podem aparecer apenas como contexto editorial, nunca como label principal nem rota principal do MVP.
 
-Para a implementacao do Header final do MVP, a Spec 002 descarta o header simples e exige navegacao com logo, links principais, CTA principal, MegaMenu desktop compacto com grupos expansivos e menu mobile em camadas com os mesmos grupos.
+Para a implementacao do Header final do MVP, a Spec 002 descarta o header simples e exige navegacao com logo, links principais, MegaMenu desktop compacto com grupos expansivos e menu mobile em camadas com os mesmos grupos, sem CTA global isolado no header.
 
 Essa decisao substitui a nomenclatura anterior de mobile accordion para o Header final. No mobile, o usuario abre o painel principal, visualiza os grupos principais, acessa uma segunda camada com os links do grupo selecionado e pode voltar ou fechar o menu.
 
@@ -38,15 +39,14 @@ Adotar os labels principais do Header MVP:
 - Oportunidades.
 - Contato.
 
-Adotar o CTA principal do Header:
+Manter contato acessivel pelo Header sem CTA global isolado:
 
-- Falar com o NITE -> `/contato`.
+- Contato -> `/contato`, pelo grupo Contato da navegacao.
 
 Implementar o Header final do MVP com:
 
 - Logo.
 - Links principais.
-- CTA principal.
 - MegaMenu desktop compacto, nao full-width, com grupos expansivos.
 - Menu mobile em camadas com os mesmos grupos.
 - Separacao clara entre rotas MVP e rotas futuras.

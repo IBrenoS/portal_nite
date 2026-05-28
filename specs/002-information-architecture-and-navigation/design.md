@@ -40,9 +40,10 @@ Itens principais:
 - Oportunidades.
 - Contato.
 
-CTA principal:
+Regra de CTA global:
 
-- Falar com o NITE -> `/contato`.
+- O header nao exibe CTA global isolado.
+- O contato permanece acessivel pelo grupo Contato da navegacao.
 
 ## MegaMenu desktop
 
@@ -108,7 +109,7 @@ A navegacao mobile deve usar os mesmos grupos do mega menu desktop:
 
 O menu mobile nao e accordion simples. O usuario abre o painel principal, visualiza os grupos principais, acessa uma segunda camada com os links do grupo selecionado e pode voltar ou fechar o menu.
 
-A primeira camada mobile deve conter logo/marca, CTA principal, botao fechar e grupos principais. A segunda camada mobile deve conter botao voltar, botao fechar, titulo do grupo e links do grupo. O menu deve ser confortavel para toque, nao depender de hover, nao criar scroll horizontal e preservar foco visivel. Itens futuros devem ser rotulados como roadmap/pendente quando exibidos.
+A primeira camada mobile deve conter logo/marca, botao fechar e grupos principais. A segunda camada mobile deve conter botao voltar, botao fechar, titulo do grupo e links do grupo. O menu deve ser confortavel para toque, nao depender de hover, nao criar scroll horizontal e preservar foco visivel. Itens futuros devem ser rotulados como roadmap/pendente quando exibidos.
 
 ## CTA por area
 
@@ -116,7 +117,7 @@ A primeira camada mobile deve conter logo/marca, CTA principal, botao fechar e g
 | -------------------- | ------------------------ | --------------------------------------------------- | -------------------------------------------------- |
 | Hero primario        | Explorar projetos        | `/projetos`                                         | Texto aprovado pelo gestor                         |
 | Hero secundario      | Conhecer o NITE          | Secao Sobre na home ou rota futura `/sobre`         | `/sobre` nao deve ser implementada automaticamente |
-| Header               | Falar com o NITE         | `/contato`                                          | Texto aprovado pelo gestor                         |
+| Header               | Sem CTA global isolado   | N/A                                                 | Contato permanece acessivel pelo grupo Contato     |
 | Oportunidades        | Acompanhar oportunidades | `/oportunidades`                                    | Pagina deve suportar estado sem vagas              |
 | Professores/gestores | Propor desafio           | `/contato?tipo=desafio` ou fluxo equivalente futuro | Fluxo detalhado e implementacao futura             |
 
@@ -130,7 +131,7 @@ A primeira camada mobile deve conter logo/marca, CTA principal, botao fechar e g
 
 ## Estados de navegacao
 
-- Fechado: mostra logo, links principais e CTA principal.
+- Fechado: mostra logo e links principais.
 - Aberto desktop: mostra grupos com links, sem depender apenas de hover.
 - Aberto mobile: mostra primeira camada com grupos principais e segunda camada com links do grupo selecionado.
 - Hover: reforca item interativo sem depender so de cor.
