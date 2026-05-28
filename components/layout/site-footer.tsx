@@ -16,10 +16,7 @@ const currentYear = 2026;
 
 export function SiteFooter() {
   return (
-    <footer
-      className="border-t border-border/70 bg-background"
-      data-surface="clean"
-    >
+    <footer className="bg-background" data-surface="clean">
       <Container className="grid gap-8 py-10 text-sm text-muted-foreground lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
         <div className="flex items-start gap-4">
           <BrandMark className="size-12 shrink-0" />

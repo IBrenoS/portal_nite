@@ -6,6 +6,11 @@ import { THEME_STORAGE_KEY } from "@/biblioteca/theme";
 import { Container } from "@/components/layout/container";
 import { OpportunityBanner } from "@/components/sections/opportunity-banner";
 import { OpportunityInterestFormPreview } from "@/components/sections/opportunity-interest-form-preview";
+import {
+  OpportunityStatus,
+  opportunityStatusLabels,
+  type OpportunityStatusValue,
+} from "@/components/sections/opportunity-status";
 import { ProjectCard } from "@/components/sections/project-card";
 import { SectionHeader } from "@/components/sections/section-header";
 import { TimelineItem } from "@/components/sections/timeline-item";
@@ -367,10 +372,10 @@ describe("design system base", () => {
     const cta = screen.getByRole("link", { name: /Falar com o NITE/i });
     const closedStatus = screen
       .getByText("Sem oportunidades abertas")
-      .closest("[data-slot='opportunity-banner-status']");
+      .closest("[data-slot='opportunity-status']");
     const openStatus = screen
       .getByText("Processo aberto")
-      .closest("[data-slot='opportunity-banner-status']");
+      .closest("[data-slot='opportunity-status']");
 
     expect(banners).toHaveLength(2);
     expect(closedBanner).toHaveAttribute("data-slot", "card");
@@ -386,6 +391,35 @@ describe("design system base", () => {
     ).toBeInTheDocument();
     expect(cta).toHaveAttribute("href", "/#contato");
     expect(document.querySelector("form")).not.toBeInTheDocument();
+  });
+
+  it("renderiza OpportunityStatus com texto acessivel para os estados da Spec 005", () => {
+    const entries = Object.entries(opportunityStatusLabels) as Array<
+      [OpportunityStatusValue, string]
+    >;
+
+    render(
+      <>
+        {entries.map(([status]) => (
+          <OpportunityStatus key={status} status={status} />
+        ))}
+      </>,
+    );
+
+    for (const [status, label] of entries) {
+      const statusElement = screen
+        .getByText(label)
+        .closest("[data-slot='opportunity-status']");
+
+      expect(statusElement).toHaveAttribute("data-status", status);
+      expect(statusElement).toHaveAttribute(
+        "aria-label",
+        `Status da oportunidade: ${label}`,
+      );
+      expect(
+        statusElement?.querySelector("[aria-hidden='true']"),
+      ).toBeInTheDocument();
+    }
   });
 
   it("renderiza OpportunityInterestFormPreview sem formulario ou campos ativos", () => {

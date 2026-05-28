@@ -66,7 +66,7 @@ export default function OpportunitiesPage() {
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbJsonLd) }}
       />
       <main id="conteudo-principal">
-        <section className="border-b border-border py-14 sm:py-16 lg:py-20">
+        <section className="py-14 sm:py-16 lg:py-20">
           <Container size="xl" className="grid gap-6">
             <SectionHeader
               as="h1"
@@ -87,7 +87,7 @@ export default function OpportunitiesPage() {
               titleId="estado-oportunidades-titulo"
               title="No momento, não há oportunidades abertas."
               description="Quando houver processo seletivo, esta página será o canal principal para acompanhar orientações e manifestar interesse."
-              note="Acompanhe esta página ou fale com o NITE para dúvidas institucionais. O envio de interesse ou currículo não garante aprovação. Quando aplicável, utilize seu e-mail institucional. O formulário integrado só deve aparecer quando houver processo aberto e definição técnica para envio, armazenamento, notificação e privacidade operacional."
+              note="Acompanhe esta página ou fale com o NITE para dúvidas institucionais. Nenhum envio de interesse ou currículo está ativo agora; quando houver processo validado, use e-mail institucional se aplicável. O envio futuro não garante aprovação."
               cta={{ label: "Falar com o NITE", href: "/contato" }}
             />
 
@@ -167,7 +167,7 @@ export default function OpportunitiesPage() {
         </section>
 
         <section
-          className="border-t border-border py-16 sm:py-20"
+          className="py-16 sm:py-20"
           aria-labelledby="estrutura-formulario-oportunidades"
         >
           <Container size="xl">
@@ -176,7 +176,7 @@ export default function OpportunitiesPage() {
         </section>
 
         <section
-          className="border-t border-border py-16 sm:py-20"
+          className="py-16 sm:py-20"
           aria-labelledby="areas-oportunidades"
         >
           <Container size="xl" className="grid gap-6">

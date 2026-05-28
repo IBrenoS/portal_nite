@@ -26,7 +26,15 @@ describe("OpportunitiesPage", () => {
 
     expect(banner).toHaveAttribute("data-slot", "card");
     expect(banner).toHaveAttribute("data-status", "closed");
-    expect(main.getByText("Sem oportunidades abertas")).toBeInTheDocument();
+    const status = main
+      .getByText("Sem oportunidades abertas")
+      .closest("[data-slot='opportunity-status']");
+
+    expect(status).toHaveAttribute("data-status", "closed");
+    expect(status).toHaveAttribute(
+      "aria-label",
+      "Status da oportunidade: Sem oportunidades abertas",
+    );
     expect(
       document.querySelector(
         "[data-component='opportunity-interest-form-preview']",
@@ -45,15 +53,12 @@ describe("OpportunitiesPage", () => {
       ),
     ).toBeInTheDocument();
     expect(
-      main.getByText(
-        "O envio de interesse ou currículo não garante aprovação.",
-        {
-          exact: false,
-        },
-      ),
+      main.getByText("O envio futuro não garante aprovação.", {
+        exact: false,
+      }),
     ).toBeInTheDocument();
     expect(
-      main.getByText("Quando aplicável, utilize seu e-mail institucional.", {
+      main.getByText("use e-mail institucional se aplicável", {
         exact: false,
       }),
     ).toBeInTheDocument();

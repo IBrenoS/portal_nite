@@ -1,8 +1,9 @@
 import {
+  ArchiveIcon,
   ArrowRightIcon,
   BellIcon,
   CheckCircle2Icon,
-  InfoIcon,
+  Clock3Icon,
 } from "lucide-react";
 
 import {
@@ -13,9 +14,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { buttonVariants } from "@/components/ui/button";
+import {
+  OpportunityStatus,
+  type OpportunityStatusValue,
+} from "@/components/sections/opportunity-status";
 import { cn } from "@/lib/utils";
 
-type OpportunityBannerStatus = "closed" | "open" | "info";
+type OpportunityBannerStatus = OpportunityStatusValue;
 type OpportunityBannerHeadingLevel = "h2" | "h3" | "h4";
 
 type OpportunityBannerProps = {
@@ -32,34 +37,31 @@ type OpportunityBannerProps = {
   className?: string;
 };
 
-const statusConfig = {
+const statusIconConfig = {
   closed: {
-    label: "Sem oportunidades abertas",
     Icon: BellIcon,
     iconClassName:
       "border-brand-circuit-bright/30 bg-brand-circuit-bright/10 text-brand-circuit-bright",
-    statusClassName:
-      "border-brand-circuit-bright/30 bg-brand-circuit-bright/10 text-brand-circuit-bright",
   },
   open: {
-    label: "Processo aberto",
     Icon: CheckCircle2Icon,
     iconClassName: "border-status-done/30 bg-status-done/10 text-status-done",
-    statusClassName: "border-status-done/30 bg-status-done/10 text-status-done",
   },
-  info: {
-    label: "Informativo",
-    Icon: InfoIcon,
-    iconClassName: "border-border bg-muted/40 text-muted-foreground",
-    statusClassName: "border-border bg-muted/40 text-muted-foreground",
+  draft: {
+    Icon: Clock3Icon,
+    iconClassName:
+      "border-status-warning/30 bg-status-warning/10 text-status-warning",
+  },
+  archived: {
+    Icon: ArchiveIcon,
+    iconClassName:
+      "border-status-draft/30 bg-status-draft/10 text-status-draft",
   },
 } satisfies Record<
   OpportunityBannerStatus,
   {
-    label: string;
     Icon: typeof BellIcon;
     iconClassName: string;
-    statusClassName: string;
   }
 >;
 
@@ -73,7 +75,7 @@ export function OpportunityBanner({
   titleId,
   className,
 }: OpportunityBannerProps) {
-  const config = statusConfig[status];
+  const config = statusIconConfig[status];
   const Heading = headingLevel;
   const Icon = config.Icon;
 
@@ -96,15 +98,7 @@ export function OpportunityBanner({
           </span>
 
           <div className="grid gap-3">
-            <span
-              data-slot="opportunity-banner-status"
-              className={cn(
-                "w-fit rounded-full border px-3 py-1 font-mono text-xs font-medium uppercase tracking-[0.14em]",
-                config.statusClassName,
-              )}
-            >
-              {config.label}
-            </span>
+            <OpportunityStatus status={status} />
             <div className="grid gap-2">
               <CardTitle>
                 <Heading

@@ -54,7 +54,7 @@ export default function ProjectsPage() {
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbJsonLd) }}
       />
       <main id="conteudo-principal">
-        <section className="border-b border-border py-14 sm:py-16 lg:py-20">
+        <section className="py-14 sm:py-16 lg:py-20">
           <Container size="xl" className="grid gap-6">
             <SectionHeader
               as="h1"

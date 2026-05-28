@@ -4,6 +4,8 @@
 
 A pagina de oportunidades deve funcionar mesmo quando nao houver processo aberto. O estado sem oportunidades abertas e parte normal da experiencia, nao erro, placeholder vazio ou promessa de vaga futura.
 
+No MVP sem backend, a experiencia entregue e a pagina `/oportunidades` com estado sem oportunidades abertas, status textual acessivel, CTA institucional seguro, areas possiveis sem anunciar vaga e estrutura visual futura/inativa do formulario. Nao ha formulario funcional, campos ativos, envio, coleta, armazenamento, notificacao ou backend.
+
 As decisoes visuais seguem a Spec 003:
 
 - CTAs com hierarquia clara.
@@ -15,17 +17,21 @@ As decisoes visuais seguem a Spec 003:
 
 ## Estrutura da pagina `/oportunidades`
 
-A pagina deve organizar:
+A pagina atual do MVP sem backend organiza:
 
 - Cabecalho da pagina.
 - Texto curto explicando a area de oportunidades.
-- CTA oficial "Acompanhar oportunidades".
 - Estado sem oportunidades abertas.
-- Estado com processo aberto, quando houver dados validados.
 - Areas possiveis de atuacao.
-- Formulario integrado, somente quando houver oportunidade aberta e fluxo tecnico definido.
-- Disclaimer de privacidade e uso dos dados.
-- FAQ futuro como expansao, sem obrigatoriedade no MVP.
+- Estrutura visual futura/inativa do formulario, sem coleta ou envio.
+- Mensagem de privacidade operacional indicando ausencia de coleta no estado atual.
+
+A pagina futura, quando houver dados validados e decisao tecnica, pode organizar:
+
+- Estado com processo aberto.
+- Formulario integrado funcional, somente quando houver oportunidade aberta e fluxo tecnico definido.
+- Disclaimer de privacidade e uso dos dados do formulario funcional.
+- FAQ futuro como expansao, sem obrigatoriedade no MVP sem backend.
 
 ## Estado sem oportunidades abertas
 
@@ -46,7 +52,7 @@ Nao deve conter:
 - Promessa de abertura futura.
 - Promessa de resposta automatica.
 
-## Estado com processo aberto
+## Estado com processo aberto futuro
 
 Quando houver oportunidade validada, a pagina deve mostrar:
 
@@ -62,6 +68,8 @@ Quando houver oportunidade validada, a pagina deve mostrar:
 - Formulario integrado ou instrucao clara quando o backend ainda estiver pendente.
 
 Oportunidade aberta deve ser objetiva e escaneavel. Conteudo longo, regras completas e documentos extensos devem ser evitados no MVP, salvo quando forem material oficial validado.
+
+Esse estado depende de oportunidade real validada. Nao deve ser simulado com dados ficticios para fechar o MVP sem backend.
 
 ## OpportunityBanner ou OpportunityCard
 
@@ -79,14 +87,17 @@ Estrutura informacional:
 Comportamento visual:
 
 - Status deve usar texto e pode usar cor/icone como apoio.
+- `OpportunityStatus` deve comunicar `closed`, `open`, `draft` e `archived` com label publico e nao depender apenas de cor.
 - O card/banner nao deve parecer clicavel se nao houver acao disponivel.
 - CTA deve ficar claro quando o formulario estiver disponivel.
 - Estado sem vagas deve parecer informativo, nao erro.
 - Foco visivel deve existir em links e CTAs.
 
-## Formulario integrado
+## Formulario integrado futuro
 
-O formulario deve aparecer apenas quando houver oportunidade aberta e condicao tecnica definida para envio.
+O formulario funcional deve aparecer apenas quando houver oportunidade aberta, condicao tecnica definida para envio e validacao de privacidade operacional.
+
+No MVP sem backend, o bloco existente e apenas uma estrutura visual futura/inativa. Ele nao deve usar `<form>`, `action`, `method`, `onSubmit`, `fetch`, API route, server action, campos ativos ou qualquer mecanismo de coleta/envio.
 
 Campos obrigatorios:
 
@@ -113,18 +124,19 @@ Regras visuais e de interacao:
 - Sucesso deve informar recebimento ou proximos passos gerais, sem prometer aprovacao ou resposta automatica.
 - Erro deve explicar como corrigir ou tentar novamente.
 - Fallback tecnico deve informar que envio ainda depende de backend, armazenamento ou notificacao.
+- O preview inativo deve continuar informando que nenhum dado e solicitado, capturado, armazenado ou enviado.
 
 ## Estados esperados
 
-| Estado | Comportamento esperado |
-|---|---|
-| Sem oportunidades abertas | Informa ausencia de processo aberto e orienta acompanhamento |
-| Processo aberto | Mostra dados validados, forma de participacao e formulario quando disponivel |
-| Draft/pendente | Nao aparece como oportunidade aberta |
-| Loading | Indica processamento sem perder contexto |
-| Erro | Mostra mensagem clara e recuperavel |
-| Sucesso | Confirma recebimento ou orienta proximos passos, sem promessa automatica |
-| Fallback tecnico | Informa dependencia de backend, armazenamento ou notificacao |
+| Estado                    | Comportamento esperado                                                                                   |
+| ------------------------- | -------------------------------------------------------------------------------------------------------- |
+| Sem oportunidades abertas | Informa ausencia de processo aberto e orienta acompanhamento                                             |
+| Processo aberto           | Futuro/condicional; mostra dados validados, forma de participacao e formulario quando disponivel         |
+| Draft/pendente            | Nao aparece como oportunidade aberta                                                                     |
+| Loading                   | Futuro do formulario funcional; indica processamento sem perder contexto                                 |
+| Erro                      | Futuro do formulario funcional; mostra mensagem clara e recuperavel                                      |
+| Sucesso                   | Futuro do formulario funcional; confirma recebimento ou orienta proximos passos, sem promessa automatica |
+| Fallback tecnico          | Futuro do formulario funcional; informa dependencia de backend, armazenamento ou notificacao             |
 
 ## Areas possiveis
 
@@ -153,8 +165,9 @@ As areas indicam possibilidades de atuacao. Elas nao devem ser apresentadas como
 
 ## Privacidade e ciencia do usuario
 
-- O formulario deve pedir aceite/ciencia para uso dos dados no contato do processo seletivo.
-- A pagina deve explicar que os dados enviados servem para contato relacionado a oportunidades.
+- O formulario funcional futuro deve pedir aceite/ciencia para uso dos dados no contato do processo seletivo.
+- Enquanto nao houver formulario funcional, a pagina deve explicar que nenhum dado e solicitado, capturado, armazenado ou enviado.
+- Quando houver coleta futura, a pagina deve explicar que os dados enviados servem para contato relacionado a oportunidades.
 - A spec tecnica futura deve definir armazenamento, notificacao, retencao e protecao de dados antes da implementacao.
 - Nenhum dado pessoal deve ser coletado sem finalidade explicita.
 
@@ -171,4 +184,4 @@ As areas indicam possibilidades de atuacao. Elas nao devem ser apresentadas como
 
 ## FAQ futuro
 
-FAQ pode ser adicionada futuramente para explicar como participar, requisitos comuns e etapas do processo. No MVP, FAQ nao e requisito obrigatorio e nao deve substituir informacoes validadas de uma oportunidade aberta.
+FAQ pode ser adicionada futuramente para explicar como participar, requisitos comuns e etapas do processo. No MVP sem backend, FAQ nao e requisito obrigatorio, nao bloqueia fechamento da Spec 005 e nao deve substituir informacoes validadas de uma oportunidade aberta.

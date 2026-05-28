@@ -170,7 +170,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbJsonLd) }}
       />
       <main id="conteudo-principal">
-        <section className="border-b border-border py-12 sm:py-16 lg:py-20">
+        <section className="py-12 sm:py-16 lg:py-20">
           <Container
             size="xl"
             className="grid gap-8 lg:grid-cols-[0.84fr_1.16fr]"
@@ -619,7 +619,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </section>
 
         {relatedProjects.length > 0 ? (
-          <section className="border-t border-border py-16 sm:py-24">
+          <section className="py-16 sm:py-24">
             <Container size="xl" className="grid gap-8">
               <div className="flex flex-col gap-3">
                 <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-circuit-bright">

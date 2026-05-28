@@ -28,29 +28,29 @@ Decisao aprovada pelo gestor/desenvolvedor do projeto: o Portal NITE adotara uma
 
 O token `background.default` foi ajustado de `#0A0A0F` para `#09090a` apos validacao visual, para reduzir a percepcao azulada do fundo dominante e aproximar a base visual de um dark premium neutro/grafite. A decisao mantem a regra de evitar preto absoluto como fundo dominante e preservar o azul como acento de marca.
 
-| Token              | Valor aprovado              | Uso principal                       |
-| ------------------ | --------------------------- | ----------------------------------- |
-| background.default | `#09090a`                   | Fundo principal                     |
-| background.section | `#0D111C`                   | Separacao de blocos e secoes        |
-| surface.card       | `#121826`                   | Cards                               |
-| surface.elevated   | `#172033`                   | Mega menu, dropdowns e paineis      |
-| surface.soft       | `#F3F6FA`                   | Secoes claras pontuais              |
-| border.subtle      | `rgba(255, 255, 255, 0.08)` | Bordas discretas                    |
-| border.strong      | `rgba(255, 255, 255, 0.16)` | Bordas com mais presenca            |
-| text.primary       | `#F4F7FB`                   | Texto principal                     |
-| text.secondary     | `#AAB4C3`                   | Texto secundario                    |
-| text.muted         | `#758195`                   | Texto de apoio                      |
-| brand.primary      | `#2563EB`                   | CTAs principais e identidade        |
-| brand.accent       | `#38BDF8`                   | Highlights, icones e microdestaques |
-| brand.glow         | `rgba(56, 189, 248, 0.22)`  | Glow de baixa intensidade           |
-| brand.soft         | `rgba(37, 99, 235, 0.12)`   | Destaques suaves                    |
-| focus.ring         | `#7DD3FC`                   | Foco visivel                        |
-| status.draft       | `#94A3B8`                   | Status rascunho                     |
-| status.progress    | `#38BDF8`                   | Status em progresso                 |
-| status.validated   | `#A78BFA`                   | Status validado                     |
-| status.done        | `#34D399`                   | Status concluido                    |
-| status.warning     | `#FBBF24`                   | Status de alerta                    |
-| status.error       | `#FB7185`                   | Status de erro                      |
+| Token              | Valor aprovado              | Uso principal                          |
+| ------------------ | --------------------------- | -------------------------------------- |
+| background.default | `#09090a`                   | Fundo principal                        |
+| background.section | `#0D111C`                   | Fundo alternativo para blocos extensos |
+| surface.card       | `#121826`                   | Cards                                  |
+| surface.elevated   | `#172033`                   | Mega menu, dropdowns e paineis         |
+| surface.soft       | `#F3F6FA`                   | Secoes claras pontuais                 |
+| border.subtle      | `rgba(255, 255, 255, 0.08)` | Bordas discretas                       |
+| border.strong      | `rgba(255, 255, 255, 0.16)` | Bordas com mais presenca               |
+| text.primary       | `#F4F7FB`                   | Texto principal                        |
+| text.secondary     | `#AAB4C3`                   | Texto secundario                       |
+| text.muted         | `#758195`                   | Texto de apoio                         |
+| brand.primary      | `#2563EB`                   | CTAs principais e identidade           |
+| brand.accent       | `#38BDF8`                   | Highlights, icones e microdestaques    |
+| brand.glow         | `rgba(56, 189, 248, 0.22)`  | Glow de baixa intensidade              |
+| brand.soft         | `rgba(37, 99, 235, 0.12)`   | Destaques suaves                       |
+| focus.ring         | `#7DD3FC`                   | Foco visivel                           |
+| status.draft       | `#94A3B8`                   | Status rascunho                        |
+| status.progress    | `#38BDF8`                   | Status em progresso                    |
+| status.validated   | `#A78BFA`                   | Status validado                        |
+| status.done        | `#34D399`                   | Status concluido                       |
+| status.warning     | `#FBBF24`                   | Status de alerta                       |
+| status.error       | `#FB7185`                   | Status de erro                         |
 
 ## Theme System e Light Mode implementado
 
@@ -72,7 +72,7 @@ Os valores abaixo sao o baseline documental do Light Mode implementado. Eles nao
 | Token light             | Valor aplicado                     | Uso principal                                          |
 | ----------------------- | ---------------------------------- | ------------------------------------------------------ |
 | background.default      | `#F7F3EA`                          | Fundo principal off-white premium, sem branco absoluto |
-| background.section      | `#EFE8DC`                          | Separacao de blocos e secoes                           |
+| background.section      | `#EFE8DC`                          | Fundo alternativo para blocos extensos                 |
 | surface.card            | `#FFFBF5`                          | Cards e superficies principais                         |
 | surface.elevated        | `#F2EBDD`                          | MegaMenu, dropdowns e paineis elevados                 |
 | surface.soft            | `#EAF1FA`                          | Destaques suaves e secoes pontuais                     |
@@ -119,7 +119,7 @@ Os valores abaixo sao o baseline documental do Light Mode implementado. Eles nao
 ## Regras de uso dos tokens
 
 - `background.default` deve ser o fundo principal.
-- `background.section` deve separar blocos e secoes.
+- `background.section` pode diferenciar blocos extensos sem depender de linhas horizontais entre secoes.
 - `surface.card` deve ser usado em cards.
 - `surface.elevated` deve ser usado em mega menu, dropdowns e paineis.
 - `surface.soft` pode ser usado apenas em secoes claras pontuais.
@@ -132,11 +132,11 @@ Os valores abaixo sao o baseline documental do Light Mode implementado. Eles nao
 
 ## Backgrounds, superficies e profundidade
 
-- O fundo principal do portal deve usar `background.default`, com `background.section` para separar blocos extensos.
+- O fundo principal do portal deve usar `background.default`, com `background.section` apenas quando um bloco extenso precisar de fundo alternativo.
 - Cards devem usar `surface.card` e manter estrutura visual consistente entre listas, detalhes e chamadas institucionais.
 - Mega menu, dropdowns e paineis devem usar `surface.elevated` para diferenciar camadas interativas.
 - `surface.soft` deve aparecer apenas em secoes claras pontuais e com revisao de contraste especifica.
-- Bordas devem ser discretas por padrao, usando `border.subtle`; `border.strong` deve ficar reservado para enfase, divisao clara ou estados ativos.
+- Bordas devem ser discretas por padrao, usando `border.subtle` em componentes, cards e controles; linhas horizontais nao devem ser usadas como divisor padrao entre secoes.
 - Sombras, quando usadas, devem ser discretas e secundarias em relacao a superficie, borda e contraste.
 - Glow deve ser aplicado em baixa intensidade, apenas em hero, timeline ou elementos especiais.
 - Grid visual e gradientes devem apoiar orientacao e profundidade, sem virar fundo dominante nem competir com conteudo.

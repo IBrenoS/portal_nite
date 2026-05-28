@@ -339,6 +339,15 @@ body {
   }
 }
 
+.skip-link {
+  translate: 0 -4rem;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  translate: none;
+}
+
 @layer utilities {
   .brand-panel {
     background: var(--brand-panel);
