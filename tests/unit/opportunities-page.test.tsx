@@ -15,7 +15,7 @@ describe("OpportunitiesPage", () => {
     expect(
       screen.getByRole("heading", {
         level: 1,
-        name: "Oportunidades do NITE",
+        name: "Faça parte do NITE",
       }),
     ).toBeInTheDocument();
 
@@ -26,9 +26,7 @@ describe("OpportunitiesPage", () => {
 
     expect(banner).toHaveAttribute("data-slot", "card");
     expect(banner).toHaveAttribute("data-status", "closed");
-    const status = main
-      .getByText("Sem oportunidades abertas")
-      .closest("[data-slot='opportunity-status']");
+    const status = document.querySelector("[data-slot='opportunity-status']");
 
     expect(status).toHaveAttribute("data-status", "closed");
     expect(status).toHaveAttribute(
@@ -43,7 +41,7 @@ describe("OpportunitiesPage", () => {
     expect(main.getByText("Formulário em preparação")).toBeInTheDocument();
     expect(
       main.getByRole("heading", {
-        level: 2,
+        level: 3,
         name: "No momento, não há oportunidades abertas.",
       }),
     ).toBeInTheDocument();
@@ -85,10 +83,16 @@ describe("OpportunitiesPage", () => {
     expect(
       main.getByRole("heading", {
         level: 2,
-        name: "Como funcionará quando houver abertura",
+        name: "Benefícios & garantias",
       }),
     ).toBeInTheDocument();
-    expect(main.getAllByRole("listitem")).toHaveLength(11);
+    expect(main.getAllByRole("listitem")).toHaveLength(17);
+    expect(
+      main.getByRole("heading", {
+        level: 3,
+        name: "Estado público claro",
+      }),
+    ).toBeInTheDocument();
     expect(
       main.getByText(
         "O formulário integrado será exibido apenas se o processo estiver aberto e o canal técnico estiver definido.",
