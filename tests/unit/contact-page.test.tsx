@@ -1,15 +1,17 @@
 import { cleanup, render, screen, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it } from "vitest";
 
 import ContactPage, { metadata } from "@/app/contato/page";
-import { siteConfig } from "@/biblioteca/site-config";
+
+const contactEmail = "unijorge.nite@gmail.com";
 
 afterEach(() => {
   cleanup();
 });
 
 describe("ContactPage", () => {
-  it("renderiza contato institucional sem formulario funcional", () => {
+  it("renderiza o fluxo direto de contato inspirado na Resend", () => {
     render(<ContactPage />);
 
     expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
@@ -19,63 +21,46 @@ describe("ContactPage", () => {
 
     const main = within(screen.getByRole("main"));
 
-    expect(
-      main.getByText(
-        "Use esta página para encontrar caminhos institucionais de contato com o Núcleo.",
-      ),
-    ).toBeInTheDocument();
-    expect(
-      main.getByText(
-        "Propostas de desafio, dúvidas sobre projetos e interesse em oportunidades podem ser direcionados por este canal.",
-      ),
-    ).toBeInTheDocument();
-    expect(
-      main.getByText(
-        "Canais reais serão exibidos apenas quando estiverem validados.",
-      ),
-    ).toBeInTheDocument();
-    expect(
-      main.getByText("Nenhum dado pessoal é solicitado nesta etapa.", {
-        exact: false,
-      }),
-    ).toBeInTheDocument();
-
-    expect(document.querySelector("form")).not.toBeInTheDocument();
-    expect(document.querySelectorAll("input, textarea, select")).toHaveLength(
-      0,
+    expect(main.getByLabelText("E-mail")).toHaveAttribute("type", "email");
+    expect(main.getByLabelText("Como podemos ajudar?")).toHaveAttribute(
+      "name",
+      "message",
     );
-    expect(
-      screen.queryByRole("button", { name: /enviar/i }),
-    ).not.toBeInTheDocument();
+    expect(main.getByRole("button", { name: "Submit" })).toBeDisabled();
+    expect(main.getByText("Get help")).toBeInTheDocument();
+    expect(main.getByRole("link", { name: contactEmail })).toHaveAttribute(
+      "href",
+      `mailto:${contactEmail}`,
+    );
+
+    expect(document.querySelector("main a[href='/projetos']")).toBeNull();
+    expect(document.querySelector("main a[href='/oportunidades']")).toBeNull();
+    expect(document.querySelector("main a[href='/atualizacoes']")).toBeNull();
   });
 
-  it("usa somente rotas reais e canais configurados", () => {
+  it("habilita Submit apenas depois dos dois campos preenchidos", async () => {
+    const user = userEvent.setup();
+
     render(<ContactPage />);
 
-    const main = within(screen.getByRole("main"));
+    const emailInput = screen.getByLabelText("E-mail");
+    const messageInput = screen.getByLabelText("Como podemos ajudar?");
+    const submitButton = screen.getByRole("button", { name: "Submit" });
 
-    for (const route of ["/projetos", "/oportunidades", "/atualizacoes"]) {
-      expect(
-        document.querySelector(`main a[href='${route}']`),
-      ).toBeInTheDocument();
-    }
+    expect(submitButton).toBeDisabled();
 
-    for (const channel of siteConfig.publicChannels) {
-      expect(
-        main.getByRole("link", { name: channel.ariaLabel }),
-      ).toHaveAttribute("href", channel.href);
-    }
+    await user.type(emailInput, "aluna@example.com");
 
-    for (const href of ["/noticias", "/sobre", "/contato?tipo=desafio"]) {
-      expect(document.querySelector(`main a[href='${href}']`)).toBeNull();
-    }
+    expect(submitButton).toBeDisabled();
 
-    expect(document.querySelector("main a[href^='mailto:']")).toBeNull();
+    await user.type(messageInput, "Quero falar com o NITE sobre um projeto.");
+
+    expect(submitButton).toBeEnabled();
   });
 
   it("declara metadata institucional de contato", () => {
     expect(metadata.title).toBe("Contato | NITE");
-    expect(metadata.description).toContain("caminhos institucionais");
+    expect(metadata.description).toContain("fluxo simples de contato");
     expect(metadata.alternates?.canonical?.toString()).toContain("/contato");
   });
 });

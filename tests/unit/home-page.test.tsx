@@ -181,19 +181,28 @@ describe("HomePage", () => {
         "Mesa de trabalho tecnológica com notebook, placa eletrônica e luzes azuis em ambiente institucional.",
       ),
     ).toBeNull();
+    const finalCta = within(screen.getByTestId("final-cta-section"));
+
     expect(
-      screen.getByText("Quer acompanhar a evolução do NITE?"),
+      finalCta.getByRole("heading", {
+        level: 2,
+        name: /NITE em evolução\.\s*Disponível para construir\./i,
+      }),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(
-        "Comece pelos projetos e pela área de Atualizações. A Timeline do NITE dará forma aos marcos validados do núcleo.",
-      ),
-    ).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Ver Timeline" })).toHaveAttribute(
-      "href",
-      "#timeline",
+      finalCta.getByRole("link", { name: /Explorar projetos/i }),
+    ).toHaveAttribute("href", "/projetos");
+    expect(
+      finalCta.getByRole("link", { name: /Falar com o NITE/i }),
+    ).toHaveAttribute("href", "/contato");
+    expect(document.querySelector(".nite-final-wordmark")).toHaveAttribute(
+      "aria-hidden",
+      "true",
     );
-    expect(screen.getAllByText("@nite.uj")).toHaveLength(2);
+    expect(document.querySelectorAll(".nite-final-wordmark-text")).toHaveLength(
+      2,
+    );
+    expect(screen.getAllByText("@nite.uj")).toHaveLength(1);
 
     for (const id of [
       "logo-final",

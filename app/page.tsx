@@ -1,4 +1,3 @@
-import { ArrowRightIcon, AtSignIcon, ShieldCheckIcon } from "lucide-react";
 import type { Metadata } from "next";
 
 import { getFeaturedProjects, getTimelineEvents } from "@/biblioteca/conteudo";
@@ -7,18 +6,13 @@ import {
   buildHomeMetadata,
   serializeJsonLd,
 } from "@/biblioteca/seo";
-import { siteConfig } from "@/biblioteca/site-config";
-import { Container } from "@/components/layout/container";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { BuildsSection } from "@/components/sections/builds-section";
+import { FinalCtaSection } from "@/components/sections/final-cta-section";
 import { HeroSection } from "@/components/sections/hero-section";
 import { LivingTimelineSection } from "@/components/sections/living-timeline-section";
 import { ProjectsOperatingSection } from "@/components/sections/projects-operating-section";
-import {
-  ButtonPrimaryLink,
-  ButtonSecondaryLink,
-} from "@/components/ui/brand-button";
 
 export const metadata: Metadata = buildHomeMetadata();
 
@@ -44,63 +38,7 @@ export default function HomePage() {
 
         <LivingTimelineSection events={timelineEvents} />
 
-        <section
-          id="contato"
-          className="relative py-16 sm:py-24 lg:py-28"
-          data-surface="clean"
-        >
-          <Container className="grid gap-8 lg:grid-cols-[1fr_0.9fr] lg:items-center">
-            <div className="brand-panel rounded-lg border border-border p-6 sm:p-8">
-              <ShieldCheckIcon
-                className="text-brand-circuit-bright"
-                aria-hidden="true"
-              />
-              <h2 className="mt-6 max-w-3xl font-heading text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
-                Quer acompanhar a evolução do NITE?
-              </h2>
-              <p className="mt-5 max-w-2xl text-base leading-8 text-muted-foreground">
-                Comece pelos projetos e pela área de Atualizações. A Timeline do
-                NITE dará forma aos marcos validados do núcleo.
-              </p>
-              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                <ButtonPrimaryLink href="#projetos">
-                  Explorar projetos
-                  <ArrowRightIcon data-icon="inline-end" />
-                </ButtonPrimaryLink>
-                <ButtonSecondaryLink href="#timeline">
-                  Ver Timeline
-                </ButtonSecondaryLink>
-              </div>
-            </div>
-
-            <div className="grid gap-4">
-              {siteConfig.publicChannels.map((channel) => (
-                <a
-                  key={channel.href}
-                  href={channel.href}
-                  aria-label={channel.ariaLabel}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="rounded-lg border border-border bg-card p-5 transition-colors hover:border-brand-circuit-bright/50"
-                >
-                  <div className="flex items-start gap-4">
-                    <span className="inline-flex size-11 shrink-0 items-center justify-center rounded-md border border-brand-circuit-bright/30 bg-brand-circuit-bright/10 text-brand-circuit-bright">
-                      <AtSignIcon aria-hidden="true" />
-                    </span>
-                    <div>
-                      <h3 className="font-heading text-lg font-semibold text-foreground">
-                        {channel.label}
-                      </h3>
-                      <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                        {channel.displayLabel}
-                      </p>
-                    </div>
-                  </div>
-                </a>
-              ))}
-            </div>
-          </Container>
-        </section>
+        <FinalCtaSection />
       </main>
       <SiteFooter />
     </>
