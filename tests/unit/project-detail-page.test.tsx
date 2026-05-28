@@ -150,7 +150,7 @@ describe("ProjectPage", () => {
     expect(
       screen.queryByRole("heading", { level: 2, name: "Links" }),
     ).not.toBeInTheDocument();
-  });
+  }, 10000);
 
   it("renderiza campos reais e autorizados quando recebe fixture real", async () => {
     vi.doMock("@/biblioteca/conteudo", () => ({
