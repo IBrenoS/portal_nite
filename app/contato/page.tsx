@@ -10,6 +10,7 @@ import {
 import { Container } from "@/components/layout/container";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
+import { ContactEmailCopy } from "@/components/sections/contact-email-copy";
 import { ContactRequestForm } from "@/components/sections/contact-request-form";
 
 const pageTitle = "Contato";
@@ -52,13 +53,13 @@ export default function ContactPage() {
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbJsonLd) }}
       />
       <main id="conteudo-principal" className="bg-black text-white">
-        <section className="min-h-[calc(100svh-3.625rem)] py-16 sm:py-32 lg:py-44">
+        <section className="min-h-[calc(100svh-3.625rem)]">
           <Container
             size="xl"
-            className="flex max-w-4xl flex-col gap-16 md:max-w-7xl md:flex-row md:gap-28 lg:gap-56"
+            className="flex max-w-4xl flex-col px-6 py-16 sm:flex-row sm:gap-8 sm:px-6 sm:py-48 md:max-w-7xl md:gap-36 lg:px-6 lg:gap-72"
           >
             <div className="w-full max-w-[35rem] animate-brand-rise">
-              <h1 className="font-heading text-5xl font-semibold leading-none tracking-normal text-white sm:text-6xl">
+              <h1 className="mb-2 mt-2 bg-[linear-gradient(to_right_bottom,rgb(255_255_255)_30%,rgb(255_255_255_/_0.5))] bg-clip-text pb-3 font-heading text-[4rem] font-normal leading-none tracking-normal text-balance text-transparent md:text-[4.8rem] lg:w-max lg:max-w-[calc(100vw-3rem)] lg:whitespace-nowrap">
                 Fale com o NITE
               </h1>
 
@@ -67,22 +68,13 @@ export default function ContactPage() {
 
             <aside
               aria-labelledby="contact-help-title"
-              className="w-full max-w-sm animate-brand-rise md:pt-20 lg:pt-24"
+              className="mt-16 w-full max-w-sm animate-brand-rise sm:mt-16"
             >
-              <div className="grid gap-1">
-                <p
-                  id="contact-help-title"
-                  className="text-sm font-normal text-white/58"
-                >
-                  Get help
-                </p>
-                <a
-                  href={`mailto:${contactEmail}`}
-                  className="group flex w-fit items-center text-sm font-normal text-white transition-colors hover:text-white/72 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/25"
-                >
-                  {contactEmail}
-                </a>
-              </div>
+              <ContactEmailCopy
+                titleId="contact-help-title"
+                label="Get help"
+                email={contactEmail}
+              />
             </aside>
           </Container>
         </section>

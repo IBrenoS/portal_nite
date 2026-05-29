@@ -87,7 +87,7 @@ export default function UpdatesPage() {
             <SectionHeader
               as="h1"
               eyebrow="Atualizações"
-              title="NITE em movimento"
+              title="Nite News"
               description={pageDescription}
             />
             <p className="max-w-3xl text-sm leading-7 text-muted-foreground">

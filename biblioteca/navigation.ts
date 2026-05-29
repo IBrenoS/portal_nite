@@ -66,7 +66,7 @@ const headerNavigationGroups: SiteNavigationGroup[] = [
     href: "/atualizacoes",
     items: [
       {
-        label: "NITE em movimento",
+        label: "Nite News",
         href: "/atualizacoes",
         status: "mvp",
       },
