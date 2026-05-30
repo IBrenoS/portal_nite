@@ -1,10 +1,4 @@
-import {
-  ArchiveIcon,
-  ArrowRightIcon,
-  BellIcon,
-  CheckCircle2Icon,
-  Clock3Icon,
-} from "lucide-react";
+import { ArrowRightIcon } from "lucide-react";
 
 import {
   Card,
@@ -16,8 +10,10 @@ import {
 import { buttonVariants } from "@/components/ui/button";
 import {
   OpportunityStatus,
+  opportunityStatusConfig,
   type OpportunityStatusValue,
 } from "@/components/sections/opportunity-status";
+import { statusBadgeToneClasses } from "@/components/ui/status-badge";
 import { cn } from "@/lib/utils";
 
 type OpportunityBannerStatus = OpportunityStatusValue;
@@ -37,34 +33,6 @@ type OpportunityBannerProps = {
   className?: string;
 };
 
-const statusIconConfig = {
-  closed: {
-    Icon: BellIcon,
-    iconClassName:
-      "border-brand-circuit-bright/30 bg-brand-circuit-bright/10 text-brand-circuit-bright",
-  },
-  open: {
-    Icon: CheckCircle2Icon,
-    iconClassName: "border-status-done/30 bg-status-done/10 text-status-done",
-  },
-  draft: {
-    Icon: Clock3Icon,
-    iconClassName:
-      "border-status-warning/30 bg-status-warning/10 text-status-warning",
-  },
-  archived: {
-    Icon: ArchiveIcon,
-    iconClassName:
-      "border-status-draft/30 bg-status-draft/10 text-status-draft",
-  },
-} satisfies Record<
-  OpportunityBannerStatus,
-  {
-    Icon: typeof BellIcon;
-    iconClassName: string;
-  }
->;
-
 export function OpportunityBanner({
   status = "closed",
   title,
@@ -75,7 +43,7 @@ export function OpportunityBanner({
   titleId,
   className,
 }: OpportunityBannerProps) {
-  const config = statusIconConfig[status];
+  const config = opportunityStatusConfig[status];
   const Heading = headingLevel;
   const Icon = config.Icon;
 
@@ -83,14 +51,14 @@ export function OpportunityBanner({
     <Card
       data-component="opportunity-banner"
       data-status={status}
-      className={cn("border-border bg-card", className)}
+      className={className}
     >
       <CardHeader className="gap-4 p-6 sm:p-8">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
           <span
             className={cn(
               "inline-flex size-11 shrink-0 items-center justify-center rounded-md border",
-              config.iconClassName,
+              statusBadgeToneClasses[config.tone].soft,
             )}
             aria-hidden="true"
           >

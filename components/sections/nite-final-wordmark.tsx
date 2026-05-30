@@ -35,8 +35,9 @@ export function NiteFinalWordmark({ className }: NiteFinalWordmarkProps) {
   return (
     <div
       aria-hidden="true"
+      data-nite-scene="wordmark"
       className={cn(
-        "nite-final-wordmark relative mx-auto h-44 w-full max-w-7xl overflow-hidden bg-black sm:h-64 lg:h-80 xl:h-96",
+        "nite-final-wordmark relative mx-auto h-44 w-full max-w-7xl overflow-hidden bg-nite-background sm:h-64 lg:h-80 xl:h-96",
         className,
       )}
       onPointerLeave={handlePointerLeave}

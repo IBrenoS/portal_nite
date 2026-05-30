@@ -10,15 +10,13 @@ Milestone 3 - Visual Identity & Design System
 
 ## Objetivo
 
-Profissionalizar a identidade visual atual do Portal NITE sem descartar sua base tecnologica, escura e azulada.
+Consolidar um unico design system NITE premium, inspirado na linguagem publica da Resend e sem camadas paralelas de tokens ou componentes.
 
 ## Decisao visual aprovada
 
-Decisao aprovada pelo gestor/desenvolvedor do projeto em conversa de especificacao: o Portal NITE adotara uma paleta dark premium, tecnologica e institucional, com fundo escuro suave, superficies elevadas, azul como cor primaria e ciano como destaque.
+Decisao aprovada pelo gestor/desenvolvedor em 2026-05-30: o Portal NITE adota um unico namespace canonico `--nite-*`. O dark global usa `#000000`, o light global preserva `#F7F3EA`, azul permanece como acento de marca e ciano como microdestaque.
 
-Essa decisao e referencia oficial da Spec 003 para o MVP Premium. O preto absoluto nao deve ser usado como fundo dominante. Grid, glow e gradientes devem ser usados com moderacao e intencao.
-
-Atualizacao aprovada pelo gestor/desenvolvedor apos validacao visual: o token `background.default` foi ajustado de `#0A0A0F` para `#09090a` para reduzir a percepcao azulada do fundo dominante e aproximar a base visual de um dark premium neutro/grafite. A decisao mantem a regra de evitar preto absoluto como fundo dominante e preservar o azul como acento de marca.
+Grid, glow e gradientes devem ser usados com moderacao. Cards compartilhados sao transparentes com borda sutil; CTAs primarios usam glass action.
 
 ## Estado atual de Light Mode / Theme System
 
@@ -37,6 +35,16 @@ Light Mode e Theme Toggle nao sao mais itens futuros nesta Spec. A infraestrutur
 O light mode usa fundo off-white premium, levemente quente/neutro, sem branco absoluto como fundo dominante. A identidade deve continuar institucional, tecnologica e premium, preservando azul como acento de marca e vermelho UNIJORGE como acento institucional pontual, nao como fundo dominante nem substituto do CTA principal.
 
 Tokens light foram documentados e aplicados na implementacao. A validacao de Button, Card, StatusBadge, ProjectCard, UpdateCard e OpportunityBanner em dark/light foi concluida, assim como a revisao de `themeColor`, manifest e Open Graph em task propria. A auditoria de dependencias visuais hardcoded de dark mode foi concluida em task propria, com correcoes pontuais no Hero, texto metalico de marca, glows de logo e marcadores de timeline, alem da preservacao justificada de assets controlados e da cena escura isolada da timeline premium.
+
+## Design system NITE canonico
+
+A referencia publica da Resend observada em 2026-05-30 orienta contraste, bordas sutis, acoes glass e campos contidos. Como a referencia externa pode mudar, o codigo final depende exclusivamente do contrato local `--nite-*`.
+
+- Usar `--nite-background`, `--nite-surface-*`, `--nite-text-*`, `--nite-border-*`, `--nite-action-*`, `--nite-focus`, `--nite-status-*` e `--nite-brand-*`.
+- Derivar aliases shadcn/Tailwind como `--background`, `--card`, `--primary` e `--ring` exclusivamente de `--nite-*`.
+- Tratar os valores light como adaptacao local para legibilidade e contraste, nao como tokens oficiais publicados pela Resend.
+- Reutilizar `Button`, `Card`, `Input`, `Textarea`, `Chip`, `StatusBadge` e `EmptyState` em vez de reconstruir receitas em JSX.
+- Isolar composicoes autorais com `data-nite-scene`, sem permitir que cenas definam variantes globais paralelas.
 
 As melhorias P2 antes registradas para texto persistente do botao desktop fechado do Theme Toggle e `allowedDevOrigins` para `127.0.0.1` foram removidas do escopo MVP por decisao tecnica. Elas nao foram implementadas, nao permanecem no backlog ativo da Spec 003 e nao bloqueiam producao, acessibilidade essencial, SEO, performance, conteudo institucional nem o funcionamento publico do Portal NITE.
 
@@ -58,16 +66,16 @@ Governanca minima de conteudo permanece Pendente de validacao coletiva. O status
 - Animacoes devem guiar atencao, nao distrair.
 - Cards, botoes, badges, secoes e CTAs devem seguir design system consistente.
 - A paleta oficial deve ser dark premium, tecnologica e institucional.
-- O preto absoluto nao deve ser usado como fundo dominante.
+- O dark global deve usar `#000000`; blocos extensos podem usar `--nite-section`.
 - Grid, glow e gradientes devem ser usados com moderacao e intencao.
 - A experiencia visual deve partir dos tokens finais aprovados na Spec 003.
 - O design system deve sustentar uma leitura premium sem depender de dados reais ainda nao validados.
 
 ## Requisitos de tipografia, layout e superficies
 
-- A tipografia recomendada para o MVP deve usar a fonte atual do projeto ou fallback sans-serif consistente, evitando introduzir familia tipografica nova sem validacao na implementacao.
-- Titulos e corpo devem priorizar legibilidade, hierarquia clara e consistencia institucional.
-- Fonte mono pode ser usada apenas em tags tecnicas, stack, metadados ou pequenos marcadores, quando fizer sentido.
+- Corpo, controles, cards, menus e logo devem usar Geist.
+- Headings e displays editoriais devem usar Sora.
+- Geist Mono pode ser usada apenas em tags tecnicas, stack, metadados ou pequenos marcadores.
 - O layout base deve usar largura maxima recomendada entre 1120px e 1200px para conteudo principal.
 - O espacamento recomendado de secoes deve partir de 64px no desktop e 40px no mobile, com ajuste responsivo quando necessario.
 - O raio de borda recomendado deve usar 8px para controles/cards compactos e 12px para superficies maiores.

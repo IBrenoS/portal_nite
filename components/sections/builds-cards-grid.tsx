@@ -10,6 +10,9 @@ import {
 } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 
+import { cardVariants } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+
 const builds = [
   {
     icon: Code2Icon,
@@ -67,7 +70,10 @@ export function BuildsCardsGrid() {
         return (
           <motion.article
             key={build.title}
-            className="group flex min-h-[14.75rem] flex-col rounded-lg border border-border bg-card/80 p-5 transition-colors duration-brand-micro ease-brand-out hover:border-border-strong hover:bg-secondary/70 lg:p-6"
+            className={cn(
+              cardVariants(),
+              "group min-h-[14.75rem] gap-0 rounded-lg border-border bg-card/80 p-5 transition-colors duration-nite-micro ease-nite-out hover:border-nite-border-strong hover:bg-secondary/70 lg:p-6",
+            )}
             initial={{ y: 12 }}
             animate={{ y: 0 }}
             transition={{
@@ -76,7 +82,7 @@ export function BuildsCardsGrid() {
               ease: [0.22, 1, 0.36, 1],
             }}
           >
-            <span className="inline-flex size-10 items-center justify-center rounded-md border border-border bg-accent text-brand-circuit-bright transition-colors duration-brand-micro group-hover:border-brand-circuit-bright/40 group-hover:bg-brand-circuit-bright/10">
+            <span className="inline-flex size-10 items-center justify-center rounded-md border border-border bg-accent text-nite-brand-accent transition-colors duration-nite-micro group-hover:border-nite-brand-accent/40 group-hover:bg-nite-brand-accent/10">
               <Icon className="size-5" aria-hidden="true" />
             </span>
 
@@ -86,7 +92,7 @@ export function BuildsCardsGrid() {
             <p className="mt-3 text-sm leading-6 text-muted-foreground">
               {build.description}
             </p>
-            <p className="mt-auto border-t border-border pt-4 text-sm leading-6 text-brand-steel">
+            <p className="mt-auto border-t border-border pt-4 text-sm leading-6 text-nite-text-secondary">
               <span className="font-semibold text-foreground">Saídas:</span>{" "}
               {build.output}.
             </p>

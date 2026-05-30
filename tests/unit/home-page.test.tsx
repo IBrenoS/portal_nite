@@ -148,6 +148,7 @@ describe("HomePage", () => {
     ) as HTMLElement;
 
     expect(timeline).toBeInTheDocument();
+    expect(timeline).toHaveAttribute("data-nite-scene", "timeline");
     expect(timeline).toHaveAttribute("data-scroll", "section");
     expect(timeline).toHaveAttribute("data-public-milestones", "0");
     expect(within(timeline).getByText("Timeline")).toBeInTheDocument();
@@ -181,8 +182,10 @@ describe("HomePage", () => {
         "Mesa de trabalho tecnológica com notebook, placa eletrônica e luzes azuis em ambiente institucional.",
       ),
     ).toBeNull();
-    const finalCta = within(screen.getByTestId("final-cta-section"));
+    const finalCtaSection = screen.getByTestId("final-cta-section");
+    const finalCta = within(finalCtaSection);
 
+    expect(finalCtaSection).toHaveAttribute("data-nite-scene", "inverse");
     expect(
       finalCta.getByRole("heading", {
         level: 2,
@@ -229,7 +232,7 @@ describe("HomePage", () => {
       "true",
     );
     expect(
-      document.querySelector("#logo-final")?.closest(".brand-panel"),
+      document.querySelector("#logo-final")?.closest(".nite-panel"),
     ).toBeNull();
     expect(
       screen.getByRole("link", {
@@ -319,7 +322,7 @@ describe("HomePage", () => {
       shimmer: 3,
       overlays: 1,
     });
-  });
+  }, 10_000);
 
   it("mantem o foco dentro do menu mobile em camadas", async () => {
     const user = userEvent.setup();

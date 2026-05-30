@@ -29,13 +29,12 @@ import {
   ProjectCard,
   type ProjectCardStatus,
 } from "@/components/sections/project-card";
-import {
-  ButtonPrimaryLink,
-  ButtonSecondaryLink,
-} from "@/components/ui/brand-button";
+import { buttonVariants } from "@/components/ui/button";
+import { cardVariants } from "@/components/ui/card";
 import { Chip } from "@/components/ui/chip";
 import { EmptyState } from "@/components/ui/empty-state";
 import { StatusBadge } from "@/components/ui/status-badge";
+import { cn } from "@/lib/utils";
 import ProjectNotFound from "./not-found";
 
 type ProjectPageProps = {
@@ -72,6 +71,8 @@ const projectDateFormatter = new Intl.DateTimeFormat("pt-BR", {
   timeZone: "UTC",
   year: "numeric",
 });
+
+const detailPanelClassName = cardVariants();
 
 function getProjectContentStateLabel(contentState: Project["contentState"]) {
   return projectContentStateLabels[contentState];
@@ -211,10 +212,10 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               </div>
 
               <div className="flex flex-col gap-5">
-                <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-circuit-bright">
+                <p className="font-mono text-xs uppercase tracking-[0.18em] text-nite-brand-accent">
                   {siteConfig.name} / Projeto
                 </p>
-                <h1 className="font-heading text-4xl font-semibold leading-tight text-foreground sm:text-5xl">
+                <h1 className="font-heading text-4xl font-normal leading-tight text-foreground sm:text-5xl">
                   {project.title}
                 </h1>
                 <p className="text-lg leading-8 text-muted-foreground">
@@ -223,24 +224,41 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               </div>
 
               {project.contentNotice ? (
-                <p className="rounded-lg border border-border bg-card/70 p-4 text-sm leading-6 text-muted-foreground">
+                <p
+                  className={cn(
+                    detailPanelClassName,
+                    "rounded-lg p-4 text-sm leading-6 text-muted-foreground",
+                  )}
+                >
                   {project.contentNotice}
                 </p>
               ) : null}
 
               <div className="flex flex-col gap-3 sm:flex-row">
-                <ButtonPrimaryLink href="#detalhes" className="w-fit">
+                <Link
+                  href="#detalhes"
+                  className={cn(
+                    buttonVariants({ variant: "primary", size: "lg" }),
+                    "w-fit rounded-md",
+                  )}
+                >
                   Ver detalhes
                   <SparklesIcon data-icon="inline-end" />
-                </ButtonPrimaryLink>
-                <ButtonSecondaryLink href="/#projetos" className="w-fit">
+                </Link>
+                <Link
+                  href="/#projetos"
+                  className={cn(
+                    buttonVariants({ variant: "outline", size: "lg" }),
+                    "w-fit rounded-md",
+                  )}
+                >
                   <ArrowLeftIcon data-icon="inline-start" />
                   Voltar para projetos
-                </ButtonSecondaryLink>
+                </Link>
               </div>
             </div>
 
-            <div className="brand-panel overflow-hidden rounded-lg border border-border">
+            <div className="nite-panel overflow-hidden rounded-lg border border-border">
               {isPublicationReady ? (
                 <div className="relative aspect-[16/10]">
                   <Image
@@ -268,7 +286,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             size="xl"
             className="grid gap-8 lg:grid-cols-[0.34fr_0.66fr]"
           >
-            <aside className="grid h-fit gap-5 rounded-lg border border-border bg-card p-5 lg:sticky lg:top-28">
+            <aside
+              className={cn(
+                detailPanelClassName,
+                "grid h-fit gap-5 rounded-lg p-5 lg:sticky lg:top-28",
+              )}
+            >
               <h2 className="font-heading text-lg font-semibold text-foreground">
                 Dados do projeto
               </h2>
@@ -329,7 +352,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                   Problema e contexto
                 </h2>
                 <div className="grid gap-4 md:grid-cols-2">
-                  <article className="rounded-lg border border-border bg-card p-5">
+                  <article
+                    className={cn(detailPanelClassName, "rounded-lg p-5")}
+                  >
                     <h3 className="font-heading text-lg font-semibold text-foreground">
                       Problema
                     </h3>
@@ -337,7 +362,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                       {project.problem}
                     </p>
                   </article>
-                  <article className="rounded-lg border border-border bg-card p-5">
+                  <article
+                    className={cn(detailPanelClassName, "rounded-lg p-5")}
+                  >
                     <h3 className="font-heading text-lg font-semibold text-foreground">
                       Contexto
                     </h3>
@@ -370,7 +397,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                     {project.highlights.map((highlight) => (
                       <article
                         key={highlight}
-                        className="rounded-lg border border-border bg-card p-4"
+                        className={cn(detailPanelClassName, "rounded-lg p-4")}
                       >
                         <p className="text-sm leading-6 text-muted-foreground">
                           {highlight}
@@ -385,7 +412,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 <h2 className="font-heading text-2xl font-semibold text-foreground">
                   Próximo passo
                 </h2>
-                <div className="rounded-lg border border-border bg-card p-5">
+                <div className={cn(detailPanelClassName, "rounded-lg p-5")}>
                   <p className="text-base leading-8 text-muted-foreground">
                     {project.nextStep}
                   </p>
@@ -416,7 +443,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                     {project.deliverables.map((deliverable) => (
                       <article
                         key={`${deliverable.type}-${deliverable.label}`}
-                        className="rounded-lg border border-border bg-card p-5"
+                        className={cn(detailPanelClassName, "rounded-lg p-5")}
                       >
                         <div className="flex flex-wrap items-start justify-between gap-3">
                           <div>
@@ -430,7 +457,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                           {deliverable.href ? (
                             <a
                               href={deliverable.href}
-                              className="inline-flex min-h-10 items-center gap-2 rounded-md text-sm font-semibold text-brand-circuit-bright transition-colors hover:text-foreground"
+                              className="inline-flex min-h-10 items-center gap-2 rounded-md text-sm font-semibold text-nite-brand-accent transition-colors hover:text-foreground"
                               target="_blank"
                               rel="noreferrer"
                             >
@@ -457,7 +484,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                     {project.metrics.map((metric) => (
                       <article
                         key={`${metric.label}-${metric.value}`}
-                        className="rounded-lg border border-border bg-card p-5"
+                        className={cn(detailPanelClassName, "rounded-lg p-5")}
                       >
                         <p className="font-heading text-2xl font-semibold text-foreground">
                           {metric.value}
@@ -466,7 +493,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                           {metric.label}
                         </p>
                         {metric.source ? (
-                          <p className="mt-3 text-xs text-brand-steel">
+                          <p className="mt-3 text-xs text-nite-text-secondary">
                             Fonte: {metric.source}
                           </p>
                         ) : null}
@@ -490,10 +517,13 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                     {publicTeam.map((member) => (
                       <li
                         key={`${member.name}-${member.role}`}
-                        className="flex items-start gap-3 rounded-lg border border-border bg-card p-4"
+                        className={cn(
+                          detailPanelClassName,
+                          "flex-row items-start gap-3 rounded-lg p-4",
+                        )}
                       >
                         <UsersIcon
-                          className="mt-0.5 size-4 text-brand-circuit-bright"
+                          className="mt-0.5 size-4 text-nite-brand-accent"
                           aria-hidden="true"
                         />
                         <div>
@@ -524,9 +554,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                     {project.changelog.map((entry) => (
                       <li
                         key={`${entry.date}-${entry.title}`}
-                        className="rounded-lg border border-border bg-card p-5"
+                        className={cn(detailPanelClassName, "rounded-lg p-5")}
                       >
-                        <div className="flex flex-wrap items-center gap-2 text-sm text-brand-steel">
+                        <div className="flex flex-wrap items-center gap-2 text-sm text-nite-text-secondary">
                           <CalendarClockIcon
                             className="size-4"
                             aria-hidden="true"
@@ -576,7 +606,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                     {project.gallery.map((image) => (
                       <figure
                         key={image.src}
-                        className="brand-panel overflow-hidden rounded-lg border border-border"
+                        className="nite-panel overflow-hidden rounded-lg border border-border"
                       >
                         <div className="relative aspect-[16/10]">
                           <Image
@@ -603,7 +633,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                       <a
                         key={link.href}
                         href={link.href}
-                        className="inline-flex min-h-11 items-center gap-2 rounded-md border border-border px-3 py-2 text-sm font-semibold text-brand-circuit-bright transition-colors hover:text-foreground"
+                        className="inline-flex min-h-11 items-center gap-2 rounded-md border border-border px-3 py-2 text-sm font-semibold text-nite-brand-accent transition-colors hover:text-foreground"
                         target="_blank"
                         rel="noreferrer"
                       >
@@ -622,7 +652,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           <section className="py-16 sm:py-24">
             <Container size="xl" className="grid gap-8">
               <div className="flex flex-col gap-3">
-                <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-circuit-bright">
+                <p className="font-mono text-xs uppercase tracking-[0.18em] text-nite-brand-accent">
                   Projetos relacionados
                 </p>
                 <h2 className="font-heading text-2xl font-semibold text-foreground sm:text-3xl">

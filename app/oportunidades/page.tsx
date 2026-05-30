@@ -23,6 +23,8 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { OpportunityInterestFormPreview } from "@/components/sections/opportunity-interest-form-preview";
 import { OpportunityStatus } from "@/components/sections/opportunity-status";
+import { buttonVariants } from "@/components/ui/button";
+import { cardVariants } from "@/components/ui/card";
 import { Chip } from "@/components/ui/chip";
 import { NiteSymbol } from "@/components/ui/nite-symbol";
 import { cn } from "@/lib/utils";
@@ -123,7 +125,8 @@ const processNotes = [
 ] as const;
 
 const careersCtaBase = cn(
-  "relative inline-flex shrink-0 select-none items-center justify-center rounded-[1rem] border-[2px] border-white/5 bg-[linear-gradient(104deg,rgba(253,253,253,0.05)_5%,rgba(240,240,228,0.1)_100%)] bg-origin-border font-sans font-semibold text-white shadow-sm backdrop-blur-[25px] transition-all duration-200 ease-in-out hover:bg-white/90 hover:text-black hover:shadow-[0_18px_48px_rgb(255_255_255_/_0.12),0_1px_3px_rgb(0_0_0_/_0.1),0_1px_2px_-1px_rgb(0_0_0_/_0.1)] focus-visible:bg-white/90 focus-visible:text-black focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/30",
+  buttonVariants({ variant: "primary", size: "md" }),
+  "relative shrink-0 rounded-[1rem]",
 );
 
 const seeOpenPositionsCta = cn(
@@ -136,32 +139,32 @@ const seeHowWeHireCta = cn(
   "h-10 w-40 gap-2 px-4 text-sm leading-5",
 );
 
-const resendGradientText =
-  "bg-[linear-gradient(to_right_bottom,#fff_30%,rgba(255,255,255,0.5))] bg-clip-text text-transparent";
+const niteGradientText = "nite-gradient-text";
 
-const resendSupportText = "text-[rgb(161,164,165)]";
+const niteSupportText = "text-nite-text-secondary";
 
-const resendHeroTitle = cn(
-  resendGradientText,
+const niteHeroTitle = cn(
+  niteGradientText,
   "mb-2 w-full text-balance pb-3 font-heading text-[clamp(3rem,8.8vw,4rem)] font-normal leading-[100%] tracking-normal md:text-[4.8rem]",
 );
 
-const resendSectionTitle =
-  "font-heading text-[2.25rem] font-normal leading-[130%] tracking-normal text-[rgba(252,253,255,0.937)]";
+const niteSectionTitle =
+  "font-heading text-[2.25rem] font-normal leading-[130%] tracking-normal text-nite-text-primary";
 
-const resendCardTitle =
-  "font-heading text-[2.25rem] font-normal leading-none tracking-normal text-[rgba(252,253,255,0.937)]";
+const niteCardTitle =
+  "font-heading text-[2.25rem] font-normal leading-none tracking-normal text-nite-text-primary";
 
-const resendCardSubtitle = cn(
-  resendGradientText,
+const niteCardSubtitle = cn(
+  niteGradientText,
   "mt-1 font-sans text-[2.25rem] font-normal leading-none tracking-normal opacity-50",
 );
 
-const resendCardFrame =
-  "group relative min-h-[421px] overflow-hidden rounded-[1rem] border border-[rgba(217,237,254,0.145)] bg-transparent px-8 py-12 text-center transition duration-brand-micro ease-brand-out hover:border-[rgba(217,237,254,0.26)] focus-visible:ring-4 focus-visible:ring-white/30";
+const niteCardFrame = cn(
+  cardVariants({ variant: "interactive" }),
+  "group relative min-h-[421px] rounded-[1rem] px-8 py-12 text-center duration-nite-micro ease-nite-out focus-visible:ring-4 focus-visible:ring-nite-focus",
+);
 
-const resendInnerFrame =
-  "border border-[rgba(217,237,254,0.145)] bg-transparent";
+const niteInnerFrame = "border border-nite-border-subtle bg-transparent";
 
 export const metadata: Metadata = {
   ...defaultMetadata,
@@ -199,17 +202,17 @@ export default function OpportunitiesPage() {
       />
       <main
         id="conteudo-principal"
-        className="overflow-hidden bg-background text-foreground"
+        className="overflow-hidden bg-nite-background text-nite-text-primary"
       >
         <section className="relative px-6 pb-7 pt-12 text-center sm:pb-10 sm:pt-24 lg:pb-5">
           <Container
             size="xl"
             className="relative z-10 grid justify-items-center"
           >
-            <h1 className={resendHeroTitle}>Faça parte do NITE</h1>
+            <h1 className={niteHeroTitle}>Faça parte do NITE</h1>
             <p
               className={cn(
-                resendSupportText,
+                niteSupportText,
                 "mb-6 w-full text-balance text-base font-normal leading-[1.5] tracking-normal md:text-[1.125rem]",
               )}
             >
@@ -226,26 +229,26 @@ export default function OpportunitiesPage() {
             size="xl"
             className="grid max-w-[1024px] gap-8 lg:grid-cols-2 lg:px-0"
           >
-            <a href="#open-positions" className={resendCardFrame}>
-              <h2 className={resendCardTitle}>Processos</h2>
-              <p className={resendCardSubtitle}>Como participar</p>
+            <a href="#open-positions" className={niteCardFrame}>
+              <h2 className={niteCardTitle}>Processos</h2>
+              <p className={niteCardSubtitle}>Como participar</p>
               <div
                 className={cn(
-                  resendInnerFrame,
-                  "mx-auto mt-10 grid max-w-sm place-items-center rounded-xl p-10 grayscale transition duration-brand-micro ease-brand-out group-hover:grayscale-0",
+                  niteInnerFrame,
+                  "mx-auto mt-10 grid max-w-sm place-items-center rounded-xl p-10 grayscale transition duration-nite-micro ease-nite-out group-hover:grayscale-0",
                 )}
               >
-                <NiteSymbol className="h-auto w-40 text-brand-circuit-bright" />
+                <NiteSymbol className="h-auto w-40 text-nite-brand-accent" />
               </div>
             </a>
 
-            <Link href="/projetos" className={resendCardFrame}>
-              <h2 className={resendCardTitle}>Projetos</h2>
-              <p className={resendCardSubtitle}>Onde atuar</p>
+            <Link href="/projetos" className={niteCardFrame}>
+              <h2 className={niteCardTitle}>Projetos</h2>
+              <p className={niteCardSubtitle}>Onde atuar</p>
               <div
                 className={cn(
-                  resendInnerFrame,
-                  "mx-auto mt-10 max-w-sm overflow-hidden rounded-xl grayscale transition duration-brand-micro ease-brand-out group-hover:grayscale-0",
+                  niteInnerFrame,
+                  "mx-auto mt-10 max-w-sm overflow-hidden rounded-xl grayscale transition duration-nite-micro ease-nite-out group-hover:grayscale-0",
                 )}
               >
                 <Image
@@ -263,11 +266,11 @@ export default function OpportunitiesPage() {
         <section className="px-6 py-16 sm:py-20" aria-labelledby="areas-nite">
           <Container size="xl" className="grid justify-items-center gap-12">
             <div className="grid justify-items-center gap-3 text-center">
-              <p id="areas-nite" className={cn("text-sm", resendSupportText)}>
+              <p id="areas-nite" className={cn("text-sm", niteSupportText)}>
                 Frentes acompanhadas pelo portal
               </p>
               <p
-                className={cn(resendSupportText, "max-w-2xl text-sm leading-7")}
+                className={cn(niteSupportText, "max-w-2xl text-sm leading-7")}
               >
                 Elas indicam possibilidades de atuação do núcleo. Elas não
                 representam vagas abertas sem confirmação.
@@ -277,7 +280,7 @@ export default function OpportunitiesPage() {
               {opportunityAreas.map((area) => (
                 <li
                   key={area}
-                  className="font-heading text-xl font-normal text-[rgba(252,253,255,0.937)] sm:text-2xl"
+                  className="font-heading text-xl font-normal text-nite-text-primary sm:text-2xl"
                 >
                   {area}
                 </li>
@@ -289,12 +292,12 @@ export default function OpportunitiesPage() {
         <section className="px-6 py-16 sm:py-24" aria-labelledby="beneficios">
           <Container size="xl" className="grid gap-14 lg:px-14">
             <div className="grid justify-items-center gap-3 text-center">
-              <h2 id="beneficios" className={resendSectionTitle}>
+              <h2 id="beneficios" className={niteSectionTitle}>
                 Benefícios & garantias
               </h2>
               <p
                 className={cn(
-                  resendSupportText,
+                  niteSupportText,
                   "max-w-2xl text-base leading-[1.5] md:text-[1.125rem]",
                 )}
               >
@@ -314,12 +317,12 @@ export default function OpportunitiesPage() {
                     index > 2 && "lg:border-t",
                   )}
                 >
-                  <h3 className="font-heading text-xl font-normal text-[rgba(252,253,255,0.937)]">
+                  <h3 className="font-heading text-xl font-normal text-nite-text-primary">
                     {item.title}
                   </h3>
                   <p
                     className={cn(
-                      resendSupportText,
+                      niteSupportText,
                       "mt-4 max-w-xs text-sm leading-7",
                     )}
                   >
@@ -346,13 +349,13 @@ export default function OpportunitiesPage() {
             <div className="text-center">
               <h2
                 id="estado-oportunidades-titulo"
-                className={cn("mx-auto", resendSectionTitle)}
+                className={cn("mx-auto", niteSectionTitle)}
               >
                 Oportunidades abertas
               </h2>
               <p
                 className={cn(
-                  resendSupportText,
+                  niteSupportText,
                   "mb-6 text-base font-normal leading-[1.5] md:text-[1.125rem]",
                 )}
               >
@@ -372,12 +375,12 @@ export default function OpportunitiesPage() {
               <div className="grid gap-5 py-8 sm:grid-cols-[1fr_auto] sm:items-center">
                 <div className="grid gap-3">
                   <OpportunityStatus status="closed" />
-                  <h3 className="font-heading text-2xl font-normal text-[rgba(252,253,255,0.937)]">
+                  <h3 className="font-heading text-2xl font-normal text-nite-text-primary">
                     No momento, não há oportunidades abertas.
                   </h3>
                   <p
                     className={cn(
-                      resendSupportText,
+                      niteSupportText,
                       "max-w-2xl text-sm leading-7",
                     )}
                   >
@@ -387,7 +390,7 @@ export default function OpportunitiesPage() {
                   </p>
                   <p
                     className={cn(
-                      resendSupportText,
+                      niteSupportText,
                       "max-w-2xl text-sm leading-7",
                     )}
                   >
@@ -399,7 +402,7 @@ export default function OpportunitiesPage() {
                   </p>
                 </div>
                 <span
-                  className="inline-flex size-12 items-center justify-center rounded-full border border-border bg-muted/40 text-brand-circuit-bright"
+                  className="inline-flex size-12 items-center justify-center rounded-full border border-border bg-muted/40 text-nite-brand-accent"
                   aria-hidden="true"
                 >
                   <BellIcon className="size-5" />
@@ -414,13 +417,7 @@ export default function OpportunitiesPage() {
           aria-labelledby="estrutura-formulario-oportunidades"
         >
           <Container size="xl" className="lg:px-14">
-            <OpportunityInterestFormPreview
-              titleId="estrutura-formulario-oportunidades"
-              className={cn(
-                "border-[rgba(217,237,254,0.145)] bg-transparent shadow-none",
-                "[&_[data-slot=card-description]]:text-[rgb(161,164,165)] [&_dd]:text-[rgb(161,164,165)] [&_dt]:font-normal [&_dt]:text-[rgba(252,253,255,0.937)] [&_p]:text-[rgb(161,164,165)]",
-              )}
-            />
+            <OpportunityInterestFormPreview titleId="estrutura-formulario-oportunidades" />
           </Container>
         </section>
 
@@ -435,17 +432,20 @@ export default function OpportunitiesPage() {
                   aria-hidden={
                     index >= processNotes.length ? "true" : undefined
                   }
-                  className="w-[min(28rem,calc(100vw-3rem))] shrink-0 rounded-[1rem] border border-[rgba(217,237,254,0.145)] bg-transparent px-8 py-7"
+                  className={cn(
+                    cardVariants(),
+                    "w-[min(28rem,calc(100vw-3rem))] shrink-0 gap-0 rounded-[1rem] px-8 py-7",
+                  )}
                 >
                   <Icon
-                    className="size-5 text-brand-circuit-bright"
+                    className="size-5 text-nite-brand-accent"
                     aria-hidden="true"
                   />
-                  <h2 className="mt-8 font-heading text-xl font-normal text-[rgba(252,253,255,0.937)]">
+                  <h2 className="mt-8 font-heading text-xl font-normal text-nite-text-primary">
                     {note.title}
                   </h2>
                   <p
-                    className={cn(resendSupportText, "mt-3 text-sm leading-7")}
+                    className={cn(niteSupportText, "mt-3 text-sm leading-7")}
                   >
                     {note.text}
                   </p>
@@ -459,7 +459,7 @@ export default function OpportunitiesPage() {
           <Container
             size="xl"
             className={cn(
-              resendSupportText,
+              niteSupportText,
               "grid gap-4 border-t border-border pt-10 text-sm leading-7 md:grid-cols-3 lg:px-14",
             )}
           >

@@ -19,11 +19,25 @@ describe("OpportunitiesPage", () => {
       }),
     ).toBeInTheDocument();
 
-    const main = within(screen.getByRole("main"));
+    const mainElement = screen.getByRole("main");
+    const main = within(mainElement);
     const banner = document.querySelector(
       "[data-component='opportunity-banner']",
     );
 
+    expect(mainElement).toHaveClass(
+      "bg-nite-background",
+      "text-nite-text-primary",
+    );
+    expect(
+      main.getByRole("heading", {
+        level: 1,
+        name: "Faça parte do NITE",
+      }),
+    ).toHaveClass("nite-gradient-text");
+    expect(main.getByRole("link", { name: "Ver oportunidades" })).toHaveClass(
+      "nite-glass-action",
+    );
     expect(banner).toHaveAttribute("data-slot", "card");
     expect(banner).toHaveAttribute("data-status", "closed");
     const status = document.querySelector("[data-slot='opportunity-status']");

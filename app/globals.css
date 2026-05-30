@@ -8,70 +8,40 @@
   --font-sans: var(--font-geist), "Bahnschrift", "Segoe UI", sans-serif;
   --font-heading: var(--font-sora), "Bahnschrift", "Segoe UI", sans-serif;
   --font-mono: var(--font-geist-mono), "Cascadia Mono", "Consolas", monospace;
-  --color-background-default: var(--background-default);
-  --color-background-section: var(--background-section);
-  --color-surface-card: var(--surface-card);
-  --color-surface-elevated: var(--surface-elevated);
-  --color-surface-soft: var(--surface-soft);
-  --color-border-subtle: var(--border-subtle);
-  --color-border-strong: var(--border-strong);
-  --color-text-primary: var(--text-primary);
-  --color-text-secondary: var(--text-secondary);
-  --color-text-muted: var(--text-muted);
-  --color-brand-primary: var(--brand-primary);
-  --color-brand-accent: var(--brand-accent);
-  --color-brand-glow: var(--brand-glow);
-  --color-brand-soft: var(--brand-soft);
-  --color-focus-ring: var(--focus-ring);
-  --color-status-draft: var(--status-draft);
-  --color-status-progress: var(--status-progress);
-  --color-status-validated: var(--status-validated);
-  --color-status-done: var(--status-done);
-  --color-status-warning: var(--status-warning);
-  --color-status-error: var(--status-error);
-  --color-brand-ink: var(--brand-ink);
-  --color-brand-circuit: var(--brand-circuit);
-  --color-brand-circuit-bright: var(--brand-circuit-bright);
-  --color-brand-metal: var(--brand-metal);
-  --color-brand-steel: var(--brand-steel);
-  --color-brand-panel: var(--brand-panel);
-  --color-brand-panel-raised: var(--brand-panel-raised);
-  --color-brand-muted: var(--brand-muted);
-  --color-brand-electric-blue: var(--brand-electric-blue);
-  --color-brand-border-cyan-soft: var(--brand-border-cyan-soft);
-  --shadow-brand-lift: var(--shadow-brand-lift);
-  --shadow-brand-focus: var(--shadow-brand-focus);
-  --shadow-brand-glow: var(--shadow-brand-glow);
-  --ease-brand-out: var(--ease-brand-out);
-  --duration-brand-reveal: var(--duration-brand-reveal);
-  --duration-brand-micro: var(--duration-brand-micro);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
+  --color-nite-background: var(--nite-background);
+  --color-nite-surface: var(--nite-surface);
+  --color-nite-surface-focus: var(--nite-surface-focus);
+  --color-nite-surface-subtle: var(--nite-surface-subtle);
+  --color-nite-text-primary: var(--nite-text-primary);
+  --color-nite-text-secondary: var(--nite-text-secondary);
+  --color-nite-text-muted: var(--nite-text-muted);
+  --color-nite-border-subtle: var(--nite-border-subtle);
+  --color-nite-border-soft: var(--nite-border-soft);
+  --color-nite-border-strong: var(--nite-border-strong);
+  --color-nite-border-hover: var(--nite-border-hover);
+  --color-nite-overlay: var(--nite-overlay);
+  --color-nite-action-text: var(--nite-action-text);
+  --color-nite-action-hover-text: var(--nite-action-hover-text);
+  --color-nite-focus: var(--nite-focus);
+  --color-nite-icon-muted: var(--nite-icon-muted);
+  --color-nite-brand-accent: var(--nite-brand-accent);
+  --color-status-draft: var(--nite-status-draft);
+  --color-status-progress: var(--nite-status-progress);
+  --color-status-validated: var(--nite-status-validated);
+  --color-status-done: var(--nite-status-done);
+  --color-status-warning: var(--nite-status-warning);
+  --color-status-error: var(--nite-status-error);
+  --shadow-nite-lift: var(--nite-shadow-lift);
+  --ease-nite-out: var(--nite-ease-out);
+  --duration-nite-micro: var(--nite-duration-micro);
   --color-ring: var(--ring);
-  --color-input: var(--input);
   --color-border: var(--border);
   --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
   --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
   --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
   --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
   --color-foreground: var(--foreground);
@@ -82,175 +52,197 @@
   --radius-xl: calc(var(--radius) + 0.25rem);
   --radius-2xl: calc(var(--radius) + 0.75rem);
   --radius-3xl: calc(var(--radius) + 1rem);
-  --radius-4xl: calc(var(--radius) + 1.25rem);
 }
 
 :root {
   color-scheme: dark light;
-  --background-default-light: #f7f3ea;
-  --background-section-light: #efe8dc;
-  --surface-card-light: #fffbf5;
-  --surface-elevated-light: #f2ebdd;
-  --surface-soft-light: #eaf1fa;
-  --border-subtle-light: rgba(17, 24, 39, 0.12);
-  --border-strong-light: rgba(17, 24, 39, 0.22);
-  --text-primary-light: #111827;
-  --text-secondary-light: #334155;
-  --text-muted-light: #5b6472;
-  --brand-primary-light: #1d4ed8;
-  --brand-accent-light: #0369a1;
-  --brand-unijorge-red-light: #c24132;
-  --brand-glow-light: rgba(29, 78, 216, 0.14);
-  --brand-soft-light: rgba(29, 78, 216, 0.1);
-  --brand-unijorge-red-soft-light: rgba(194, 65, 50, 0.12);
-  --focus-ring-light: #1d4ed8;
-  --status-draft-light: #475569;
-  --status-progress-light: #0369a1;
-  --status-validated-light: #6d28d9;
-  --status-done-light: #047857;
-  --status-warning-light: #92400e;
-  --status-error-light: #be123c;
-  --primary-foreground-light: #fffaf0;
-  --shadow-brand-lift-light: 0 18px 48px rgb(15 23 42 / 0.14);
-  --background-default: #09090a;
-  --background-section: #0d111c;
-  --surface-card: #121826;
-  --surface-elevated: #172033;
-  --surface-soft: #f3f6fa;
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-strong: rgba(255, 255, 255, 0.16);
-  --text-primary: #f4f7fb;
-  --text-secondary: #aab4c3;
-  --text-muted: #758195;
-  --brand-primary: #2563eb;
-  --brand-accent: #38bdf8;
-  --brand-glow: rgba(56, 189, 248, 0.22);
-  --brand-soft: rgba(37, 99, 235, 0.12);
-  --focus-ring: #7dd3fc;
-  --status-draft: #94a3b8;
-  --status-progress: #38bdf8;
-  --status-validated: #a78bfa;
-  --status-done: #34d399;
-  --status-warning: #fbbf24;
-  --status-error: #fb7185;
-  --brand-ink: var(--background-default);
-  --brand-panel: var(--surface-card);
-  --brand-panel-raised: var(--surface-elevated);
-  --brand-circuit: var(--brand-primary);
-  --brand-circuit-bright: var(--brand-accent);
-  --brand-electric-blue: var(--brand-primary);
-  --brand-metal: var(--text-primary);
-  --brand-steel: var(--text-secondary);
-  --brand-muted: var(--text-muted);
-  --brand-graphite: var(--surface-elevated);
-  --brand-border-cyan-soft: var(--border-subtle);
-  --brand-glow-cyan: var(--brand-glow);
-  --duration-brand-reveal: 650ms;
-  --duration-brand-micro: 220ms;
-  --duration-brand-medium: 560ms;
-  --ease-brand-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --header-logo-collapse-range: 96px;
-  --parallax-range-min: 6%;
-  --parallax-range-max: 14%;
-  --background: var(--brand-ink);
-  --foreground: var(--text-primary);
-  --card: var(--brand-panel);
-  --card-foreground: var(--text-primary);
-  --popover: var(--brand-panel-raised);
-  --popover-foreground: var(--text-primary);
-  --primary: var(--brand-primary);
-  --primary-foreground: var(--text-primary);
-  --secondary: var(--surface-elevated);
-  --secondary-foreground: var(--text-primary);
-  --muted: var(--background-section);
-  --muted-foreground: var(--text-secondary);
-  --accent: var(--brand-soft);
-  --accent-foreground: var(--text-primary);
-  --destructive: var(--status-error);
-  --border: var(--border-subtle);
-  --input: var(--border-strong);
-  --ring: var(--focus-ring);
-  --chart-1: var(--brand-circuit-bright);
-  --chart-2: var(--brand-circuit);
-  --chart-3: var(--status-validated);
-  --chart-4: var(--status-done);
-  --chart-5: var(--status-warning);
+  --nite-light-background: #f7f3ea;
+  --nite-light-section: #efe8dc;
+  --nite-light-surface: rgb(255 251 245 / 0.92);
+  --nite-light-surface-focus: rgb(255 251 245 / 0.98);
+  --nite-light-surface-elevated: rgb(242 235 221 / 0.94);
+  --nite-light-surface-subtle: rgb(17 24 39 / 0.035);
+  --nite-light-border-subtle: rgb(17 24 39 / 0.14);
+  --nite-light-border-soft: rgb(17 24 39 / 0.16);
+  --nite-light-border-strong: rgb(17 24 39 / 0.22);
+  --nite-light-border-hover: rgb(29 78 216 / 0.38);
+  --nite-light-text-primary: #111827;
+  --nite-light-text-secondary: #334155;
+  --nite-light-text-muted: #5b6472;
+  --nite-light-overlay: rgb(255 251 245 / 0.92);
+  --nite-light-action-text: #111827;
+  --nite-light-action-hover: #111827;
+  --nite-light-action-hover-text: #fffaf0;
+  --nite-light-placeholder: rgb(51 65 85 / 0.58);
+  --nite-light-focus: rgb(29 78 216 / 0.34);
+  --nite-light-icon-muted: #5b6472;
+  --nite-light-heading-from: #111827;
+  --nite-light-heading-to: rgb(17 24 39 / 0.52);
+  --nite-light-glass-from: rgb(17 24 39 / 0.035);
+  --nite-light-glass-to: rgb(29 78 216 / 0.08);
+  --nite-light-glass-border: rgb(17 24 39 / 0.12);
+  --nite-light-action-shadow:
+    0 1px 3px rgb(15 23 42 / 0.1), 0 1px 2px -1px rgb(15 23 42 / 0.1);
+  --nite-light-action-shadow-hover: 0 18px 48px rgb(15 23 42 / 0.16);
+  --nite-light-brand-primary: #1d4ed8;
+  --nite-light-brand-accent: #0369a1;
+  --nite-light-brand-glow: rgb(29 78 216 / 0.14);
+  --nite-light-brand-soft: rgb(29 78 216 / 0.1);
+  --nite-light-status-draft: #475569;
+  --nite-light-status-progress: #0369a1;
+  --nite-light-status-validated: #6d28d9;
+  --nite-light-status-done: #047857;
+  --nite-light-status-warning: #92400e;
+  --nite-light-status-error: #be123c;
+  --nite-light-shadow-lift: 0 18px 48px rgb(15 23 42 / 0.14);
+  --nite-dark-background: #09090a;
+  --nite-dark-section: #0d111c;
+  --nite-dark-surface: rgb(24 25 28 / 0.88);
+  --nite-dark-surface-focus: rgb(24 25 28 / 0.96);
+  --nite-dark-surface-elevated: rgb(24 25 28 / 0.88);
+  --nite-dark-surface-subtle: rgb(255 255 255 / 0.04);
+  --nite-dark-text-primary: #f0f0f0;
+  --nite-dark-text-secondary: #a1a4a5;
+  --nite-dark-text-muted: #878d8f;
+  --nite-dark-border-subtle: rgb(176 199 217 / 0.145);
+  --nite-dark-border-soft: rgb(176 199 217 / 0.145);
+  --nite-dark-border-strong: rgb(217 237 254 / 0.26);
+  --nite-dark-border-hover: rgb(217 237 254 / 0.26);
+  --nite-dark-overlay: rgb(0 0 0 / 0.6);
+  --nite-dark-action-text: #fff;
+  --nite-dark-action-hover: #f0f0f0;
+  --nite-dark-action-hover-text: #000;
+  --nite-dark-placeholder: rgb(255 255 255 / 0.28);
+  --nite-dark-focus: rgb(255 255 255 / 0.3);
+  --nite-dark-icon-muted: #70757e;
+  --nite-dark-heading-from: #fff;
+  --nite-dark-heading-to: rgb(255 255 255 / 0.5);
+  --nite-dark-glass-from: rgb(253 253 253 / 0.05);
+  --nite-dark-glass-to: rgb(240 240 228 / 0.1);
+  --nite-dark-glass-border: rgb(255 255 255 / 0.05);
+  --nite-dark-action-shadow:
+    0 1px 3px rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --nite-dark-action-shadow-hover: 0 18px 48px rgb(255 255 255 / 0.12);
+  --nite-dark-brand-primary: #2563eb;
+  --nite-dark-brand-accent: #38bdf8;
+  --nite-dark-brand-glow: rgb(56 189 248 / 0.22);
+  --nite-dark-brand-soft: rgb(37 99 235 / 0.12);
+  --nite-dark-status-draft: #94a3b8;
+  --nite-dark-status-progress: #38bdf8;
+  --nite-dark-status-validated: #a78bfa;
+  --nite-dark-status-done: #34d399;
+  --nite-dark-status-warning: #fbbf24;
+  --nite-dark-status-error: #fb7185;
+  --nite-dark-shadow-lift: 0 24px 70px rgb(0 0 0 / 0.42);
+  --nite-duration-micro: 220ms;
+  --nite-duration-medium: 560ms;
+  --nite-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --background: var(--nite-background);
+  --foreground: var(--nite-text-primary);
+  --card: var(--nite-surface);
+  --card-foreground: var(--nite-text-primary);
+  --primary: var(--nite-brand-primary);
+  --primary-foreground: var(--nite-action-text);
+  --secondary: var(--nite-surface-elevated);
+  --muted: var(--nite-section);
+  --muted-foreground: var(--nite-text-secondary);
+  --accent: var(--nite-brand-soft);
+  --destructive: var(--nite-status-error);
+  --border: var(--nite-border-subtle);
+  --ring: var(--nite-focus);
   --radius: 0.5rem;
-  --shadow-brand-lift: 0 24px 70px rgb(0 0 0 / 0.42);
-  --shadow-brand-focus:
-    0 0 0 1px var(--focus-ring), 0 0 0 6px var(--brand-glow);
-  --shadow-brand-glow: 0 0 32px var(--brand-glow-cyan);
-  --sidebar: var(--brand-panel);
-  --sidebar-foreground: var(--text-primary);
-  --sidebar-primary: var(--brand-primary);
-  --sidebar-primary-foreground: var(--text-primary);
-  --sidebar-accent: var(--surface-elevated);
-  --sidebar-accent-foreground: var(--text-primary);
-  --sidebar-border: var(--border-subtle);
-  --sidebar-ring: var(--focus-ring);
+  --nite-shadow-focus:
+    0 0 0 1px var(--nite-focus), 0 0 0 6px var(--nite-brand-glow);
+}
+
+:root,
+[data-nite-scene="inverse"] {
+  --nite-background: var(--nite-dark-background);
+  --nite-section: var(--nite-dark-section);
+  --nite-surface: var(--nite-dark-surface);
+  --nite-surface-focus: var(--nite-dark-surface-focus);
+  --nite-surface-elevated: var(--nite-dark-surface-elevated);
+  --nite-surface-subtle: var(--nite-dark-surface-subtle);
+  --nite-text-primary: var(--nite-dark-text-primary);
+  --nite-text-secondary: var(--nite-dark-text-secondary);
+  --nite-text-muted: var(--nite-dark-text-muted);
+  --nite-border-subtle: var(--nite-dark-border-subtle);
+  --nite-border-soft: var(--nite-dark-border-soft);
+  --nite-border-strong: var(--nite-dark-border-strong);
+  --nite-border-hover: var(--nite-dark-border-hover);
+  --nite-overlay: var(--nite-dark-overlay);
+  --nite-action-text: var(--nite-dark-action-text);
+  --nite-action-hover: var(--nite-dark-action-hover);
+  --nite-action-hover-text: var(--nite-dark-action-hover-text);
+  --nite-placeholder: var(--nite-dark-placeholder);
+  --nite-focus: var(--nite-dark-focus);
+  --nite-icon-muted: var(--nite-dark-icon-muted);
+  --nite-heading-from: var(--nite-dark-heading-from);
+  --nite-heading-to: var(--nite-dark-heading-to);
+  --nite-glass-from: var(--nite-dark-glass-from);
+  --nite-glass-to: var(--nite-dark-glass-to);
+  --nite-glass-border: var(--nite-dark-glass-border);
+  --nite-action-shadow: var(--nite-dark-action-shadow);
+  --nite-action-shadow-hover: var(--nite-dark-action-shadow-hover);
+  --nite-brand-primary: var(--nite-dark-brand-primary);
+  --nite-brand-accent: var(--nite-dark-brand-accent);
+  --nite-brand-glow: var(--nite-dark-brand-glow);
+  --nite-brand-soft: var(--nite-dark-brand-soft);
+  --nite-status-draft: var(--nite-dark-status-draft);
+  --nite-status-progress: var(--nite-dark-status-progress);
+  --nite-status-validated: var(--nite-dark-status-validated);
+  --nite-status-done: var(--nite-dark-status-done);
+  --nite-status-warning: var(--nite-dark-status-warning);
+  --nite-status-error: var(--nite-dark-status-error);
+  --nite-shadow-lift: var(--nite-dark-shadow-lift);
 }
 
 :root[data-theme="dark"],
-.dark {
+.dark,
+[data-nite-scene="inverse"] {
   color-scheme: dark;
 }
 
 :root[data-theme="light"] {
   color-scheme: light;
-  --background-default: var(--background-default-light);
-  --background-section: var(--background-section-light);
-  --surface-card: var(--surface-card-light);
-  --surface-elevated: var(--surface-elevated-light);
-  --surface-soft: var(--surface-soft-light);
-  --border-subtle: var(--border-subtle-light);
-  --border-strong: var(--border-strong-light);
-  --text-primary: var(--text-primary-light);
-  --text-secondary: var(--text-secondary-light);
-  --text-muted: var(--text-muted-light);
-  --brand-primary: var(--brand-primary-light);
-  --brand-accent: var(--brand-accent-light);
-  --brand-glow: var(--brand-glow-light);
-  --brand-soft: var(--brand-soft-light);
-  --focus-ring: var(--focus-ring-light);
-  --status-draft: var(--status-draft-light);
-  --status-progress: var(--status-progress-light);
-  --status-validated: var(--status-validated-light);
-  --status-done: var(--status-done-light);
-  --status-warning: var(--status-warning-light);
-  --status-error: var(--status-error-light);
-  --primary-foreground: var(--primary-foreground-light);
-  --sidebar-primary-foreground: var(--primary-foreground-light);
-  --shadow-brand-lift: var(--shadow-brand-lift-light);
-}
-
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) {
-    color-scheme: light;
-    --background-default: var(--background-default-light);
-    --background-section: var(--background-section-light);
-    --surface-card: var(--surface-card-light);
-    --surface-elevated: var(--surface-elevated-light);
-    --surface-soft: var(--surface-soft-light);
-    --border-subtle: var(--border-subtle-light);
-    --border-strong: var(--border-strong-light);
-    --text-primary: var(--text-primary-light);
-    --text-secondary: var(--text-secondary-light);
-    --text-muted: var(--text-muted-light);
-    --brand-primary: var(--brand-primary-light);
-    --brand-accent: var(--brand-accent-light);
-    --brand-glow: var(--brand-glow-light);
-    --brand-soft: var(--brand-soft-light);
-    --focus-ring: var(--focus-ring-light);
-    --status-draft: var(--status-draft-light);
-    --status-progress: var(--status-progress-light);
-    --status-validated: var(--status-validated-light);
-    --status-done: var(--status-done-light);
-    --status-warning: var(--status-warning-light);
-    --status-error: var(--status-error-light);
-    --primary-foreground: var(--primary-foreground-light);
-    --sidebar-primary-foreground: var(--primary-foreground-light);
-    --shadow-brand-lift: var(--shadow-brand-lift-light);
-  }
+  --nite-background: var(--nite-light-background);
+  --nite-section: var(--nite-light-section);
+  --nite-surface: var(--nite-light-surface);
+  --nite-surface-focus: var(--nite-light-surface-focus);
+  --nite-surface-elevated: var(--nite-light-surface-elevated);
+  --nite-surface-subtle: var(--nite-light-surface-subtle);
+  --nite-text-primary: var(--nite-light-text-primary);
+  --nite-text-secondary: var(--nite-light-text-secondary);
+  --nite-text-muted: var(--nite-light-text-muted);
+  --nite-border-subtle: var(--nite-light-border-subtle);
+  --nite-border-soft: var(--nite-light-border-soft);
+  --nite-border-strong: var(--nite-light-border-strong);
+  --nite-border-hover: var(--nite-light-border-hover);
+  --nite-overlay: var(--nite-light-overlay);
+  --nite-action-text: var(--nite-light-action-text);
+  --nite-action-hover: var(--nite-light-action-hover);
+  --nite-action-hover-text: var(--nite-light-action-hover-text);
+  --nite-placeholder: var(--nite-light-placeholder);
+  --nite-focus: var(--nite-light-focus);
+  --nite-icon-muted: var(--nite-light-icon-muted);
+  --nite-heading-from: var(--nite-light-heading-from);
+  --nite-heading-to: var(--nite-light-heading-to);
+  --nite-glass-from: var(--nite-light-glass-from);
+  --nite-glass-to: var(--nite-light-glass-to);
+  --nite-glass-border: var(--nite-light-glass-border);
+  --nite-action-shadow: var(--nite-light-action-shadow);
+  --nite-action-shadow-hover: var(--nite-light-action-shadow-hover);
+  --nite-brand-primary: var(--nite-light-brand-primary);
+  --nite-brand-accent: var(--nite-light-brand-accent);
+  --nite-brand-glow: var(--nite-light-brand-glow);
+  --nite-brand-soft: var(--nite-light-brand-soft);
+  --nite-status-draft: var(--nite-light-status-draft);
+  --nite-status-progress: var(--nite-light-status-progress);
+  --nite-status-validated: var(--nite-light-status-validated);
+  --nite-status-done: var(--nite-light-status-done);
+  --nite-status-warning: var(--nite-light-status-warning);
+  --nite-status-error: var(--nite-light-status-error);
+  --nite-shadow-lift: var(--nite-light-shadow-lift);
 }
 
 * {
@@ -275,12 +267,12 @@ body {
   position: absolute;
   pointer-events: none;
   opacity: 0 !important;
-  transition: opacity var(--duration-brand-micro) var(--ease-brand-out);
+  transition: opacity var(--nite-duration-micro) var(--nite-ease-out);
 }
 
 [data-site-header]::after {
   inset: 0;
-  background: rgb(9 9 10 / 0.42);
+  background: color-mix(in srgb, var(--nite-background) 82%, transparent);
 }
 
 [data-site-header]::before {
@@ -294,16 +286,6 @@ body {
   -webkit-mask-position: 0 calc(100% - 7.5rem);
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-size: 100% 1px;
-}
-
-:root[data-theme="light"] [data-site-header]::after {
-  background: rgb(247 243 234 / 0.82);
-}
-
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) [data-site-header]::after {
-    background: rgb(247 243 234 / 0.82);
-  }
 }
 
 [data-site-header][data-header-scrolled="true"]::before,
@@ -327,14 +309,14 @@ body {
   }
   :focus-visible {
     outline: 0;
-    box-shadow: var(--shadow-brand-focus);
+    box-shadow: var(--nite-shadow-focus);
   }
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;
   }
   ::selection {
-    background: var(--brand-glow);
+    background: var(--nite-brand-glow);
     color: var(--foreground);
   }
 }
@@ -349,63 +331,122 @@ body {
 }
 
 @layer utilities {
-  .brand-panel {
-    background: var(--brand-panel);
-    box-shadow: var(--shadow-brand-lift);
-  }
-
-  .brand-metal-text {
+  .nite-gradient-text {
     background: linear-gradient(
       to right bottom,
-      var(--text-primary) 28%,
-      var(--text-secondary) 72%,
-      var(--brand-accent) 118%
+      var(--nite-heading-from) 30%,
+      var(--nite-heading-to)
     );
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
 
-  .hero-brand-glow {
+  .nite-glass-action {
+    border: 2px solid var(--nite-glass-border);
+    background: linear-gradient(
+      104deg,
+      var(--nite-glass-from) 5%,
+      var(--nite-glass-to) 100%
+    );
+    color: var(--nite-action-text);
+    box-shadow: var(--nite-action-shadow);
+    backdrop-filter: blur(25px);
+  }
+
+  .nite-glass-action:not(:disabled):hover,
+  .nite-glass-action:not(:disabled):focus-visible {
+    background: var(--nite-action-hover);
+    color: var(--nite-action-hover-text);
+    box-shadow: var(--nite-action-shadow-hover);
+  }
+
+  .nite-glass-action:focus-visible {
+    outline: 0;
+    box-shadow:
+      var(--nite-action-shadow-hover),
+      0 0 0 4px var(--nite-focus);
+  }
+
+  .nite-glass-action:disabled {
+    cursor: not-allowed;
+    opacity: 0.3;
+  }
+
+  .nite-form-field {
+    border-color: var(--nite-border-soft);
+    background: var(--nite-surface);
+    color: var(--nite-text-primary);
+  }
+
+  .nite-form-field::placeholder {
+    color: var(--nite-placeholder);
+  }
+
+  .nite-form-field:focus-visible {
+    border-color: var(--nite-border-hover);
+    background: var(--nite-surface-focus);
+    outline: 0;
+    box-shadow: 0 0 0 2px var(--nite-focus);
+  }
+
+  .nite-panel {
+    background: var(--nite-surface);
+    box-shadow: var(--nite-shadow-lift);
+  }
+
+  .nite-metal-text {
+    background: linear-gradient(
+      to right bottom,
+      var(--nite-text-primary) 28%,
+      var(--nite-text-secondary) 72%,
+      var(--nite-brand-accent) 118%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .nite-hero-glow {
     background: radial-gradient(
       ellipse at 50% 42%,
-      var(--brand-glow),
-      var(--brand-soft) 34%,
+      var(--nite-brand-glow),
+      var(--nite-brand-soft) 34%,
       transparent 68%
     );
   }
 
-  .hero-surface-glow {
+  .nite-surface-glow {
     background: radial-gradient(
       ellipse at 50% 44%,
-      color-mix(in srgb, var(--surface-soft) 18%, transparent),
+      color-mix(in srgb, var(--nite-surface-subtle) 18%, transparent),
       transparent 68%
     );
   }
 
-  .unijorge-lit {
+  [data-nite-scene="unijorge-brand-text"].unijorge-lit {
     isolation: isolate;
   }
 
-  .unijorge-lit-word {
+  [data-nite-scene="unijorge-brand-text"] .unijorge-lit-word {
     color: var(--unijorge-lit-color);
     text-shadow:
       0 0 0.08rem var(--unijorge-lit-core),
       0 0 0.32rem var(--unijorge-lit-soft),
       0 0 0.74rem var(--unijorge-lit-wide);
-    animation: unijorge-lit-pulse 3.7s var(--ease-brand-out) infinite;
+    animation: unijorge-lit-pulse 3.7s var(--nite-ease-out) infinite;
     filter: brightness(1.08) saturate(1.16);
     will-change: filter, text-shadow;
   }
 
-  .unijorge-lit-word-red {
+  [data-nite-scene="unijorge-brand-text"] .unijorge-lit-word-red {
     --unijorge-lit-color: #f15a4d;
     --unijorge-lit-core: rgb(255 128 108 / 0.88);
     --unijorge-lit-soft: rgb(241 90 77 / 0.48);
     --unijorge-lit-wide: rgb(173 51 39 / 0.32);
   }
 
-  .unijorge-lit-word-blue {
+  [data-nite-scene="unijorge-brand-text"] .unijorge-lit-word-blue {
     --unijorge-lit-color: #6ea1ff;
     --unijorge-lit-core: rgb(130 174 255 / 0.9);
     --unijorge-lit-soft: rgb(74 119 199 / 0.54);
@@ -413,8 +454,8 @@ body {
     animation-delay: 0.35s;
   }
 
-  .animate-brand-rise {
-    animation: brand-rise var(--duration-brand-medium) var(--ease-brand-out)
+  .animate-nite-rise {
+    animation: nite-rise var(--nite-duration-medium) var(--nite-ease-out)
       both;
   }
 }
@@ -449,7 +490,7 @@ body {
     );
   mix-blend-mode: soft-light;
   opacity: 0;
-  transition: opacity var(--duration-brand-micro) var(--ease-brand-out);
+  transition: opacity var(--nite-duration-micro) var(--nite-ease-out);
 }
 
 .nite-final-wordmark::after {
@@ -506,7 +547,7 @@ body {
   background-clip: text;
   filter: drop-shadow(0 0 18px rgb(125 249 255 / 0.22));
   opacity: 0;
-  transition: opacity var(--duration-brand-micro) var(--ease-brand-out);
+  transition: opacity var(--nite-duration-micro) var(--nite-ease-out);
   -webkit-background-clip: text;
 }
 
@@ -554,7 +595,7 @@ body {
   }
 }
 
-@keyframes brand-rise {
+@keyframes nite-rise {
   from {
     opacity: 0;
     transform: translateY(14px);
@@ -698,7 +739,7 @@ body {
   color: #faf9f5;
   font-family: var(--font-heading);
   font-size: clamp(3.35rem, 7vw, 6rem);
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: 0;
   line-height: 1.1;
 }
@@ -731,9 +772,9 @@ body {
   line-height: 1;
   padding: 0.78rem 1rem;
   transition:
-    background-color var(--duration-brand-micro) var(--ease-brand-out),
-    border-color var(--duration-brand-micro) var(--ease-brand-out),
-    transform var(--duration-brand-micro) var(--ease-brand-out);
+    background-color var(--nite-duration-micro) var(--nite-ease-out),
+    border-color var(--nite-duration-micro) var(--nite-ease-out),
+    transform var(--nite-duration-micro) var(--nite-ease-out);
 }
 
 .timeline-premium-button svg {
@@ -838,7 +879,7 @@ body {
     transition-duration: 0.01ms !important;
   }
 
-  .unijorge-lit-word {
+  [data-nite-scene="unijorge-brand-text"] .unijorge-lit-word {
     animation: none !important;
     will-change: auto;
   }

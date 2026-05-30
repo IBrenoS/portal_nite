@@ -1,12 +1,11 @@
 import { ArrowRightIcon } from "lucide-react";
+import Link from "next/link";
 
 import { Container } from "@/components/layout/container";
-import {
-  ButtonPrimaryLink,
-  ButtonSecondaryLink,
-} from "@/components/ui/brand-button";
 import { AnimatedNiteLogo } from "@/components/ui/animated-nite-logo";
+import { buttonVariants } from "@/components/ui/button";
 import { Reveal } from "@/components/ui/reveal";
+import { cn } from "@/lib/utils";
 
 export function HeroSection() {
   return (
@@ -22,11 +21,11 @@ export function HeroSection() {
       >
         <Reveal className="relative z-10 order-2 flex max-w-[43rem] flex-col items-center gap-8 text-center sm:order-none sm:gap-9 lg:max-w-[47rem] lg:items-start lg:pl-16 lg:text-left xl:max-w-[48rem]">
           <div className="flex flex-col gap-5 sm:gap-6">
-            <p className="mx-auto max-w-[40rem] font-mono text-xs uppercase tracking-[0.18em] text-brand-circuit-bright lg:mx-0">
+            <p className="mx-auto max-w-[40rem] font-mono text-xs uppercase tracking-[0.18em] text-nite-brand-accent lg:mx-0">
               UNIJORGE / Núcleo de Inovação & Tecnologia
             </p>
-            <h1 className="max-w-[11.4em] font-heading text-[2.35rem] font-semibold leading-[1.04] text-foreground [text-wrap:balance] min-[390px]:text-[2.45rem] sm:text-[3.15rem] sm:leading-[1.03] lg:max-w-[14.9em] lg:text-[3.08rem] lg:leading-[1.04] xl:text-[3.18rem]">
-              <span className="brand-metal-text">
+            <h1 className="max-w-[11.4em] font-heading text-[2.5rem] font-normal leading-[1.04] text-foreground [text-wrap:balance] min-[390px]:text-[2.65rem] sm:text-[3.35rem] sm:leading-[1.03] lg:max-w-[14.9em] lg:text-[3.28rem] lg:leading-[1.04] xl:text-[3.4rem]">
+              <span className="nite-metal-text">
                 Tecnologia aplicada, aprendizagem e projetos em evolução.
               </span>
             </h1>
@@ -38,13 +37,25 @@ export function HeroSection() {
           </div>
 
           <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
-            <ButtonPrimaryLink href="/projetos" className="w-full sm:w-fit">
+            <Link
+              href="/projetos"
+              className={cn(
+                buttonVariants({ variant: "primary", size: "lg" }),
+                "w-full rounded-md sm:w-fit",
+              )}
+            >
               Explorar projetos
               <ArrowRightIcon data-icon="inline-end" />
-            </ButtonPrimaryLink>
-            <ButtonSecondaryLink href="#sobre" className="w-full sm:w-fit">
+            </Link>
+            <Link
+              href="#sobre"
+              className={cn(
+                buttonVariants({ variant: "outline", size: "lg" }),
+                "w-full rounded-md sm:w-fit",
+              )}
+            >
               Conhecer o NITE
-            </ButtonSecondaryLink>
+            </Link>
           </div>
         </Reveal>
 
@@ -54,11 +65,11 @@ export function HeroSection() {
         >
           <div
             aria-hidden="true"
-            className="hero-brand-glow pointer-events-none absolute inset-x-[2%] top-[12%] z-0 h-[62%] blur-3xl"
+            className="nite-hero-glow pointer-events-none absolute inset-x-[2%] top-[12%] z-0 h-[62%] blur-3xl"
           />
           <div
             aria-hidden="true"
-            className="hero-surface-glow pointer-events-none absolute inset-x-[12%] top-[24%] z-0 h-[44%] opacity-70 blur-xl"
+            className="nite-surface-glow pointer-events-none absolute inset-x-[12%] top-[24%] z-0 h-[44%] opacity-70 blur-xl"
           />
           <AnimatedNiteLogo className="relative z-10 w-full max-w-[8rem] min-[430px]:max-w-[9.5rem] sm:max-w-[20rem] lg:max-w-[20rem] xl:max-w-[21.5rem]" />
         </div>

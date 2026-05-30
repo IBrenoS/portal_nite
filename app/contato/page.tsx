@@ -52,14 +52,17 @@ export default function ContactPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbJsonLd) }}
       />
-      <main id="conteudo-principal" className="bg-black text-white">
+      <main
+        id="conteudo-principal"
+        className="bg-nite-background text-nite-text-primary"
+      >
         <section className="min-h-[calc(100svh-3.625rem)]">
           <Container
             size="xl"
             className="flex max-w-4xl flex-col px-6 py-16 sm:flex-row sm:gap-8 sm:px-6 sm:py-48 md:max-w-7xl md:gap-36 lg:px-6 lg:gap-72"
           >
-            <div className="w-full max-w-[35rem] animate-brand-rise">
-              <h1 className="mb-2 mt-2 bg-[linear-gradient(to_right_bottom,rgb(255_255_255)_30%,rgb(255_255_255_/_0.5))] bg-clip-text pb-3 font-heading text-[4rem] font-normal leading-none tracking-normal text-balance text-transparent md:text-[4.8rem] lg:w-max lg:max-w-[calc(100vw-3rem)] lg:whitespace-nowrap">
+            <div className="w-full max-w-[35rem] animate-nite-rise">
+              <h1 className="nite-gradient-text mb-2 mt-2 pb-3 font-heading text-[4rem] font-normal leading-none tracking-normal text-balance md:text-[4.8rem] lg:w-max lg:max-w-[calc(100vw-3rem)] lg:whitespace-nowrap">
                 Fale com o NITE
               </h1>
 
@@ -68,7 +71,7 @@ export default function ContactPage() {
 
             <aside
               aria-labelledby="contact-help-title"
-              className="mt-16 w-full max-w-sm animate-brand-rise sm:mt-16"
+              className="mt-16 w-full max-w-sm animate-nite-rise sm:mt-16"
             >
               <ContactEmailCopy
                 titleId="contact-help-title"

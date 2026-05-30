@@ -20,16 +20,32 @@ describe("ContactPage", () => {
       screen.getByRole("heading", { level: 1, name: "Fale com o NITE" }),
     ).toBeInTheDocument();
 
-    const main = within(screen.getByRole("main"));
+    const mainElement = screen.getByRole("main");
+    const main = within(mainElement);
 
+    expect(mainElement).toHaveClass(
+      "bg-nite-background",
+      "text-nite-text-primary",
+    );
     expect(main.getByLabelText("E-mail")).toHaveAttribute("type", "email");
+    expect(main.getByLabelText("E-mail")).toHaveAttribute("data-slot", "input");
+    expect(main.getByLabelText("E-mail")).toHaveClass("nite-form-field");
     expect(main.getByLabelText("Como podemos ajudar?")).toHaveAttribute(
       "name",
       "message",
     );
+    expect(main.getByLabelText("Como podemos ajudar?")).toHaveAttribute(
+      "data-slot",
+      "textarea",
+    );
+    expect(main.getByLabelText("Como podemos ajudar?")).toHaveClass(
+      "nite-form-field",
+    );
     const submitButton = main.getByRole("button", { name: "Submit" });
 
     expect(submitButton).toBeDisabled();
+    expect(submitButton).toHaveAttribute("data-slot", "button");
+    expect(submitButton).toHaveClass("nite-glass-action");
     expect(submitButton.querySelector("svg")).toHaveClass(
       "lucide-chevron-right",
     );

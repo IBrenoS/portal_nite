@@ -4,13 +4,17 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { CheckIcon, MonitorIcon, MoonIcon, SunIcon } from "lucide-react";
 
 import {
-  normalizeThemePreference,
+  applyThemePreference,
+  dispatchThemeChange,
+  persistThemePreference,
+  readStoredThemePreference,
+  THEME_CHANGE_EVENT,
   THEME_STORAGE_KEY,
   themePreferenceLabels,
   themePreferences,
-  type ResolvedTheme,
   type ThemePreference,
 } from "@/biblioteca/theme";
+import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 type ThemeToggleProps = {
@@ -35,73 +39,11 @@ type ThemePreferenceOptionProps = {
   onSelect: (preference: ThemePreference) => void;
 };
 
-const THEME_CHANGE_EVENT = "nite-theme-change";
-
 const themePreferenceIcons = {
   system: MonitorIcon,
   light: SunIcon,
   dark: MoonIcon,
 } satisfies Record<ThemePreference, typeof MonitorIcon>;
-
-const getSystemTheme = (): ResolvedTheme => {
-  if (
-    typeof window !== "undefined" &&
-    typeof window.matchMedia === "function" &&
-    window.matchMedia("(prefers-color-scheme: light)").matches
-  ) {
-    return "light";
-  }
-
-  return "dark";
-};
-
-const resolveTheme = (preference: ThemePreference): ResolvedTheme =>
-  preference === "system" ? getSystemTheme() : preference;
-
-const applyThemePreference = (preference: ThemePreference) => {
-  if (typeof document === "undefined") {
-    return;
-  }
-
-  const resolvedTheme = resolveTheme(preference);
-  const root = document.documentElement;
-
-  root.dataset.theme = resolvedTheme;
-  root.dataset.themePreference = preference;
-  root.classList.toggle("dark", resolvedTheme === "dark");
-};
-
-const readStoredThemePreference = () => {
-  if (typeof window === "undefined") {
-    return "system";
-  }
-
-  try {
-    const storedPreference = normalizeThemePreference(
-      window.localStorage.getItem(THEME_STORAGE_KEY),
-    );
-
-    if (window.localStorage.getItem(THEME_STORAGE_KEY) !== storedPreference) {
-      window.localStorage.setItem(THEME_STORAGE_KEY, storedPreference);
-    }
-
-    return storedPreference;
-  } catch {
-    return "system";
-  }
-};
-
-const persistThemePreference = (preference: ThemePreference) => {
-  try {
-    window.localStorage.setItem(THEME_STORAGE_KEY, preference);
-  } catch {
-    return;
-  }
-};
-
-const dispatchThemeChange = () => {
-  window.dispatchEvent(new Event(THEME_CHANGE_EVENT));
-};
 
 function useThemePreference() {
   const [preference, setPreference] = useState<ThemePreference>("system");
@@ -287,7 +229,10 @@ export function ThemeToggleButton({
       <button
         ref={buttonRef}
         type="button"
-        className="inline-flex min-h-10 min-w-10 items-center justify-center rounded-lg border border-border/80 bg-card/80 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+        className={cn(
+          buttonVariants({ variant: "secondary", size: "icon" }),
+          "rounded-lg border-border/80 bg-card/80 text-muted-foreground hover:text-foreground",
+        )}
         aria-controls={`${id}-panel`}
         aria-expanded={isOpen}
         aria-haspopup="dialog"
@@ -304,7 +249,7 @@ export function ThemeToggleButton({
         >
           <ThemeTogglePanel
             id={`${id}-options`}
-            className="bg-background/98 shadow-[var(--shadow-brand-lift)]"
+            className="bg-background/98 shadow-nite-lift"
             onPreferenceChange={() => setPopoverOpen(false)}
           />
         </div>

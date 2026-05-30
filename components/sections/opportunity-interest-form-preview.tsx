@@ -7,7 +7,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
 
 type OpportunityInterestFormPreviewHeadingLevel = "h2" | "h3" | "h4";
 
@@ -64,12 +63,12 @@ export function OpportunityInterestFormPreview({
     <Card
       data-component="opportunity-interest-form-preview"
       data-status="inactive"
-      className={cn("border-border bg-card", className)}
+      className={className}
     >
       <CardHeader className="gap-4 p-6 sm:p-8">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
           <span
-            className="inline-flex size-11 shrink-0 items-center justify-center rounded-md border border-border bg-muted/40 text-brand-circuit-bright"
+            className="inline-flex size-11 shrink-0 items-center justify-center rounded-md border border-border bg-muted/40 text-nite-brand-accent"
             aria-hidden="true"
           >
             <ClipboardListIcon />
@@ -126,7 +125,7 @@ export function OpportunityInterestFormPreview({
 
         <div className="flex gap-3 rounded-lg border border-border bg-background/40 p-4">
           <LockKeyholeIcon
-            className="mt-0.5 size-4 shrink-0 text-brand-circuit-bright"
+            className="mt-0.5 size-4 shrink-0 text-nite-brand-accent"
             aria-hidden="true"
           />
           <p className="text-sm leading-7 text-muted-foreground">

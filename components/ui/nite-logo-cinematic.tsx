@@ -22,8 +22,9 @@ export function NiteLogoCinematic({
     <div
       ref={containerRef}
       aria-hidden="true"
+      data-nite-scene="electric-logo"
       className={cn(
-        "animated-nite-logo mx-auto flex w-full items-center justify-center drop-shadow-[0_0_24px_var(--brand-glow)] sm:drop-shadow-[0_0_36px_var(--brand-glow)] lg:drop-shadow-[0_0_44px_var(--brand-glow)] [&_svg]:h-auto [&_svg]:w-full",
+        "animated-nite-logo mx-auto flex w-full items-center justify-center drop-shadow-[0_0_24px_var(--nite-brand-glow)] sm:drop-shadow-[0_0_36px_var(--nite-brand-glow)] lg:drop-shadow-[0_0_44px_var(--nite-brand-glow)] [&_svg]:h-auto [&_svg]:w-full",
         className,
       )}
       dangerouslySetInnerHTML={{ __html: svgMarkup }}

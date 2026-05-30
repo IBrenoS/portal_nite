@@ -106,12 +106,11 @@ export default function UpdatesPage() {
             <Card
               data-component="updates-empty-state"
               data-status="empty"
-              className="border-border bg-card"
             >
               <CardHeader className="gap-4 p-6 sm:p-8">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
                   <span
-                    className="inline-flex size-11 shrink-0 items-center justify-center rounded-md border border-brand-circuit-bright/30 bg-brand-circuit-bright/10 text-brand-circuit-bright"
+                    className="inline-flex size-11 shrink-0 items-center justify-center rounded-md border border-nite-brand-accent/30 bg-nite-brand-accent/10 text-nite-brand-accent"
                     aria-hidden="true"
                   >
                     <Clock3Icon />
@@ -172,7 +171,7 @@ export default function UpdatesPage() {
             <aside className="grid gap-4" aria-labelledby="uso-atualizacoes">
               <Card>
                 <CardHeader className="p-5">
-                  <span className="inline-flex size-10 items-center justify-center rounded-md border border-border text-brand-circuit-bright">
+                  <span className="inline-flex size-10 items-center justify-center rounded-md border border-border text-nite-brand-accent">
                     <ArchiveIcon aria-hidden="true" />
                   </span>
                   <CardTitle>
@@ -195,7 +194,7 @@ export default function UpdatesPage() {
 
               <Card>
                 <CardHeader className="p-5">
-                  <span className="inline-flex size-10 items-center justify-center rounded-md border border-border text-brand-circuit-bright">
+                  <span className="inline-flex size-10 items-center justify-center rounded-md border border-border text-nite-brand-accent">
                     <ShieldCheckIcon aria-hidden="true" />
                   </span>
                   <CardTitle>

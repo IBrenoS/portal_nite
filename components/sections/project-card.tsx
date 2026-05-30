@@ -1,9 +1,7 @@
 import type { Route } from "next";
 import Image from "next/image";
-import { ArrowRightIcon, ImageOffIcon } from "lucide-react";
 
 import {
-  Card,
   CardContent,
   CardFooter,
   CardHeader,
@@ -11,10 +9,16 @@ import {
 } from "@/components/ui/card";
 import { Chip } from "@/components/ui/chip";
 import {
+  DomainCardCta,
+  DomainCardMediaFallback,
+  DomainCardRoot,
+  MetadataPanel,
+} from "@/components/ui/domain-card";
+import {
   StatusBadge,
+  statusBadgeLabels,
   type StatusBadgeStatus,
 } from "@/components/ui/status-badge";
-import { cn } from "@/lib/utils";
 
 type ProjectCardStatus = Extract<
   StatusBadgeStatus,
@@ -44,11 +48,11 @@ type ProjectCardProps = {
 };
 
 const projectStatusLabels = {
-  draft: "Em estruturação",
-  in_progress: "Em andamento",
-  validated: "Validado",
-  done: "Finalizado",
-  archived: "Arquivado",
+  draft: statusBadgeLabels.draft,
+  in_progress: statusBadgeLabels.in_progress,
+  validated: statusBadgeLabels.validated,
+  done: statusBadgeLabels.done,
+  archived: statusBadgeLabels.archived,
 } satisfies Record<ProjectCardStatus, string>;
 
 function ProjectCard({
@@ -70,10 +74,9 @@ function ProjectCard({
   const Heading = `h${headingLevel}` as "h2" | "h3" | "h4";
   const visibleStack = stack.slice(0, 4);
   const hiddenStackCount = Math.max(stack.length - visibleStack.length, 0);
-  const CardRoot = href ? LinkedProjectCardRoot : StaticProjectCardRoot;
 
   return (
-    <CardRoot href={href} className={className}>
+    <DomainCardRoot component="project-card" href={href} className={className}>
       <ProjectCardMedia
         image={image}
         hasPublicEvidence={hasPublicEvidence}
@@ -101,19 +104,19 @@ function ProjectCard({
         <p className="text-sm leading-6 text-muted-foreground">{summary}</p>
 
         <dl className="grid gap-3 text-sm">
-          <div className="rounded-lg border border-border bg-background/42 p-3">
+          <MetadataPanel>
             <dt className="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-muted-foreground">
               Objetivo
             </dt>
             <dd className="mt-1.5 leading-6 text-foreground">{objective}</dd>
-          </div>
+          </MetadataPanel>
 
-          <div className="rounded-lg border border-border bg-background/42 p-3">
+          <MetadataPanel>
             <dt className="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-muted-foreground">
               Próximo passo
             </dt>
             <dd className="mt-1.5 leading-6 text-foreground">{nextStep}</dd>
-          </div>
+          </MetadataPanel>
         </dl>
 
         {visibleStack.length > 0 ? (
@@ -149,49 +152,10 @@ function ProjectCard({
         )}
 
         {href ? (
-          <span className="inline-flex min-h-11 items-center gap-2 rounded-md text-sm font-semibold text-brand-circuit-bright transition-colors group-hover/card:text-foreground">
-            Ver projeto
-            <ArrowRightIcon className="size-4" aria-hidden="true" />
-          </span>
+          <DomainCardCta>Ver projeto</DomainCardCta>
         ) : null}
       </CardFooter>
-    </CardRoot>
-  );
-}
-
-function LinkedProjectCardRoot({
-  href,
-  className,
-  children,
-}: {
-  href?: Route | string;
-  className?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <Card
-      as="a"
-      href={href ?? "#"}
-      variant="interactive"
-      className={cn("min-h-full rounded-lg py-0", className)}
-    >
-      {children}
-    </Card>
-  );
-}
-
-function StaticProjectCardRoot({
-  className,
-  children,
-}: {
-  href?: Route | string;
-  className?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <Card className={cn("min-h-full rounded-lg py-0", className)}>
-      {children}
-    </Card>
+    </DomainCardRoot>
   );
 }
 
@@ -212,7 +176,7 @@ function ProjectCardMedia({
           alt={image.alt}
           fill
           sizes="(max-width: 768px) 100vw, 560px"
-          className="object-cover transition-transform duration-brand-micro ease-brand-out group-hover/card:scale-[1.025]"
+          className="object-cover transition-transform duration-nite-micro ease-nite-out group-hover/card:scale-[1.025]"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background/72 via-background/16 to-transparent" />
       </div>
@@ -220,21 +184,11 @@ function ProjectCardMedia({
   }
 
   return (
-    <div className="grid aspect-[16/9] place-items-center border-b border-border bg-muted/70 p-5 text-center">
-      <div className="grid justify-items-center gap-3">
-        <span
-          className="inline-flex size-11 items-center justify-center rounded-md border border-border bg-card text-muted-foreground"
-          aria-hidden="true"
-        >
-          <ImageOffIcon className="size-5" />
-        </span>
-        <p className="max-w-xs text-sm leading-6 text-muted-foreground">
-          {hasPublicEvidence
-            ? `Evidência pública sem imagem de capa para ${title}.`
-            : "Imagem ou evidência pública ainda indisponível."}
-        </p>
-      </div>
-    </div>
+    <DomainCardMediaFallback slot="project-card-media-fallback">
+      {hasPublicEvidence
+        ? `Evidência pública sem imagem de capa para ${title}.`
+        : "Imagem ou evidência pública ainda indisponível."}
+    </DomainCardMediaFallback>
   );
 }
 
