@@ -13,7 +13,7 @@ describe("UpdatesPage", () => {
 
     expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
     expect(
-      screen.getByRole("heading", { level: 1, name: "NITE em movimento" }),
+      screen.getByRole("heading", { level: 1, name: "Nite News" }),
     ).toBeInTheDocument();
 
     const main = within(screen.getByRole("main"));

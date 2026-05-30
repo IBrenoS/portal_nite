@@ -14,8 +14,8 @@ export default function OpenGraphImage() {
     <div
       style={{
         alignItems: "center",
-        background: "#09090a",
-        color: "#f8fbff",
+        background: "#000000",
+        color: "#f0f0f0",
         display: "flex",
         height: "100%",
         justifyContent: "space-between",
@@ -36,9 +36,9 @@ export default function OpenGraphImage() {
         <div
           style={{
             alignSelf: "flex-start",
-            border: "1px solid rgba(51,212,255,0.56)",
+            border: "1px solid rgba(56,189,248,0.56)",
             borderRadius: 999,
-            color: "#33d4ff",
+            color: "#38bdf8",
             display: "flex",
             fontSize: 22,
             letterSpacing: "0.22em",
@@ -61,7 +61,7 @@ export default function OpenGraphImage() {
           </div>
           <div
             style={{
-              color: "#a8b2bd",
+              color: "#a1a4a5",
               display: "flex",
               fontSize: 30,
               lineHeight: 1.35,
@@ -75,9 +75,9 @@ export default function OpenGraphImage() {
       <div
         style={{
           alignItems: "center",
-          border: "1px solid rgba(168,178,189,0.36)",
+          border: "1px solid rgba(176,199,217,0.26)",
           borderRadius: 28,
-          boxShadow: "0 0 90px rgba(51,212,255,0.18)",
+          boxShadow: "0 0 90px rgba(56,189,248,0.22)",
           display: "flex",
           height: 280,
           justifyContent: "center",
@@ -87,7 +87,7 @@ export default function OpenGraphImage() {
       >
         <div
           style={{
-            color: "#33d4ff",
+            color: "#38bdf8",
             display: "flex",
             fontSize: 104,
             fontWeight: 800,

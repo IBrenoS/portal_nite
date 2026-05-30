@@ -15,6 +15,15 @@ const statusBadgeLabels = {
 } as const;
 
 type StatusBadgeStatus = keyof typeof statusBadgeLabels;
+type StatusBadgeTone =
+  | "brand"
+  | "quiet"
+  | "draft"
+  | "progress"
+  | "validated"
+  | "done"
+  | "warning"
+  | "error";
 
 const statusBadgeVariants = cva(
   "inline-flex min-h-6 w-fit shrink-0 items-center gap-1.5 rounded-full border px-2 py-1 text-xs leading-none font-medium whitespace-nowrap transition-colors",
@@ -23,6 +32,7 @@ const statusBadgeVariants = cva(
       size: {
         sm: "min-h-6 px-2 py-1 text-xs",
         md: "min-h-7 px-2.5 py-1 text-xs",
+        lg: "min-h-7 px-3 py-1 text-sm leading-5",
       },
       variant: {
         soft: "",
@@ -37,15 +47,19 @@ const statusBadgeVariants = cva(
 );
 
 const statusBadgeToneClasses = {
+  brand: {
+    soft: "border-nite-brand-accent/35 bg-nite-brand-accent/10 text-nite-brand-accent",
+    outline: "border-nite-brand-accent/55 text-nite-brand-accent",
+  },
+  quiet: {
+    soft: "border-border bg-muted/40 text-muted-foreground",
+    outline: "border-border text-muted-foreground",
+  },
   draft: {
     soft: "border-status-draft/35 bg-status-draft/10 text-status-draft",
     outline: "border-status-draft/55 text-status-draft",
   },
   progress: {
-    soft: "border-status-progress/35 bg-status-progress/10 text-status-progress",
-    outline: "border-status-progress/55 text-status-progress",
-  },
-  in_progress: {
     soft: "border-status-progress/35 bg-status-progress/10 text-status-progress",
     outline: "border-status-progress/55 text-status-progress",
   },
@@ -65,17 +79,24 @@ const statusBadgeToneClasses = {
     soft: "border-status-error/40 bg-status-error/10 text-status-error",
     outline: "border-status-error/60 text-status-error",
   },
-  archived: {
-    soft: "border-status-draft/30 bg-status-draft/10 text-status-draft",
-    outline: "border-status-draft/50 text-status-draft",
-  },
 } satisfies Record<
-  StatusBadgeStatus,
+  StatusBadgeTone,
   Record<
     NonNullable<VariantProps<typeof statusBadgeVariants>["variant"]>,
     string
   >
 >;
+
+const statusBadgeToneByStatus = {
+  draft: "draft",
+  progress: "progress",
+  in_progress: "progress",
+  validated: "validated",
+  done: "done",
+  warning: "warning",
+  error: "error",
+  archived: "draft",
+} satisfies Record<StatusBadgeStatus, StatusBadgeTone>;
 
 type StatusBadgeProps = Omit<
   ComponentPropsWithoutRef<"span">,
@@ -83,20 +104,25 @@ type StatusBadgeProps = Omit<
 > &
   VariantProps<typeof statusBadgeVariants> & {
     status: StatusBadgeStatus;
+    tone?: StatusBadgeTone;
     label?: ReactNode;
     icon?: ReactNode;
+    showIndicator?: boolean;
   };
 
 function StatusBadge({
   status,
+  tone,
   label,
   icon,
+  showIndicator = true,
   size = "md",
   variant = "soft",
   className,
   ...props
 }: StatusBadgeProps) {
   const fallbackLabel = statusBadgeLabels[status];
+  const visualTone = tone ?? statusBadgeToneByStatus[status];
   const visibleLabel =
     typeof label === "string" && label.trim().length === 0
       ? fallbackLabel
@@ -109,21 +135,31 @@ function StatusBadge({
       data-variant={variant}
       className={cn(
         statusBadgeVariants({ size, variant }),
-        statusBadgeToneClasses[status][variant ?? "soft"],
+        statusBadgeToneClasses[visualTone][variant ?? "soft"],
         className,
       )}
       {...props}
     >
-      <span
-        aria-hidden="true"
-        className="inline-flex shrink-0 items-center justify-center [&_svg]:size-3.5 [&_svg]:shrink-0"
-      >
-        {icon ?? <span className="size-1.5 rounded-full bg-current" />}
+      {showIndicator ? (
+        <span
+          aria-hidden="true"
+          className="inline-flex shrink-0 items-center justify-center [&_svg]:size-3.5 [&_svg]:shrink-0"
+        >
+          {icon ?? <span className="size-1.5 rounded-full bg-current" />}
+        </span>
+      ) : null}
+      <span data-slot="status-badge-label" className="min-w-0">
+        {visibleLabel}
       </span>
-      <span>{visibleLabel}</span>
     </span>
   );
 }
 
-export { StatusBadge, statusBadgeLabels, statusBadgeVariants };
-export type { StatusBadgeProps, StatusBadgeStatus };
+export {
+  StatusBadge,
+  statusBadgeLabels,
+  statusBadgeToneByStatus,
+  statusBadgeToneClasses,
+  statusBadgeVariants,
+};
+export type { StatusBadgeProps, StatusBadgeStatus, StatusBadgeTone };

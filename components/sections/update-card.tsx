@@ -1,20 +1,19 @@
 import type { Route } from "next";
 import Image from "next/image";
-import {
-  ArrowRightIcon,
-  CalendarDaysIcon,
-  ImageOffIcon,
-  UserRoundIcon,
-} from "lucide-react";
+import { CalendarDaysIcon, UserRoundIcon } from "lucide-react";
 
 import {
-  Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
+import {
+  DomainCardCta,
+  DomainCardMediaFallback,
+  DomainCardRoot,
+  MetadataPanel,
+} from "@/components/ui/domain-card";
 
 type UpdateCardCategory =
   | "bastidores"
@@ -68,11 +67,10 @@ function UpdateCard({
   className,
 }: UpdateCardProps) {
   const Heading = headingLevel;
-  const CardRoot = href ? LinkedUpdateCardRoot : StaticUpdateCardRoot;
   const hasMetadata = Boolean(publishedAt || author);
 
   return (
-    <CardRoot href={href} className={className}>
+    <DomainCardRoot component="update-card" href={href} className={className}>
       <UpdateCardMedia image={image} />
 
       <CardHeader className="gap-3">
@@ -98,9 +96,9 @@ function UpdateCard({
         {hasMetadata ? (
           <dl className="grid gap-2 text-sm">
             {publishedAt ? (
-              <div className="flex gap-2 rounded-lg border border-border bg-background/42 p-3">
+              <MetadataPanel className="flex gap-2">
                 <CalendarDaysIcon
-                  className="mt-0.5 size-4 shrink-0 text-brand-circuit-bright"
+                  className="mt-0.5 size-4 shrink-0 text-nite-brand-accent"
                   aria-hidden="true"
                 />
                 <div>
@@ -111,13 +109,13 @@ function UpdateCard({
                     {publishedAt}
                   </dd>
                 </div>
-              </div>
+              </MetadataPanel>
             ) : null}
 
             {author ? (
-              <div className="flex gap-2 rounded-lg border border-border bg-background/42 p-3">
+              <MetadataPanel className="flex gap-2">
                 <UserRoundIcon
-                  className="mt-0.5 size-4 shrink-0 text-brand-circuit-bright"
+                  className="mt-0.5 size-4 shrink-0 text-nite-brand-accent"
                   aria-hidden="true"
                 />
                 <div>
@@ -126,7 +124,7 @@ function UpdateCard({
                   </dt>
                   <dd className="mt-1 leading-6 text-foreground">{author}</dd>
                 </div>
-              </div>
+              </MetadataPanel>
             ) : null}
           </dl>
         ) : null}
@@ -134,53 +132,10 @@ function UpdateCard({
 
       {href ? (
         <CardFooter>
-          <span className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-brand-circuit-bright transition-colors group-hover/card:text-foreground">
-            Abrir atualização
-            <ArrowRightIcon className="size-4" aria-hidden="true" />
-          </span>
+          <DomainCardCta>Abrir atualização</DomainCardCta>
         </CardFooter>
       ) : null}
-    </CardRoot>
-  );
-}
-
-function LinkedUpdateCardRoot({
-  href,
-  className,
-  children,
-}: {
-  href?: Route | string;
-  className?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <Card
-      as="a"
-      href={href ?? "#"}
-      variant="interactive"
-      data-component="update-card"
-      className={cn("min-h-full rounded-lg py-0", className)}
-    >
-      {children}
-    </Card>
-  );
-}
-
-function StaticUpdateCardRoot({
-  className,
-  children,
-}: {
-  href?: Route | string;
-  className?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <Card
-      data-component="update-card"
-      className={cn("min-h-full rounded-lg py-0", className)}
-    >
-      {children}
-    </Card>
+    </DomainCardRoot>
   );
 }
 
@@ -193,7 +148,7 @@ function UpdateCardMedia({ image }: { image?: UpdateCardImage }) {
           alt={image.alt}
           fill
           sizes="(max-width: 768px) 100vw, 560px"
-          className="object-cover transition-transform duration-brand-micro ease-brand-out group-hover/card:scale-[1.025]"
+          className="object-cover transition-transform duration-nite-micro ease-nite-out group-hover/card:scale-[1.025]"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-background/12 to-transparent" />
       </div>
@@ -201,23 +156,10 @@ function UpdateCardMedia({ image }: { image?: UpdateCardImage }) {
   }
 
   return (
-    <div
-      data-slot="update-card-media-fallback"
-      className="grid aspect-[16/9] place-items-center border-b border-border bg-muted/70 p-5 text-center"
-    >
-      <div className="grid justify-items-center gap-3">
-        <span
-          className="inline-flex size-11 items-center justify-center rounded-md border border-border bg-card text-muted-foreground"
-          aria-hidden="true"
-        >
-          <ImageOffIcon className="size-5" />
-        </span>
-        <p className="max-w-xs text-sm leading-6 text-muted-foreground">
-          Imagem não publicada. O card permanece sem mídia até haver arquivo
-          autorizado.
-        </p>
-      </div>
-    </div>
+    <DomainCardMediaFallback slot="update-card-media-fallback">
+      Imagem não publicada. O card permanece sem mídia até haver arquivo
+      autorizado.
+    </DomainCardMediaFallback>
   );
 }
 

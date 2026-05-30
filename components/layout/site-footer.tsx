@@ -40,7 +40,7 @@ export function SiteFooter() {
             aria-label="Navegação institucional do rodapé"
             className="grid gap-3 lg:justify-items-end"
           >
-            <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-circuit-bright">
+            <p className="font-mono text-xs uppercase tracking-[0.18em] text-nite-brand-accent">
               Navegação
             </p>
             <ul className="flex flex-wrap gap-x-5 gap-y-3 lg:justify-end">
@@ -68,7 +68,7 @@ export function SiteFooter() {
                 aria-label={channel.ariaLabel}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex min-h-11 items-center gap-2 rounded-md border border-brand-circuit-bright/30 px-4 py-2 font-mono text-xs uppercase tracking-[0.18em] text-brand-circuit-bright transition-colors hover:border-brand-circuit-bright hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                className="inline-flex min-h-11 items-center gap-2 rounded-md border border-nite-brand-accent/30 px-4 py-2 font-mono text-xs uppercase tracking-[0.18em] text-nite-brand-accent transition-colors hover:border-nite-brand-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
                 {channel.displayLabel}
                 <ArrowUpRightIcon className="size-4" aria-hidden="true" />

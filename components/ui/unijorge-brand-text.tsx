@@ -7,6 +7,7 @@ type UnijorgeBrandTextProps = {
 export function UnijorgeBrandText({ className }: UnijorgeBrandTextProps) {
   return (
     <span
+      data-nite-scene="unijorge-brand-text"
       className={cn(
         "unijorge-lit inline-flex items-baseline whitespace-nowrap",
         className,

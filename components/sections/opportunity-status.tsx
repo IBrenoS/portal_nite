@@ -7,6 +7,11 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
+import {
+  StatusBadge,
+  type StatusBadgeStatus,
+  type StatusBadgeTone,
+} from "@/components/ui/status-badge";
 import { cn } from "@/lib/utils";
 
 const opportunityStatusLabels = {
@@ -21,27 +26,30 @@ type OpportunityStatusValue = keyof typeof opportunityStatusLabels;
 const opportunityStatusConfig = {
   closed: {
     Icon: BellIcon,
-    className:
-      "border-brand-circuit-bright/35 bg-brand-circuit-bright/10 text-brand-circuit-bright",
+    badgeStatus: "progress",
+    tone: "brand",
   },
   open: {
     Icon: CheckCircle2Icon,
-    className: "border-status-done/35 bg-status-done/10 text-status-done",
+    badgeStatus: "done",
+    tone: "done",
   },
   draft: {
     Icon: Clock3Icon,
-    className:
-      "border-status-warning/40 bg-status-warning/10 text-status-warning",
+    badgeStatus: "warning",
+    tone: "warning",
   },
   archived: {
     Icon: ArchiveIcon,
-    className: "border-status-draft/35 bg-status-draft/10 text-status-draft",
+    badgeStatus: "archived",
+    tone: "draft",
   },
 } satisfies Record<
   OpportunityStatusValue,
   {
     Icon: LucideIcon;
-    className: string;
+    badgeStatus: StatusBadgeStatus;
+    tone: StatusBadgeTone;
   }
 >;
 
@@ -66,30 +74,28 @@ function OpportunityStatus({
   const Icon = config.Icon;
 
   return (
-    <span
+    <StatusBadge
       data-slot="opportunity-status"
       data-status={status}
       aria-label={`Status da oportunidade: ${visibleLabel}`}
+      status={config.badgeStatus}
+      tone={config.tone}
+      label={visibleLabel}
+      icon={showIcon ? <Icon /> : undefined}
+      showIndicator={showIcon}
+      size="lg"
       className={cn(
-        "inline-flex min-h-7 max-w-full items-center gap-1.5 rounded-full border px-3 py-1 text-left text-sm leading-5 font-medium",
-        "w-fit",
-        config.className,
+        "max-w-full whitespace-normal text-left [&_[data-slot=status-badge-label]]:break-words",
         className,
       )}
       {...props}
-    >
-      {showIcon ? (
-        <span
-          aria-hidden="true"
-          className="inline-flex shrink-0 items-center justify-center [&_svg]:size-3.5 [&_svg]:shrink-0"
-        >
-          <Icon />
-        </span>
-      ) : null}
-      <span className="min-w-0 break-words">{visibleLabel}</span>
-    </span>
+    />
   );
 }
 
-export { OpportunityStatus, opportunityStatusLabels };
+export {
+  OpportunityStatus,
+  opportunityStatusConfig,
+  opportunityStatusLabels,
+};
 export type { OpportunityStatusProps, OpportunityStatusValue };

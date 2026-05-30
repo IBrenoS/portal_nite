@@ -43,11 +43,11 @@ export function SectionHeader({
   return (
     <div className={cn(sectionHeaderVariants({ align }), className)}>
       {eyebrow ? (
-        <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-circuit-bright">
+        <p className="font-mono text-xs uppercase tracking-[0.18em] text-nite-brand-accent">
           {eyebrow}
         </p>
       ) : null}
-      <Heading className="font-heading text-2xl leading-tight font-semibold text-foreground sm:text-3xl">
+      <Heading className="font-heading text-3xl leading-tight font-normal text-foreground sm:text-4xl">
         {title}
       </Heading>
       {description ? (

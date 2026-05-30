@@ -23,6 +23,7 @@ import {
   type SiteNavigationItem,
 } from "@/biblioteca/navigation";
 import { Container } from "@/components/layout/container";
+import { buttonVariants } from "@/components/ui/button";
 import { HeaderLogoMorph } from "@/components/ui/header-logo-morph";
 import {
   ThemeToggleButton,
@@ -35,7 +36,7 @@ const HEADER_COLLAPSE_END = 96;
 const HEADER_COLLAPSE_STATE_AT = 72;
 const HEADER_EFFECT_STATE_AT = 10;
 const HEADER_MOTION_EASE = [0.22, 1, 0.36, 1] as const;
-const RESEND_MENU_EASE = [0.4, 0, 0.2, 1] as const;
+const NITE_MENU_EASE = [0.4, 0, 0.2, 1] as const;
 const MOBILE_MENU_FOCUSABLE_SELECTOR = [
   "a[href]",
   "button:not([disabled])",
@@ -44,6 +45,14 @@ const MOBILE_MENU_FOCUSABLE_SELECTOR = [
   "textarea:not([disabled])",
   '[tabindex]:not([tabindex="-1"])',
 ].join(",");
+const mobileControlClassName = cn(
+  buttonVariants({ variant: "secondary", size: "md" }),
+  "min-h-11 rounded-md border-border bg-card px-3 py-2",
+);
+const mobileIconControlClassName = cn(
+  buttonVariants({ variant: "secondary", size: "icon" }),
+  "size-11 rounded-md border-border bg-card",
+);
 type HeaderGroupId = SiteNavigationGroup["id"];
 type HeaderMotionTransition = {
   duration: number;
@@ -107,10 +116,10 @@ export function SiteHeader() {
     : { duration: 0.18, ease: HEADER_MOTION_EASE };
   const desktopMenuTransition = reduceMotion
     ? { duration: 0 }
-    : { duration: 0.2, ease: RESEND_MENU_EASE };
+    : { duration: 0.2, ease: NITE_MENU_EASE };
   const desktopContentTransition = reduceMotion
     ? { duration: 0 }
-    : { duration: 0.2, ease: RESEND_MENU_EASE };
+    : { duration: 0.2, ease: NITE_MENU_EASE };
   const desktopMenuItemCount = activeDesktopNavigationGroup?.items.length ?? 0;
   const isTwoColumnDesktopMenu = desktopMenuItemCount > 4;
   const desktopMenuHeightClass =
@@ -392,7 +401,7 @@ export function SiteHeader() {
     <motion.header
       ref={headerRef}
       className={cn(
-        "sticky top-0 z-40 overflow-visible bg-transparent transition-colors duration-brand-micro ease-brand-out before:z-50 before:backdrop-blur-2xl before:backdrop-brightness-200 after:z-0 after:backdrop-blur-md",
+        "sticky top-0 z-40 overflow-visible bg-transparent transition-colors duration-nite-micro ease-nite-out before:z-50 before:backdrop-blur-2xl before:backdrop-brightness-200 after:z-0 after:backdrop-blur-md",
       )}
       data-header-collapsed={isCollapsed ? "true" : "false"}
       data-header-scrolled={hasScrolled ? "true" : "false"}
@@ -454,7 +463,7 @@ export function SiteHeader() {
           <button
             ref={mobileMenuButtonRef}
             type="button"
-            className="inline-flex min-h-11 items-center justify-center rounded-md border border-border bg-card px-3 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-secondary focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 lg:hidden"
+            className={cn(mobileControlClassName, "lg:hidden")}
             aria-controls="site-mobile-navigation"
             aria-expanded={isMobileMenuOpen}
             onClick={toggleMobileMenu}
@@ -482,7 +491,7 @@ export function SiteHeader() {
             <motion.div
               id={`site-mega-menu-${activeDesktopNavigationGroup.id}`}
               className={cn(
-                "relative w-[24rem] origin-[top_center] overflow-hidden rounded-3xl border border-[rgba(176,199,217,0.145)] bg-black/60 backdrop-blur-md transition-[width,height] duration-300 ease-out",
+                "relative w-[24rem] origin-[top_center] overflow-hidden rounded-3xl border border-nite-border-soft bg-nite-overlay backdrop-blur-md transition-[width,height] duration-300 ease-out",
                 desktopMenuHeightClass,
               )}
               data-mega-menu-shell=""
@@ -619,8 +628,8 @@ function HeaderNavigationGroupControl({
       <button
         type="button"
         className={cn(
-          "inline-flex h-[58px] select-none items-center gap-1.5 px-3 py-1 text-sm font-medium text-[rgb(135,141,143)] outline-hidden transition duration-150 ease-in-out hover:text-[rgb(240,240,240)] focus-visible:text-[rgb(240,240,240)] focus-visible:ring-2 focus-visible:ring-ring/40",
-          isOpen && "text-[rgb(240,240,240)]",
+          "inline-flex h-[58px] select-none items-center gap-1.5 px-3 py-1 text-sm font-medium text-nite-text-muted outline-hidden transition duration-150 ease-in-out hover:text-nite-text-primary focus-visible:text-nite-text-primary focus-visible:ring-2 focus-visible:ring-ring/40",
+          isOpen && "text-nite-text-primary",
         )}
         aria-controls={`site-mega-menu-${group.id}`}
         aria-expanded={isOpen}
@@ -630,8 +639,8 @@ function HeaderNavigationGroupControl({
         <ChevronDownIcon
           aria-hidden="true"
           className={cn(
-            "size-3.5 text-[rgb(135,141,143)] transition-[color,transform] duration-150 ease-in-out",
-            isOpen && "translate-y-0.5 text-[rgb(240,240,240)]",
+            "size-3.5 text-nite-text-muted transition-[color,transform] duration-150 ease-in-out",
+            isOpen && "translate-y-0.5 text-nite-text-primary",
           )}
         />
       </button>
@@ -710,14 +719,14 @@ function DesktopNavigationItemLink({
   onNavigate?: () => void;
 }) {
   const className = cn(
-    "inline-flex items-center gap-2 font-heading text-base font-light leading-[1.3125rem] text-[rgb(161,164,165)] outline-hidden transition duration-150 ease-in-out hover:text-[rgb(240,240,240)] focus-visible:text-[rgb(240,240,240)] focus-visible:ring-2 focus-visible:ring-ring/40",
-    item.status === "planned" && "text-[rgb(135,141,143)]",
+    "inline-flex items-center gap-2 font-heading text-base font-light leading-[1.3125rem] text-nite-text-secondary outline-hidden transition duration-150 ease-in-out hover:text-nite-text-primary focus-visible:text-nite-text-primary focus-visible:ring-2 focus-visible:ring-ring/40",
+    item.status === "planned" && "text-nite-text-muted",
   );
   const content = (
     <>
       <span>{item.label}</span>
       {item.status === "planned" ? (
-        <span className="rounded-full border border-[rgba(176,199,217,0.145)] px-1.5 py-0.5 text-[0.62rem] font-semibold uppercase text-[rgb(135,141,143)]">
+        <span className="rounded-full border border-nite-border-soft px-1.5 py-0.5 text-[0.62rem] font-semibold uppercase text-nite-text-muted">
           Planejado
         </span>
       ) : null}
@@ -781,7 +790,7 @@ function MobileNavigationRoot({
         <button
           ref={closeButtonRef}
           type="button"
-          className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-border bg-card text-foreground transition-colors hover:bg-secondary focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+          className={mobileIconControlClassName}
           aria-label="Fechar menu"
           onClick={onClose}
         >
@@ -794,7 +803,10 @@ function MobileNavigationRoot({
           <button
             key={group.id}
             type="button"
-            className="flex min-h-14 items-center justify-between rounded-xl border border-border/90 bg-card/80 px-4 py-3 text-left text-base font-semibold text-foreground transition-colors hover:bg-secondary focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+            className={cn(
+              buttonVariants({ variant: "secondary", size: "lg" }),
+              "min-h-14 w-full justify-between whitespace-normal rounded-xl border-border/90 bg-card/80 px-4 py-3 text-left text-base",
+            )}
             aria-controls={`site-mobile-group-${group.id}`}
             aria-expanded="false"
             onClick={() => onOpenGroup(group.id)}
@@ -843,7 +855,7 @@ function MobileNavigationDetail({
         <button
           ref={backButtonRef}
           type="button"
-          className="inline-flex min-h-11 items-center gap-2 rounded-md border border-border bg-card px-3 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-secondary focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+          className={mobileControlClassName}
           onClick={onBack}
         >
           <ArrowLeftIcon aria-hidden="true" className="size-4" />
@@ -852,7 +864,7 @@ function MobileNavigationDetail({
 
         <button
           type="button"
-          className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-border bg-card text-foreground transition-colors hover:bg-secondary focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+          className={mobileIconControlClassName}
           aria-label="Fechar menu"
           onClick={onClose}
         >

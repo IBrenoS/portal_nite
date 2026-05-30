@@ -7,9 +7,11 @@ const chipVariants = cva(
   {
     variants: {
       variant: {
-        default: "border-brand-circuit-bright/40 bg-brand-circuit-bright/10 text-brand-circuit-bright",
+        default:
+          "border-nite-brand-accent/40 bg-nite-brand-accent/10 text-nite-brand-accent",
         quiet: "border-border bg-muted text-muted-foreground",
-        metal: "border-brand-metal/40 bg-brand-metal/10 text-brand-metal",
+        metal:
+          "border-nite-text-primary/40 bg-nite-text-primary/10 text-nite-text-primary",
       },
     },
     defaultVariants: {

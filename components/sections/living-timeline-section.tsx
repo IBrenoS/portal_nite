@@ -214,6 +214,7 @@ export function LivingTimelineSection({ events }: LivingTimelineSectionProps) {
       ref={sectionRef}
       className="timeline-premium-section bg-background"
       data-component="living-timeline-section"
+      data-nite-scene="timeline"
       data-public-milestones={publicTimelineEvents.length}
       data-scroll="section"
       data-surface="clean"

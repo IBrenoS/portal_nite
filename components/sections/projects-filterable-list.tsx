@@ -295,7 +295,7 @@ function FilterButton({
       onClick={onClick}
       className={cn(
         "min-h-10 gap-2",
-        active && "border-brand-circuit-bright/45",
+        active && "border-nite-brand-accent/45",
       )}
     >
       <span>{label}</span>
@@ -303,7 +303,7 @@ function FilterButton({
         {count}
       </span>
       {active ? (
-        <span className="rounded-full bg-brand-circuit-bright/12 px-1.5 py-0.5 text-[0.64rem] uppercase tracking-[0.12em] text-brand-circuit-bright">
+        <span className="rounded-full bg-nite-brand-accent/12 px-1.5 py-0.5 text-[0.64rem] uppercase tracking-[0.12em] text-nite-brand-accent">
           Ativo
         </span>
       ) : null}

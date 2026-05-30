@@ -16,7 +16,6 @@ import { SectionHeader } from "@/components/sections/section-header";
 import { TimelineItem } from "@/components/sections/timeline-item";
 import { UpdateCard } from "@/components/sections/update-card";
 import { Button } from "@/components/ui/button";
-import { ButtonPrimary, ButtonSecondary } from "@/components/ui/brand-button";
 import {
   Card,
   CardContent,
@@ -27,7 +26,9 @@ import {
 } from "@/components/ui/card";
 import { Chip } from "@/components/ui/chip";
 import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
 import { StatusBadge } from "@/components/ui/status-badge";
+import { Textarea } from "@/components/ui/textarea";
 import { ThemeToggle, ThemeToggleButton } from "@/components/ui/theme-toggle";
 
 afterEach(() => {
@@ -46,8 +47,10 @@ describe("design system base", () => {
           title="Componentes base"
           description="Descricao acessivel."
         />
-        <ButtonPrimary>Acao primaria</ButtonPrimary>
-        <ButtonSecondary>Acao secundaria</ButtonSecondary>
+        <Button size="lg">Acao primaria</Button>
+        <Button size="lg" variant="outline">
+          Acao secundaria
+        </Button>
         <Chip>Token</Chip>
         <EmptyState
           title="Sem conteudo"
@@ -109,6 +112,30 @@ describe("design system base", () => {
     expect(button).toBeDisabled();
     expect(button).toHaveAttribute("aria-busy", "true");
     expect(button).toHaveAttribute("data-loading", "true");
+  });
+
+  it("aplica primitives de campo com o contrato visual canonico", () => {
+    render(
+      <>
+        <Input aria-label="E-mail institucional" />
+        <Textarea aria-label="Mensagem institucional" />
+      </>,
+    );
+
+    expect(screen.getByLabelText("E-mail institucional")).toHaveAttribute(
+      "data-slot",
+      "input",
+    );
+    expect(screen.getByLabelText("E-mail institucional")).toHaveClass(
+      "nite-form-field",
+    );
+    expect(screen.getByLabelText("Mensagem institucional")).toHaveAttribute(
+      "data-slot",
+      "textarea",
+    );
+    expect(screen.getByLabelText("Mensagem institucional")).toHaveClass(
+      "nite-form-field",
+    );
   });
 
   it("disponibiliza variantes e tamanhos minimos do Button", () => {
@@ -233,6 +260,7 @@ describe("design system base", () => {
     const card = screen.getByTestId("base-card");
 
     expect(card).not.toHaveAttribute("tabindex");
+    expect(card).toHaveClass("bg-transparent");
     expect(screen.getByText("Titulo do card")).toBeInTheDocument();
     expect(screen.getByText("Descricao curta.")).toBeInTheDocument();
     expect(screen.getByText("Conteudo do card.")).toBeInTheDocument();

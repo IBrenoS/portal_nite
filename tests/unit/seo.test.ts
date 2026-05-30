@@ -31,7 +31,7 @@ describe("manifest", () => {
     );
     expect(metadata.short_name).toBe(siteConfig.name);
     expect(metadata.description).toBe(siteConfig.description);
-    expect(metadata.background_color).toBe("#09090a");
-    expect(metadata.theme_color).toBe("#09090a");
+    expect(metadata.background_color).toBe("#000000");
+    expect(metadata.theme_color).toBe("#000000");
   });
 });

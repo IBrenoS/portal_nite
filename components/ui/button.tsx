@@ -8,32 +8,20 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default:
-          "bg-primary text-[var(--primary-foreground)] shadow-[0_0_24px_var(--brand-glow)] hover:bg-primary/90 active:bg-primary/85",
-        primary:
-          "bg-primary text-[var(--primary-foreground)] shadow-[0_0_24px_var(--brand-glow)] hover:bg-primary/90 active:bg-primary/85",
+        primary: "nite-glass-action",
         outline:
-          "border-border bg-transparent text-foreground hover:bg-accent hover:text-foreground aria-expanded:bg-accent aria-expanded:text-foreground",
+          "border-nite-border-soft bg-transparent text-nite-text-primary hover:bg-nite-surface-subtle hover:text-nite-text-primary aria-expanded:bg-nite-surface-subtle aria-expanded:text-nite-text-primary",
         secondary:
-          "border-border bg-card text-card-foreground hover:bg-secondary aria-expanded:bg-secondary aria-expanded:text-secondary-foreground",
+          "border-nite-border-soft bg-nite-surface text-nite-text-primary hover:bg-nite-surface-focus aria-expanded:bg-nite-surface-focus aria-expanded:text-nite-text-primary",
         ghost:
-          "bg-transparent text-foreground hover:bg-accent hover:text-foreground aria-expanded:bg-accent aria-expanded:text-foreground",
-        destructive:
-          "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
-        link: "h-auto min-h-0 rounded-sm bg-transparent px-0 py-0 text-primary underline-offset-4 shadow-none hover:underline active:translate-y-0",
+          "bg-transparent text-nite-text-primary hover:bg-nite-surface-subtle hover:text-nite-text-primary aria-expanded:bg-nite-surface-subtle aria-expanded:text-nite-text-primary",
+        link: "h-auto min-h-0 rounded-sm bg-transparent px-0 py-0 text-nite-brand-accent underline-offset-4 shadow-none hover:underline active:translate-y-0",
       },
       size: {
-        default: "min-h-10 px-4 py-2",
         md: "min-h-10 px-4 py-2",
-        xs: "h-6 gap-1 rounded-[min(var(--radius-md),10px)] px-2 text-xs in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3",
         sm: "min-h-9 px-3 py-1.5 text-sm in-data-[slot=button-group]:rounded-lg [&_svg:not([class*='size-'])]:size-3.5",
         lg: "min-h-11 px-5 py-2.5 text-base",
         icon: "size-10 p-0",
-        "icon-xs":
-          "size-6 rounded-[min(var(--radius-md),10px)] in-data-[slot=button-group]:rounded-lg [&_svg:not([class*='size-'])]:size-3",
-        "icon-sm":
-          "size-7 rounded-[min(var(--radius-md),12px)] in-data-[slot=button-group]:rounded-lg",
-        "icon-lg": "size-9",
       },
     },
     defaultVariants: {

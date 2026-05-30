@@ -49,13 +49,13 @@ export function ContactEmailCopy({
     <div className="mb-8">
       <p
         id={titleId}
-        className="mb-1 text-sm font-normal leading-5 text-[rgb(161_164_165)]"
+        className="mb-1 text-sm font-normal leading-5 text-nite-text-secondary"
       >
         {label}
       </p>
 
       <p
-        className="group flex items-center text-sm font-normal leading-6 text-[rgb(240_240_240)]"
+        className="group flex items-center text-sm font-normal leading-6 text-nite-text-primary"
         onBlurCapture={() => setIsRowActive(false)}
         onFocusCapture={() => setIsRowActive(true)}
         onMouseEnter={() => setIsRowActive(true)}
@@ -66,7 +66,7 @@ export function ContactEmailCopy({
           type="button"
           aria-label="Copy to clipboard"
           className={cn(
-            "inline-flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-transparent bg-transparent text-[rgb(161_164_165)] opacity-100 outline-none transition duration-150 ease-out hover:border-[rgb(176_199_217_/_0.145)] hover:bg-white/[0.03] hover:text-[rgb(240_240_240)] focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-white/25 group-hover:opacity-100 sm:opacity-0 sm:focus-visible:opacity-100 sm:group-hover:opacity-100",
+            "inline-flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-transparent bg-transparent text-nite-text-secondary opacity-100 outline-none transition duration-150 ease-out hover:border-nite-border-soft hover:bg-nite-surface hover:text-nite-text-primary focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-nite-focus group-hover:opacity-100 sm:opacity-0 sm:focus-visible:opacity-100 sm:group-hover:opacity-100",
             isCopyActionVisible && "sm:opacity-100",
           )}
           onClick={async () => {
