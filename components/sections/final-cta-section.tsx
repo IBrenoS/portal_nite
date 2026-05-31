@@ -10,13 +10,13 @@ export function FinalCtaSection() {
   return (
     <section
       id="contato"
-      className="relative overflow-hidden bg-nite-background pt-16 text-nite-text-primary sm:pt-24 lg:pt-28"
+      className="relative overflow-hidden bg-nite-background pb-24 pt-24 text-nite-text-primary sm:pb-0 sm:pt-28 lg:pt-36"
       data-nite-scene="inverse"
       data-surface="clean"
       data-testid="final-cta-section"
     >
       <Container size="xl" className="relative text-center">
-        <h2 className="mx-auto max-w-5xl pb-3 font-heading text-5xl font-normal leading-none sm:text-6xl lg:text-7xl">
+        <h2 className="mx-auto max-w-5xl pb-3 font-heading text-5xl font-semibold leading-none sm:text-6xl lg:text-7xl">
           <span className="nite-gradient-text">
             NITE em evolução.
             <br />
@@ -47,7 +47,7 @@ export function FinalCtaSection() {
           </Link>
         </div>
 
-        <NiteFinalWordmark className="mt-16 sm:mt-20" />
+        <NiteFinalWordmark className="mt-20 sm:mt-24 lg:mt-28" />
       </Container>
     </section>
   );

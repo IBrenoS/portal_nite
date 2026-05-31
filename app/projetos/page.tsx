@@ -75,7 +75,7 @@ export default function ProjectsPage() {
             <div className="grid gap-3">
               <h2
                 id="lista-projetos"
-                className="font-heading text-3xl font-normal text-foreground sm:text-4xl"
+                className="font-heading text-2xl font-semibold text-foreground sm:text-3xl"
               >
                 Lista de projetos
               </h2>

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import type { CSSProperties, PointerEvent } from "react";
 
 import { cn } from "@/lib/utils";
@@ -37,7 +38,7 @@ export function NiteFinalWordmark({ className }: NiteFinalWordmarkProps) {
       aria-hidden="true"
       data-nite-scene="wordmark"
       className={cn(
-        "nite-final-wordmark relative mx-auto h-44 w-full max-w-7xl overflow-hidden bg-nite-background sm:h-64 lg:h-80 xl:h-96",
+        "nite-final-wordmark relative mx-auto hidden aspect-[56/15] w-full max-w-7xl overflow-hidden bg-nite-background sm:block",
         className,
       )}
       onPointerLeave={handlePointerLeave}
@@ -49,12 +50,15 @@ export function NiteFinalWordmark({ className }: NiteFinalWordmarkProps) {
         } as NiteWordmarkSpotlightStyle
       }
     >
-      <span className="nite-final-wordmark-text nite-final-wordmark-base">
-        NITE
-      </span>
-      <span className="nite-final-wordmark-text nite-final-wordmark-shine">
-        NITE
-      </span>
+      <Image
+        src="/images/brand/nite-logo-footer.webp"
+        alt=""
+        width={2800}
+        height={750}
+        sizes="(min-width: 1280px) 1280px, calc(100vw - 3rem)"
+        className="nite-final-wordmark-image pointer-events-none relative z-[1] h-auto w-full select-none"
+        draggable={false}
+      />
     </div>
   );
 }

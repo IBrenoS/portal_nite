@@ -202,10 +202,13 @@ describe("HomePage", () => {
       "aria-hidden",
       "true",
     );
+    expect(
+      document.querySelector(".nite-final-wordmark-image"),
+    ).toHaveAttribute("src", expect.stringContaining("nite-logo-footer.webp"));
     expect(document.querySelectorAll(".nite-final-wordmark-text")).toHaveLength(
-      2,
+      0,
     );
-    expect(screen.getAllByText("@nite.uj")).toHaveLength(1);
+    expect(screen.queryByText("@nite.uj")).toBeNull();
 
     for (const id of [
       "logo-final",
@@ -275,39 +278,104 @@ describe("HomePage", () => {
 
     const footerElement = screen.getByRole("contentinfo");
     const footer = within(footerElement);
-    expect(footer.getByText("NITE | UNIJORGE")).toBeInTheDocument();
+    expect(footerElement).toHaveAttribute("data-footer-variant", "wordmark");
+    expect(footerElement).toHaveClass(
+      "border-t",
+      "border-nite-border-subtle",
+      "sm:-mt-[7vh]",
+    );
+    expect(footerElement).not.toHaveClass("sm:-mt-[9vh]");
     expect(
-      footer.getByText(
+      footerElement.querySelector("[data-footer-transition-divider]"),
+    ).toHaveAttribute("aria-hidden", "true");
+    expect(
+      footerElement.querySelector("[data-footer-transition-glow]"),
+    ).toHaveAttribute("aria-hidden", "true");
+    expect(footerElement.children).toHaveLength(3);
+
+    const footerLayout = footerElement.lastElementChild as HTMLElement;
+    expect(footerLayout).toHaveClass(
+      "mx-auto",
+      "flex",
+      "max-w-5xl",
+      "flex-col",
+      "gap-12",
+      "px-6",
+      "py-36",
+      "md:max-w-7xl",
+      "md:min-h-[39.75rem]",
+      "md:flex-row",
+      "md:gap-8",
+    );
+
+    const footerIdentity = footerLayout.firstElementChild as HTMLElement;
+    expect(
+      Array.from(footerIdentity.children).map((child) => child.tagName),
+    ).toEqual(["SPAN", "NAV", "P"]);
+    expect(footerIdentity.lastElementChild).toHaveTextContent(
+      "© 2026 NITE UNIJORGE.",
+    );
+
+    const footerNavigation = footer.getByRole("navigation", {
+      name: "Navegação institucional do rodapé",
+    });
+    expect(footerNavigation).toHaveClass(
+      "grid-cols-2",
+      "gap-8",
+      "lg:grid-cols-5",
+    );
+    expect(footerNavigation).not.toHaveClass("sm:grid-cols-3");
+    expect(
+      Array.from(footerNavigation.children).map(
+        (group) => group.querySelector("p")?.textContent,
+      ),
+    ).toEqual([
+      "O NITE",
+      "Projetos",
+      "Atualizações",
+      "Oportunidades",
+      "Contato",
+    ]);
+    expect(
+      footerElement.querySelector("[data-nite-scene='unijorge-brand-text']"),
+    ).toHaveAttribute("aria-label", "UNIJORGE");
+    expect(footer.queryByText("NITE | UNIJORGE")).toBeNull();
+    expect(
+      footer.queryByText(
         "Portal institucional do Núcleo de Inovação, Tecnologia e Empreendedorismo.",
       ),
-    ).toBeInTheDocument();
+    ).toBeNull();
     expect(
-      footer.getByText(
+      footer.queryByText(
         "Conteúdos e oportunidades dependem de validação/autorização institucional.",
       ),
-    ).toBeInTheDocument();
-    expect(footer.getByRole("link", { name: "Início" })).toHaveAttribute(
+    ).toBeNull();
+    expect(footer.getByRole("link", { name: "Sobre" })).toHaveAttribute(
       "href",
-      "/",
+      "/#sobre",
     );
-    expect(footer.getByRole("link", { name: "Projetos" })).toHaveAttribute(
+    expect(footer.getByRole("link", { name: "Timeline" })).toHaveAttribute(
       "href",
-      "/projetos",
+      "/#timeline",
     );
-    expect(footer.getByRole("link", { name: "Oportunidades" })).toHaveAttribute(
-      "href",
-      "/oportunidades",
-    );
-    expect(footer.getByRole("link", { name: "Atualizações" })).toHaveAttribute(
+    expect(
+      footer.getByRole("link", { name: "Todos os projetos" }),
+    ).toHaveAttribute("href", "/projetos");
+    expect(footer.getByRole("link", { name: "Nite News" })).toHaveAttribute(
       "href",
       "/atualizacoes",
     );
-    expect(footer.getByRole("link", { name: "Contato" })).toHaveAttribute(
-      "href",
-      "/contato",
-    );
-    expect(footer.queryByRole("link", { name: "Sobre" })).toBeNull();
-    expect(footer.queryByRole("link", { name: "Timeline" })).toBeNull();
+    expect(
+      footer.getByRole("link", { name: "Como participar" }),
+    ).toHaveAttribute("href", "/oportunidades");
+    expect(
+      footer.getByRole("link", { name: "Falar com o NITE" }),
+    ).toHaveAttribute("href", "/contato");
+    expect(
+      footer.getByRole("link", { name: "Acompanhar o NITE no Instagram" }),
+    ).toHaveAttribute("href", expect.stringContaining("instagram.com"));
+    expect(footer.queryByText("Propor desafio")).toBeNull();
+    expect(footer.queryByText("E-mail")).toBeNull();
     expect(document.querySelector("footer a[href='/noticias']")).toBeNull();
     expect(document.querySelector("footer a[href='/sobre']")).toBeNull();
     expect(

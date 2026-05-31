@@ -33,12 +33,13 @@ async function openStablePage(page: Page, path: string, theme: Theme) {
     await document.fonts.ready;
     await Promise.all(
       Array.from(document.images)
-        .filter((image) => !image.complete)
+        .filter((image) => image.offsetParent !== null && !image.complete)
         .map(
           (image) =>
             new Promise<void>((resolve) => {
               image.addEventListener("load", () => resolve(), { once: true });
               image.addEventListener("error", () => resolve(), { once: true });
+              image.loading = "eager";
             }),
         ),
     );
@@ -148,5 +149,112 @@ test.describe("mobile design system snapshots", () => {
 
     await page.getByRole("button", { name: "Fechar menu" }).click();
     await expect(menu).toBeHidden();
+  });
+});
+
+test.describe("resend-inspired footer layout", () => {
+  test("desktop footer preserves the Resend proportions and wordmark overlap", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1920, height: 958 });
+    await openStablePage(page, "/", "dark");
+
+    const measurements = await page.evaluate(() => {
+      const footer = document.querySelector("footer");
+      const wordmark = document.querySelector(".nite-final-wordmark");
+      const divider = footer?.querySelector("[data-footer-transition-divider]");
+      const glow = footer?.querySelector("[data-footer-transition-glow]");
+      const headings = Array.from(
+        document.querySelectorAll(
+          "footer nav[aria-label='Navegação institucional do rodapé'] > div > p",
+        ),
+      );
+
+      if (!footer || !wordmark) {
+        throw new Error("Footer or wordmark not found");
+      }
+
+      const footerRect = footer.getBoundingClientRect();
+      const wordmarkRect = wordmark.getBoundingClientRect();
+
+      return {
+        footerHeight: footerRect.height,
+        headingTops: headings.map((heading) =>
+          Math.round(heading.getBoundingClientRect().top),
+        ),
+        hasTransitionDivider: Boolean(divider),
+        hasTransitionGlow: Boolean(glow),
+        overlap: wordmarkRect.bottom - footerRect.top,
+      };
+    });
+
+    expect(measurements.footerHeight).toBeGreaterThanOrEqual(636);
+    expect(new Set(measurements.headingTops).size).toBe(1);
+    expect(measurements.hasTransitionDivider).toBe(true);
+    expect(measurements.hasTransitionGlow).toBe(true);
+    expect(measurements.overlap).toBeGreaterThanOrEqual(65);
+    expect(measurements.overlap).toBeLessThanOrEqual(71);
+  });
+
+  test("internal route footer remains clean", async ({ page }) => {
+    await page.setViewportSize({ width: 1920, height: 958 });
+    await openStablePage(page, "/projetos", "dark");
+
+    const footerState = await page.evaluate(() => {
+      const footer = document.querySelector("footer");
+
+      if (!footer) {
+        throw new Error("Footer not found.");
+      }
+
+      return {
+        borderTopWidth: getComputedStyle(footer).borderTopWidth,
+        hasTransitionDivider: Boolean(
+          footer.querySelector("[data-footer-transition-divider]"),
+        ),
+        hasTransitionGlow: Boolean(
+          footer.querySelector("[data-footer-transition-glow]"),
+        ),
+        variant: footer.getAttribute("data-footer-variant"),
+      };
+    });
+
+    expect(footerState).toEqual({
+      borderTopWidth: "0px",
+      hasTransitionDivider: false,
+      hasTransitionGlow: false,
+      variant: "plain",
+    });
+  });
+
+  test("mobile footer keeps the wordmark hidden and navigation in two columns", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await openStablePage(page, "/", "dark");
+
+    const measurements = await page.evaluate(() => {
+      const wordmark = document.querySelector(".nite-final-wordmark");
+      const navigation = document.querySelector(
+        "footer nav[aria-label='Navegação institucional do rodapé']",
+      );
+
+      if (!wordmark || !navigation) {
+        throw new Error("Footer navigation or wordmark not found");
+      }
+
+      return {
+        gridColumns:
+          getComputedStyle(navigation).gridTemplateColumns.split(" ").length,
+        hasHorizontalOverflow:
+          document.documentElement.scrollWidth >
+          document.documentElement.clientWidth,
+        wordmarkDisplay: getComputedStyle(wordmark).display,
+      };
+    });
+
+    expect(measurements.wordmarkDisplay).toBe("none");
+    expect(measurements.gridColumns).toBe(2);
+    expect(measurements.hasHorizontalOverflow).toBe(false);
   });
 });

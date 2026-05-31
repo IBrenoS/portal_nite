@@ -40,7 +40,7 @@ export default function HomePage() {
 
         <FinalCtaSection />
       </main>
-      <SiteFooter />
+      <SiteFooter variant="wordmark" />
     </>
   );
 }

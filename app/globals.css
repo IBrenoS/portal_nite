@@ -455,8 +455,7 @@ body {
   }
 
   .animate-nite-rise {
-    animation: nite-rise var(--nite-duration-medium) var(--nite-ease-out)
-      both;
+    animation: nite-rise var(--nite-duration-medium) var(--nite-ease-out) both;
   }
 }
 
@@ -466,133 +465,50 @@ body {
   isolation: isolate;
 }
 
-.nite-final-wordmark::before,
-.nite-final-wordmark::after {
+.nite-final-wordmark::before {
   content: "";
   position: absolute;
-  inset: 0;
+  top: -6.25rem;
+  left: -6.25rem;
+  width: 12.5rem;
+  height: 12.5rem;
+  border-radius: 9999px;
   pointer-events: none;
-}
-
-.nite-final-wordmark::before {
   z-index: 2;
-  background:
-    radial-gradient(
-      circle at var(--nite-spotlight-x) var(--nite-spotlight-y),
-      rgb(255 255 255 / 0.46),
-      rgb(125 249 255 / 0.2) 8rem,
-      transparent 15rem
-    ),
-    radial-gradient(
-      ellipse at 50% 100%,
-      rgb(56 189 248 / 0.12),
-      transparent 58%
-    );
+  background: radial-gradient(6.25rem, rgb(255 255 255 / 0.56), transparent);
   mix-blend-mode: soft-light;
   opacity: 0;
-  transition: opacity var(--nite-duration-micro) var(--nite-ease-out);
-}
-
-.nite-final-wordmark::after {
-  z-index: 4;
-  background: linear-gradient(
-    180deg,
-    rgb(0 0 0 / 0) 58%,
-    rgb(0 0 0 / 0.72) 100%
-  );
+  transform: translateX(var(--nite-spotlight-x))
+    translateY(var(--nite-spotlight-y));
+  transition: opacity 500ms var(--nite-ease-out);
+  will-change: transform;
 }
 
 .nite-final-wordmark:hover::before {
   opacity: 1;
 }
 
-.nite-final-wordmark-text {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: transparent;
-  font-family: var(--font-heading);
-  font-size: 7rem;
-  font-weight: 800;
-  letter-spacing: 0;
-  line-height: 0.76;
-  pointer-events: none;
-  user-select: none;
+.nite-final-wordmark-image {
+  filter: brightness(0.72) saturate(0.82);
+  opacity: 0.68;
 }
 
-.nite-final-wordmark-base {
+.nite-footer-transition-divider {
   background: linear-gradient(
-    180deg,
-    rgb(255 255 255 / 0.1),
-    rgb(255 255 255 / 0.028) 58%,
-    rgb(56 189 248 / 0.045)
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--nite-text-muted) 65%, transparent) 50%,
+    transparent 100%
   );
-  background-clip: text;
-  filter: drop-shadow(0 30px 42px rgb(0 0 0 / 0.78));
-  -webkit-background-clip: text;
 }
 
-.nite-final-wordmark-shine {
-  z-index: 3;
-  background: radial-gradient(
-    circle at var(--nite-spotlight-x) var(--nite-spotlight-y),
-    rgb(255 255 255 / 0.92),
-    rgb(191 255 255 / 0.55) 4.5rem,
-    rgb(125 249 255 / 0.18) 8.5rem,
-    transparent 14rem
-  );
-  background-clip: text;
-  filter: drop-shadow(0 0 18px rgb(125 249 255 / 0.22));
-  opacity: 0;
-  transition: opacity var(--nite-duration-micro) var(--nite-ease-out);
-  -webkit-background-clip: text;
-}
-
-.nite-final-wordmark:hover .nite-final-wordmark-shine {
-  opacity: 1;
-}
-
-@media (hover: none) {
-  .nite-final-wordmark::before {
-    opacity: 0.72;
-  }
-
-  .nite-final-wordmark-shine {
-    opacity: 0.72;
-  }
-}
-
-@media (min-width: 480px) {
-  .nite-final-wordmark-text {
-    font-size: 9rem;
-  }
-}
-
-@media (min-width: 640px) {
-  .nite-final-wordmark-text {
-    font-size: 12rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .nite-final-wordmark-text {
-    font-size: 16rem;
-  }
-}
-
-@media (min-width: 1280px) {
-  .nite-final-wordmark-text {
-    font-size: 18rem;
-  }
-}
-
-@media (min-width: 1536px) {
-  .nite-final-wordmark-text {
-    font-size: 20rem;
-  }
+.nite-footer-transition-glow {
+  background:
+    conic-gradient(from 90deg, transparent 50%, var(--nite-background) 50%),
+    radial-gradient(
+      color-mix(in srgb, var(--nite-text-secondary) 4%, transparent) 0%,
+      transparent 80%
+    );
 }
 
 @keyframes nite-rise {
@@ -739,7 +655,7 @@ body {
   color: #faf9f5;
   font-family: var(--font-heading);
   font-size: clamp(3.35rem, 7vw, 6rem);
-  font-weight: 400;
+  font-weight: 700;
   letter-spacing: 0;
   line-height: 1.1;
 }

@@ -24,7 +24,7 @@ export function HeroSection() {
             <p className="mx-auto max-w-[40rem] font-mono text-xs uppercase tracking-[0.18em] text-nite-brand-accent lg:mx-0">
               UNIJORGE / Núcleo de Inovação & Tecnologia
             </p>
-            <h1 className="max-w-[11.4em] font-heading text-[2.5rem] font-normal leading-[1.04] text-foreground [text-wrap:balance] min-[390px]:text-[2.65rem] sm:text-[3.35rem] sm:leading-[1.03] lg:max-w-[14.9em] lg:text-[3.28rem] lg:leading-[1.04] xl:text-[3.4rem]">
+            <h1 className="max-w-[11.4em] font-heading text-[2.35rem] font-semibold leading-[1.04] text-foreground [text-wrap:balance] min-[390px]:text-[2.45rem] sm:text-[3.15rem] sm:leading-[1.03] lg:max-w-[14.9em] lg:text-[3.08rem] lg:leading-[1.04] xl:text-[3.18rem]">
               <span className="nite-metal-text">
                 Tecnologia aplicada, aprendizagem e projetos em evolução.
               </span>

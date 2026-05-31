@@ -215,7 +215,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 <p className="font-mono text-xs uppercase tracking-[0.18em] text-nite-brand-accent">
                   {siteConfig.name} / Projeto
                 </p>
-                <h1 className="font-heading text-4xl font-normal leading-tight text-foreground sm:text-5xl">
+                <h1 className="font-heading text-4xl font-semibold leading-tight text-foreground sm:text-5xl">
                   {project.title}
                 </h1>
                 <p className="text-lg leading-8 text-muted-foreground">

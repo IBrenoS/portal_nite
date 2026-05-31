@@ -73,6 +73,12 @@ describe("ProjectsPage", () => {
     ).toBeInTheDocument();
 
     const main = within(screen.getByRole("main"));
+    const footer = screen.getByRole("contentinfo");
+
+    expect(footer).toHaveAttribute("data-footer-variant", "plain");
+    expect(footer).not.toHaveClass("border-t", "sm:-mt-[7vh]");
+    expect(footer.querySelector("[data-footer-transition-divider]")).toBeNull();
+    expect(footer.querySelector("[data-footer-transition-glow]")).toBeNull();
 
     expect(document.querySelectorAll("[data-slot='card']")).toHaveLength(3);
     expect(
@@ -88,12 +94,12 @@ describe("ProjectsPage", () => {
     ).toHaveLength(3);
 
     expect(
-      screen.getByRole("link", { name: /Software aplicado/i }),
+      main.getByRole("link", { name: /Software aplicado/i }),
     ).toHaveAttribute("href", "/projetos/software-aplicado");
     expect(
-      screen.getByRole("link", { name: /Robótica educacional/i }),
+      main.getByRole("link", { name: /Robótica educacional/i }),
     ).toHaveAttribute("href", "/projetos/robotica-educacional");
-    expect(screen.getByRole("link", { name: /Dados e IA/i })).toHaveAttribute(
+    expect(main.getByRole("link", { name: /Dados e IA/i })).toHaveAttribute(
       "href",
       "/projetos/dados-e-ia",
     );
@@ -136,10 +142,10 @@ describe("ProjectsPage", () => {
 
     expect(document.querySelectorAll("[data-slot='card']")).toHaveLength(1);
     expect(
-      screen.getByRole("link", { name: /Robótica educacional/i }),
+      main.getByRole("link", { name: /Robótica educacional/i }),
     ).toBeInTheDocument();
     expect(
-      screen.queryByRole("link", { name: /Software aplicado/i }),
+      main.queryByRole("link", { name: /Software aplicado/i }),
     ).not.toBeInTheDocument();
 
     await user.click(
