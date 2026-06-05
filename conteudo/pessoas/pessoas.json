@@ -1,0 +1,30 @@
+[
+  {
+    "slug": "breno-cerqueira",
+    "name": "Breno Cerqueira",
+    "role": "Gestor & Software Engineer",
+    "location": "Salvador, Brazil",
+    "summary": "Just do it",
+    "public": true,
+    "authorized": true,
+    "contentState": "real",
+    "avatar": {
+      "src": "/images/pessoas/breno-cerqueira.jpeg",
+      "alt": "Foto de perfil autorizada de Breno Cerqueira."
+    },
+    "initials": "BC",
+    "interests": ["IA", "Programação"],
+    "clubs": ["Café", "Leitura"],
+    "links": [
+      {
+        "label": "GitHub",
+        "href": "https://github.com/IBrenoS"
+      },
+      {
+        "label": "LinkedIn",
+        "href": "https://www.linkedin.com/in/brenocerq/"
+      }
+    ],
+    "entries": []
+  }
+]

@@ -21,7 +21,6 @@ import {
 import { Container } from "@/components/layout/container";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
-import { OpportunityInterestFormPreview } from "@/components/sections/opportunity-interest-form-preview";
 import { OpportunityStatus } from "@/components/sections/opportunity-status";
 import { buttonVariants } from "@/components/ui/button";
 import { cardVariants } from "@/components/ui/card";
@@ -108,8 +107,8 @@ const processNotes = [
     Icon: BellIcon,
   },
   {
-    title: "Estrutura em preparação",
-    text: "A estrutura futura aparece como referência, sem campos ativos ou envio real.",
+    title: "Canal em preparação",
+    text: "O formulário integrado só será exibido quando houver processo aberto e canal técnico definido.",
     Icon: ClipboardListIcon,
   },
   {
@@ -409,15 +408,6 @@ export default function OpportunitiesPage() {
                 </span>
               </div>
             </div>
-          </Container>
-        </section>
-
-        <section
-          className="px-6 py-16 sm:py-20"
-          aria-labelledby="estrutura-formulario-oportunidades"
-        >
-          <Container size="xl" className="lg:px-14">
-            <OpportunityInterestFormPreview titleId="estrutura-formulario-oportunidades" />
           </Container>
         </section>
 

@@ -31,7 +31,7 @@ export function SiteFooter({
       className={cn(
         "relative overflow-hidden bg-background",
         hasWordmarkTransition &&
-          "z-20 border-t border-nite-border-subtle sm:-mt-[7vh]",
+          "z-20 border-t border-nite-border-subtle sm:-mt-[5vh]",
         className,
       )}
       data-footer-variant={variant}
@@ -52,7 +52,7 @@ export function SiteFooter({
         </>
       ) : null}
 
-      <div className="mx-auto flex max-w-5xl flex-col gap-12 px-6 py-36 text-sm text-muted-foreground md:max-w-7xl md:min-h-[39.75rem] md:flex-row md:gap-8">
+      <div className="mx-auto flex max-w-5xl flex-col gap-12 px-6 py-36 text-sm text-muted-foreground md:max-w-7xl md:min-h-[35rem] md:flex-row md:gap-8">
         <div className="flex min-w-48 flex-col items-start justify-start gap-8 md:min-w-[18.75rem]">
           <UnijorgeBrandText className="text-sm font-semibold uppercase tracking-[0.18em]" />
 

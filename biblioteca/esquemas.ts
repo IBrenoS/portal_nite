@@ -79,6 +79,86 @@ export const timelineSourceStatusValues = [
   "placeholder",
   "confirmado",
 ] as const;
+export const personContentStateValues = ["real", "em-estruturacao"] as const;
+export const personEntryCategoryValues = [
+  "projeto",
+  "atualizacao",
+  "handbook",
+  "pessoal",
+] as const;
+
+const personLinkSchema = z.object({
+  label: z.string().min(2).describe("Rotulo publico do link da pessoa."),
+  href: z.string().url().describe("URL externa autorizada da pessoa."),
+});
+
+const personEntrySchema = z.object({
+  title: z.string().min(3).describe("Titulo publico do registro relacionado."),
+  date: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .describe("Data ISO do registro."),
+  category: z
+    .enum(personEntryCategoryValues)
+    .describe("Categoria usada nos filtros do perfil."),
+  description: z
+    .string()
+    .min(12)
+    .describe("Descricao curta do registro relacionado."),
+  href: z.string().url().optional().describe("URL publica do registro."),
+  image: imageSchema
+    .optional()
+    .describe("Imagem autorizada relacionada ao registro."),
+});
+
+export const personSchema = z.object({
+  slug: slugSchema,
+  name: z.string().min(2).describe("Nome publico autorizado da pessoa."),
+  role: z.string().min(3).describe("Funcao, papel ou frente principal."),
+  location: z
+    .string()
+    .min(3)
+    .describe("Localidade publica autorizada da pessoa."),
+  summary: z
+    .string()
+    .min(5)
+    .describe("Resumo autorizado usado no perfil e na busca."),
+  public: z.boolean().describe("Controla se a pessoa pode aparecer no portal."),
+  authorized: z
+    .boolean()
+    .describe("Confirma autorizacao de nome, foto e dados publicos."),
+  contentState: z
+    .enum(personContentStateValues)
+    .describe("Estado editorial do perfil publico da pessoa."),
+  initials: z
+    .string()
+    .min(1)
+    .max(3)
+    .optional()
+    .describe("Fallback visual quando nao ha foto autorizada."),
+  avatar: imageSchema
+    .optional()
+    .describe("Foto publica autorizada da pessoa, quando existir."),
+  interests: z
+    .array(z.string().min(2))
+    .default([])
+    .describe("Interesses publicos autorizados."),
+  clubs: z
+    .array(z.string().min(2))
+    .default([])
+    .describe("Clubes ou afinidades publicas autorizadas."),
+  links: z
+    .array(personLinkSchema)
+    .default([])
+    .describe("Links externos autorizados da pessoa."),
+  entries: z
+    .array(personEntrySchema)
+    .default([])
+    .describe("Registros publicos relacionados a pessoa."),
+  seo: seoSchema.optional().describe("Pacote de metadata por pessoa."),
+});
+
+export const peopleCollectionSchema = z.array(personSchema);
 
 export const projectSchema = z.object({
   slug: slugSchema,
@@ -309,3 +389,6 @@ export type ProjectLinkType = (typeof projectLinkTypeValues)[number];
 export type ProjectTeamRole = (typeof projectTeamRoleValues)[number];
 export type TimelineSourceStatus = (typeof timelineSourceStatusValues)[number];
 export type TimelineEvent = z.infer<typeof timelineEventSchema>;
+export type PersonContentState = (typeof personContentStateValues)[number];
+export type PersonEntryCategory = (typeof personEntryCategoryValues)[number];
+export type Person = z.infer<typeof personSchema>;

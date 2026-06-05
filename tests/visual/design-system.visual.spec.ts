@@ -9,12 +9,14 @@ const desktopRoutes = [
   { name: "projects", path: "/projetos" },
   { name: "project-detail", path: "/projetos/software-aplicado" },
   { name: "updates", path: "/atualizacoes" },
+  { name: "people", path: "/pessoas" },
   { name: "opportunities", path: "/oportunidades" },
   { name: "contact", path: "/contato" },
 ] as const;
 
 const mobileRoutes = [
   { name: "home", path: "/" },
+  { name: "people", path: "/pessoas" },
   { name: "opportunities", path: "/oportunidades" },
   { name: "contact", path: "/contato" },
 ] as const;

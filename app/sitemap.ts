@@ -1,6 +1,9 @@
 import type { MetadataRoute } from "next";
 
-import { getIndexableProjects } from "@/biblioteca/conteudo";
+import {
+  getIndexablePeople,
+  getIndexableProjects,
+} from "@/biblioteca/conteudo";
 import { absoluteUrl } from "@/biblioteca/seo";
 import { siteConfig } from "@/biblioteca/site-config";
 
@@ -14,6 +17,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     ...getIndexableProjects().map((project) => ({
       url: absoluteUrl(`/projetos/${project.slug}`),
+      lastModified,
+    })),
+    ...getIndexablePeople().map((person) => ({
+      url: absoluteUrl(`/pessoas/${person.slug}`),
       lastModified,
     })),
   ];
