@@ -9,8 +9,12 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary: "nite-glass-action",
+        spotlight:
+          "relative overflow-hidden rounded-[1rem] nite-glass-action transition-all duration-200 focus-visible:ring-4 focus-visible:ring-white/30",
         outline:
           "border-nite-border-soft bg-transparent text-nite-text-primary hover:bg-nite-surface-subtle hover:text-nite-text-primary aria-expanded:bg-nite-surface-subtle aria-expanded:text-nite-text-primary",
+        invisible:
+          "h-auto min-h-0 w-fit rounded-none border-transparent bg-transparent !px-0 !py-0 text-nite-text-secondary shadow-none hover:text-nite-text-primary focus-visible:text-nite-text-primary focus-visible:ring-0 active:translate-y-0",
         quiet:
           "border-nite-border-soft bg-transparent text-nite-text-secondary hover:border-nite-border-hover hover:bg-nite-surface-subtle hover:text-nite-text-primary aria-expanded:border-nite-border-hover aria-expanded:bg-nite-surface-subtle aria-expanded:text-nite-text-primary",
         secondary:

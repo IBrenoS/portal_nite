@@ -1,4 +1,3 @@
-import { ArrowRightIcon } from "lucide-react";
 import Link from "next/link";
 
 import { Container } from "@/components/layout/container";
@@ -36,22 +35,21 @@ export function HeroSection() {
             </p>
           </div>
 
-          <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+          <div className="flex w-full flex-col gap-7 sm:w-auto sm:flex-row">
             <Link
               href="/projetos"
               className={cn(
-                buttonVariants({ variant: "primary", size: "lg" }),
-                "w-full rounded-md sm:w-fit",
+                buttonVariants({ variant: "spotlight", size: "lg" }),
+                "w-full sm:w-fit",
               )}
             >
               Explorar projetos
-              <ArrowRightIcon data-icon="inline-end" />
             </Link>
             <Link
               href="#sobre"
               className={cn(
-                buttonVariants({ variant: "outline", size: "lg" }),
-                "w-full rounded-md sm:w-fit",
+                buttonVariants({ variant: "invisible", size: "lg" }),
+                "self-center sm:self-auto",
               )}
             >
               Conhecer o NITE

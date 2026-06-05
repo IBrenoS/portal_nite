@@ -28,6 +28,7 @@ import { SiteHeader } from "@/components/layout/site-header";
 import {
   ProjectCard,
   type ProjectCardStatus,
+  type ProjectCardVisual,
 } from "@/components/sections/project-card";
 import { buttonVariants } from "@/components/ui/button";
 import { cardVariants } from "@/components/ui/card";
@@ -104,6 +105,27 @@ function hasProjectPublicEvidence(project: Project) {
   );
 }
 
+function getProjectVisual(
+  project: Project,
+  isPublicationReady: boolean,
+): ProjectCardVisual | undefined {
+  if (isPublicationReady) {
+    return {
+      kind: "evidence",
+      src: project.coverImage,
+      alt: project.alt,
+    };
+  }
+
+  return project.illustration
+    ? {
+        kind: "illustration",
+        src: project.illustration.src,
+        alt: project.illustration.alt,
+      }
+    : undefined;
+}
+
 function hasProjectResults(project: Project) {
   return (
     isProjectPublicationReady(project) &&
@@ -156,6 +178,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const hasChangelog = isPublicationReady && project.changelog.length > 0;
   const hasResults = hasProjectResults(project);
   const hasLinks = isPublicationReady && project.links.length > 0;
+  const projectVisual = getProjectVisual(project, isPublicationReady);
   const breadcrumbJsonLd = buildBreadcrumbJsonLd([
     { name: "Início", path: "/" },
     { name: "Projetos", path: "/#projetos" },
@@ -223,17 +246,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 </p>
               </div>
 
-              {project.contentNotice ? (
-                <p
-                  className={cn(
-                    detailPanelClassName,
-                    "rounded-lg p-4 text-sm leading-6 text-muted-foreground",
-                  )}
-                >
-                  {project.contentNotice}
-                </p>
-              ) : null}
-
               <div className="flex flex-col gap-3 sm:flex-row">
                 <Link
                   href="#detalhes"
@@ -259,16 +271,20 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             </div>
 
             <div className="nite-panel overflow-hidden rounded-lg border border-border">
-              {isPublicationReady ? (
-                <div className="relative aspect-[16/10]">
+              {projectVisual ? (
+                <div
+                  className="relative aspect-[16/10] bg-muted"
+                  data-visual-kind={projectVisual.kind}
+                >
                   <Image
-                    src={project.coverImage}
-                    alt={project.alt}
+                    src={projectVisual.src}
+                    alt={projectVisual.alt}
                     fill
                     priority
                     sizes="(max-width: 1024px) 100vw, 760px"
                     className="object-cover"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/72 via-background/10 to-transparent" />
                 </div>
               ) : (
                 <EmptyState
@@ -686,14 +702,10 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                           : undefined
                       }
                       href={`/projetos/${relatedProject.slug}`}
-                      image={
-                        relatedIsPublicationReady
-                          ? {
-                              src: relatedProject.coverImage,
-                              alt: relatedProject.alt,
-                            }
-                          : undefined
-                      }
+                      visual={getProjectVisual(
+                        relatedProject,
+                        relatedIsPublicationReady,
+                      )}
                       hasPublicEvidence={hasProjectPublicEvidence(
                         relatedProject,
                       )}

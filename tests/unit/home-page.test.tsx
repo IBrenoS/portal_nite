@@ -38,12 +38,34 @@ describe("HomePage", () => {
         "O NITE conecta estudantes, professores e desafios institucionais em um portal para acompanhar frentes, oportunidades e movimentos do núcleo com contexto e transparência.",
       ),
     ).toBeInTheDocument();
-    expect(
-      hero.getByRole("link", { name: /Explorar projetos/i }),
-    ).toHaveAttribute("href", "/projetos");
-    expect(
-      hero.getByRole("link", { name: /Conhecer o NITE/i }),
-    ).toHaveAttribute("href", "#sobre");
+    const heroPrimaryCta = hero.getByRole("link", {
+      name: /Explorar projetos/i,
+    });
+    const heroSecondaryCta = hero.getByRole("link", {
+      name: /Conhecer o NITE/i,
+    });
+    const heroCtaGroup = heroPrimaryCta.parentElement;
+
+    expect(heroPrimaryCta).toHaveAttribute("href", "/projetos");
+    expect(heroPrimaryCta).toHaveClass(
+      "nite-glass-action",
+      "rounded-[1rem]",
+    );
+    expect(heroPrimaryCta).not.toHaveClass(
+      "nite-button-texture",
+      "after:absolute",
+    );
+    expect(heroPrimaryCta).not.toHaveClass("rounded-md");
+    expect(heroSecondaryCta).toHaveAttribute("href", "#sobre");
+    expect(heroSecondaryCta).toHaveClass(
+      "w-fit",
+      "border-transparent",
+      "bg-transparent",
+      "!px-0",
+    );
+    expect(heroSecondaryCta).not.toHaveClass("border-nite-border-soft");
+    expect(heroCtaGroup).toHaveClass("gap-4");
+    expect(heroCtaGroup).not.toHaveClass("gap-3");
 
     for (const forbidden of [
       "Explorar frentes do NITE",
@@ -122,15 +144,29 @@ describe("HomePage", () => {
         .querySelectorAll("[data-slot='status-badge'][data-status='draft']"),
     ).toHaveLength(3);
     expect(projects.getAllByText("Em estruturação")).toHaveLength(3);
-    expect(projects.getAllByText("Objetivo")).toHaveLength(3);
-    expect(projects.getAllByText("Próximo passo")).toHaveLength(3);
-    expect(projects.getAllByText("Stack")).toHaveLength(3);
     expect(
-      projects.getAllByText("Imagem ou evidência pública ainda indisponível."),
-    ).toHaveLength(3);
+      projects.queryByText(
+        "Projetos em estruturação permanecem sinalizados até que existam evidências públicas, entregáveis reais e contexto validado para publicação.",
+      ),
+    ).not.toBeInTheDocument();
+    expect(projects.queryByText("Visual editorial")).not.toBeInTheDocument();
     expect(
-      projects.getAllByText("Última atualização pendente de dado validado."),
-    ).toHaveLength(3);
+      projects.getByAltText(
+        /Ilustração editorial da frente de software aplicado/i,
+      ),
+    ).toBeInTheDocument();
+    expect(projects.queryByText("Objetivo")).not.toBeInTheDocument();
+    expect(projects.queryByText("Próximo passo")).not.toBeInTheDocument();
+    expect(projects.queryByText("Stack")).not.toBeInTheDocument();
+    expect(
+      projects.queryByText(/Problema ou contexto/i),
+    ).not.toBeInTheDocument();
+    expect(
+      projects.queryByText("Imagem ou evidência pública ainda indisponível."),
+    ).not.toBeInTheDocument();
+    expect(
+      projects.queryByText("Última atualização pendente de dado validado."),
+    ).not.toBeInTheDocument();
     expect(projects.getAllByText("Ver projeto")).toHaveLength(3);
     expect(
       projects.getAllByRole("link", { name: /Ver projeto/i }),
@@ -161,11 +197,19 @@ describe("HomePage", () => {
       ),
     ).toBeInTheDocument();
     expect(within(timeline).getByText("Continuar leitura")).toBeInTheDocument();
-    expect(
-      within(timeline).getByRole("link", {
-        name: "Continuar leitura sobre a timeline do NITE",
-      }),
-    ).toHaveAttribute("href", "/atualizacoes");
+    const timelineCta = within(timeline).getByRole("link", {
+      name: "Continuar leitura sobre a timeline do NITE",
+    });
+
+    expect(timelineCta).toHaveAttribute("href", "/atualizacoes");
+    expect(timelineCta).toHaveClass(
+      "timeline-premium-button",
+      "w-fit",
+      "border-transparent",
+      "bg-transparent",
+      "!px-0",
+    );
+    expect(timeline.querySelector(".timeline-premium-clickable")).toBeNull();
     expect(timeline.querySelector("[data-scroll='bg']")).toBeInTheDocument();
     expect(
       timeline.querySelector("[data-scroll='container']"),
@@ -192,12 +236,32 @@ describe("HomePage", () => {
         name: /NITE em evolução\.\s*Disponível para construir\./i,
       }),
     ).toBeInTheDocument();
-    expect(
-      finalCta.getByRole("link", { name: /Explorar projetos/i }),
-    ).toHaveAttribute("href", "/projetos");
-    expect(
-      finalCta.getByRole("link", { name: /Falar com o NITE/i }),
-    ).toHaveAttribute("href", "/contato");
+    const finalPrimaryCta = finalCta.getByRole("link", {
+      name: /Explorar projetos/i,
+    });
+    const finalSecondaryCta = finalCta.getByRole("link", {
+      name: /Falar com o NITE/i,
+    });
+
+    expect(finalPrimaryCta).toHaveAttribute("href", "/projetos");
+    expect(finalPrimaryCta).toHaveClass(
+      "nite-glass-action",
+      "group",
+      "h-12",
+      "rounded-2xl",
+    );
+    expect(finalPrimaryCta).not.toHaveClass("after:absolute");
+    expect(finalPrimaryCta.querySelector("svg")).toBeInTheDocument();
+    expect(finalSecondaryCta).toHaveAttribute("href", "/contato");
+    expect(finalSecondaryCta).toHaveClass(
+      "group",
+      "h-12",
+      "rounded-2xl",
+      "bg-transparent",
+      "text-nite-text-secondary",
+    );
+    expect(finalSecondaryCta).not.toHaveClass("!px-0");
+    expect(finalSecondaryCta.querySelector("svg")).toBeInTheDocument();
     expect(document.querySelector(".nite-final-wordmark")).toHaveAttribute(
       "aria-hidden",
       "true",
@@ -282,7 +346,7 @@ describe("HomePage", () => {
     expect(footerElement).toHaveClass(
       "border-t",
       "border-nite-border-subtle",
-      "sm:-mt-[7vh]",
+      "sm:-mt-[5vh]",
     );
     expect(footerElement).not.toHaveClass("sm:-mt-[9vh]");
     expect(
@@ -303,7 +367,7 @@ describe("HomePage", () => {
       "px-6",
       "py-36",
       "md:max-w-7xl",
-      "md:min-h-[39.75rem]",
+      "md:min-h-[35rem]",
       "md:flex-row",
       "md:gap-8",
     );
@@ -361,7 +425,7 @@ describe("HomePage", () => {
     expect(
       footer.getByRole("link", { name: "Todos os projetos" }),
     ).toHaveAttribute("href", "/projetos");
-    expect(footer.getByRole("link", { name: "Nite News" })).toHaveAttribute(
+    expect(footer.getByRole("link", { name: "NIT News" })).toHaveAttribute(
       "href",
       "/atualizacoes",
     );

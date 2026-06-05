@@ -86,9 +86,15 @@ describe("ProjectsPage", () => {
         "[data-slot='status-badge'][data-status='draft']",
       ).length,
     ).toBe(3);
+    expect(main.queryByText("Visual editorial")).not.toBeInTheDocument();
     expect(
-      main.getAllByText("Imagem ou evidência pública ainda indisponível."),
-    ).toHaveLength(3);
+      main.getByAltText(
+        /Ilustração editorial da frente de software aplicado/i,
+      ),
+    ).toBeInTheDocument();
+    expect(
+      main.queryByText("Imagem ou evidência pública ainda indisponível."),
+    ).not.toBeInTheDocument();
     expect(
       main.getAllByText("Última atualização pendente de dado validado."),
     ).toHaveLength(3);
@@ -171,6 +177,41 @@ describe("ProjectsPage", () => {
     expect(
       main.getByRole("button", { name: /Todas, 3 itens, ativo/i }),
     ).toHaveAttribute("aria-pressed", "true");
+  });
+
+  it("filtra por busca textual e tecnologia sem criar rotas de tag", async () => {
+    const user = userEvent.setup();
+
+    render(<ProjectsPage />);
+
+    const main = within(screen.getByRole("main"));
+    const search = main.getByRole("searchbox", {
+      name: "Buscar projetos por nome, resumo, categoria ou tecnologia",
+    });
+
+    await user.type(search, "python");
+
+    expect(document.querySelectorAll("[data-slot='card']")).toHaveLength(1);
+    expect(main.getByRole("link", { name: /Dados e IA/i })).toBeInTheDocument();
+    expect(
+      main.queryByRole("link", { name: /Software aplicado/i }),
+    ).not.toBeInTheDocument();
+
+    await user.clear(search);
+    await user.click(main.getByRole("button", { name: /Arduino, 1 item/i }));
+
+    expect(document.querySelectorAll("[data-slot='card']")).toHaveLength(1);
+    expect(
+      main.getByRole("link", { name: /Robótica educacional/i }),
+    ).toBeInTheDocument();
+    expect(
+      main.getByRole("button", { name: /Arduino, 1 item, ativo/i }),
+    ).toHaveAttribute("aria-pressed", "true");
+
+    await user.click(main.getByRole("button", { name: "Limpar filtros" }));
+
+    expect(search).toHaveValue("");
+    expect(document.querySelectorAll("[data-slot='card']")).toHaveLength(3);
   });
 
   it("declara metadata institucional de portfolio", () => {

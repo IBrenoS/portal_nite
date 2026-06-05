@@ -1,6 +1,10 @@
+import Link from "next/link";
+import { ArrowRightIcon } from "lucide-react";
+
 import { Container } from "@/components/layout/container";
 import { BuildsCardsGrid } from "@/components/sections/builds-cards-grid";
 import { SectionHeader } from "@/components/sections/section-header";
+import { buttonVariants } from "@/components/ui/button";
 
 export function BuildsSection() {
   return (
@@ -20,6 +24,15 @@ export function BuildsSection() {
           eyebrow="O que o NITE constrói"
           title="Saídas concretas para transformar desafios acadêmicos em tecnologia aplicada."
           description="O núcleo organiza frentes de criação que aproximam estudantes, professores e gestão de protótipos, automações, experiências digitais e aprendizagem prática."
+          actions={
+            <Link
+              href="/projetos"
+              className={buttonVariants({ variant: "quiet", size: "md" })}
+            >
+              Explorar frentes
+              <ArrowRightIcon aria-hidden="true" />
+            </Link>
+          }
         />
 
         <BuildsCardsGrid />

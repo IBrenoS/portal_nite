@@ -66,12 +66,10 @@ const headerNavigationGroups: SiteNavigationGroup[] = [
     href: "/atualizacoes",
     items: [
       {
-        label: "Nite News",
+        label: "NIT News",
         href: "/atualizacoes",
         status: "mvp",
       },
-      { label: "Registros", href: "/atualizacoes", status: "mvp" },
-      { label: "Pessoas", href: "/pessoas", status: "mvp" },
     ],
   },
   {
@@ -81,6 +79,7 @@ const headerNavigationGroups: SiteNavigationGroup[] = [
     items: [
       { label: "Como participar", href: "/oportunidades", status: "mvp" },
       { label: "Processos abertos", href: "/oportunidades", status: "mvp" },
+      { label: "Pessoas", href: "/pessoas", status: "mvp" },
       { label: "Enviar currículo", href: "/oportunidades", status: "mvp" },
     ],
   },

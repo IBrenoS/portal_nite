@@ -3,6 +3,7 @@ import { Container } from "@/components/layout/container";
 import {
   ProjectCard,
   type ProjectCardStatus,
+  type ProjectCardVisual,
 } from "@/components/sections/project-card";
 import { SectionHeader } from "@/components/sections/section-header";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -31,6 +32,27 @@ const projectDateFormatter = new Intl.DateTimeFormat("pt-BR", {
   year: "numeric",
 });
 
+function getProjectVisual(
+  project: Project,
+  isPublicationReady: boolean,
+): ProjectCardVisual | undefined {
+  if (isPublicationReady) {
+    return {
+      kind: "evidence",
+      src: project.coverImage,
+      alt: project.alt,
+    };
+  }
+
+  return project.illustration
+    ? {
+        kind: "illustration",
+        src: project.illustration.src,
+        alt: project.illustration.alt,
+      }
+    : undefined;
+}
+
 export function ProjectsOperatingSection({
   projects,
 }: ProjectsOperatingSectionProps) {
@@ -50,11 +72,6 @@ export function ProjectsOperatingSection({
             title="Projetos em destaque"
             description="Acompanhe frentes, protótipos e entregas do NITE com contexto, status, stack e próximos passos."
           />
-          <p className="max-w-2xl text-sm leading-7 text-muted-foreground lg:justify-self-end">
-            Projetos em estruturação permanecem sinalizados até que existam
-            evidências públicas, entregáveis reais e contexto validado para
-            publicação.
-          </p>
         </div>
 
         {projects.length > 0 ? (
@@ -95,12 +112,9 @@ export function ProjectsOperatingSection({
                       : undefined
                   }
                   href={`/projetos/${project.slug}`}
-                  image={
-                    isPublicationReady
-                      ? { src: project.coverImage, alt: project.alt }
-                      : undefined
-                  }
+                  visual={getProjectVisual(project, isPublicationReady)}
                   hasPublicEvidence={hasPublicEvidence}
+                  density="compact"
                   headingLevel={3}
                 />
               );

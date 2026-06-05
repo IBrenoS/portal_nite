@@ -1,6 +1,5 @@
 "use client";
 
-import { ArrowRightIcon } from "lucide-react";
 import type { Route } from "next";
 import { useRef } from "react";
 import gsap from "gsap";
@@ -8,6 +7,8 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import type { TimelineEvent } from "@/biblioteca/esquemas";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -235,19 +236,20 @@ export function LivingTimelineSection({ events }: LivingTimelineSectionProps) {
               Uma leitura visual dos marcos que estruturam o núcleo, suas
               frentes e seus próximos passos.
             </p>
-            <div className="timeline-premium-button" data-scroll="button">
-              <span>Continuar leitura</span>
-              <ArrowRightIcon aria-hidden="true" />
-            </div>
+            <a
+              href={timelineCtaHref}
+              className={cn(
+                buttonVariants({ variant: "invisible", size: "lg" }),
+                "timeline-premium-button",
+              )}
+              aria-label="Continuar leitura sobre a timeline do NITE"
+              data-cta="Home timeline"
+              data-cta-copy="Continuar leitura"
+              data-scroll="button"
+            >
+              Continuar leitura
+            </a>
           </div>
-
-          <a
-            href={timelineCtaHref}
-            className="timeline-premium-clickable"
-            aria-label="Continuar leitura sobre a timeline do NITE"
-            data-cta="Home timeline"
-            data-cta-copy="Continuar leitura"
-          />
         </div>
       </div>
     </section>

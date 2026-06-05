@@ -119,17 +119,22 @@ describe("ProjectPage", () => {
       screen.getAllByText("Em estruturação").length,
     ).toBeGreaterThanOrEqual(2);
     expect(
-      screen.getAllByText("Imagem ou evidência pública ainda indisponível.")
-        .length,
-    ).toBeGreaterThanOrEqual(1);
+      screen.getByAltText(
+        /Ilustração editorial da frente de software aplicado/i,
+      ),
+    ).toBeInTheDocument();
+    expect(screen.queryByText("Visual editorial")).not.toBeInTheDocument();
+    expect(
+      screen.queryByText("Imagem ou evidência pública ainda indisponível."),
+    ).not.toBeInTheDocument();
     expect(
       screen.getByText("Pendente de validação pública"),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(
+      screen.queryByText(
         "Conteúdo em estruturação editorial; não representa um projeto ativo validado.",
       ),
-    ).toBeInTheDocument();
+    ).not.toBeInTheDocument();
     expect(
       screen.queryByRole("heading", { level: 2, name: "Resultados" }),
     ).not.toBeInTheDocument();

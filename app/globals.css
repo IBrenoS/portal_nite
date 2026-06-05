@@ -668,56 +668,6 @@ body {
   line-height: 1.55;
 }
 
-.timeline-premium-button {
-  position: relative;
-  z-index: 2;
-  display: inline-flex;
-  width: fit-content;
-  min-height: 2.75rem;
-  align-items: center;
-  justify-content: center;
-  gap: 0.65rem;
-  border: 1px solid rgb(250 249 245 / 0.68);
-  border-radius: 0.5rem;
-  background: #faf9f5;
-  color: #141413;
-  font-family: var(--font-mono);
-  font-size: 0.95rem;
-  font-weight: 600;
-  letter-spacing: 0;
-  line-height: 1;
-  padding: 0.78rem 1rem;
-  transition:
-    background-color var(--nite-duration-micro) var(--nite-ease-out),
-    border-color var(--nite-duration-micro) var(--nite-ease-out),
-    transform var(--nite-duration-micro) var(--nite-ease-out);
-}
-
-.timeline-premium-button svg {
-  width: 1rem;
-  height: 1rem;
-}
-
-.timeline-premium-clickable {
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  border-radius: inherit;
-  cursor: pointer;
-}
-
-.timeline-premium-container:hover .timeline-premium-button,
-.timeline-premium-container:has(.timeline-premium-clickable:focus-visible)
-  .timeline-premium-button {
-  border-color: #faf9f5;
-  background: rgb(250 249 245 / 0.88);
-  transform: translateY(-1px);
-}
-
-.timeline-premium-clickable:focus-visible {
-  border-radius: inherit;
-}
-
 @media (prefers-reduced-motion: no-preference) {
   [data-scroll="section"] .timeline-premium-eyebrow,
   [data-scroll="section"] .timeline-premium-title,

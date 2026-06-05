@@ -19,6 +19,7 @@ import {
   statusBadgeLabels,
   type StatusBadgeStatus,
 } from "@/components/ui/status-badge";
+import { cn } from "@/lib/utils";
 
 type ProjectCardStatus = Extract<
   StatusBadgeStatus,
@@ -28,6 +29,10 @@ type ProjectCardStatus = Extract<
 type ProjectCardImage = {
   src: string;
   alt: string;
+};
+
+type ProjectCardVisual = ProjectCardImage & {
+  kind: "evidence" | "illustration";
 };
 
 type ProjectCardProps = {
@@ -41,8 +46,9 @@ type ProjectCardProps = {
   nextStep: string;
   updatedAt?: string;
   href?: Route | string;
-  image?: ProjectCardImage;
+  visual?: ProjectCardVisual;
   hasPublicEvidence?: boolean;
+  density?: "standard" | "compact";
   headingLevel?: 2 | 3 | 4;
   className?: string;
 };
@@ -66,19 +72,29 @@ function ProjectCard({
   nextStep,
   updatedAt,
   href,
-  image,
+  visual,
   hasPublicEvidence = false,
+  density = "standard",
   headingLevel = 3,
   className,
 }: ProjectCardProps) {
   const Heading = `h${headingLevel}` as "h2" | "h3" | "h4";
-  const visibleStack = stack.slice(0, 4);
+  const isCompact = density === "compact";
+  const visibleStack = stack.slice(0, isCompact ? 3 : 4);
   const hiddenStackCount = Math.max(stack.length - visibleStack.length, 0);
 
   return (
-    <DomainCardRoot component="project-card" href={href} className={className}>
+    <DomainCardRoot
+      component="project-card"
+      href={href}
+      className={cn(
+        "bg-card/70 shadow-[0_18px_48px_rgb(0_0_0/0.16)] hover:shadow-nite-lift",
+        isCompact && "gap-3",
+        className,
+      )}
+    >
       <ProjectCardMedia
-        image={image}
+        visual={visual}
         hasPublicEvidence={hasPublicEvidence}
         title={title}
       />
@@ -100,30 +116,34 @@ function ProjectCard({
         </CardTitle>
       </CardHeader>
 
-      <CardContent className="grid flex-1 gap-4">
+      <CardContent className={cn("grid flex-1 gap-4", isCompact && "gap-3")}>
         <p className="text-sm leading-6 text-muted-foreground">{summary}</p>
 
-        <dl className="grid gap-3 text-sm">
-          <MetadataPanel>
-            <dt className="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-muted-foreground">
-              Objetivo
-            </dt>
-            <dd className="mt-1.5 leading-6 text-foreground">{objective}</dd>
-          </MetadataPanel>
+        {!isCompact ? (
+          <dl className="grid gap-3 text-sm">
+            <MetadataPanel>
+              <dt className="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-muted-foreground">
+                Objetivo
+              </dt>
+              <dd className="mt-1.5 leading-6 text-foreground">{objective}</dd>
+            </MetadataPanel>
 
-          <MetadataPanel>
-            <dt className="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-muted-foreground">
-              Próximo passo
-            </dt>
-            <dd className="mt-1.5 leading-6 text-foreground">{nextStep}</dd>
-          </MetadataPanel>
-        </dl>
+            <MetadataPanel>
+              <dt className="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-muted-foreground">
+                Próximo passo
+              </dt>
+              <dd className="mt-1.5 leading-6 text-foreground">{nextStep}</dd>
+            </MetadataPanel>
+          </dl>
+        ) : null}
 
         {visibleStack.length > 0 ? (
           <div className="grid gap-2">
-            <p className="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-muted-foreground">
-              Stack
-            </p>
+            {!isCompact ? (
+              <p className="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-muted-foreground">
+                Stack
+              </p>
+            ) : null}
             <div className="flex flex-wrap gap-2">
               {visibleStack.map((technology) => (
                 <Chip key={technology} variant="metal">
@@ -137,19 +157,28 @@ function ProjectCard({
           </div>
         ) : null}
 
-        <p className="sr-only">Problema ou contexto: {problem}</p>
+        {!isCompact ? (
+          <p className="sr-only">Problema ou contexto: {problem}</p>
+        ) : null}
       </CardContent>
 
-      <CardFooter className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
-        {updatedAt ? (
-          <p className="text-xs leading-5 text-muted-foreground">
-            Última atualização: {updatedAt}
-          </p>
-        ) : (
-          <p className="text-xs leading-5 text-muted-foreground">
-            Última atualização pendente de dado validado.
-          </p>
+      <CardFooter
+        className={cn(
+          "flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between",
+          isCompact && "justify-end",
         )}
+      >
+        {!isCompact ? (
+          updatedAt ? (
+            <p className="text-xs leading-5 text-muted-foreground">
+              Última atualização: {updatedAt}
+            </p>
+          ) : (
+            <p className="text-xs leading-5 text-muted-foreground">
+              Última atualização pendente de dado validado.
+            </p>
+          )
+        ) : null}
 
         {href ? (
           <DomainCardCta>Ver projeto</DomainCardCta>
@@ -160,25 +189,35 @@ function ProjectCard({
 }
 
 function ProjectCardMedia({
-  image,
+  visual,
   hasPublicEvidence,
   title,
 }: {
-  image?: ProjectCardImage;
+  visual?: ProjectCardVisual;
   hasPublicEvidence: boolean;
   title: string;
 }) {
-  if (image) {
+  if (visual) {
+    const label = visual.kind === "evidence" ? "Evidência pública" : null;
+
     return (
-      <div className="relative aspect-[16/9] overflow-hidden border-b border-border">
+      <div
+        className="relative aspect-[16/9] overflow-hidden border-b border-border bg-muted"
+        data-visual-kind={visual.kind}
+      >
         <Image
-          src={image.src}
-          alt={image.alt}
+          src={visual.src}
+          alt={visual.alt}
           fill
           sizes="(max-width: 768px) 100vw, 560px"
           className="object-cover transition-transform duration-nite-micro ease-nite-out group-hover/card:scale-[1.025]"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background/72 via-background/16 to-transparent" />
+        {label ? (
+          <span className="absolute left-3 top-3 rounded-full border border-border bg-background/78 px-2.5 py-1 font-mono text-[0.64rem] uppercase tracking-[0.14em] text-foreground backdrop-blur">
+            {label}
+          </span>
+        ) : null}
       </div>
     );
   }
@@ -193,4 +232,4 @@ function ProjectCardMedia({
 }
 
 export { ProjectCard, projectStatusLabels };
-export type { ProjectCardProps, ProjectCardStatus };
+export type { ProjectCardProps, ProjectCardStatus, ProjectCardVisual };

@@ -7,9 +7,11 @@ import {
   ProjectCard,
   projectStatusLabels,
   type ProjectCardStatus,
+  type ProjectCardVisual,
 } from "@/components/sections/project-card";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
 type ProjectsFilterableListProps = {
@@ -18,6 +20,7 @@ type ProjectsFilterableListProps = {
 
 type StatusFilter = ProjectCardStatus | "all";
 type AreaFilter = string | "all";
+type TechnologyFilter = string | "all";
 
 const statusFilterLabels = {
   all: "Todos",
@@ -82,6 +85,12 @@ function getUniqueAreas(projects: Project[]) {
   );
 }
 
+function getUniqueTechnologies(projects: Project[]) {
+  return Array.from(
+    new Set(projects.flatMap((project) => project.technologies)),
+  ).sort((current, next) => current.localeCompare(next, "pt-BR"));
+}
+
 function getStatusCounts(projects: Project[]) {
   const counts = Object.fromEntries(
     statusFilterOrder.map((status) => [status, 0]),
@@ -101,15 +110,90 @@ function getAreaCounts(projects: Project[]) {
   }, {});
 }
 
+function getTechnologyCounts(projects: Project[]) {
+  return projects.reduce<Record<string, number>>((counts, project) => {
+    for (const technology of project.technologies) {
+      counts[technology] = (counts[technology] ?? 0) + 1;
+    }
+
+    return counts;
+  }, {});
+}
+
+function normalizeSearch(value: string) {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLocaleLowerCase("pt-BR")
+    .trim();
+}
+
+function projectMatchesSearch(project: Project, query: string) {
+  if (!query) {
+    return true;
+  }
+
+  const searchableText = normalizeSearch(
+    [
+      project.title,
+      project.summary,
+      project.description,
+      project.problem,
+      project.context,
+      project.category,
+      project.currentPhase,
+      ...project.technologies,
+    ].join(" "),
+  );
+
+  return searchableText.includes(query);
+}
+
+function getProjectVisual(
+  project: Project,
+  isPublicationReady: boolean,
+): ProjectCardVisual | undefined {
+  if (isPublicationReady) {
+    return {
+      kind: "evidence",
+      src: project.coverImage,
+      alt: project.alt,
+    };
+  }
+
+  return project.illustration
+    ? {
+        kind: "illustration",
+        src: project.illustration.src,
+        alt: project.illustration.alt,
+      }
+    : undefined;
+}
+
 export function ProjectsFilterableList({
   projects,
 }: ProjectsFilterableListProps) {
   const [selectedStatus, setSelectedStatus] = useState<StatusFilter>("all");
   const [selectedArea, setSelectedArea] = useState<AreaFilter>("all");
+  const [selectedTechnology, setSelectedTechnology] =
+    useState<TechnologyFilter>("all");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const areas = useMemo(() => getUniqueAreas(projects), [projects]);
+  const technologies = useMemo(
+    () => getUniqueTechnologies(projects),
+    [projects],
+  );
   const statusCounts = useMemo(() => getStatusCounts(projects), [projects]);
   const areaCounts = useMemo(() => getAreaCounts(projects), [projects]);
+  const technologyCounts = useMemo(
+    () => getTechnologyCounts(projects),
+    [projects],
+  );
+  const normalizedSearchQuery = useMemo(
+    () => normalizeSearch(searchQuery),
+    [searchQuery],
+  );
 
   const filteredProjects = useMemo(
     () =>
@@ -119,17 +203,38 @@ export function ProjectsFilterableList({
           getProjectCardStatus(project) === selectedStatus;
         const areaMatches =
           selectedArea === "all" || project.category === selectedArea;
+        const technologyMatches =
+          selectedTechnology === "all" ||
+          project.technologies.includes(selectedTechnology);
+        const searchMatches = projectMatchesSearch(
+          project,
+          normalizedSearchQuery,
+        );
 
-        return statusMatches && areaMatches;
+        return (
+          statusMatches && areaMatches && technologyMatches && searchMatches
+        );
       }),
-    [projects, selectedArea, selectedStatus],
+    [
+      normalizedSearchQuery,
+      projects,
+      selectedArea,
+      selectedStatus,
+      selectedTechnology,
+    ],
   );
 
-  const hasActiveFilters = selectedStatus !== "all" || selectedArea !== "all";
+  const hasActiveFilters =
+    selectedStatus !== "all" ||
+    selectedArea !== "all" ||
+    selectedTechnology !== "all" ||
+    searchQuery.trim().length > 0;
 
   function clearFilters() {
     setSelectedStatus("all");
     setSelectedArea("all");
+    setSelectedTechnology("all");
+    setSearchQuery("");
   }
 
   if (projects.length === 0) {
@@ -150,7 +255,7 @@ export function ProjectsFilterableList({
               Filtros
             </h3>
             <p className="mt-1 text-sm leading-6 text-muted-foreground">
-              Combine status e área para refinar a listagem.
+              Combine busca, status, área e tecnologia para refinar a listagem.
             </p>
           </div>
           <Button
@@ -162,6 +267,23 @@ export function ProjectsFilterableList({
           >
             Limpar filtros
           </Button>
+        </div>
+
+        <div className="grid gap-2">
+          <label
+            htmlFor="project-search"
+            className="font-mono text-xs uppercase tracking-[0.16em] text-muted-foreground"
+          >
+            Busca
+          </label>
+          <Input
+            id="project-search"
+            type="search"
+            value={searchQuery}
+            aria-label="Buscar projetos por nome, resumo, categoria ou tecnologia"
+            placeholder="Buscar por nome, tecnologia ou frente"
+            onChange={(event) => setSearchQuery(event.target.value)}
+          />
         </div>
 
         <fieldset className="grid gap-3">
@@ -182,6 +304,32 @@ export function ProjectsFilterableList({
                 count={statusCounts[status]}
                 label={statusFilterLabels[status]}
                 onClick={() => setSelectedStatus(status)}
+              />
+            ))}
+          </div>
+        </fieldset>
+
+        <fieldset className="grid gap-3">
+          <legend className="font-mono text-xs uppercase tracking-[0.16em] text-muted-foreground">
+            Tecnologia
+          </legend>
+          <div
+            className="flex flex-wrap gap-2"
+            aria-label="Filtrar por tecnologia"
+          >
+            <FilterButton
+              active={selectedTechnology === "all"}
+              count={projects.length}
+              label="Todas as tecnologias"
+              onClick={() => setSelectedTechnology("all")}
+            />
+            {technologies.map((technology) => (
+              <FilterButton
+                key={technology}
+                active={selectedTechnology === technology}
+                count={technologyCounts[technology] ?? 0}
+                label={technology}
+                onClick={() => setSelectedTechnology(technology)}
               />
             ))}
           </div>
@@ -246,11 +394,7 @@ export function ProjectsFilterableList({
                       : undefined
                   }
                   href={`/projetos/${project.slug}`}
-                  image={
-                    isPublicationReady
-                      ? { src: project.coverImage, alt: project.alt }
-                      : undefined
-                  }
+                  visual={getProjectVisual(project, isPublicationReady)}
                   hasPublicEvidence={hasProjectPublicEvidence(project)}
                   headingLevel={3}
                 />

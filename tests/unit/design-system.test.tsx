@@ -150,6 +150,12 @@ describe("design system base", () => {
         <Button variant="ghost" size="lg">
           Discreto
         </Button>
+        <Button variant="spotlight" size="lg">
+          Destaque
+        </Button>
+        <Button variant="invisible" size="lg">
+          Invisivel
+        </Button>
         <Button variant="quiet">Busca discreta</Button>
         <Button variant="outline">Contorno</Button>
         <Button variant="link">Link visual</Button>
@@ -167,6 +173,20 @@ describe("design system base", () => {
     ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Busca discreta" })).toHaveClass(
       "text-nite-text-secondary",
+    );
+    expect(screen.getByRole("button", { name: "Destaque" })).toHaveClass(
+      "nite-glass-action",
+      "rounded-[1rem]",
+    );
+    expect(screen.getByRole("button", { name: "Destaque" })).not.toHaveClass(
+      "nite-button-texture",
+      "after:absolute",
+    );
+    expect(screen.getByRole("button", { name: "Invisivel" })).toHaveClass(
+      "w-fit",
+      "border-transparent",
+      "bg-transparent",
+      "!px-0",
     );
     expect(
       screen.getByRole("button", { name: "Contorno" }),
@@ -329,7 +349,7 @@ describe("design system base", () => {
     expect(iconWrapper).toBeInTheDocument();
   });
 
-  it("renderiza ProjectCard com Card base, StatusBadge real e fallback honesto", () => {
+  it("renderiza ProjectCard com ilustracao editorial separada de evidencia", () => {
     render(
       <ProjectCard
         title="Portal de testes"
@@ -347,6 +367,11 @@ describe("design system base", () => {
         ]}
         nextStep="Validar conteudo real antes de publicar evidencias."
         href="/projetos/portal-de-testes"
+        visual={{
+          kind: "illustration",
+          src: "/images/projetos/ilustracao-software-aplicado.webp",
+          alt: "Ilustração editorial da frente de software aplicado.",
+        }}
         headingLevel={3}
       />,
     );
@@ -369,8 +394,11 @@ describe("design system base", () => {
     expect(screen.getByText("Software aplicado")).toBeInTheDocument();
     expect(screen.getByText("Next.js")).toBeInTheDocument();
     expect(screen.getByText("+1")).toBeInTheDocument();
+    expect(screen.queryByText("Visual editorial")).not.toBeInTheDocument();
     expect(
-      screen.getByText("Imagem ou evidência pública ainda indisponível."),
+      screen.getByAltText(
+        "Ilustração editorial da frente de software aplicado.",
+      ),
     ).toBeInTheDocument();
     expect(
       screen.getByText("Última atualização pendente de dado validado."),

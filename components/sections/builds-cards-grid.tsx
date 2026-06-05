@@ -72,7 +72,7 @@ export function BuildsCardsGrid() {
             key={build.title}
             className={cn(
               cardVariants(),
-              "group min-h-[14.75rem] gap-0 rounded-lg border-border bg-card/80 p-5 transition-colors duration-nite-micro ease-nite-out hover:border-nite-border-strong hover:bg-secondary/70 lg:p-6",
+              "group min-h-[14.75rem] gap-0 rounded-lg border-border bg-card/80 p-5 shadow-[0_16px_44px_rgb(0_0_0/0.12)] transition-all duration-nite-micro ease-nite-out hover:-translate-y-0.5 hover:border-nite-border-strong hover:bg-secondary/70 hover:shadow-nite-lift lg:p-6",
             )}
             initial={{ y: 12 }}
             animate={{ y: 0 }}
@@ -82,7 +82,7 @@ export function BuildsCardsGrid() {
               ease: [0.22, 1, 0.36, 1],
             }}
           >
-            <span className="inline-flex size-10 items-center justify-center rounded-md border border-border bg-accent text-nite-brand-accent transition-colors duration-nite-micro group-hover:border-nite-brand-accent/40 group-hover:bg-nite-brand-accent/10">
+            <span className="inline-flex size-10 items-center justify-center rounded-md border border-border bg-accent text-nite-brand-accent shadow-[0_0_0_4px_rgb(56_189_248/0.04)] transition-colors duration-nite-micro group-hover:border-nite-brand-accent/40 group-hover:bg-nite-brand-accent/10">
               <Icon className="size-5" aria-hidden="true" />
             </span>
 

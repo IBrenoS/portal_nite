@@ -16,6 +16,10 @@
     "nextStep": "Validar projetos e evidências públicas antes de publicar entregáveis reais.",
     "coverImage": "/images/projetos/programacao-lab-card.png",
     "alt": "Bancada tecnológica com telas de código, notebook e iluminação azul em ambiente de desenvolvimento.",
+    "illustration": {
+      "src": "/images/projetos/ilustracao-software-aplicado.webp",
+      "alt": "Ilustração editorial da frente de software aplicado com blocos abstratos e linhas tecnológicas."
+    },
     "featured": true,
     "contentNotice": "Conteúdo em estruturação editorial; não representa um projeto ativo validado.",
     "technologies": ["Next.js", "TypeScript", "UI responsiva"],
@@ -59,6 +63,10 @@
     "nextStep": "Organizar registros, oficinas e protótipos que possam ser publicados com contexto validado.",
     "coverImage": "/images/projetos/robotica-prototipo-card.png",
     "alt": "Protótipo de robótica sobre bancada de laboratório com componentes eletrônicos e iluminação azul.",
+    "illustration": {
+      "src": "/images/projetos/ilustracao-robotica-educacional.webp",
+      "alt": "Ilustração editorial da frente de robótica educacional com formas abstratas de sensores e prototipagem."
+    },
     "featured": true,
     "contentNotice": "Conteúdo em estruturação editorial; não representa um projeto ativo validado.",
     "technologies": ["Arduino", "Sensores", "Prototipagem"],
@@ -102,6 +110,10 @@
     "nextStep": "Definir casos de uso e evidências públicas antes de publicar análises ou protótipos reais.",
     "coverImage": "/images/projetos/dados-ia-card.png",
     "alt": "Painéis de dados abstratos em laboratório tecnológico escuro com iluminação azul.",
+    "illustration": {
+      "src": "/images/projetos/ilustracao-dados-e-ia.webp",
+      "alt": "Ilustração editorial da frente de dados e IA com nós abstratos e barras de visualização."
+    },
     "featured": true,
     "contentNotice": "Conteúdo em estruturação editorial; não representa um projeto ativo validado.",
     "technologies": ["Python", "Análise de dados", "IA aplicada"],

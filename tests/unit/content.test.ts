@@ -71,6 +71,22 @@ describe("conteudo estruturado", () => {
         (project) => project.currentPhase === "Mapeamento da frente",
       ),
     ).toBe(true);
+    expect(projects.map((project) => project.illustration?.src)).toEqual([
+      "/images/projetos/ilustracao-software-aplicado.webp",
+      "/images/projetos/ilustracao-robotica-educacional.webp",
+      "/images/projetos/ilustracao-dados-e-ia.webp",
+    ]);
+    expect(
+      projects.every((project) => {
+        const illustration = project.illustration;
+
+        return Boolean(
+          illustration &&
+            illustration.alt.includes("Ilustração editorial") &&
+            illustration.src !== project.coverImage,
+        );
+      }),
+    ).toBe(true);
     expect(projects.every((project) => project.nextStep.length > 12)).toBe(
       true,
     );

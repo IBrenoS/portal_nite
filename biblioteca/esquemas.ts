@@ -212,6 +212,11 @@ export const projectSchema = z.object({
     .describe("Proxima acao honesta prevista para a frente ou projeto."),
   coverImage: z.string().min(1).describe("Imagem principal do projeto."),
   alt: z.string().min(12).describe("Texto alternativo da imagem principal."),
+  illustration: imageSchema
+    .optional()
+    .describe(
+      "Ilustração editorial neutra para frentes ainda sem evidência pública validada.",
+    ),
   featured: z
     .boolean()
     .default(true)
