@@ -1,17 +1,25 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  getIndexablePeople,
   getIndexableProjects,
+  getPeople,
+  getPersonBySlug,
+  getPersonSlugs,
   getProjectBySlug,
   getProjects,
   getProjectSlugs,
+  getPublicPeople,
   getTimelineEvents,
 } from "@/biblioteca/conteudo";
 import {
+  peopleCollectionSchema,
+  personContentStateValues,
   projectCollectionSchema,
   projectContentStateValues,
   projectStatusValues,
   timelineCollectionSchema,
+  type Person,
 } from "@/biblioteca/esquemas";
 
 describe("conteudo estruturado", () => {
@@ -105,9 +113,81 @@ describe("conteudo estruturado", () => {
     expect(getIndexableProjects()).toEqual([]);
   });
 
+  it("carrega colecao de pessoas autorizadas e indexaveis", () => {
+    expect(personContentStateValues).toEqual(["real", "em-estruturacao"]);
+    expect(getPeople().map((person) => person.slug)).toEqual([
+      "breno-cerqueira",
+    ]);
+    expect(getPersonSlugs()).toEqual([{ slug: "breno-cerqueira" }]);
+    expect(getPersonBySlug("breno-cerqueira")).toMatchObject({
+      public: true,
+      authorized: true,
+      contentState: "real",
+    });
+    expect(getPersonBySlug("ana-silva")).toBeUndefined();
+    expect(getPublicPeople().map((person) => person.slug)).toEqual([
+      "breno-cerqueira",
+    ]);
+    expect(getIndexablePeople().map((person) => person.slug)).toEqual([
+      "breno-cerqueira",
+    ]);
+  });
+
+  it("filtra pessoas publicas e indexaveis somente quando ha autorizacao", () => {
+    const publicPerson = {
+      slug: "ana-silva",
+      name: "Ana Silva",
+      role: "Coordenadora de inovacao",
+      location: "Salvador, BA",
+      summary:
+        "Perfil autorizado para validar a exibicao publica da pagina de pessoas.",
+      public: true,
+      authorized: true,
+      contentState: "real",
+      initials: "AS",
+      interests: ["Pesquisa aplicada"],
+      clubs: ["Leitura"],
+      links: [],
+      entries: [],
+    } satisfies Person;
+    const privatePerson = {
+      ...publicPerson,
+      slug: "pessoa-interna",
+      name: "Pessoa Interna",
+      public: false,
+    } satisfies Person;
+    const unauthorizedPerson = {
+      ...publicPerson,
+      slug: "pessoa-sem-autorizacao",
+      name: "Pessoa Sem Autorizacao",
+      authorized: false,
+    } satisfies Person;
+    const draftPerson = {
+      ...publicPerson,
+      slug: "pessoa-em-estruturacao",
+      name: "Pessoa Em Estruturacao",
+      contentState: "em-estruturacao",
+    } satisfies Person;
+    const people = [
+      publicPerson,
+      privatePerson,
+      unauthorizedPerson,
+      draftPerson,
+    ];
+
+    expect(getPublicPeople(people)).toEqual([publicPerson, draftPerson]);
+    expect(getIndexablePeople(people)).toEqual([publicPerson]);
+  });
+
   it("falha explicitamente quando projeto nao cumpre schema", () => {
     expect(() =>
       projectCollectionSchema.parse([{ slug: "Slug Invalido" }]),
+    ).toThrow();
+  });
+
+  it("falha explicitamente quando pessoa nao cumpre schema", () => {
+    expect(() =>
+      peopleCollectionSchema.parse([{ slug: "Nome Invalido" }]),
     ).toThrow();
   });
 

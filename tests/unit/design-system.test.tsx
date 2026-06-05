@@ -150,6 +150,7 @@ describe("design system base", () => {
         <Button variant="ghost" size="lg">
           Discreto
         </Button>
+        <Button variant="quiet">Busca discreta</Button>
         <Button variant="outline">Contorno</Button>
         <Button variant="link">Link visual</Button>
       </>,
@@ -164,6 +165,9 @@ describe("design system base", () => {
     expect(
       screen.getByRole("button", { name: "Discreto" }),
     ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Busca discreta" })).toHaveClass(
+      "text-nite-text-secondary",
+    );
     expect(
       screen.getByRole("button", { name: "Contorno" }),
     ).toBeInTheDocument();

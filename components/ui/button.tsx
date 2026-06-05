@@ -11,6 +11,8 @@ const buttonVariants = cva(
         primary: "nite-glass-action",
         outline:
           "border-nite-border-soft bg-transparent text-nite-text-primary hover:bg-nite-surface-subtle hover:text-nite-text-primary aria-expanded:bg-nite-surface-subtle aria-expanded:text-nite-text-primary",
+        quiet:
+          "border-nite-border-soft bg-transparent text-nite-text-secondary hover:border-nite-border-hover hover:bg-nite-surface-subtle hover:text-nite-text-primary aria-expanded:border-nite-border-hover aria-expanded:bg-nite-surface-subtle aria-expanded:text-nite-text-primary",
         secondary:
           "border-nite-border-soft bg-nite-surface text-nite-text-primary hover:bg-nite-surface-focus aria-expanded:bg-nite-surface-focus aria-expanded:text-nite-text-primary",
         ghost:

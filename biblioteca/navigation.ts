@@ -71,7 +71,7 @@ const headerNavigationGroups: SiteNavigationGroup[] = [
         status: "mvp",
       },
       { label: "Registros", href: "/atualizacoes", status: "mvp" },
-      { label: "Bastidores", href: "/atualizacoes", status: "mvp" },
+      { label: "Pessoas", href: "/pessoas", status: "mvp" },
     ],
   },
   {

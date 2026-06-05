@@ -51,8 +51,15 @@ describe("OpportunitiesPage", () => {
       document.querySelector(
         "[data-component='opportunity-interest-form-preview']",
       ),
-    ).toHaveAttribute("data-status", "inactive");
-    expect(main.getByText("Formulário em preparação")).toBeInTheDocument();
+    ).not.toBeInTheDocument();
+    expect(
+      main.queryByText("Formulário em preparação"),
+    ).not.toBeInTheDocument();
+    expect(
+      main.queryByRole("heading", {
+        name: "Estrutura futura do formulário",
+      }),
+    ).not.toBeInTheDocument();
     expect(
       main.getByRole("heading", {
         level: 3,
@@ -113,11 +120,11 @@ describe("OpportunitiesPage", () => {
       ),
     ).toBeInTheDocument();
     expect(
-      main.getByText(
+      main.queryByText(
         "Este bloco antecipa os campos esperados, mas o formulário ainda não está ativo.",
         { exact: false },
       ),
-    ).toBeInTheDocument();
+    ).not.toBeInTheDocument();
     for (const futureField of [
       "Nome completo",
       "E-mail institucional",
@@ -126,7 +133,7 @@ describe("OpportunitiesPage", () => {
       "Mensagem ou objetivo de participação",
       "Currículo",
     ]) {
-      expect(main.getByText(futureField)).toBeInTheDocument();
+      expect(main.queryByText(futureField)).not.toBeInTheDocument();
     }
     expect(
       main.getByText(
