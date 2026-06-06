@@ -35,9 +35,15 @@ describe("OpportunitiesPage", () => {
         name: "Faça parte do NITE",
       }),
     ).toHaveClass("nite-gradient-text");
-    expect(main.getByRole("link", { name: "Ver oportunidades" })).toHaveClass(
-      "nite-glass-action",
-    );
+    const openPositionsLink = main.getByRole("link", {
+      name: "Ver oportunidades",
+    });
+
+    expect(openPositionsLink).toHaveClass("nite-glass-action");
+    expect(openPositionsLink).toHaveAttribute("href", "#open-positions");
+    expect(
+      main.getByRole("link", { name: /Processos\s+Como participar/i }),
+    ).toHaveAttribute("href", "/oportunidades/como-participar");
     expect(banner).toHaveAttribute("data-slot", "card");
     expect(banner).toHaveAttribute("data-status", "closed");
     const status = document.querySelector("[data-slot='opportunity-status']");
