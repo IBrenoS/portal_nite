@@ -64,7 +64,7 @@ describe("HomePage", () => {
       "!px-0",
     );
     expect(heroSecondaryCta).not.toHaveClass("border-nite-border-soft");
-    expect(heroCtaGroup).toHaveClass("gap-4");
+    expect(heroCtaGroup).toHaveClass("gap-7");
     expect(heroCtaGroup).not.toHaveClass("gap-3");
 
     for (const forbidden of [
