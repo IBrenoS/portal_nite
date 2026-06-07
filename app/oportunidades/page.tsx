@@ -228,7 +228,10 @@ export default function OpportunitiesPage() {
             size="xl"
             className="grid max-w-[1024px] gap-8 lg:grid-cols-2 lg:px-0"
           >
-            <a href="#open-positions" className={niteCardFrame}>
+            <Link
+              href="/oportunidades/como-participar"
+              className={niteCardFrame}
+            >
               <h2 className={niteCardTitle}>Processos</h2>
               <p className={niteCardSubtitle}>Como participar</p>
               <div
@@ -239,7 +242,7 @@ export default function OpportunitiesPage() {
               >
                 <NiteSymbol className="h-auto w-40 text-nite-brand-accent" />
               </div>
-            </a>
+            </Link>
 
             <Link href="/projetos" className={niteCardFrame}>
               <h2 className={niteCardTitle}>Projetos</h2>
@@ -268,9 +271,7 @@ export default function OpportunitiesPage() {
               <p id="areas-nite" className={cn("text-sm", niteSupportText)}>
                 Frentes acompanhadas pelo portal
               </p>
-              <p
-                className={cn(niteSupportText, "max-w-2xl text-sm leading-7")}
-              >
+              <p className={cn(niteSupportText, "max-w-2xl text-sm leading-7")}>
                 Elas indicam possibilidades de atuação do núcleo. Elas não
                 representam vagas abertas sem confirmação.
               </p>
@@ -434,9 +435,7 @@ export default function OpportunitiesPage() {
                   <h2 className="mt-8 font-heading text-xl font-normal text-nite-text-primary">
                     {note.title}
                   </h2>
-                  <p
-                    className={cn(niteSupportText, "mt-3 text-sm leading-7")}
-                  >
+                  <p className={cn(niteSupportText, "mt-3 text-sm leading-7")}>
                     {note.text}
                   </p>
                 </article>
