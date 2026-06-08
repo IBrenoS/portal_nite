@@ -11,7 +11,6 @@ import { Container } from "@/components/layout/container";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { PremiumHeroIcon } from "@/components/sections/premium-hero-icon";
-import { SyncKeyStage } from "@/components/sections/sync-key-stage";
 import { cn } from "@/lib/utils";
 
 const pageTitle = "Como participar | Oportunidades";
@@ -202,7 +201,11 @@ export default function HowToParticipatePage() {
                 Entrar no NITE não é escolher um rótulo. É encontrar sincronia
                 entre interesse, repertório, ritmo e contexto de projeto.
               </p>
-              <SyncKeyStage />
+              <div
+                data-component="readiness-visual-gap"
+                aria-hidden="true"
+                className="mt-2 h-[25rem] sm:h-[32rem] lg:h-[40rem]"
+              />
             </div>
 
             <div className="mx-auto mt-12 grid max-w-5xl gap-0 sm:mt-16">

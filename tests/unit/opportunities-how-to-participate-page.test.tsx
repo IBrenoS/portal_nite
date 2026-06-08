@@ -228,7 +228,7 @@ describe("OpportunitiesHowToParticipatePage", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("mantem o palco SYNC como transicao visual antes dos principios", () => {
+  it("mantem uma area visual vazia antes dos principios", () => {
     render(<HowToParticipatePage />);
 
     expect(
@@ -247,55 +247,37 @@ describe("OpportunitiesHowToParticipatePage", () => {
       document.querySelectorAll("[data-component='process-path-dot']"),
     ).toHaveLength(0);
 
-    const syncStage = document.querySelector("[data-component='sync-key-stage']");
-
-    expect(document.querySelector("[data-webgl-intent]")).toHaveAttribute(
-      "data-webgl-intent",
-      "resend-inspired-sync-key-scene",
+    const visualGap = document.querySelector(
+      "[data-component='readiness-visual-gap']",
     );
-    expect(
-      document.querySelector("[data-component='sync-key-webgl-canvas']"),
-    ).toBeInTheDocument();
-    expect(
-      document.querySelector("[data-component='sync-key-static-fallback']"),
-    ).toBeInTheDocument();
+    const removedDataPrefix = `data-${"bl"}${"ender"}`;
+    const removedMarkerSelector = `[data-${"sync"}-${"key"}]`;
+
     expect(
       document.querySelector("[data-component='process-object-visual']"),
     ).not.toBeInTheDocument();
-    expect(
-      syncStage,
-    ).toHaveClass("mt-8", "h-[22rem]", "lg:h-[34rem]");
-    expect(syncStage).toHaveAttribute("aria-hidden", "true");
-    expect(syncStage).toHaveAttribute("data-asset-source", "blender-glb");
-    expect(syncStage).toHaveAttribute("data-orbit-control", "free-360");
-    expect(syncStage).toHaveAttribute("data-pointer-cursor", "default");
-    expect(syncStage).not.toHaveAttribute("data-interaction-boundary");
-    expect(
-      syncStage,
-    ).toHaveAttribute(
-      "data-blender-asset",
-      "/models/oportunidades/sync-key-stage-blender.glb",
+    expect(visualGap).toBeInTheDocument();
+    expect(visualGap).toHaveClass(
+      "mt-2",
+      "h-[25rem]",
+      "sm:h-[32rem]",
+      "lg:h-[40rem]",
     );
+    expect(visualGap).toHaveAttribute("aria-hidden", "true");
+    expect(visualGap).toBeEmptyDOMElement();
     expect(
-      document.querySelector("[data-component='sync-key-mobile-poster']"),
-    ).toHaveAttribute(
-      "src",
-      expect.stringContaining("sync-key-stage-poster-blender.png"),
-    );
-    expect(
-      document.querySelector("[data-component='sync-key-interaction-band']"),
+      document.querySelector("[data-webgl-intent]"),
     ).not.toBeInTheDocument();
+    expect(document.querySelector("canvas")).not.toBeInTheDocument();
     expect(
-      document.querySelector("[data-component='sync-key-interaction-line']"),
-    ).not.toBeInTheDocument();
-    expect(
-      Array.from(syncStage!.children).filter(
-        (child) => child.tagName.toLowerCase() === "div",
+      Array.from(document.querySelectorAll("*")).some((element) =>
+        Array.from(element.attributes).some((attribute) =>
+          attribute.name.startsWith(removedDataPrefix),
+        ),
       ),
-    ).toHaveLength(1);
-    expect(
-      document.querySelector("[data-component='sync-key-webgl-canvas']"),
-    ).toHaveClass("cursor-default");
+    ).toBe(false);
+    expect(document.querySelectorAll(removedMarkerSelector)).toHaveLength(0);
+    expect(document.querySelector("img[src*='stage']")).not.toBeInTheDocument();
     expect(
       screen.queryByRole("list", { name: "Etapas de aproximação ao projeto" }),
     ).not.toBeInTheDocument();
@@ -303,23 +285,6 @@ describe("OpportunitiesHowToParticipatePage", () => {
     const firstArticle = screen.getAllByRole("article")[0];
 
     expect(firstArticle.parentElement).toHaveClass("mt-12", "sm:mt-16");
-
-    const keys = Array.from(document.querySelectorAll("[data-sync-key]")).map(
-      (element) => element.textContent,
-    );
-
-    expect(keys).toEqual(["S", "Y", "N", "C"]);
-
-    const motionProfiles = Array.from(
-      document.querySelectorAll("[data-sync-motion-profile]"),
-    ).map((element) => element.getAttribute("data-sync-motion-profile"));
-
-    expect(motionProfiles).toEqual([
-      "heavy-drift",
-      "loose-tumble",
-      "steady-hover",
-      "deep-orbit",
-    ]);
   });
 
   it("declara metadata e breadcrumb da rota dedicada", () => {
