@@ -8,6 +8,7 @@ Aceito
 
 - 2026-05-14: Aprovada pelo gestor do projeto para liberar motion controlado no Header final do MVP, incluindo mega menu desktop e menu mobile em camadas.
 - 2026-05-27: Auditoria reversa registrou que a Living Timeline atual usa GSAP `ScrollTrigger` para protagonismo visual por scroll, exigindo documentacao explicita de reduced motion, performance e ausencia de scroll hijacking.
+- 2026-06-09: A logo do Hero mantem a introducao cinematica inicial e passa a usar um loop recorrente de eletricidade no cerebro no pos-intro, substituindo o antigo pulso discreto.
 
 ## Contexto
 

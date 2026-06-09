@@ -59,15 +59,19 @@ type NiteLogoAnimationState = NiteLogoTargets & {
   textPeakMetalGlow: string;
   textPremiumGlow: string;
   textShimmerGlow: string;
-  bulbIdleGlow: string;
-  bulbIdlePulseGlow: string;
-  brainIdleGlow: string;
-  brainIdlePulseGlow: string;
-  idleArcAfterglow: string;
-  idleArcFlashGlow: string;
-  idleSparkAfterglow: string;
-  idleSparkFlashGlow: string;
 };
+
+type BrainElectricityLoopTargetSource = Pick<
+  NiteLogoAnimationState,
+  | "isCompactViewport"
+  | "energyRoutePrimaryPaths"
+  | "energyRouteSecondaryPaths"
+  | "energyRouteMicroPaths"
+  | "electricArcJumpPaths"
+  | "electricArcBranchPaths"
+  | "electricArcMicroPaths"
+  | "sparkHeads"
+>;
 
 const MAIN_RISE_IGNITION_ORDER = [
   "energy-main-rise-bulb-to-brain-primary",
@@ -82,8 +86,8 @@ const TEXT_ASCENSION_DECAY_AT = 2.68;
 const TEXT_SHIMMER_FADE_AT = 2.9;
 const IDLE_VIEWPORT_THRESHOLD = 0.12;
 const SCROLL_SETTLE_DELAY_MS = 220;
-const SIGNATURE_PULSE_MIN_DELAY_MS = 5_000;
-const SIGNATURE_PULSE_MAX_DELAY_MS = 8_000;
+const BRAIN_ELECTRICITY_LOOP_MIN_DELAY_MS = 4_000;
+const BRAIN_ELECTRICITY_LOOP_MAX_DELAY_MS = 7_000;
 const REDUCED_MOTION_TEXT_GLOW =
   "brightness(1.03) drop-shadow(0 0 6px rgba(125, 249, 255, 0.1))";
 
@@ -97,15 +101,16 @@ const clearLifecycleDataset = (rootElement: HTMLElement) => {
   delete rootElement.dataset.niteVisibility;
   delete rootElement.dataset.niteIntro;
   delete rootElement.dataset.niteIdle;
-  delete rootElement.dataset.nitePulse;
+  delete rootElement.dataset.niteBrainLoop;
   delete rootElement.dataset.niteScroll;
 };
 
-const getSignaturePulseDelayMs = () =>
+const getBrainElectricityLoopDelayMs = () =>
   Math.round(
-    SIGNATURE_PULSE_MIN_DELAY_MS +
+    BRAIN_ELECTRICITY_LOOP_MIN_DELAY_MS +
       Math.random() *
-        (SIGNATURE_PULSE_MAX_DELAY_MS - SIGNATURE_PULSE_MIN_DELAY_MS),
+        (BRAIN_ELECTRICITY_LOOP_MAX_DELAY_MS -
+          BRAIN_ELECTRICITY_LOOP_MIN_DELAY_MS),
   );
 
 const getScopedTargets = (q: ScopedSelector): NiteLogoTargets => ({
@@ -253,30 +258,6 @@ const createAnimationState = (
     textShimmerGlow: isCompactViewport
       ? "brightness(1.22) drop-shadow(0 0 5px rgba(239, 255, 255, 0.2)) drop-shadow(0 0 10px rgba(125, 249, 255, 0.18))"
       : "brightness(1.34) drop-shadow(0 0 7px rgba(239, 255, 255, 0.26)) drop-shadow(0 0 14px rgba(125, 249, 255, 0.22))",
-    bulbIdleGlow: isCompactViewport
-      ? "brightness(1.08) drop-shadow(0 0 5px rgba(125, 249, 255, 0.14))"
-      : "brightness(1.1) drop-shadow(0 0 7px rgba(125, 249, 255, 0.16))",
-    bulbIdlePulseGlow: isCompactViewport
-      ? "brightness(1.14) drop-shadow(0 0 7px rgba(125, 249, 255, 0.18))"
-      : "brightness(1.16) drop-shadow(0 0 10px rgba(125, 249, 255, 0.2))",
-    brainIdleGlow: isCompactViewport
-      ? "brightness(1.025) drop-shadow(0 0 4px rgba(125, 249, 255, 0.07))"
-      : "brightness(1.035) drop-shadow(0 0 6px rgba(125, 249, 255, 0.09))",
-    brainIdlePulseGlow: isCompactViewport
-      ? "brightness(1.055) drop-shadow(0 0 6px rgba(125, 249, 255, 0.1))"
-      : "brightness(1.07) drop-shadow(0 0 8px rgba(125, 249, 255, 0.12))",
-    idleArcAfterglow: isCompactViewport
-      ? "brightness(1.06) drop-shadow(0 0 3px rgba(125, 249, 255, 0.08))"
-      : "brightness(1.08) drop-shadow(0 0 4px rgba(125, 249, 255, 0.1))",
-    idleArcFlashGlow: isCompactViewport
-      ? "brightness(1.35) drop-shadow(0 0 5px rgba(239, 255, 255, 0.2)) drop-shadow(0 0 8px rgba(125, 249, 255, 0.18))"
-      : "brightness(1.48) drop-shadow(0 0 6px rgba(239, 255, 255, 0.24)) drop-shadow(0 0 11px rgba(125, 249, 255, 0.22))",
-    idleSparkAfterglow: isCompactViewport
-      ? "brightness(1.04) drop-shadow(0 0 3px rgba(125, 249, 255, 0.07))"
-      : "brightness(1.06) drop-shadow(0 0 4px rgba(125, 249, 255, 0.09))",
-    idleSparkFlashGlow: isCompactViewport
-      ? "brightness(1.28) drop-shadow(0 0 5px rgba(239, 255, 255, 0.18)) drop-shadow(0 0 8px rgba(125, 249, 255, 0.18))"
-      : "brightness(1.38) drop-shadow(0 0 6px rgba(239, 255, 255, 0.22)) drop-shadow(0 0 10px rgba(125, 249, 255, 0.2))",
   };
 };
 
@@ -315,6 +296,48 @@ const pickTargets = <Target>(targets: Target[], indexes: number[]) =>
 
     return target ? [target] : [];
   });
+
+export const getBrainElectricityLoopTargetSets = (
+  targets: BrainElectricityLoopTargetSource,
+) => {
+  const primaryRoutePaths = targets.energyRoutePrimaryPaths;
+  const secondaryRoutePaths = targets.isCompactViewport
+    ? targets.energyRouteSecondaryPaths.slice(0, MOBILE_SECONDARY_ROUTE_LIMIT)
+    : targets.energyRouteSecondaryPaths;
+  const microRoutePaths = targets.isCompactViewport
+    ? targets.energyRouteMicroPaths.slice(0, MOBILE_MICRO_ROUTE_LIMIT)
+    : targets.energyRouteMicroPaths;
+  const jumpArcPaths = targets.isCompactViewport
+    ? targets.electricArcJumpPaths.slice(0, 1)
+    : targets.electricArcJumpPaths;
+  const branchArcPaths = targets.isCompactViewport
+    ? targets.electricArcBranchPaths.slice(0, 1)
+    : targets.electricArcBranchPaths;
+  const microArcPaths = targets.isCompactViewport
+    ? targets.electricArcMicroPaths.slice(0, 1)
+    : targets.electricArcMicroPaths;
+  const sparkHeads = targets.isCompactViewport
+    ? pickTargets(targets.sparkHeads, [...MOBILE_INTRO_SPARK_INDEXES])
+    : targets.sparkHeads;
+  const routePaths = [
+    ...primaryRoutePaths,
+    ...secondaryRoutePaths,
+    ...microRoutePaths,
+  ];
+  const arcPaths = [...jumpArcPaths, ...branchArcPaths, ...microArcPaths];
+
+  return {
+    primaryRoutePaths,
+    secondaryRoutePaths,
+    microRoutePaths,
+    routePaths,
+    jumpArcPaths,
+    branchArcPaths,
+    microArcPaths,
+    arcPaths,
+    sparkHeads,
+  };
+};
 
 const setupReducedMotionState = (targets: NiteLogoTargets) => {
   const electricPathTargets = [
@@ -428,6 +451,28 @@ const setupPostIntroRestState = (state: NiteLogoAnimationState) => {
     transformOrigin: "50% 50%",
   });
   gsap.set(state.textShimmerPaths, { opacity: 0, strokeDashoffset: 0 });
+};
+
+const resetBrainElectricityLoopTargets = (
+  state: NiteLogoAnimationState,
+  targets: ReturnType<typeof getBrainElectricityLoopTargetSets>,
+) => {
+  setPathDashToHidden([...targets.routePaths, ...targets.arcPaths]);
+  gsap.set(targets.routePaths, {
+    opacity: 0,
+    filter: state.routeAfterglow,
+  });
+  gsap.set(targets.arcPaths, {
+    opacity: 0,
+    filter: state.arcAfterglow,
+  });
+  gsap.set(targets.sparkHeads, {
+    opacity: 0,
+    scale: 0,
+    filter: state.sparkAfterglow,
+    transformBox: "fill-box",
+    transformOrigin: "50% 50%",
+  });
 };
 
 const buildIntroTimeline = (state: NiteLogoAnimationState) => {
@@ -854,179 +899,216 @@ const buildIntroTimeline = (state: NiteLogoAnimationState) => {
   return introTimeline;
 };
 
-const buildSignaturePulseTimeline = (state: NiteLogoAnimationState) => {
-  const pulseRoutePaths = state.energyRoutePrimaryPaths.slice(
-    0,
-    state.isCompactViewport ? 1 : 2,
-  );
-  const pulseArcSetA = [
-    ...state.electricArcJumpPaths.slice(0, 1),
-    ...state.electricArcBranchPaths.slice(0, 1),
-  ].slice(0, 2);
-  const pulseArcSetB = [
-    ...state.electricArcMicroPaths.slice(0, 1),
-    ...state.electricArcBranchPaths.slice(1, 2),
-  ].slice(0, 2);
-  const pulseSparkSetA = state.isCompactViewport
-    ? pickTargets(state.sparkHeads, [1])
-    : pickTargets(state.sparkHeads, [1, 6]);
-  const pulseSparkSetB = state.isCompactViewport
-    ? pickTargets(state.sparkHeads, [10])
-    : pickTargets(state.sparkHeads, [3, 12]);
-  const signaturePulseTimeline = gsap.timeline({
+const buildBrainElectricityLoopTimeline = (state: NiteLogoAnimationState) => {
+  const loopTargets = getBrainElectricityLoopTargetSets(state);
+  const brainElectricityLoopTimeline = gsap.timeline({
     paused: true,
     defaults: { ease: "sine.inOut" },
   });
 
-  signaturePulseTimeline
-    .call(() => setupPostIntroRestState(state), undefined, 0)
-    .to(
-      state.bulb,
-      {
-        filter: state.bulbIgnitionGlow,
-        scale: state.isCompactViewport ? 1.006 : 1.01,
-        duration: 0.16,
-        repeat: 1,
-        yoyo: true,
-        ease: "sine.inOut",
-      },
-      0.06,
-    )
-    .to(
-      state.brain,
-      {
-        filter: state.brainIdlePulseGlow,
-        duration: 0.32,
-        repeat: 1,
-        yoyo: true,
-        ease: "sine.inOut",
-      },
-      0.1,
-    );
+  brainElectricityLoopTimeline.call(
+    () => {
+      setupPostIntroRestState(state);
+      resetBrainElectricityLoopTargets(state, loopTargets);
+    },
+    undefined,
+    0,
+  );
 
-  if (pulseRoutePaths.length > 0) {
-    signaturePulseTimeline
-      .set(
-        pulseRoutePaths,
-        {
-          opacity: 0,
-          strokeDasharray: 1200,
-          strokeDashoffset: 1200,
-          filter: state.routePrimaryGlow,
+  if (loopTargets.primaryRoutePaths.length > 0) {
+    brainElectricityLoopTimeline.to(
+      loopTargets.primaryRoutePaths,
+      {
+        opacity: state.isCompactViewport ? 0.84 : 0.92,
+        strokeDashoffset: 0,
+        filter: state.routePrimaryGlow,
+        duration: 0.46,
+        stagger: {
+          each: state.isCompactViewport ? 0.035 : 0.045,
+          from: "start",
         },
-        0.08,
-      )
+        ease: "power4.out",
+      },
+      0.05,
+    );
+  }
+
+  if (loopTargets.secondaryRoutePaths.length > 0) {
+    brainElectricityLoopTimeline.to(
+      loopTargets.secondaryRoutePaths,
+      {
+        opacity: state.isCompactViewport ? 0.62 : 0.78,
+        strokeDashoffset: 0,
+        filter: state.routeSecondaryGlow,
+        duration: 0.38,
+        stagger: {
+          each: state.isCompactViewport ? 0.032 : 0.04,
+          from: "start",
+        },
+        ease: "power3.out",
+      },
+      0.22,
+    );
+  }
+
+  if (loopTargets.microRoutePaths.length > 0) {
+    brainElectricityLoopTimeline.to(
+      loopTargets.microRoutePaths,
+      {
+        opacity: state.isCompactViewport ? 0.48 : 0.64,
+        strokeDashoffset: 0,
+        filter: state.routeMicroGlow,
+        duration: 0.28,
+        stagger: {
+          each: state.isCompactViewport ? 0.024 : 0.028,
+          from: "start",
+        },
+        ease: "expo.out",
+      },
+      0.38,
+    );
+  }
+
+  brainElectricityLoopTimeline.to(
+    state.brain,
+    {
+      filter: state.brainStormGlow,
+      duration: 0.26,
+      ease: "power2.out",
+    },
+    0.42,
+  );
+
+  [
+    {
+      targets: loopTargets.jumpArcPaths,
+      position: 0.55,
+      opacity: state.isCompactViewport ? 0.72 : 0.88,
+      duration: 0.07,
+    },
+    {
+      targets: loopTargets.branchArcPaths,
+      position: 0.68,
+      opacity: state.isCompactViewport ? 0.66 : 0.82,
+      duration: 0.075,
+    },
+    {
+      targets: loopTargets.microArcPaths,
+      position: 0.82,
+      opacity: state.isCompactViewport ? 0.58 : 0.74,
+      duration: 0.06,
+    },
+  ].forEach(({ targets, position, opacity, duration }) => {
+    if (targets.length === 0) {
+      return;
+    }
+
+    brainElectricityLoopTimeline.to(
+      targets,
+      {
+        opacity,
+        strokeDashoffset: 0,
+        filter: state.arcFlashGlow,
+        duration,
+        repeat: 1,
+        yoyo: true,
+        stagger: {
+          each: state.isCompactViewport ? 0.05 : 0.06,
+          from: "start",
+        },
+        ease: "steps(2)",
+      },
+      position,
+    );
+  });
+
+  if (loopTargets.sparkHeads.length > 0) {
+    brainElectricityLoopTimeline
       .to(
-        pulseRoutePaths,
+        loopTargets.sparkHeads,
         {
-          opacity: 0.42,
-          strokeDashoffset: 0,
-          duration: 0.42,
+          opacity: state.isCompactViewport ? 0.72 : 0.88,
+          scale: state.isCompactViewport ? 0.78 : 0.9,
+          filter: state.sparkFlashGlow,
+          duration: 0.12,
           stagger: {
-            each: 0.06,
+            each: state.isCompactViewport ? 0.034 : 0.03,
             from: "start",
           },
-          ease: "power3.out",
+          ease: "expo.out",
         },
-        0.12,
+        0.9,
       )
       .to(
-        pulseRoutePaths,
+        loopTargets.sparkHeads,
         {
-          opacity: 0.2,
-          filter: state.routeAfterglow,
-          duration: 0.3,
-          ease: "sine.out",
+          opacity: state.isCompactViewport ? 0.13 : 0.16,
+          scale: state.isCompactViewport ? 0.46 : 0.52,
+          filter: state.sparkAfterglow,
+          duration: 0.34,
+          stagger: {
+            each: 0.016,
+            from: "end",
+          },
+          ease: "power2.out",
         },
-        0.72,
+        1.15,
       );
   }
 
-  if (pulseArcSetA.length > 0) {
-    signaturePulseTimeline.to(
-      pulseArcSetA,
+  if (loopTargets.routePaths.length > 0) {
+    brainElectricityLoopTimeline.to(
+      loopTargets.routePaths,
       {
-        opacity: 0.46,
-        filter: state.idleArcFlashGlow,
-        duration: 0.07,
-        repeat: 1,
-        yoyo: true,
+        opacity: 0.2,
+        strokeDashoffset: 0,
+        filter: state.routeAfterglow,
+        duration: 0.42,
         stagger: {
-          each: 0.08,
-          from: "start",
-        },
-        ease: "steps(2)",
-      },
-      0.24,
-    );
-  }
-
-  if (pulseSparkSetA.length > 0) {
-    signaturePulseTimeline.to(
-      pulseSparkSetA,
-      {
-        opacity: 0.42,
-        scale: state.isCompactViewport ? 0.66 : 0.72,
-        filter: state.idleSparkFlashGlow,
-        duration: 0.11,
-        repeat: 1,
-        yoyo: true,
-        stagger: {
-          each: 0.06,
-          from: "start",
-        },
-        ease: "expo.out",
-      },
-      0.34,
-    );
-  }
-
-  if (pulseArcSetB.length > 0) {
-    signaturePulseTimeline.to(
-      pulseArcSetB,
-      {
-        opacity: 0.38,
-        filter: state.idleArcFlashGlow,
-        duration: 0.065,
-        repeat: 1,
-        yoyo: true,
-        stagger: {
-          each: 0.1,
+          each: 0.012,
           from: "end",
         },
-        ease: "steps(2)",
+        ease: "sine.out",
       },
-      0.88,
+      1.25,
     );
   }
 
-  if (pulseSparkSetB.length > 0) {
-    signaturePulseTimeline.to(
-      pulseSparkSetB,
+  if (loopTargets.arcPaths.length > 0) {
+    brainElectricityLoopTimeline.to(
+      loopTargets.arcPaths,
       {
-        opacity: 0.34,
-        scale: state.isCompactViewport ? 0.6 : 0.66,
-        filter: state.idleSparkFlashGlow,
-        duration: 0.1,
-        repeat: 1,
-        yoyo: true,
+        opacity: 0.08,
+        strokeDashoffset: 0,
+        filter: state.arcAfterglow,
+        duration: 0.32,
         stagger: {
-          each: 0.08,
+          each: 0.014,
           from: "end",
         },
-        ease: "expo.out",
+        ease: "sine.out",
       },
-      1.0,
+      1.25,
     );
   }
 
-  signaturePulseTimeline.call(
-    () => setupPostIntroRestState(state),
-    undefined,
-    1.34,
-  );
+  brainElectricityLoopTimeline
+    .to(
+      state.brain,
+      {
+        filter: state.brainAfterglow,
+        duration: 0.32,
+        ease: "sine.out",
+      },
+      1.45,
+    )
+    .call(
+      () => setupPostIntroRestState(state),
+      undefined,
+      1.6,
+    );
 
-  return signaturePulseTimeline;
+  return brainElectricityLoopTimeline;
 };
 
 export function useNiteElectricAnimation(
@@ -1062,7 +1144,7 @@ export function useNiteElectricAnimation(
           : "visible";
         rootElement.dataset.niteIntro = "static";
         rootElement.dataset.niteIdle = "disabled";
-        rootElement.dataset.nitePulse = "disabled";
+        rootElement.dataset.niteBrainLoop = "disabled";
 
         return () => clearLifecycleDataset(rootElement);
       });
@@ -1072,13 +1154,14 @@ export function useNiteElectricAnimation(
 
         setupInitialState(state);
         const introTimeline = buildIntroTimeline(state);
-        const signaturePulseTimeline = buildSignaturePulseTimeline(state);
+        const brainElectricityLoopTimeline =
+          buildBrainElectricityLoopTimeline(state);
         let introComplete = false;
         let isLogoInViewport = true;
         let isScrollActive = false;
         let scrollResumeTimeout: number | null = null;
-        let signaturePulseTimeout: number | null = null;
-        let isSignaturePulseActive = false;
+        let brainElectricityLoopTimeout: number | null = null;
+        let isBrainElectricityLoopActive = false;
         let wasIntroPlayingBeforeHidden = false;
         let wasIntroPlayingBeforeScroll = false;
 
@@ -1100,9 +1183,9 @@ export function useNiteElectricAnimation(
             : canRunPostIntro()
               ? "running"
               : "paused";
-          rootElement.dataset.nitePulse = !introComplete
+          rootElement.dataset.niteBrainLoop = !introComplete
             ? "waiting"
-            : isSignaturePulseActive
+            : isBrainElectricityLoopActive
               ? "running"
               : canRunPostIntro()
                 ? "armed"
@@ -1122,41 +1205,41 @@ export function useNiteElectricAnimation(
           !document.hidden &&
           !isScrollActive;
 
-        const clearSignaturePulseTimeout = () => {
-          if (signaturePulseTimeout) {
-            window.clearTimeout(signaturePulseTimeout);
-            signaturePulseTimeout = null;
+        const clearBrainElectricityLoopTimeout = () => {
+          if (brainElectricityLoopTimeout) {
+            window.clearTimeout(brainElectricityLoopTimeout);
+            brainElectricityLoopTimeout = null;
           }
         };
 
-        const resetSignaturePulse = () => {
-          signaturePulseTimeline.pause(0);
-          isSignaturePulseActive = false;
+        const resetBrainElectricityLoop = () => {
+          brainElectricityLoopTimeline.pause(0);
+          isBrainElectricityLoopActive = false;
           setupPostIntroRestState(state);
           updateLifecycleDataset();
         };
 
-        const playSignaturePulse = () => {
+        const playBrainElectricityLoop = () => {
           if (!canRunPostIntro()) {
             updateLifecycleDataset();
             return;
           }
 
-          clearSignaturePulseTimeout();
-          signaturePulseTimeline.restart();
+          clearBrainElectricityLoopTimeout();
+          brainElectricityLoopTimeline.restart();
         };
 
-        const scheduleNextSignaturePulse = () => {
-          clearSignaturePulseTimeout();
+        const scheduleNextBrainElectricityLoop = () => {
+          clearBrainElectricityLoopTimeout();
 
           if (!canRunPostIntro()) {
             updateLifecycleDataset();
             return;
           }
 
-          signaturePulseTimeout = window.setTimeout(
-            playSignaturePulse,
-            getSignaturePulseDelayMs(),
+          brainElectricityLoopTimeout = window.setTimeout(
+            playBrainElectricityLoop,
+            getBrainElectricityLoopDelayMs(),
           );
           updateLifecycleDataset();
         };
@@ -1180,24 +1263,24 @@ export function useNiteElectricAnimation(
         };
 
         const pausePostIntro = () => {
-          clearSignaturePulseTimeout();
-          resetSignaturePulse();
+          clearBrainElectricityLoopTimeout();
+          resetBrainElectricityLoop();
         };
 
         const resumePostIntro = () => {
-          scheduleNextSignaturePulse();
+          scheduleNextBrainElectricityLoop();
         };
 
-        signaturePulseTimeline.eventCallback("onStart", () => {
-          isSignaturePulseActive = true;
+        brainElectricityLoopTimeline.eventCallback("onStart", () => {
+          isBrainElectricityLoopActive = true;
           updateLifecycleDataset();
         });
 
-        signaturePulseTimeline.eventCallback("onComplete", () => {
-          isSignaturePulseActive = false;
+        brainElectricityLoopTimeline.eventCallback("onComplete", () => {
+          isBrainElectricityLoopActive = false;
           setupPostIntroRestState(state);
           updateLifecycleDataset();
-          scheduleNextSignaturePulse();
+          scheduleNextBrainElectricityLoop();
         });
 
         const handleScrollActivity = () => {
@@ -1326,7 +1409,7 @@ export function useNiteElectricAnimation(
           if (scrollResumeTimeout) {
             window.clearTimeout(scrollResumeTimeout);
           }
-          clearSignaturePulseTimeout();
+          clearBrainElectricityLoopTimeout();
 
           viewportObserver?.disconnect();
           document.removeEventListener(
@@ -1338,7 +1421,7 @@ export function useNiteElectricAnimation(
           window.removeEventListener("scroll", handleScrollActivity);
           clearLifecycleDataset(rootElement);
           introTimeline.kill();
-          signaturePulseTimeline.kill();
+          brainElectricityLoopTimeline.kill();
         };
       });
 
