@@ -8,7 +8,7 @@ afterEach(() => {
 });
 
 describe("OpportunitiesPage", () => {
-  it("renderiza estado sem oportunidades, CTA seguro e nenhum formulario real", () => {
+  it("renderiza estado sem oportunidades, caminhos seguros e nenhum formulario real", () => {
     render(<OpportunitiesPage />);
 
     expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
@@ -34,13 +34,10 @@ describe("OpportunitiesPage", () => {
         level: 1,
         name: "Faça parte do NITE",
       }),
-    ).toHaveClass("nite-gradient-text");
-    const openPositionsLink = main.getByRole("link", {
-      name: "Ver oportunidades",
-    });
-
-    expect(openPositionsLink).toHaveClass("nite-glass-action");
-    expect(openPositionsLink).toHaveAttribute("href", "#open-positions");
+    ).not.toHaveClass("nite-gradient-text");
+    expect(
+      main.queryByRole("link", { name: "Ver estado atual" }),
+    ).not.toBeInTheDocument();
     expect(
       main.getByRole("link", { name: /Processos\s+Como participar/i }),
     ).toHaveAttribute("href", "/oportunidades/como-participar");
@@ -69,27 +66,22 @@ describe("OpportunitiesPage", () => {
     expect(
       main.getByRole("heading", {
         level: 3,
-        name: "No momento, não há oportunidades abertas.",
+        name: "Nenhum processo aberto agora.",
       }),
     ).toBeInTheDocument();
     expect(
       main.getByText(
-        "Quando houver processo seletivo, esta página será o canal principal para acompanhar orientações e manifestar interesse.",
+        "Quando uma oportunidade for publicada, você encontrará aqui a área, os requisitos e como participar.",
       ),
     ).toBeInTheDocument();
     expect(
-      main.getByText("O envio futuro não garante aprovação.", {
+      main.getByText("não garante aprovação", {
         exact: false,
       }),
     ).toBeInTheDocument();
     expect(
-      main.getByText("use e-mail institucional se aplicável", {
-        exact: false,
-      }),
-    ).toBeInTheDocument();
-    expect(
-      main.getByRole("link", { name: /Falar com o NITE/i }),
-    ).toHaveAttribute("href", "/contato");
+      main.queryByRole("link", { name: /Falar com o NITE/i }),
+    ).not.toBeInTheDocument();
 
     expect(document.querySelector("form")).not.toBeInTheDocument();
     expect(screen.queryByLabelText(/nome completo/i)).not.toBeInTheDocument();
@@ -102,27 +94,72 @@ describe("OpportunitiesPage", () => {
     );
   });
 
-  it("explica fluxo futuro sem publicar vagas, prazos ou automacoes", () => {
+  it("apresenta beneficios e vantagens sem publicar vagas, prazos ou automacoes", () => {
     render(<OpportunitiesPage />);
 
     const main = within(screen.getByRole("main"));
 
+    expect(main.queryAllByText(/\bfrentes?\b/i)).toHaveLength(0);
+    expect(
+      main.getByText(
+        "Descubra como participar do NITE, conheça os projetos e acompanhe a abertura de processos seletivos.",
+      ),
+    ).toBeInTheDocument();
     expect(
       main.getByRole("heading", {
         level: 2,
-        name: "Benefícios & garantias",
+        name: "O que fazemos no NITE",
+      }),
+    ).toBeInTheDocument();
+    expect(
+      main.queryByRole("heading", {
+        level: 3,
+        name: "Informação sem confusão",
+      }),
+    ).not.toBeInTheDocument();
+
+    expect(
+      main.getByRole("heading", {
+        level: 2,
+        name: "Benefícios e vantagens",
       }),
     ).toBeInTheDocument();
     expect(main.getAllByRole("listitem")).toHaveLength(17);
     expect(
-      main.getByRole("heading", {
-        level: 3,
-        name: "Estado público claro",
+      main.queryByRole("heading", {
+        level: 2,
+        name: "Como cuidamos do processo",
       }),
+    ).not.toBeInTheDocument();
+    for (const benefitTitle of [
+      "Horas curriculares",
+      "Projetos reais",
+      "Certificado de conclusão",
+      "Currículo",
+      "Prática guiada",
+      "Equipe",
+      "Integração",
+      "Autonomia",
+      "Rotina de projeto",
+    ]) {
+      expect(
+        main.getByRole("heading", {
+          level: 3,
+          name: benefitTitle,
+        }),
+      ).toBeInTheDocument();
+    }
+    expect(
+      main.getByText("Acumule horas conforme as regras do seu curso."),
     ).toBeInTheDocument();
     expect(
       main.getByText(
-        "O formulário integrado será exibido apenas se o processo estiver aberto e o canal técnico estiver definido.",
+        "Receba certificado após cumprir a carga horária do núcleo.",
+      ),
+    ).toBeInTheDocument();
+    expect(
+      main.getByText(
+        "Nenhum dado pessoal é solicitado enquanto não houver fluxo operacional aprovado.",
       ),
     ).toBeInTheDocument();
     expect(
@@ -137,13 +174,12 @@ describe("OpportunitiesPage", () => {
       "Curso ou vínculo com a universidade",
       "Área de interesse",
       "Mensagem ou objetivo de participação",
-      "Currículo",
     ]) {
       expect(main.queryByText(futureField)).not.toBeInTheDocument();
     }
     expect(
       main.getByText(
-        "Esta página não anuncia vagas, datas, prazos, responsáveis, métricas ou critérios de aprovação sem confirmação.",
+        "Nenhuma vaga, data ou critério é publicado sem confirmação institucional.",
       ),
     ).toBeInTheDocument();
 

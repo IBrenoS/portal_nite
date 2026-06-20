@@ -16,7 +16,7 @@ afterEach(() => {
 });
 
 describe("OpportunitiesHowToParticipatePage", () => {
-  it("renderiza a rota dedicada como pagina editorial sem CTA principal", () => {
+  it("renderiza a rota dedicada como pagina editorial com CTA final para oportunidades", () => {
     render(<HowToParticipatePage />);
 
     const mainElement = screen.getByRole("main");
@@ -43,6 +43,18 @@ describe("OpportunitiesHowToParticipatePage", () => {
     expect(
       main.getByRole("heading", { level: 2, name: "Sinais de prontidão" }),
     ).toBeInTheDocument();
+    expect(main.queryByText("Como ler os sinais")).not.toBeInTheDocument();
+    expect(
+      main.getByText(
+        "Entrar no NITE não é escolher um rótulo. É encontrar sincronia entre interesse, repertório, ritmo e contexto de projeto.",
+      ),
+    ).toHaveClass(
+      "text-base",
+      "md:text-[1.125rem]",
+      "md:leading-[1.5]",
+      "font-normal",
+      "text-balance",
+    );
     expect(
       main.queryByRole("heading", {
         level: 2,
@@ -51,7 +63,6 @@ describe("OpportunitiesHowToParticipatePage", () => {
     ).not.toBeInTheDocument();
     expect(main.queryByText("Como participar")).not.toBeInTheDocument();
 
-    expect(main.queryByRole("link")).not.toBeInTheDocument();
     expect(mainElement.querySelector("form")).not.toBeInTheDocument();
     expect(
       mainElement.querySelectorAll("input, textarea, select, button"),
@@ -180,20 +191,35 @@ describe("OpportunitiesHowToParticipatePage", () => {
     expect(heroSymbol?.style.getPropertyValue("--pointer-x")).toBe("159px");
   });
 
-  it("usa tokens do design system nas superficies visuais da pagina", () => {
+  it("mantem hero em tokens NITE e permite a paleta Resend na timeline", () => {
     render(<HowToParticipatePage />);
 
     const mainElement = screen.getByRole("main");
-    const serializedVisualContracts = Array.from(
-      mainElement.querySelectorAll<HTMLElement>("*"),
+    const hero = document.querySelector(
+      "[data-component='resend-inspired-hero']",
+    );
+    const timeline = document.querySelector(
+      "[data-component='readiness-resend-timeline']",
+    );
+    const heroVisualContracts = Array.from(
+      hero?.querySelectorAll<HTMLElement>("*") ?? [],
+    )
+      .map((element) => `${element.className} ${element.getAttribute("style")}`)
+      .join(" ");
+    const timelineVisualContracts = Array.from(
+      timeline?.querySelectorAll<HTMLElement>("*") ?? [],
     )
       .map((element) => `${element.className} ${element.getAttribute("style")}`)
       .join(" ");
 
-    expect(serializedVisualContracts).not.toMatch(
+    expect(mainElement).toHaveClass("bg-nite-background");
+    expect(heroVisualContracts).not.toMatch(
       /bg-black|border-white|text-white|from-white|via-zinc|to-white|sky-\d|#[0-9a-f]{3,8}|rgba?\(/i,
     );
-    expect(serializedVisualContracts).toContain("--nite-");
+    expect(timelineVisualContracts).toContain("border-[#212629]");
+    expect(timelineVisualContracts).toContain("bg-black");
+    expect(timelineVisualContracts).toContain("from-white/5");
+    expect(timelineVisualContracts).toContain("text-white");
   });
 
   it("mantem a linguagem aprovada e evita termos rejeitados no conteudo visivel", () => {
@@ -226,9 +252,52 @@ describe("OpportunitiesHowToParticipatePage", () => {
     expect(
       main.queryByText(/sem promessa|sem formulário|sem vaga/i),
     ).not.toBeInTheDocument();
+
+    const finalCta = document.querySelector(
+      "[data-component='readiness-final-cta']",
+    );
+    expect(finalCta).toBeInTheDocument();
+
+    const finalCtaScope = within(finalCta as HTMLElement);
+    expect(
+      finalCtaScope.getByRole("heading", {
+        level: 2,
+        name: "Leve seus sinais para oportunidades",
+      }),
+    ).toHaveClass(
+      "text-[3rem]",
+      "md:text-[3.5rem]",
+      "tracking-tighter",
+      "text-center",
+    );
+    expect(
+      finalCtaScope.getByText(
+        "Interesse, ritmo, registro e contexto já mostram por onde começar. Avance para oportunidades e encontre o ponto de entrada mais alinhado ao seu momento.",
+      ),
+    ).toHaveClass(
+      "text-base",
+      "md:text-[1.125rem]",
+      "md:leading-[1.5]",
+      "text-center",
+    );
+
+    const ctaMark = finalCta?.querySelector(
+      "[data-component='readiness-final-cta-mark']",
+    );
+    expect(ctaMark).toHaveAttribute("alt", "");
+    expect(ctaMark?.getAttribute("src")).toContain(
+      "/images/oportunidades/readiness-cta-mark.svg",
+    );
+    expect(ctaMark).toHaveClass("mb-8", "h-20", "w-20");
+
+    const opportunityLink = finalCtaScope.getByRole("link", {
+      name: "Ver oportunidades",
+    });
+    expect(opportunityLink).toHaveAttribute("href", "/oportunidades");
+    expect(opportunityLink).toHaveClass("h-12", "rounded-2xl");
   });
 
-  it("mantem uma area visual vazia antes dos principios", () => {
+  it("recria a anatomia vertical da timeline Inbound da Resend", () => {
     render(<HowToParticipatePage />);
 
     expect(
@@ -247,24 +316,154 @@ describe("OpportunitiesHowToParticipatePage", () => {
       document.querySelectorAll("[data-component='process-path-dot']"),
     ).toHaveLength(0);
 
-    const visualGap = document.querySelector(
-      "[data-component='readiness-visual-gap']",
-    );
     const removedDataPrefix = `data-${"bl"}${"ender"}`;
     const removedMarkerSelector = `[data-${"sync"}-${"key"}]`;
+    const readinessTimeline = document.querySelector(
+      "[data-component='readiness-resend-timeline']",
+    );
+    const rows = document.querySelectorAll(
+      "[data-component='readiness-resend-step-row']",
+    );
 
     expect(
       document.querySelector("[data-component='process-object-visual']"),
     ).not.toBeInTheDocument();
-    expect(visualGap).toBeInTheDocument();
-    expect(visualGap).toHaveClass(
-      "mt-2",
-      "h-[25rem]",
-      "sm:h-[32rem]",
-      "lg:h-[40rem]",
+    expect(
+      document.querySelector("[data-component='readiness-visual-gap']"),
+    ).not.toBeInTheDocument();
+    expect(readinessTimeline).toBeInTheDocument();
+    expect(readinessTimeline).toHaveAttribute(
+      "data-implementation-reference",
+      "resend-inbound-timeline",
     );
-    expect(visualGap).toHaveAttribute("aria-hidden", "true");
-    expect(visualGap).toBeEmptyDOMElement();
+    expect(readinessTimeline).toHaveClass(
+      "mx-auto",
+      "flex",
+      "w-full",
+      "flex-col",
+      "items-center",
+    );
+    expect(rows).toHaveLength(4);
+
+    for (const row of rows) {
+      expect(row).toHaveClass(
+        "grid",
+        "w-full",
+        "grid-cols-[2rem_1fr]",
+        "gap-x-6",
+        "md:grid-cols-[6rem_1fr_2fr]",
+        "md:gap-x-10",
+      );
+    }
+
+    expect(
+      document.querySelectorAll(
+        "[data-component='readiness-resend-marker-column']",
+      ),
+    ).toHaveLength(4);
+    expect(
+      document.querySelectorAll("[data-component='readiness-resend-dot']"),
+    ).toHaveLength(4);
+    expect(
+      document.querySelectorAll("[data-component='readiness-resend-line']"),
+    ).toHaveLength(4);
+    expect(
+      document.querySelectorAll(
+        "[data-component='readiness-resend-visual-column']",
+      ),
+    ).toHaveLength(4);
+    expect(
+      document.querySelectorAll("[data-component='readiness-resend-panel']"),
+    ).toHaveLength(4);
+    expect(
+      document.querySelectorAll(
+        "[data-component='readiness-resend-shell-mask-left']",
+      ),
+    ).toHaveLength(4);
+    expect(
+      document.querySelectorAll(
+        "[data-component='readiness-resend-shell-mask-bottom']",
+      ),
+    ).toHaveLength(4);
+    for (const panel of document.querySelectorAll(
+      "[data-component='readiness-resend-panel']",
+    )) {
+      expect(
+        panel.querySelector(
+          "[data-component='readiness-resend-shell-mask-left']",
+        ),
+      ).toHaveClass("absolute", "inset-y-0", "left-0", "z-10");
+      expect(
+        panel.querySelector(
+          "[data-component='readiness-resend-shell-mask-bottom']",
+        ),
+      ).toHaveClass("absolute", "bottom-0", "left-0", "z-10");
+      const shell = panel.querySelector(
+        "[data-component='readiness-resend-panel-shell']",
+      );
+      expect(shell).toBeInTheDocument();
+      expect(shell).toHaveClass(
+        "overflow-visible",
+        "rounded-tr-[3rem]",
+        "border-x",
+        "border-t",
+        "border-[#212629]",
+      );
+    }
+    expect(
+      document.querySelectorAll(
+        "[data-component='readiness-resend-panel-frame']",
+      ),
+    ).toHaveLength(4);
+    for (const frame of document.querySelectorAll(
+      "[data-component='readiness-resend-panel-frame']",
+    )) {
+      expect(frame).toHaveClass(
+        "flex",
+        "items-center",
+        "justify-end",
+        "gap-2",
+        "border-b",
+        "border-[#212629]",
+        "p-5",
+        "pl-8",
+      );
+      expect(frame).not.toHaveClass("relative", "overflow-hidden");
+    }
+    expect(
+      document.querySelectorAll(
+        "[data-component='readiness-resend-panel-fade-left']",
+      ),
+    ).toHaveLength(0);
+    expect(
+      document.querySelectorAll(
+        "[data-component='readiness-resend-panel-fade-bottom']",
+      ),
+    ).toHaveLength(0);
+    expect(
+      document.querySelectorAll(
+        "[data-component='readiness-resend-panel-glow']",
+      ),
+    ).toHaveLength(4);
+    expect(
+      document.querySelectorAll(
+        "[data-component='readiness-resend-window-dot']",
+      ),
+    ).toHaveLength(0);
+    expect(
+      document.querySelector("[data-component='readiness-resend-code-panel']"),
+    ).toBeInTheDocument();
+    expect(
+      document.querySelector("[data-component='readiness-resend-terminal']"),
+    ).toBeInTheDocument();
+    for (const heading of document.querySelectorAll(
+      "[data-component='readiness-resend-panel'] h4",
+    )) {
+      expect(heading).not.toHaveClass("font-heading");
+    }
+    expect(
+      document.querySelectorAll("[data-component='readiness-log-row']"),
+    ).toHaveLength(4);
     expect(
       document.querySelector("[data-webgl-intent]"),
     ).not.toBeInTheDocument();
@@ -279,12 +478,22 @@ describe("OpportunitiesHowToParticipatePage", () => {
     expect(document.querySelectorAll(removedMarkerSelector)).toHaveLength(0);
     expect(document.querySelector("img[src*='stage']")).not.toBeInTheDocument();
     expect(
-      screen.queryByRole("list", { name: "Etapas de aproximação ao projeto" }),
+      screen.queryByRole("tablist", {
+        name: "Sinais de prontidão em timeline",
+      }),
     ).not.toBeInTheDocument();
-
-    const firstArticle = screen.getAllByRole("article")[0];
-
-    expect(firstArticle.parentElement).toHaveClass("mt-12", "sm:mt-16");
+    expect(screen.queryAllByRole("tab")).toHaveLength(0);
+    expect(
+      screen.getByRole("list", { name: "Etapas de aproximação ao projeto" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("tabpanel", {
+        name: "Painel do sinal Contexto",
+      }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getAllByText("compatibilidade mapeada").length,
+    ).toBeGreaterThan(0);
   });
 
   it("declara metadata e breadcrumb da rota dedicada", () => {

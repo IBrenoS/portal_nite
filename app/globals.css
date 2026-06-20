@@ -522,25 +522,6 @@ body {
   }
 }
 
-.opportunities-marquee {
-  width: max-content;
-  animation: opportunities-marquee-scroll 34s linear infinite;
-  will-change: transform;
-}
-
-.opportunities-marquee:hover {
-  animation-play-state: paused;
-}
-
-@keyframes opportunities-marquee-scroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(calc(-50% - 1rem));
-  }
-}
-
 @keyframes unijorge-lit-pulse {
   0%,
   100% {
@@ -714,14 +695,6 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .opportunities-marquee {
-    width: auto;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    animation: none !important;
-    will-change: auto;
-  }
-
   .timeline-premium-scroll-bg {
     max-width: 100%;
     margin-block: 0;

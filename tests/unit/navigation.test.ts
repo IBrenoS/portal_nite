@@ -28,19 +28,29 @@ describe("navegacao institucional", () => {
     );
   });
 
-  it("move Pessoas para Oportunidades mantendo a rota publica", () => {
+  it("organiza o menu Nucleo com oportunidades, pessoas e curriculo planejado", () => {
     const opportunitiesGroup = headerNavigationGroups.find(
       (group) => group.id === "oportunidades",
     );
 
-    expect(opportunitiesGroup?.items).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          label: "Pessoas",
-          href: "/pessoas",
-          status: "mvp",
-        }),
-      ]),
-    );
+    expect(opportunitiesGroup?.label).toBe("Núcleo");
+    expect(opportunitiesGroup?.items).toEqual([
+      {
+        label: "Oportunidades",
+        href: "/oportunidades",
+        status: "mvp",
+      },
+      {
+        label: "Pessoas",
+        href: "/pessoas",
+        status: "mvp",
+      },
+      {
+        label: "Enviar currículo",
+        href: "/oportunidades",
+        status: "planned",
+        note: "Disponível apenas quando houver processo validado.",
+      },
+    ]);
   });
 });

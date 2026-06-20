@@ -47,10 +47,7 @@ describe("HomePage", () => {
     const heroCtaGroup = heroPrimaryCta.parentElement;
 
     expect(heroPrimaryCta).toHaveAttribute("href", "/projetos");
-    expect(heroPrimaryCta).toHaveClass(
-      "nite-glass-action",
-      "rounded-[1rem]",
-    );
+    expect(heroPrimaryCta).toHaveClass("nite-glass-action", "rounded-[1rem]");
     expect(heroPrimaryCta).not.toHaveClass(
       "nite-button-texture",
       "after:absolute",
@@ -325,7 +322,7 @@ describe("HomePage", () => {
       "O NITE",
       "Projetos",
       "Atualizações",
-      "Oportunidades",
+      "Núcleo",
       "Contato",
     ]) {
       expect(header.getByRole("button", { name: group })).toHaveAttribute(
@@ -393,13 +390,7 @@ describe("HomePage", () => {
       Array.from(footerNavigation.children).map(
         (group) => group.querySelector("p")?.textContent,
       ),
-    ).toEqual([
-      "O NITE",
-      "Projetos",
-      "Atualizações",
-      "Oportunidades",
-      "Contato",
-    ]);
+    ).toEqual(["O NITE", "Projetos", "Atualizações", "Núcleo", "Contato"]);
     expect(
       footerElement.querySelector("[data-nite-scene='unijorge-brand-text']"),
     ).toHaveAttribute("aria-label", "UNIJORGE");
@@ -429,9 +420,14 @@ describe("HomePage", () => {
       "href",
       "/atualizacoes",
     );
-    expect(
-      footer.getByRole("link", { name: "Como participar" }),
-    ).toHaveAttribute("href", "/oportunidades");
+    expect(footer.getByRole("link", { name: "Oportunidades" })).toHaveAttribute(
+      "href",
+      "/oportunidades",
+    );
+    expect(footer.getByRole("link", { name: "Pessoas" })).toHaveAttribute(
+      "href",
+      "/pessoas",
+    );
     expect(
       footer.getByRole("link", { name: "Falar com o NITE" }),
     ).toHaveAttribute("href", "/contato");

@@ -40,12 +40,12 @@ export function PremiumHeroIcon({ className }: PremiumHeroIconProps) {
     "--pointer-y": motionStyle["--pointer-y"],
     backgroundImage:
       "radial-gradient(100px, color-mix(in srgb, var(--nite-light-action-hover-text) 80%, transparent), transparent)",
-    height: "250px",
+    height: "200px",
     left: "-100px",
     mixBlendMode: "soft-light",
     top: "-100px",
     transform: "translateX(var(--pointer-x)) translateY(var(--pointer-y))",
-    width: "250px",
+    width: "200px",
   };
 
   useEffect(() => {

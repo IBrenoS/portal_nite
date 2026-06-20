@@ -704,6 +704,14 @@ function HeaderNavigationItemLink({
     );
   }
 
+  if (item.status === "planned") {
+    return (
+      <span className={className} aria-disabled="true">
+        {content}
+      </span>
+    );
+  }
+
   return (
     <a href={item.href} className={className} onClick={onNavigate}>
       {content}
@@ -744,6 +752,14 @@ function DesktopNavigationItemLink({
       >
         {content}
       </a>
+    );
+  }
+
+  if (item.status === "planned") {
+    return (
+      <span className={className} aria-disabled="true">
+        {content}
+      </span>
     );
   }
 

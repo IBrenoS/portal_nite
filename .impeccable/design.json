@@ -1,0 +1,174 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-19T23:05:45-03:00",
+  "title": "Design System: Portal NITE",
+  "extensions": {
+    "colorMeta": {
+      "dark-background": {
+        "role": "neutral",
+        "displayName": "Preto Nucleo",
+        "canonical": "var(--nite-dark-background)",
+        "tonalRamp": ["#050506", "#09090A", "#0D111C", "#18191C", "#3A3D44", "#70757E", "#A1A4A5", "#F0F0F0"]
+      },
+      "dark-brand-primary": {
+        "role": "primary",
+        "displayName": "Azul Eletrico NITE",
+        "canonical": "var(--nite-dark-brand-primary)",
+        "tonalRamp": ["#071536", "#0B255F", "#123A92", "#1D4ED8", "#2563EB", "#6EA1FF", "#B8D2FF", "#EAF2FF"]
+      },
+      "dark-brand-accent": {
+        "role": "primary",
+        "displayName": "Ciano de Sinal",
+        "canonical": "var(--nite-dark-brand-accent)",
+        "tonalRamp": ["#06202B", "#0B3345", "#0F5470", "#087FA8", "#38BDF8", "#7DD3FC", "#BAE6FD", "#F0F9FF"]
+      },
+      "light-background": {
+        "role": "neutral",
+        "displayName": "Base Claro Institucional",
+        "canonical": "var(--nite-light-background)",
+        "tonalRamp": ["#111827", "#334155", "#5B6472", "#B7B0A3", "#EFE8DC", "#F7F3EA", "#FFFBF5", "#FFFFFF"]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display Institucional",
+        "purpose": "Hero, CTA final e momentos de marca."
+      },
+      "body": {
+        "displayName": "Leitura Operacional",
+        "purpose": "Paragrafos, descricoes, formularios e conteudo de projeto."
+      },
+      "label": {
+        "displayName": "Sinal Tecnico",
+        "purpose": "Chips, metadados, stack e labels curtas."
+      }
+    },
+    "shadows": [
+      {
+        "name": "lift-sutil",
+        "value": "0 24px 70px rgb(0 0 0 / 0.42)",
+        "purpose": "Paineis e superficies que precisam se destacar no dark."
+      },
+      {
+        "name": "acao-hover",
+        "value": "0 18px 48px rgb(255 255 255 / 0.12)",
+        "purpose": "Resposta pontual em CTAs glass."
+      }
+    ],
+    "motion": [
+      {
+        "name": "nite-ease-out",
+        "value": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "Transicoes curtas e funcionais."
+      },
+      {
+        "name": "nite-duration-micro",
+        "value": "220ms",
+        "purpose": "Estados de hover, focus e microfeedback."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "xl",
+        "value": "1280px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Glass Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "CTA principal translucidado para acoes institucionais.",
+      "html": "<button class=\"ds-btn-primary\">Explorar projetos</button>",
+      "css": ".ds-btn-primary{display:inline-flex;min-height:44px;align-items:center;justify-content:center;border:2px solid rgba(255,255,255,.05);border-radius:16px;background:linear-gradient(104deg,rgba(253,253,253,.05) 5%,rgba(240,240,228,.1) 100%);color:#fff;padding:10px 20px;font:600 16px/1.2 Sora,Segoe UI,sans-serif;box-shadow:0 1px 3px rgba(0,0,0,.1);transition:background .22s cubic-bezier(.22,1,.36,1),color .22s cubic-bezier(.22,1,.36,1),box-shadow .22s cubic-bezier(.22,1,.36,1)}.ds-btn-primary:hover{background:#f0f0f0;color:#000;box-shadow:0 18px 48px rgba(255,255,255,.12)}.ds-btn-primary:focus-visible{outline:0;box-shadow:0 0 0 4px rgba(255,255,255,.3)}"
+    },
+    {
+      "name": "Quiet Card",
+      "kind": "card",
+      "refersTo": "card-default",
+      "description": "Container padrao para conteudo de projeto, status ou secao.",
+      "html": "<article class=\"ds-card\"><h3>Projetos em destaque</h3><p>Acompanhe frentes, prototipos e entregas com contexto real.</p></article>",
+      "css": ".ds-card{display:flex;flex-direction:column;gap:12px;border:1px solid rgba(176,199,217,.145);border-radius:12px;background:transparent;color:#f0f0f0;padding:16px;font:400 16px/1.6 Geist,Segoe UI,sans-serif;transition:border-color .22s cubic-bezier(.22,1,.36,1),background .22s cubic-bezier(.22,1,.36,1)}.ds-card h3{margin:0;font:600 20px/1.25 Sora,Segoe UI,sans-serif}.ds-card p{margin:0;color:#a1a4a5}.ds-card:hover{border-color:rgba(217,237,254,.26);background:rgba(255,255,255,.04)}.ds-card:focus-within{box-shadow:0 0 0 4px rgba(255,255,255,.3)}"
+    },
+    {
+      "name": "NITE Input",
+      "kind": "input",
+      "refersTo": "input-default",
+      "description": "Campo compartilhado para formularios e filtros.",
+      "html": "<label class=\"ds-field\"><span>E-mail institucional</span><input placeholder=\"nome@unijorge.edu.br\" /></label>",
+      "css": ".ds-field{display:grid;gap:8px;color:#f0f0f0;font:500 14px/1.3 Geist,Segoe UI,sans-serif}.ds-field input{height:40px;border:1px solid rgba(176,199,217,.145);border-radius:12px;background:rgba(24,25,28,.88);color:#f0f0f0;padding:0 12px;font:400 14px/1.4 Geist,Segoe UI,sans-serif;transition:border-color .22s cubic-bezier(.22,1,.36,1),background .22s cubic-bezier(.22,1,.36,1),box-shadow .22s cubic-bezier(.22,1,.36,1)}.ds-field input::placeholder{color:rgba(255,255,255,.28)}.ds-field input:focus-visible{outline:0;border-color:rgba(217,237,254,.26);background:rgba(24,25,28,.96);box-shadow:0 0 0 2px rgba(255,255,255,.3)}"
+    },
+    {
+      "name": "Status Badge",
+      "kind": "chip",
+      "description": "Badge textual para status de projeto e oportunidade.",
+      "html": "<span class=\"ds-status\"><span aria-hidden=\"true\"></span>Em estruturação</span>",
+      "css": ".ds-status{display:inline-flex;min-height:28px;width:max-content;align-items:center;gap:6px;border:1px solid rgba(148,163,184,.35);border-radius:999px;background:rgba(148,163,184,.1);color:#94a3b8;padding:4px 10px;font:500 12px/1 Geist,Segoe UI,sans-serif;white-space:nowrap}.ds-status span{width:6px;height:6px;border-radius:999px;background:currentColor}"
+    },
+    {
+      "name": "Mega Menu Link",
+      "kind": "nav",
+      "description": "Link textual dentro do MegaMenu compacto.",
+      "html": "<a class=\"ds-nav-link\" href=\"/projetos\">Todos os projetos</a>",
+      "css": ".ds-nav-link{display:inline-flex;align-items:center;color:#a1a4a5;text-decoration:none;font:300 16px/1.3125 Sora,Segoe UI,sans-serif;transition:color .15s ease-in-out}.ds-nav-link:hover,.ds-nav-link:focus-visible{color:#f0f0f0;outline:0;box-shadow:0 0 0 2px rgba(255,255,255,.3)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Circuito Institucional Metalico",
+    "overview": "O sistema visual do Portal NITE trata o nucleo como uma infraestrutura viva de tecnologia aplicada dentro da UNIJORGE. A superficie principal e dark, tecnica e contida; a energia vem da logo, do azul eletrico pontual, de motion funcional e de camadas discretas, nao de decoracao espalhada.",
+    "keyCharacteristics": [
+      "Dark-first com light mode derivado, nao paralelo.",
+      "Azul eletrico como acento raro e funcional.",
+      "Superficies tecnicas transparentes com borda sutil.",
+      "Tipografia Sora para voz institucional e Geist para leitura.",
+      "Motion curto, acessivel e subordinado a navegacao."
+    ],
+    "rules": [
+      {
+        "name": "The Rare Blue Rule",
+        "body": "O azul e um sinal, nao uma atmosfera. Se uma dobra inteira fica azulada, a composicao perdeu hierarquia.",
+        "section": "colors"
+      },
+      {
+        "name": "The Honest Surface Rule",
+        "body": "Superficies podem ser transparentes, mas texto e foco precisam manter contraste AA em uso real.",
+        "section": "colors"
+      },
+      {
+        "name": "The No Editorial Costume Rule",
+        "body": "NITE e tecnico-institucional, nao revista. Nao trocar a voz por serifas editoriais, italicos ornamentais ou grids de magazine sem uma spec explicita.",
+        "section": "typography"
+      },
+      {
+        "name": "The Border-First Rule",
+        "body": "Cards e controles primeiro usam borda, superficie e contraste. Sombra forte precisa justificar estado, camada ou cena.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do usar --nite-* como contrato canonico para cor, superficie, foco, status e sombra.",
+      "Do preservar dark-first e light mode derivado com contraste real.",
+      "Do usar azul eletrico para acao, leitura e identidade pontual.",
+      "Do manter status, oportunidades, projetos e evidencias honestos, com texto claro quando algo esta pendente.",
+      "Do validar teclado, foco, contraste, responsividade e prefers-reduced-motion antes de chamar uma entrega de pronta.",
+      "Do deixar a logo ser protagonista em cenas de marca, mantendo o restante do sistema mais contido."
+    ],
+    "donts": [
+      "Don't inventar dados institucionais, metricas, depoimentos, datas, responsaveis, equipes, fotos, resultados, vagas ou evidencias.",
+      "Don't apresentar placeholders, rotas futuras, formularios futuros ou oportunidades futuras como funcionalidades prontas.",
+      "Don't usar neon permanente, glow dominante, grid decorativo excessivo ou gradientes competindo com conteudo.",
+      "Don't transformar o portal em landing page generica de SaaS com cards iguais, hero-metric template ou copy inflada.",
+      "Don't copiar layout, assets, textos, imagens ou identidade de referencias externas.",
+      "Don't depender apenas de cor, icone ou animacao para comunicar estado."
+    ]
+  }
+}

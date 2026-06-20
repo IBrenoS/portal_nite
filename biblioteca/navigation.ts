@@ -74,13 +74,21 @@ const headerNavigationGroups: SiteNavigationGroup[] = [
   },
   {
     id: "oportunidades",
-    label: "Oportunidades",
+    label: "Núcleo",
     href: "/oportunidades",
     items: [
-      { label: "Como participar", href: "/oportunidades", status: "mvp" },
-      { label: "Processos abertos", href: "/oportunidades", status: "mvp" },
+      {
+        label: "Oportunidades",
+        href: "/oportunidades",
+        status: "mvp",
+      },
       { label: "Pessoas", href: "/pessoas", status: "mvp" },
-      { label: "Enviar currículo", href: "/oportunidades", status: "mvp" },
+      {
+        label: "Enviar currículo",
+        href: "/oportunidades",
+        status: "planned",
+        note: "Disponível apenas quando houver processo validado.",
+      },
     ],
   },
   {
