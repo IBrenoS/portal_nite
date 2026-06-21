@@ -15,6 +15,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: absoluteUrl("/"),
       lastModified,
     },
+    {
+      url: absoluteUrl("/sobre"),
+      lastModified,
+    },
     ...getIndexableProjects().map((project) => ({
       url: absoluteUrl(`/projetos/${project.slug}`),
       lastModified,

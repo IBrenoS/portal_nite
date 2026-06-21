@@ -1,5 +1,6 @@
 import {
   cleanup,
+  fireEvent,
   render,
   screen,
   waitFor,
@@ -53,7 +54,7 @@ describe("HomePage", () => {
       "after:absolute",
     );
     expect(heroPrimaryCta).not.toHaveClass("rounded-md");
-    expect(heroSecondaryCta).toHaveAttribute("href", "#sobre");
+    expect(heroSecondaryCta).toHaveAttribute("href", "/sobre");
     expect(heroSecondaryCta).toHaveClass(
       "w-fit",
       "border-transparent",
@@ -89,31 +90,84 @@ describe("HomePage", () => {
       screen.queryByText("M7 - SEO, acessibilidade e performance"),
     ).not.toBeInTheDocument();
     expect(screen.queryByText("Landing institucional")).not.toBeInTheDocument();
-    const builds = within(screen.getByTestId("builds-section"));
-    expect(builds.getByText("O que o NITE constrói")).toBeInTheDocument();
+    const buildsSection = screen.getByTestId("builds-section");
+    const builds = within(buildsSection);
+
+    expect(buildsSection).toHaveAttribute("id", "metodo");
+    expect(document.querySelector("#sobre")).toBeNull();
+    expect(builds.getByText("Método aplicado")).toBeInTheDocument();
     expect(
       builds.getByText(
-        "Saídas concretas para transformar desafios acadêmicos em tecnologia aplicada.",
+        "Antes de virar projeto, uma demanda precisa virar evidência.",
       ),
     ).toBeInTheDocument();
     expect(
       builds.getByText(
-        "O núcleo organiza frentes de criação que aproximam estudantes, professores e gestão de protótipos, automações, experiências digitais e aprendizagem prática.",
+        "O NITE organiza desafios acadêmicos em recortes, protótipos e registros públicos para que cada frente avance com contexto, limite e rastreabilidade.",
       ),
+    ).toBeInTheDocument();
+    expect(
+      builds.queryByRole("link", { name: /Explorar projetos/i }),
+    ).not.toBeInTheDocument();
+    expect(builds.getByText("Sistema de método NITE")).toBeInTheDocument();
+    expect(
+      builds.getByText(
+        "Uma superfície procedural mostra como uma demanda ganha leitura, forma e rastro público.",
+      ),
+    ).toBeInTheDocument();
+    expect(
+      buildsSection.querySelector("[data-component='nite-method-system']"),
+    ).toHaveAttribute("data-media-mode", "canvas-2d-with-html-fallback");
+    expect(
+      buildsSection.querySelector("[data-method-fallback='static-system-map']"),
+    ).toBeInTheDocument();
+    expect(
+      screen
+        .getByTestId("builds-section")
+        .querySelector("[data-method-canvas='resend-style-procedural-system']"),
     ).toBeInTheDocument();
 
     for (const title of [
+      "Problema publicável",
+      "Artefato testável",
+      "Rastro verificável",
+      "Caminho para a comunidade",
+    ]) {
+      expect(builds.getAllByText(title).length).toBeGreaterThanOrEqual(1);
+    }
+
+    for (const label of ["Recorte", "Protótipo", "Evidência", "Circulação"]) {
+      expect(builds.getByText(label)).toBeInTheDocument();
+    }
+
+    expect(builds.getByText("Estado ativo")).toBeInTheDocument();
+    expect(builds.getByText("Registro gerado")).toBeInTheDocument();
+    expect(
+      builds.getByText("brief, hipótese, restrições e próximos passos."),
+    ).toBeInTheDocument();
+    expect(
+      builds.getByRole("button", { name: /Problema publicável/i }),
+    ).toHaveAttribute("aria-pressed", "true");
+
+    for (const oldBuildCopy of [
+      "O que o NITE constrói",
+      "Um sistema de conversão entre desafio acadêmico e aplicação pública.",
+      "Esta dobra mostra o papel do núcleo: transformar demandas, pesquisas e oportunidades de aprendizagem em artefatos testáveis, documentados e honestos sobre seu estágio.",
+      "Conversor NITE",
+      "Desafio, método, evidência e rota pública na mesma superfície.",
+      "Saída esperada",
+      "Artefatos possíveis",
+      "Saídas concretas para transformar desafios acadêmicos em tecnologia aplicada.",
       "Software aplicado",
       "Dados e IA",
       "Robótica e prototipagem",
       "Experiência digital",
       "Automação e processos",
       "Oficinas e aprendizagem prática",
+      "Saídas:",
     ]) {
-      expect(builds.getByText(title)).toBeInTheDocument();
+      expect(builds.queryByText(oldBuildCopy)).not.toBeInTheDocument();
     }
-
-    expect(builds.getAllByText("Saídas:")).toHaveLength(6);
 
     for (const removed of [
       "Aprendizado aplicado",
@@ -407,7 +461,7 @@ describe("HomePage", () => {
     ).toBeNull();
     expect(footer.getByRole("link", { name: "Sobre" })).toHaveAttribute(
       "href",
-      "/#sobre",
+      "/sobre",
     );
     expect(footer.getByRole("link", { name: "Timeline" })).toHaveAttribute(
       "href",
@@ -437,7 +491,6 @@ describe("HomePage", () => {
     expect(footer.queryByText("Propor desafio")).toBeNull();
     expect(footer.queryByText("E-mail")).toBeNull();
     expect(document.querySelector("footer a[href='/noticias']")).toBeNull();
-    expect(document.querySelector("footer a[href='/sobre']")).toBeNull();
     expect(
       document.querySelector("footer a[href='/contato?tipo=desafio']"),
     ).toBeNull();
@@ -451,6 +504,41 @@ describe("HomePage", () => {
       overlays: 1,
     });
   }, 10_000);
+
+  it("atualiza a superfície de método por clique e foco", async () => {
+    const user = userEvent.setup();
+
+    render(<HomePage />);
+
+    const builds = within(screen.getByTestId("builds-section"));
+    const recorteButton = builds.getByRole("button", {
+      name: /Problema publicável/i,
+    });
+    const prototipoButton = builds.getByRole("button", {
+      name: /Artefato testável/i,
+    });
+    const circulacaoButton = builds.getByRole("button", {
+      name: /Caminho para a comunidade/i,
+    });
+
+    expect(recorteButton).toHaveAttribute("aria-pressed", "true");
+
+    await user.click(prototipoButton);
+
+    expect(prototipoButton).toHaveAttribute("aria-pressed", "true");
+    expect(recorteButton).toHaveAttribute("aria-pressed", "false");
+    expect(
+      builds.getByText("interface, prova de conceito, fluxo ou demonstração."),
+    ).toBeInTheDocument();
+
+    fireEvent.focus(circulacaoButton);
+
+    expect(circulacaoButton).toHaveAttribute("aria-pressed", "true");
+    expect(prototipoButton).toHaveAttribute("aria-pressed", "false");
+    expect(
+      builds.getByText("página pública, chamada, guia ou atualização."),
+    ).toBeInTheDocument();
+  });
 
   it("mantem o foco dentro do menu mobile em camadas", async () => {
     const user = userEvent.setup();

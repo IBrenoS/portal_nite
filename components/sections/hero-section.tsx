@@ -46,7 +46,7 @@ export function HeroSection() {
               Explorar projetos
             </Link>
             <Link
-              href="#sobre"
+              href="/sobre"
               className={cn(
                 buttonVariants({ variant: "invisible", size: "lg" }),
                 "self-center sm:self-auto",

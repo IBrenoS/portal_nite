@@ -1,8 +1,29 @@
 import { describe, expect, it } from "vitest";
 
-import { headerNavigationGroups } from "@/biblioteca/navigation";
+import {
+  futureNavigationRoutes,
+  headerNavigationGroups,
+} from "@/biblioteca/navigation";
 
 describe("navegacao institucional", () => {
+  it("expõe Sobre como rota pública do NITE", () => {
+    const niteGroup = headerNavigationGroups.find(
+      (group) => group.id === "nite",
+    );
+
+    expect(niteGroup?.href).toBe("/sobre");
+    expect(niteGroup?.items).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          label: "Sobre",
+          href: "/sobre",
+          status: "mvp",
+        }),
+      ]),
+    );
+    expect(futureNavigationRoutes).not.toContain("/sobre");
+  });
+
   it("centraliza NIT News em Atualizacoes sem Registros redundante", () => {
     const updatesGroup = headerNavigationGroups.find(
       (group) => group.id === "atualizacoes",

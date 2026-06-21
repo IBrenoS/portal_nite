@@ -40,9 +40,9 @@ const headerNavigationGroups: SiteNavigationGroup[] = [
   {
     id: "nite",
     label: "O NITE",
-    href: "/#sobre",
+    href: "/sobre",
     items: [
-      { label: "Sobre", href: "/#sobre", status: "mvp" },
+      { label: "Sobre", href: "/sobre", status: "mvp" },
       { label: "Destaques", href: "/#projetos", status: "mvp" },
       { label: "Timeline", href: "/#timeline", status: "mvp" },
     ],
@@ -100,7 +100,6 @@ const headerNavigationGroups: SiteNavigationGroup[] = [
 ];
 
 const futureNavigationRoutes = [
-  "/sobre",
   "/atualizacoes/[slug]",
   "/comunidade",
   "/eventos",
