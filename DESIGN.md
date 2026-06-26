@@ -12,12 +12,12 @@ colors:
   dark-border-subtle: "#B0C7D925"
   dark-brand-primary: "#2563EB"
   dark-brand-accent: "#38BDF8"
-  light-background: "#F7F3EA"
-  light-section: "#EFE8DC"
-  light-surface: "#FFFBF5EB"
-  light-text-primary: "#111827"
+  light-background: "#F4F7FA"
+  light-section: "#E8EEF5"
+  light-surface: "#FFFFFFEB"
+  light-text-primary: "#0B1220"
   light-text-secondary: "#334155"
-  light-text-muted: "#5B6472"
+  light-text-muted: "#5C6878"
   light-brand-primary: "#1D4ED8"
   light-brand-accent: "#0369A1"
 typography:
@@ -122,7 +122,9 @@ A paleta e escura, fria e metalica, com azul eletrico reservado para acao, leitu
 - **Preto Nucleo** (`#09090A`): fundo global dark e base da presenca premium.
 - **Secao Tecnica** (`#0D111C`): bloco extenso quando a pagina precisa de separacao sem linha pesada.
 - **Vidro Metalico** (`#18191CE0`): superficies de menu, campos e paineis.
-- **Texto Principal** (`#F0F0F0` dark, `#111827` light): leitura primaria.
+- **Claro Metalico** (`#F4F7FA`): base light fria e tecnica, derivada do dark-first sem virar papel creme.
+- **Secao Clara Tecnica** (`#E8EEF5`): separacao light em azul-cinza suave, usada quando a pagina precisa de respiro sem calor editorial.
+- **Texto Principal** (`#F0F0F0` dark, `#0B1220` light): leitura primaria.
 - **Texto Secundario** (`#A1A4A5` dark, `#334155` light): descricao, metadados e apoio.
 - **Borda Sutil** (`#B0C7D925`): contorno tecnico de cards e controles.
 
