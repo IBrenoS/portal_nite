@@ -248,10 +248,10 @@ describe("HomePage", () => {
     ).not.toBeInTheDocument();
     expect(projects.queryByText("Visual editorial")).not.toBeInTheDocument();
     expect(
-      projects.getByAltText(
+      projects.queryByAltText(
         /Ilustração editorial da frente de software aplicado/i,
       ),
-    ).toBeInTheDocument();
+    ).not.toBeInTheDocument();
     expect(projects.queryByText("Objetivo")).not.toBeInTheDocument();
     expect(projects.queryByText("Próximo passo")).not.toBeInTheDocument();
     expect(projects.queryByText("Stack")).not.toBeInTheDocument();

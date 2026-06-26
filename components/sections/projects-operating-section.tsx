@@ -1,10 +1,11 @@
+import type { Route } from "next";
+
 import type { Project } from "@/biblioteca/esquemas";
 import { Container } from "@/components/layout/container";
 import {
-  ProjectCard,
-  type ProjectCardStatus,
-  type ProjectCardVisual,
-} from "@/components/sections/project-card";
+  FeaturedProjectShowcase,
+  SupportingProjectModule,
+} from "@/components/sections/project-showcase";
 import { SectionHeader } from "@/components/sections/section-header";
 import { EmptyState } from "@/components/ui/empty-state";
 
@@ -12,113 +13,53 @@ type ProjectsOperatingSectionProps = {
   projects: Project[];
 };
 
-const projectCardStatusByProjectStatus = {
-  placeholder: "draft",
-  planejado: "draft",
-  "em-descoberta": "in_progress",
-  "em-prototipo": "in_progress",
-  ativo: "in_progress",
-  concluido: "done",
-} satisfies Record<Project["status"], ProjectCardStatus>;
-
-const publicationReadyContentStates = new Set<Project["contentState"]>([
-  "real",
-]);
-
-const projectDateFormatter = new Intl.DateTimeFormat("pt-BR", {
-  day: "2-digit",
-  month: "2-digit",
-  timeZone: "UTC",
-  year: "numeric",
-});
-
-function getProjectVisual(
-  project: Project,
-  isPublicationReady: boolean,
-): ProjectCardVisual | undefined {
-  if (isPublicationReady) {
-    return {
-      kind: "evidence",
-      src: project.coverImage,
-      alt: project.alt,
-    };
-  }
-
-  return project.illustration
-    ? {
-        kind: "illustration",
-        src: project.illustration.src,
-        alt: project.illustration.alt,
-      }
-    : undefined;
+function projectHref(project: Project) {
+  return `/projetos/${project.slug}` as Route;
 }
 
 export function ProjectsOperatingSection({
   projects,
 }: ProjectsOperatingSectionProps) {
+  const protagonist =
+    projects.find((project) => project.slug === "software-aplicado") ??
+    projects[0];
+  const supportingProjects = protagonist
+    ? projects
+        .filter((project) => project.slug !== protagonist.slug)
+        .slice(0, 2)
+    : [];
+
   return (
     <section
       id="projetos"
-      className="py-16 sm:py-24 lg:py-28"
+      className="resend-dark-scene border-t border-white/8 py-24 sm:py-32 lg:py-40"
       data-projects-operating-section=""
-      data-surface="clean"
+      data-nite-scene="inverse"
+      data-surface="resend-dark"
       data-testid="projects-operating-section"
     >
-      <Container size="xl" className="flex flex-col gap-10">
-        <div className="grid gap-6 lg:grid-cols-[minmax(22rem,34rem)_minmax(0,1fr)] lg:items-end">
-          <SectionHeader
-            className="lg:pl-16"
-            eyebrow="Projetos"
-            title="Projetos em destaque"
-            description="Acompanhe frentes, protótipos e entregas do NITE com contexto, status, stack e próximos passos."
-          />
-        </div>
+      <Container size="xl" className="flex flex-col gap-12 sm:gap-16">
+        <SectionHeader
+          className="max-w-[42rem] [&_h2]:font-resend-display [&_h2]:text-[clamp(3.25rem,6vw,5.5rem)] [&_h2]:font-normal [&_h2]:leading-[0.96] [&_p]:text-[#8a8a8a]"
+          title="Projetos em destaque"
+          description="Acompanhe frentes, protótipos e entregas do NITE com contexto, status, stack e próximos passos."
+        />
 
-        {projects.length > 0 ? (
-          <div className="grid gap-5 lg:grid-cols-3">
-            {projects.map((project) => {
-              const isPublicationReady = publicationReadyContentStates.has(
-                project.contentState,
-              );
-              const hasPublicEvidence =
-                isPublicationReady &&
-                (project.deliverables.some(
-                  (deliverable) =>
-                    deliverable.status === "disponivel" &&
-                    Boolean(deliverable.href),
-                ) ||
-                  project.gallery.length > 0 ||
-                  project.links.length > 0);
-
-              return (
-                <ProjectCard
+        {protagonist ? (
+          <div className="grid gap-5">
+            <FeaturedProjectShowcase
+              project={protagonist}
+              href={projectHref(protagonist)}
+            />
+            <div className="grid gap-5 lg:grid-cols-2">
+              {supportingProjects.map((project) => (
+                <SupportingProjectModule
                   key={project.slug}
-                  title={project.title}
-                  summary={project.summary}
-                  area={project.category}
-                  status={projectCardStatusByProjectStatus[project.status]}
-                  problem={project.problem}
-                  objective={
-                    project.objective ??
-                    "Objetivo em validação editorial antes de publicação pública."
-                  }
-                  stack={project.technologies}
-                  nextStep={project.nextStep}
-                  updatedAt={
-                    isPublicationReady
-                      ? projectDateFormatter.format(
-                          new Date(`${project.lastUpdated}T00:00:00Z`),
-                        )
-                      : undefined
-                  }
-                  href={`/projetos/${project.slug}`}
-                  visual={getProjectVisual(project, isPublicationReady)}
-                  hasPublicEvidence={hasPublicEvidence}
-                  density="compact"
-                  headingLevel={3}
+                  project={project}
+                  href={projectHref(project)}
                 />
-              );
-            })}
+              ))}
+            </div>
           </div>
         ) : (
           <EmptyState
