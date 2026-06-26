@@ -1,6 +1,5 @@
 import {
   cleanup,
-  fireEvent,
   render,
   screen,
   waitFor,
@@ -94,38 +93,66 @@ describe("HomePage", () => {
     const builds = within(buildsSection);
 
     expect(buildsSection).toHaveAttribute("id", "metodo");
+    expect(buildsSection).toHaveAttribute("data-nite-scene", "inverse");
     expect(document.querySelector("#sobre")).toBeNull();
-    expect(builds.getByText("Método aplicado")).toBeInTheDocument();
+    expect(builds.getByRole("heading", { level: 2 })).toHaveTextContent(
+      "Método aplicado",
+    );
     expect(
       builds.getByText(
-        "Antes de virar projeto, uma demanda precisa virar evidência.",
-      ),
-    ).toBeInTheDocument();
-    expect(
-      builds.getByText(
-        "O NITE organiza desafios acadêmicos em recortes, protótipos e registros públicos para que cada frente avance com contexto, limite e rastreabilidade.",
+        "O NITE organiza desafios acadêmicos em recortes, protótipos e registros públicos.",
       ),
     ).toBeInTheDocument();
     expect(
       builds.queryByRole("link", { name: /Explorar projetos/i }),
     ).not.toBeInTheDocument();
-    expect(builds.getByText("Sistema de método NITE")).toBeInTheDocument();
     expect(
-      builds.getByText(
-        "Uma superfície procedural mostra como uma demanda ganha leitura, forma e rastro público.",
-      ),
+      buildsSection.querySelector("[data-component='method-feature-icon']"),
+    ).toBeInTheDocument();
+    expect(
+      buildsSection.querySelector("img[src*='method-applied-icon']"),
     ).toBeInTheDocument();
     expect(
       buildsSection.querySelector("[data-component='nite-method-system']"),
     ).toHaveAttribute("data-media-mode", "canvas-2d-with-html-fallback");
     expect(
-      buildsSection.querySelector("[data-method-fallback='static-system-map']"),
+      buildsSection.querySelector("[data-method-fallback='static-method-system']"),
     ).toBeInTheDocument();
     expect(
-      screen
-        .getByTestId("builds-section")
-        .querySelector("[data-method-canvas='resend-style-procedural-system']"),
+      buildsSection.querySelector("[data-method-canvas='resend-method-system']"),
     ).toBeInTheDocument();
+    expect(
+      builds.getByRole("tablist", { name: "Etapas do método aplicado" }),
+    ).toBeInTheDocument();
+    const methodTablist = builds.getByRole("tablist", {
+      name: "Etapas do método aplicado",
+    });
+    expect(methodTablist).toHaveClass("overflow-x-auto");
+    expect(
+      buildsSection.querySelector("[data-method-canvas='resend-method-system']"),
+    ).toHaveAttribute("aria-hidden", "true");
+    expect(
+      buildsSection.querySelector("[data-component='method-feature-icon'] img"),
+    ).toHaveAttribute("alt", "");
+
+    const methodTabs = builds.getAllByRole("tab");
+    expect(methodTabs).toHaveLength(4);
+    expect(methodTabs.map((tab) => tab.textContent)).toEqual(
+      expect.arrayContaining([
+        "Recorte",
+        "Protótipo",
+        "Evidência",
+        "Circulação",
+      ]),
+    );
+    expect(builds.getByRole("tab", { name: /Recorte/i })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    expect(builds.getByRole("tabpanel")).toHaveAttribute(
+      "aria-labelledby",
+      "method-tab-recorte",
+    );
 
     for (const title of [
       "Problema publicável",
@@ -141,15 +168,15 @@ describe("HomePage", () => {
     }
 
     expect(builds.getByText("Estado ativo")).toBeInTheDocument();
-    expect(builds.getByText("Registro gerado")).toBeInTheDocument();
     expect(
       builds.getByText("brief, hipótese, restrições e próximos passos."),
     ).toBeInTheDocument();
-    expect(
-      builds.getByRole("button", { name: /Problema publicável/i }),
-    ).toHaveAttribute("aria-pressed", "true");
 
     for (const oldBuildCopy of [
+      "Antes de virar projeto, uma demanda precisa virar evidência.",
+      "Sistema de método NITE",
+      "Uma superfície procedural mostra como uma demanda ganha leitura, forma e rastro público.",
+      "Registro gerado",
       "O que o NITE constrói",
       "Um sistema de conversão entre desafio acadêmico e aplicação pública.",
       "Esta dobra mostra o papel do núcleo: transformar demandas, pesquisas e oportunidades de aprendizagem em artefatos testáveis, documentados e honestos sobre seu estágio.",
@@ -177,22 +204,41 @@ describe("HomePage", () => {
       expect(screen.queryByText(removed)).not.toBeInTheDocument();
     }
 
-    const projects = within(screen.getByTestId("projects-operating-section"));
-    expect(projects.getByText("Projetos em destaque")).toBeInTheDocument();
+    const projectsSection = screen.getByTestId("projects-operating-section");
+    const projects = within(projectsSection);
+
+    expect(projectsSection).toHaveAttribute("data-nite-scene", "inverse");
+    expect(
+      projects.getByRole("heading", {
+        level: 2,
+        name: "Projetos em destaque",
+      }),
+    ).toBeInTheDocument();
     expect(
       projects.getByText(
         "Acompanhe frentes, protótipos e entregas do NITE com contexto, status, stack e próximos passos.",
       ),
     ).toBeInTheDocument();
     expect(
-      screen
-        .getByTestId("projects-operating-section")
-        .querySelectorAll("[data-slot='card']"),
-    ).toHaveLength(3);
+      projectsSection.querySelectorAll("[data-project-role='protagonist']"),
+    ).toHaveLength(1);
     expect(
-      screen
-        .getByTestId("projects-operating-section")
-        .querySelectorAll("[data-slot='status-badge'][data-status='draft']"),
+      projectsSection.querySelectorAll("[data-project-role='supporting']"),
+    ).toHaveLength(2);
+    expect(
+      within(
+        projectsSection.querySelector(
+          "[data-project-role='protagonist']",
+        ) as HTMLElement,
+      ).getByRole("heading", { name: "Software aplicado" }),
+    ).toBeInTheDocument();
+    expect(projectsSection.querySelectorAll("[data-slot='card']")).toHaveLength(
+      0,
+    );
+    expect(
+      projectsSection.querySelectorAll(
+        "[data-slot='status-badge'][data-status='draft']",
+      ),
     ).toHaveLength(3);
     expect(projects.getAllByText("Em estruturação")).toHaveLength(3);
     expect(
@@ -222,6 +268,10 @@ describe("HomePage", () => {
     expect(
       projects.getAllByRole("link", { name: /Ver projeto/i }),
     ).toHaveLength(3);
+    const supportingModules = projectsSection.querySelectorAll(
+      "[data-project-role='supporting']",
+    );
+    expect(supportingModules).toHaveLength(2);
     expect(
       projects.queryByText("Entregável principal"),
     ).not.toBeInTheDocument();
@@ -511,33 +561,34 @@ describe("HomePage", () => {
     render(<HomePage />);
 
     const builds = within(screen.getByTestId("builds-section"));
-    const recorteButton = builds.getByRole("button", {
-      name: /Problema publicável/i,
-    });
-    const prototipoButton = builds.getByRole("button", {
-      name: /Artefato testável/i,
-    });
-    const circulacaoButton = builds.getByRole("button", {
-      name: /Caminho para a comunidade/i,
-    });
+    const recorteTab = builds.getByRole("tab", { name: /Recorte/i });
+    const prototipoTab = builds.getByRole("tab", { name: /Protótipo/i });
+    const circulacaoTab = builds.getByRole("tab", { name: /Circulação/i });
 
-    expect(recorteButton).toHaveAttribute("aria-pressed", "true");
+    expect(recorteTab).toHaveAttribute("aria-selected", "true");
 
-    await user.click(prototipoButton);
+    await user.click(prototipoTab);
 
-    expect(prototipoButton).toHaveAttribute("aria-pressed", "true");
-    expect(recorteButton).toHaveAttribute("aria-pressed", "false");
+    expect(prototipoTab).toHaveAttribute("aria-selected", "true");
+    expect(recorteTab).toHaveAttribute("aria-selected", "false");
     expect(
-      builds.getByText("interface, prova de conceito, fluxo ou demonstração."),
-    ).toBeInTheDocument();
+      builds.getByRole("tabpanel"),
+    ).toHaveTextContent("interface, prova de conceito, fluxo ou demonstração.");
 
-    fireEvent.focus(circulacaoButton);
+    prototipoTab.focus();
 
-    expect(circulacaoButton).toHaveAttribute("aria-pressed", "true");
-    expect(prototipoButton).toHaveAttribute("aria-pressed", "false");
+    await user.keyboard("{ArrowRight}");
+
+    expect(builds.getByRole("tab", { name: /Evidência/i })).toHaveFocus();
+
+    await user.keyboard("{End}");
+
+    expect(circulacaoTab).toHaveFocus();
+    expect(circulacaoTab).toHaveAttribute("aria-selected", "true");
+    expect(prototipoTab).toHaveAttribute("aria-selected", "false");
     expect(
-      builds.getByText("página pública, chamada, guia ou atualização."),
-    ).toBeInTheDocument();
+      builds.getByRole("tabpanel"),
+    ).toHaveTextContent("página pública, chamada, guia ou atualização.");
   });
 
   it("mantem o foco dentro do menu mobile em camadas", async () => {
