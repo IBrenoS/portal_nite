@@ -1,5 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Sora } from "next/font/google";
+import {
+  Geist,
+  Geist_Mono,
+  Instrument_Serif,
+  Sora,
+} from "next/font/google";
 import Script from "next/script";
 
 import "@/app/globals.css";
@@ -25,6 +30,13 @@ const monoFont = Geist_Mono({
   subsets: ["latin"],
 });
 
+const resendDisplayFont = Instrument_Serif({
+  variable: "--font-instrument-serif",
+  display: "swap",
+  subsets: ["latin"],
+  weight: "400",
+});
+
 export const metadata: Metadata = {
   ...defaultMetadata,
   title: buildPageTitle(),
@@ -48,7 +60,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html
       lang={siteConfig.locale}
-      className={`${headingFont.variable} ${bodyFont.variable} ${monoFont.variable}`}
+      className={`${headingFont.variable} ${bodyFont.variable} ${monoFont.variable} ${resendDisplayFont.variable}`}
       data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
