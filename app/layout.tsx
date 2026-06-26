@@ -1,10 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import {
-  Geist,
-  Geist_Mono,
-  Instrument_Serif,
-  Sora,
-} from "next/font/google";
+import { Geist, Geist_Mono, Instrument_Serif, Sora } from "next/font/google";
 import Script from "next/script";
 
 import "@/app/globals.css";

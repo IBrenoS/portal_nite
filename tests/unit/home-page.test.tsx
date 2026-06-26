@@ -116,10 +116,14 @@ describe("HomePage", () => {
       buildsSection.querySelector("[data-component='nite-method-system']"),
     ).toHaveAttribute("data-media-mode", "canvas-2d-with-html-fallback");
     expect(
-      buildsSection.querySelector("[data-method-fallback='static-method-system']"),
+      buildsSection.querySelector(
+        "[data-method-fallback='static-method-system']",
+      ),
     ).toBeInTheDocument();
     expect(
-      buildsSection.querySelector("[data-method-canvas='resend-method-system']"),
+      buildsSection.querySelector(
+        "[data-method-canvas='resend-method-system']",
+      ),
     ).toBeInTheDocument();
     expect(
       builds.getByRole("tablist", { name: "Etapas do método aplicado" }),
@@ -129,7 +133,9 @@ describe("HomePage", () => {
     });
     expect(methodTablist).toHaveClass("overflow-x-auto");
     expect(
-      buildsSection.querySelector("[data-method-canvas='resend-method-system']"),
+      buildsSection.querySelector(
+        "[data-method-canvas='resend-method-system']",
+      ),
     ).toHaveAttribute("aria-hidden", "true");
     expect(
       buildsSection.querySelector("[data-component='method-feature-icon'] img"),
@@ -571,9 +577,9 @@ describe("HomePage", () => {
 
     expect(prototipoTab).toHaveAttribute("aria-selected", "true");
     expect(recorteTab).toHaveAttribute("aria-selected", "false");
-    expect(
-      builds.getByRole("tabpanel"),
-    ).toHaveTextContent("interface, prova de conceito, fluxo ou demonstração.");
+    expect(builds.getByRole("tabpanel")).toHaveTextContent(
+      "interface, prova de conceito, fluxo ou demonstração.",
+    );
 
     prototipoTab.focus();
 
@@ -586,9 +592,9 @@ describe("HomePage", () => {
     expect(circulacaoTab).toHaveFocus();
     expect(circulacaoTab).toHaveAttribute("aria-selected", "true");
     expect(prototipoTab).toHaveAttribute("aria-selected", "false");
-    expect(
-      builds.getByRole("tabpanel"),
-    ).toHaveTextContent("página pública, chamada, guia ou atualização.");
+    expect(builds.getByRole("tabpanel")).toHaveTextContent(
+      "página pública, chamada, guia ou atualização.",
+    );
   });
 
   it("mantem o foco dentro do menu mobile em camadas", async () => {
