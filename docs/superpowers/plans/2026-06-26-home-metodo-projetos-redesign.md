@@ -128,9 +128,7 @@ expect(
     ) as HTMLElement,
   ).getByRole("heading", { name: "Software aplicado" }),
 ).toBeInTheDocument();
-expect(
-  projectsSection.querySelectorAll("[data-slot='card']"),
-).toHaveLength(0);
+expect(projectsSection.querySelectorAll("[data-slot='card']")).toHaveLength(0);
 expect(
   projectsSection.querySelectorAll(
     "[data-slot='status-badge'][data-status='draft']",
@@ -153,9 +151,9 @@ expect(recorteTab).toHaveAttribute("aria-selected", "true");
 
 await user.click(prototipoTab);
 expect(prototipoTab).toHaveAttribute("aria-selected", "true");
-expect(
-  builds.getByRole("tabpanel"),
-).toHaveTextContent("interface, prova de conceito, fluxo ou demonstração.");
+expect(builds.getByRole("tabpanel")).toHaveTextContent(
+  "interface, prova de conceito, fluxo ou demonstração.",
+);
 
 prototipoTab.focus();
 await user.keyboard("{ArrowRight}");
@@ -195,9 +193,9 @@ describe("ProjectsOperatingSection", () => {
         name: "Software aplicado",
       }),
     ).toBeInTheDocument();
-    expect(
-      screen.getAllByRole("link", { name: "Ver projeto" }),
-    ).toHaveLength(3);
+    expect(screen.getAllByRole("link", { name: "Ver projeto" })).toHaveLength(
+      3,
+    );
   });
 });
 ```
@@ -264,12 +262,7 @@ Do not replace or reference `public/images/oportunidades/n-icon.png`.
 Update `app/layout.tsx`:
 
 ```tsx
-import {
-  Geist,
-  Geist_Mono,
-  Instrument_Serif,
-  Sora,
-} from "next/font/google";
+import { Geist, Geist_Mono, Instrument_Serif, Sora } from "next/font/google";
 
 const resendDisplayFont = Instrument_Serif({
   variable: "--font-instrument-serif",
@@ -489,7 +482,13 @@ export function MethodSystemCanvas({
 
       nodes.forEach((node, index) => {
         context.beginPath();
-        context.arc(node.x, node.y, index === activeIndex ? 4 + pulse * 3 : 3, 0, Math.PI * 2);
+        context.arc(
+          node.x,
+          node.y,
+          index === activeIndex ? 4 + pulse * 3 : 3,
+          0,
+          Math.PI * 2,
+        );
         context.fillStyle =
           index === activeIndex
             ? "rgba(245,245,245,0.95)"
@@ -499,7 +498,13 @@ export function MethodSystemCanvas({
 
       if (activeNode) {
         context.beginPath();
-        context.arc(activeNode.x, activeNode.y, 18 + pulse * 10, 0, Math.PI * 2);
+        context.arc(
+          activeNode.x,
+          activeNode.y,
+          18 + pulse * 10,
+          0,
+          Math.PI * 2,
+        );
         context.strokeStyle = "rgba(245,245,245,0.16)";
         context.stroke();
       }
@@ -991,9 +996,7 @@ export function SupportingProjectModule({
         <h3 className="text-xl font-medium text-[#f5f5f5] sm:text-2xl">
           {project.title}
         </h3>
-        <p className="text-sm leading-6 text-[#8a8a8a]">
-          {project.summary}
-        </p>
+        <p className="text-sm leading-6 text-[#8a8a8a]">{project.summary}</p>
         <Link
           href={href}
           className="mt-2 inline-flex min-h-10 w-fit items-center gap-2 text-sm font-medium text-[#f5f5f5] transition-opacity hover:opacity-70"
@@ -1059,9 +1062,7 @@ const protagonist =
   projects.find((project) => project.slug === "software-aplicado") ??
   projects[0];
 const supportingProjects = protagonist
-  ? projects
-      .filter((project) => project.slug !== protagonist.slug)
-      .slice(0, 2)
+  ? projects.filter((project) => project.slug !== protagonist.slug).slice(0, 2)
   : [];
 ```
 
@@ -1153,14 +1154,10 @@ expect(builds.getByRole("tabpanel")).toHaveAttribute(
   "method-tab-recorte",
 );
 expect(
-  buildsSection.querySelector(
-    "[data-method-canvas='resend-method-system']",
-  ),
+  buildsSection.querySelector("[data-method-canvas='resend-method-system']"),
 ).toHaveAttribute("aria-hidden", "true");
 expect(
-  buildsSection.querySelector(
-    "[data-component='method-feature-icon'] img",
-  ),
+  buildsSection.querySelector("[data-component='method-feature-icon'] img"),
 ).toHaveAttribute("alt", "");
 ```
 
