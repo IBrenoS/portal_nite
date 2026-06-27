@@ -32,15 +32,15 @@ export function ProjectsOperatingSection({
   return (
     <section
       id="projetos"
-      className="resend-dark-scene border-t border-white/8 py-24 sm:py-32 lg:py-40"
+      className="bg-nite-background py-24 text-nite-text-primary sm:py-32 lg:py-40"
       data-projects-operating-section=""
       data-nite-scene="inverse"
-      data-surface="resend-dark"
+      data-surface="nite-background"
       data-testid="projects-operating-section"
     >
       <Container size="xl" className="flex flex-col gap-12 sm:gap-16">
         <SectionHeader
-          className="max-w-[42rem] [&_h2]:font-resend-display [&_h2]:text-[clamp(3.25rem,6vw,5.5rem)] [&_h2]:font-normal [&_h2]:leading-[0.96] [&_p]:text-[#8a8a8a]"
+          className="max-w-[42rem] [&_h2]:font-heading [&_h2]:text-[clamp(2rem,4vw,3rem)] [&_h2]:font-semibold [&_h2]:leading-[1.1] [&_h2]:tracking-normal [&_p]:text-nite-text-secondary"
           title="Projetos em destaque"
           description="Acompanhe frentes, protótipos e entregas do NITE com contexto, status, stack e próximos passos."
         />

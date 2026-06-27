@@ -1,3 +1,6 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+
 import { cleanup, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it } from "vitest";
@@ -40,6 +43,20 @@ afterEach(() => {
 });
 
 describe("design system base", () => {
+  it("expoe as superficies semanticas do tema para utilitarios Tailwind", () => {
+    const globalStyles = readFileSync(
+      join(process.cwd(), "app", "globals.css"),
+      "utf8",
+    );
+
+    expect(globalStyles).toContain(
+      "--color-nite-section: var(--nite-section);",
+    );
+    expect(globalStyles).toContain(
+      "--color-nite-surface-elevated: var(--nite-surface-elevated);",
+    );
+  });
+
   it("renderiza componentes essenciais do M2", () => {
     render(
       <Container>

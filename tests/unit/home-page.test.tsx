@@ -94,10 +94,22 @@ describe("HomePage", () => {
 
     expect(buildsSection).toHaveAttribute("id", "metodo");
     expect(buildsSection).toHaveAttribute("data-nite-scene", "inverse");
-    expect(document.querySelector("#sobre")).toBeNull();
-    expect(builds.getByRole("heading", { level: 2 })).toHaveTextContent(
-      "Método aplicado",
+    expect(buildsSection).toHaveAttribute("data-surface", "nite-background");
+    expect(buildsSection).toHaveClass(
+      "bg-nite-background",
+      "text-nite-text-primary",
     );
+    expect(buildsSection).not.toHaveClass("resend-dark-scene");
+    expect(document.querySelector("#sobre")).toBeNull();
+    const buildsHeading = builds.getByRole("heading", { level: 2 });
+    expect(buildsHeading).toHaveClass("font-heading", "font-semibold");
+    expect(buildsHeading.parentElement?.className).toContain(
+      "[&_h2]:font-heading",
+    );
+    expect(buildsHeading.parentElement?.className).not.toContain(
+      "font-resend-display",
+    );
+    expect(buildsHeading).toHaveTextContent("Método aplicado");
     expect(
       builds.getByText(
         "O NITE organiza desafios acadêmicos em recortes, protótipos e registros públicos.",
@@ -106,52 +118,82 @@ describe("HomePage", () => {
     expect(
       builds.queryByRole("link", { name: /Explorar projetos/i }),
     ).not.toBeInTheDocument();
-    expect(
-      buildsSection.querySelector("[data-component='method-feature-icon']"),
-    ).toBeInTheDocument();
-    expect(
-      buildsSection.querySelector("img[src*='method-applied-icon']"),
-    ).toBeInTheDocument();
+    const methodFeatureIcon = buildsSection.querySelector(
+      "img[data-component='method-feature-icon']",
+    );
+    expect(methodFeatureIcon).toBeInTheDocument();
+    expect(methodFeatureIcon).toHaveAttribute(
+      "src",
+      expect.stringContaining("home_icon.png"),
+    );
+    expect(methodFeatureIcon).toHaveAttribute("width", "170");
+    expect(methodFeatureIcon).toHaveAttribute("height", "170");
+    expect(methodFeatureIcon).toHaveClass("size-[170px]");
+    expect(methodFeatureIcon).not.toHaveClass(
+      "sm:size-[9.5rem]",
+      "animate-nite-rise",
+    );
+    expect(methodFeatureIcon?.getAttribute("style")).not.toMatch(
+      /animation|opacity|transform/i,
+    );
     expect(
       buildsSection.querySelector("[data-component='nite-method-system']"),
-    ).toHaveAttribute("data-media-mode", "canvas-2d-with-html-fallback");
+    ).toHaveAttribute("data-media-mode", "resend-react-dom-panel");
     expect(
-      buildsSection.querySelector(
-        "[data-method-fallback='static-method-system']",
-      ),
+      buildsSection.querySelector("[data-method-window-controls]"),
     ).toBeInTheDocument();
     expect(
-      buildsSection.querySelector(
-        "[data-method-canvas='resend-method-system']",
-      ),
+      buildsSection.querySelector("[data-method-code-pane]"),
     ).toBeInTheDocument();
+    expect(buildsSection.querySelector("[data-method-content]")).toHaveClass(
+      "min-w-0",
+    );
+    expect(buildsSection.querySelector("[data-method-code-pane]")).toHaveClass(
+      "min-w-0",
+    );
+    expect(
+      buildsSection.querySelector("[data-method-preview-pane]"),
+    ).toBeInTheDocument();
+    expect(buildsSection.querySelector("canvas")).not.toBeInTheDocument();
     expect(
       builds.getByRole("tablist", { name: "Etapas do método aplicado" }),
     ).toBeInTheDocument();
     const methodTablist = builds.getByRole("tablist", {
       name: "Etapas do método aplicado",
     });
-    expect(methodTablist).toHaveClass("overflow-x-auto");
+    expect(methodTablist).toHaveClass(
+      "overflow-x-auto",
+      "[scrollbar-width:none]",
+    );
     expect(
-      buildsSection.querySelector(
-        "[data-method-canvas='resend-method-system']",
-      ),
-    ).toHaveAttribute("aria-hidden", "true");
+      builds.getByRole("switch", { name: "Visualização mobile" }),
+    ).toHaveAttribute("aria-checked", "false");
     expect(
-      buildsSection.querySelector("[data-component='method-feature-icon'] img"),
-    ).toHaveAttribute("alt", "");
+      builds.getByRole("switch", { name: "Aparência clara do preview" }),
+    ).toHaveAttribute("aria-checked", "false");
+    expect(
+      buildsSection.querySelectorAll("[data-method-segmented-control]"),
+    ).toHaveLength(2);
+    expect(
+      buildsSection.querySelector("[data-method-switch-thumb]"),
+    ).not.toBeInTheDocument();
+    expect(methodFeatureIcon).toHaveAttribute("alt", "");
 
     const methodTabs = builds.getAllByRole("tab");
     expect(methodTabs).toHaveLength(4);
-    expect(methodTabs.map((tab) => tab.textContent)).toEqual(
-      expect.arrayContaining([
-        "Recorte",
-        "Protótipo",
-        "Evidência",
-        "Circulação",
-      ]),
-    );
-    expect(builds.getByRole("tab", { name: /Recorte/i })).toHaveAttribute(
+    for (const file of [
+      "recorte.tsx",
+      "prototipo.tsx",
+      "evidencia.tsx",
+      "circulacao.tsx",
+    ]) {
+      expect(builds.getByRole("tab", { name: file })).toBeInTheDocument();
+    }
+    for (const tab of methodTabs) {
+      expect(tab).toHaveClass("text-sm");
+      expect(tab.querySelector("[data-tsx-file-icon]")).toHaveTextContent("TS");
+    }
+    expect(builds.getByRole("tab", { name: "recorte.tsx" })).toHaveAttribute(
       "aria-selected",
       "true",
     );
@@ -159,23 +201,85 @@ describe("HomePage", () => {
       "aria-labelledby",
       "method-tab-recorte",
     );
-
-    for (const title of [
-      "Problema publicável",
-      "Artefato testável",
-      "Rastro verificável",
-      "Caminho para a comunidade",
-    ]) {
-      expect(builds.getAllByText(title).length).toBeGreaterThanOrEqual(1);
-    }
-
-    for (const label of ["Recorte", "Protótipo", "Evidência", "Circulação"]) {
-      expect(builds.getByText(label)).toBeInTheDocument();
-    }
-
-    expect(builds.getByText("Estado ativo")).toBeInTheDocument();
+    expect(buildsSection.querySelector("[data-method-code-pane]")).toHaveClass(
+      "hidden",
+      "md:block",
+    );
     expect(
-      builds.getByText("brief, hipótese, restrições e próximos passos."),
+      buildsSection.querySelector("[data-method-preview-frame]"),
+    ).toHaveAttribute("data-device", "desktop");
+    expect(
+      buildsSection.querySelector("[data-method-preview-frame]"),
+    ).toHaveAttribute("data-appearance", "dark");
+    expect(
+      within(builds.getByRole("tabpanel")).queryByText("NITE"),
+    ).not.toBeInTheDocument();
+    expect(
+      within(builds.getByRole("tabpanel")).queryByText("01 / 04"),
+    ).not.toBeInTheDocument();
+    expect(
+      buildsSection.querySelector("[data-method-preview-header]"),
+    ).not.toBeInTheDocument();
+    expect(buildsSection.querySelector("[data-method-code-pane]")).toHaveClass(
+      "overflow-scroll",
+      "[scrollbar-width:thin]",
+    );
+    expect(
+      buildsSection.querySelectorAll("[data-method-code-line]"),
+    ).toHaveLength(26);
+
+    expect(
+      within(builds.getByRole("tabpanel")).getByRole("heading", {
+        name: "Problema publicável",
+      }),
+    ).toBeInTheDocument();
+    const previewHeading = within(builds.getByRole("tabpanel")).getByRole(
+      "heading",
+      {
+        name: "Problema publicável",
+      },
+    );
+    expect(previewHeading).toHaveClass(
+      "font-heading",
+      "text-[clamp(2rem,3vw,2.875rem)]",
+      "leading-[1.08]",
+      "font-semibold",
+      "text-[var(--method-preview-heading)]",
+    );
+    expect(previewHeading).not.toHaveClass("text-[clamp(1.75rem,3vw,2.5rem)]");
+    const previewDescription = within(builds.getByRole("tabpanel")).getByText(
+      "A demanda deixa de ser uma ideia solta e vira um contexto claro, com limites, público e critérios de leitura.",
+    );
+    expect(previewDescription).toHaveClass(
+      "text-base",
+      "leading-7",
+      "font-medium",
+      "text-[var(--method-preview-body)]",
+    );
+    expect(previewDescription).not.toHaveClass("text-sm", "opacity-65");
+    expect(builds.getByRole("tabpanel")).toHaveStyle({
+      "--method-preview-heading": "#f5f7fb",
+      "--method-preview-body": "rgb(214 224 237 / 0.82)",
+      "--method-preview-label": "rgb(176 199 217 / 0.7)",
+      "--method-preview-output": "#f2f7ff",
+      "--method-preview-rule": "rgb(176 199 217 / 0.16)",
+    });
+    const methodOutput = within(builds.getByRole("tabpanel"))
+      .getByText("brief, hipótese, restrições e próximos passos")
+      .closest("[data-method-preview-output]");
+    expect(methodOutput).toBeInTheDocument();
+    expect(methodOutput).toHaveClass(
+      "rounded-xl",
+      "border",
+      "border-[var(--method-preview-rule)]",
+      "bg-[var(--method-preview-output-surface)]",
+      "p-5",
+    );
+
+    expect(
+      within(builds.getByRole("tabpanel")).getByText(
+        "brief, hipótese, restrições e próximos passos",
+      ),
     ).toBeInTheDocument();
 
     for (const oldBuildCopy of [
@@ -214,12 +318,33 @@ describe("HomePage", () => {
     const projects = within(projectsSection);
 
     expect(projectsSection).toHaveAttribute("data-nite-scene", "inverse");
+    expect(projectsSection).toHaveAttribute("data-surface", "nite-background");
+    expect(projectsSection).toHaveClass(
+      "bg-nite-background",
+      "text-nite-text-primary",
+    );
+    expect(projectsSection).not.toHaveClass(
+      "border-t",
+      "border-nite-border-subtle",
+    );
+    expect(projectsSection).not.toHaveClass("resend-dark-scene");
     expect(
       projects.getByRole("heading", {
         level: 2,
         name: "Projetos em destaque",
       }),
     ).toBeInTheDocument();
+    const projectsHeading = projects.getByRole("heading", {
+      level: 2,
+      name: "Projetos em destaque",
+    });
+    expect(projectsHeading).toHaveClass("font-heading", "font-semibold");
+    expect(projectsHeading.parentElement?.className).toContain(
+      "[&_h2]:font-heading",
+    );
+    expect(projectsHeading.parentElement?.className).not.toContain(
+      "font-resend-display",
+    );
     expect(
       projects.getByText(
         "Acompanhe frentes, protótipos e entregas do NITE com contexto, status, stack e próximos passos.",
@@ -567,9 +692,20 @@ describe("HomePage", () => {
     render(<HomePage />);
 
     const builds = within(screen.getByTestId("builds-section"));
-    const recorteTab = builds.getByRole("tab", { name: /Recorte/i });
-    const prototipoTab = builds.getByRole("tab", { name: /Protótipo/i });
-    const circulacaoTab = builds.getByRole("tab", { name: /Circulação/i });
+    const recorteTab = builds.getByRole("tab", { name: "recorte.tsx" });
+    const prototipoTab = builds.getByRole("tab", { name: "prototipo.tsx" });
+    const circulacaoTab = builds.getByRole("tab", {
+      name: "circulacao.tsx",
+    });
+    const mobileSwitch = builds.getByRole("switch", {
+      name: "Visualização mobile",
+    });
+    const lightSwitch = builds.getByRole("switch", {
+      name: "Aparência clara do preview",
+    });
+    const previewFrame = screen
+      .getByTestId("builds-section")
+      .querySelector("[data-method-preview-frame]");
 
     expect(recorteTab).toHaveAttribute("aria-selected", "true");
 
@@ -578,14 +714,19 @@ describe("HomePage", () => {
     expect(prototipoTab).toHaveAttribute("aria-selected", "true");
     expect(recorteTab).toHaveAttribute("aria-selected", "false");
     expect(builds.getByRole("tabpanel")).toHaveTextContent(
-      "interface, prova de conceito, fluxo ou demonstração.",
+      "interface, prova de conceito, fluxo ou demonstração",
     );
+    expect(
+      screen
+        .getByTestId("builds-section")
+        .querySelector("[data-method-code-pane]"),
+    ).toHaveTextContent('etapa: "Protótipo"');
 
     prototipoTab.focus();
 
     await user.keyboard("{ArrowRight}");
 
-    expect(builds.getByRole("tab", { name: /Evidência/i })).toHaveFocus();
+    expect(builds.getByRole("tab", { name: "evidencia.tsx" })).toHaveFocus();
 
     await user.keyboard("{End}");
 
@@ -593,8 +734,25 @@ describe("HomePage", () => {
     expect(circulacaoTab).toHaveAttribute("aria-selected", "true");
     expect(prototipoTab).toHaveAttribute("aria-selected", "false");
     expect(builds.getByRole("tabpanel")).toHaveTextContent(
-      "página pública, chamada, guia ou atualização.",
+      "página pública, chamada, guia ou atualização",
     );
+
+    await user.click(mobileSwitch);
+
+    expect(mobileSwitch).toHaveAttribute("aria-checked", "true");
+    expect(previewFrame).toHaveAttribute("data-device", "mobile");
+
+    await user.click(lightSwitch);
+
+    expect(lightSwitch).toHaveAttribute("aria-checked", "true");
+    expect(previewFrame).toHaveAttribute("data-appearance", "light");
+    expect(previewFrame).toHaveStyle({
+      "--method-preview-heading": "#0b1220",
+      "--method-preview-body": "rgb(51 65 85 / 0.86)",
+      "--method-preview-label": "rgb(51 65 85 / 0.64)",
+      "--method-preview-output": "#102033",
+      "--method-preview-rule": "rgb(15 23 42 / 0.12)",
+    });
   });
 
   it("mantem o foco dentro do menu mobile em camadas", async () => {

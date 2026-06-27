@@ -20,9 +20,9 @@ function ProjectShowcaseMeta({ project }: { project: Project }) {
         <StatusBadge
           status="draft"
           size="sm"
-          className="border-white/12 bg-white/4 text-[#a1a1a1]"
+          className="border-nite-border-subtle bg-nite-surface-subtle text-nite-text-secondary"
         />
-        <span className="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-[#737373]">
+        <span className="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-nite-text-muted">
           {project.category}
         </span>
       </div>
@@ -31,7 +31,7 @@ function ProjectShowcaseMeta({ project }: { project: Project }) {
           <Chip
             key={technology}
             variant="quiet"
-            className="min-h-6 border-white/10 bg-transparent px-2.5 py-1 text-[0.65rem] text-[#8a8a8a]"
+            className="min-h-6 border-nite-border-subtle bg-transparent px-2.5 py-1 text-[0.65rem] text-nite-text-secondary"
           >
             {technology}
           </Chip>
@@ -51,15 +51,15 @@ function SoftwareInterfaceVisual() {
   return (
     <div
       aria-hidden="true"
-      className="grid min-h-[22rem] gap-4 bg-[#030303] p-5 sm:grid-cols-[1.15fr_0.85fr] sm:p-8"
+      className="grid min-h-[22rem] gap-4 bg-nite-section p-5 sm:grid-cols-[1.15fr_0.85fr] sm:p-8"
     >
-      <div className="overflow-hidden rounded-xl border border-white/10 bg-black">
-        <div className="flex gap-4 border-b border-white/10 px-4 py-3 font-mono text-[0.65rem] text-[#737373]">
+      <div className="overflow-hidden rounded-xl border border-nite-border-subtle bg-nite-background">
+        <div className="flex gap-4 border-b border-nite-border-subtle px-4 py-3 font-mono text-[0.65rem] text-nite-text-muted">
           <span>routes.ts</span>
           <span>events.ts</span>
           <span>tests.ts</span>
         </div>
-        <pre className="overflow-hidden p-5 font-mono text-xs leading-6 text-[#9b9b9b]">
+        <pre className="overflow-hidden p-5 font-mono text-xs leading-6 text-nite-text-secondary">
           <code>{`export async function publish(context) {
   const evidence = await validate(context)
   return registry.create({
@@ -71,25 +71,25 @@ function SoftwareInterfaceVisual() {
         </pre>
       </div>
 
-      <div className="flex flex-col justify-between gap-5 rounded-xl border border-white/10 bg-white/[0.018] p-5">
+      <div className="flex flex-col justify-between gap-5 rounded-xl border border-nite-border-subtle bg-nite-surface-subtle p-5">
         <div>
-          <p className="font-mono text-[0.65rem] uppercase tracking-[0.14em] text-[#737373]">
+          <p className="font-mono text-[0.65rem] uppercase tracking-[0.14em] text-nite-text-muted">
             Activity
           </p>
           <div className="mt-5 grid gap-3">
             {logs.map(([method, path, status]) => (
               <div
                 key={path}
-                className="grid grid-cols-[2.5rem_1fr_auto] gap-3 border-b border-white/8 pb-3 font-mono text-[0.68rem]"
+                className="grid grid-cols-[2.5rem_1fr_auto] gap-3 border-b border-nite-border-subtle pb-3 font-mono text-[0.68rem]"
               >
-                <span className="text-[#737373]">{method}</span>
-                <span className="text-[#a1a1a1]">{path}</span>
-                <span className="text-emerald-400/80">{status}</span>
+                <span className="text-nite-text-muted">{method}</span>
+                <span className="text-nite-text-secondary">{path}</span>
+                <span className="text-status-done">{status}</span>
               </div>
             ))}
           </div>
         </div>
-        <div className="h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
+        <div className="h-px bg-gradient-to-r from-transparent via-nite-border-strong to-transparent" />
       </div>
     </div>
   );
@@ -102,22 +102,22 @@ export function FeaturedProjectShowcase({
   return (
     <article
       data-project-role="protagonist"
-      className="overflow-hidden rounded-[1.35rem] border border-white/10 bg-[#030303]"
+      className="overflow-hidden rounded-[1.35rem] border border-nite-border-subtle bg-nite-section"
     >
       <SoftwareInterfaceVisual />
-      <div className="grid gap-6 border-t border-white/10 p-6 sm:p-8 lg:grid-cols-[1fr_auto] lg:items-end">
+      <div className="grid gap-6 border-t border-nite-border-subtle p-6 sm:p-8 lg:grid-cols-[1fr_auto] lg:items-end">
         <div className="grid max-w-[46rem] gap-4">
           <ProjectShowcaseMeta project={project} />
-          <h3 className="text-2xl font-medium text-[#f5f5f5] sm:text-3xl">
+          <h3 className="text-2xl font-medium text-nite-text-primary sm:text-3xl">
             {project.title}
           </h3>
-          <p className="max-w-[42rem] text-sm leading-6 text-[#8a8a8a] sm:text-base sm:leading-7">
+          <p className="max-w-[42rem] text-sm leading-6 text-nite-text-secondary sm:text-base sm:leading-7">
             {project.summary}
           </p>
         </div>
         <Link
           href={href}
-          className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-[#f5f5f5] transition-opacity hover:opacity-70"
+          className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-nite-text-primary transition-opacity hover:opacity-70"
         >
           Ver projeto
           <ArrowUpRight aria-hidden="true" className="size-4" />
@@ -141,11 +141,11 @@ export function SupportingProjectModule({
     <article
       data-project-role="supporting"
       className={cn(
-        "overflow-hidden rounded-[1.35rem] border border-white/10 bg-[#030303]",
+        "overflow-hidden rounded-[1.35rem] border border-nite-border-subtle bg-nite-section",
         className,
       )}
     >
-      <div className="relative aspect-[16/10] overflow-hidden border-b border-white/10 bg-[#050505]">
+      <div className="relative aspect-[16/10] overflow-hidden border-b border-nite-border-subtle bg-nite-section">
         <Image
           src={visual.src}
           alt={visual.alt}
@@ -153,17 +153,19 @@ export function SupportingProjectModule({
           sizes="(max-width: 1024px) 100vw, 50vw"
           className="object-cover grayscale contrast-110 brightness-[0.58]"
         />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_30%,#030303_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_30%,var(--nite-section)_100%)]" />
       </div>
       <div className="grid gap-4 p-6 sm:p-7">
         <ProjectShowcaseMeta project={project} />
-        <h3 className="text-xl font-medium text-[#f5f5f5] sm:text-2xl">
+        <h3 className="text-xl font-medium text-nite-text-primary sm:text-2xl">
           {project.title}
         </h3>
-        <p className="text-sm leading-6 text-[#8a8a8a]">{project.summary}</p>
+        <p className="text-sm leading-6 text-nite-text-secondary">
+          {project.summary}
+        </p>
         <Link
           href={href}
-          className="mt-2 inline-flex min-h-10 w-fit items-center gap-2 text-sm font-medium text-[#f5f5f5] transition-opacity hover:opacity-70"
+          className="mt-2 inline-flex min-h-10 w-fit items-center gap-2 text-sm font-medium text-nite-text-primary transition-opacity hover:opacity-70"
         >
           Ver projeto
           <ArrowUpRight aria-hidden="true" className="size-4" />

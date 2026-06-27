@@ -8,11 +8,11 @@
   --font-sans: var(--font-geist), "Bahnschrift", "Segoe UI", sans-serif;
   --font-heading: var(--font-sora), "Bahnschrift", "Segoe UI", sans-serif;
   --font-mono: var(--font-geist-mono), "Cascadia Mono", "Consolas", monospace;
-  --font-resend-display:
-    var(--font-instrument-serif), "Iowan Old Style", "Times New Roman", serif;
   --color-nite-background: var(--nite-background);
+  --color-nite-section: var(--nite-section);
   --color-nite-surface: var(--nite-surface);
   --color-nite-surface-focus: var(--nite-surface-focus);
+  --color-nite-surface-elevated: var(--nite-surface-elevated);
   --color-nite-surface-subtle: var(--nite-surface-subtle);
   --color-nite-text-primary: var(--nite-text-primary);
   --color-nite-text-secondary: var(--nite-text-secondary);
@@ -454,16 +454,6 @@ body {
     --unijorge-lit-soft: rgb(74 119 199 / 0.54);
     --unijorge-lit-wide: rgb(35 73 127 / 0.42);
     animation-delay: 0.35s;
-  }
-
-  .resend-dark-scene {
-    --resend-scene-bg: #000;
-    --resend-scene-surface: rgb(255 255 255 / 0.025);
-    --resend-scene-border: rgb(255 255 255 / 0.1);
-    --resend-scene-text: #f5f5f5;
-    --resend-scene-muted: #8a8a8a;
-    background: var(--resend-scene-bg);
-    color: var(--resend-scene-text);
   }
 
   .animate-nite-rise {

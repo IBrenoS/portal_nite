@@ -16,7 +16,8 @@ entrega validada.
 A composição segue a opção `Palco de Produto` revisada:
 
 - `Método aplicado` usa um ícone 3D exclusivo, título e descrição centralizados.
-- Um único canvas apresenta `Recorte`, `Protótipo`, `Evidência` e `Circulação`.
+- Um único painel técnico apresenta `Recorte`, `Protótipo`, `Evidência` e
+  `Circulação`.
 - `Projetos em destaque` tem `Software aplicado` como protagonista.
 - `Robótica educacional` e `Dados e IA` aparecem como módulos de apoio.
 - As três frentes continuam exibindo o estado `Em estruturação`.
@@ -47,16 +48,11 @@ cards genéricos ou elementos decorativos sem função.
 A Resend usa fontes comerciais que não estão disponíveis no repositório. A
 implementação não fará hotlink nem copiará arquivos de fonte de terceiros.
 
-O papel visual será reproduzido com:
+O papel visual será reproduzido com as famílias já adotadas pelo produto:
 
-- `Instrument Serif`, via `next/font/google`, nos títulos editoriais dessas duas
-  seções;
-- `Geist`, já existente no projeto, para texto, controles e metadados;
-- `Geist Mono`, já existente, para logs, estados e rótulos técnicos.
-
-A fonte serifada será exposta como `--font-resend-display`. Caso arquivos
-licenciados sejam fornecidos posteriormente, a troca ficará isolada no
-carregamento da fonte e não exigirá alteração dos componentes.
+- `Sora` nos títulos e destaques do preview;
+- `Geist` para texto, controles e metadados;
+- `Geist Mono` para arquivos, código, estados e rótulos técnicos.
 
 ## Método aplicado
 
@@ -70,7 +66,7 @@ O cabeçalho será centralizado e terá:
 
 O texto anterior `Antes de virar projeto, uma demanda precisa virar evidência.`
 deixa de ser o título principal da seção. Sua ideia permanece representada pelo
-canvas e pelos textos dos estágios.
+painel e pelos textos dos estágios.
 
 ### Ícone
 
@@ -78,54 +74,50 @@ O ativo será uma imagem raster gerada especificamente para a seção:
 
 - quatro módulos de metal escuro e vidro fumê;
 - eixo central preciso;
-- sem letra `N`, cubo, envelope ou símbolos dos três projetos;
+- sem letra `N`, envelope ou símbolos dos três projetos;
 - fundo transparente ou preto compatível com a cena;
-- dimensões de exibição próximas de `150 x 150`;
-- poster estático com animação de entrada, respiração e inclinação leve no
-  wrapper;
-- movimento desativado com `prefers-reduced-motion`.
+- dimensões de exibição de `170 x 170`;
+- exibição estática no desktop e mobile;
+- sem animação, inclinação, brilho ou microinteração no wrapper.
 
 O ícone não reutilizará `public/images/oportunidades/n-icon.png`.
 
-### Canvas
+### Painel técnico
 
-`MethodSystemCanvas` será um canvas 2D decorativo com uma camada HTML acessível
-por cima. O canvas desenhará:
+O painel reproduz a estrutura observada na feature `Develop emails using React`
+da Resend sem usar `<canvas>` ou iframe. Toda a interface é DOM React:
 
-- grade de 20 px em baixa opacidade;
-- rotas ortogonais entre os quatro estágios;
-- trilhas curtas em movimento;
-- pontos de atividade e pulsos discretos;
-- máscara radial para dissipar linhas nas bordas;
-- destaque monocromático do estágio ativo.
+- barra superior de 48 px com controles de janela;
+- controles segmentados de dispositivo e aparência no desktop;
+- lista lateral com ícone `TS`, fonte de `14 px` e os arquivos `recorte.tsx`,
+  `prototipo.tsx`, `evidencia.tsx` e `circulacao.tsx`;
+- código com numeração de linhas, realce de sintaxe e barras de rolagem vertical
+  e horizontal;
+- preview do método que muda junto com o arquivo ativo;
+- preview sem cabeçalho, assinatura ou numeração adicional;
+- aparência escura por padrão e variação clara controlada pelo switch;
+- preview mobile limitado a 350 px quando o controle de dispositivo está ativo.
 
-A camada HTML apresentará todos os estágios dentro de uma única superfície:
-
-- `Recorte`;
-- `Protótipo`;
-- `Evidência`;
-- `Circulação`.
-
-Cada estágio terá rótulo, título e descrição breve. Um `tablist` inferior
-controlará o estado ativo. Clique, foco e teclado atualizarão o canvas e a área
-de saída. O conteúdo continuará disponível sem canvas.
+Cada arquivo representa um estágio e preserva seu rótulo, título, descrição e
+saída. Clique, foco e teclado atualizam simultaneamente o código e o preview.
 
 ### Responsividade
 
 Desktop:
 
 - cabeçalho centralizado;
-- canvas com largura máxima próxima de `1200 px`;
-- quatro estágios visíveis simultaneamente;
-- tablist horizontal na base.
+- painel com largura máxima próxima de `1200 px` e altura de `700 px`;
+- navegação vertical de `200 px`;
+- código e preview dividem igualmente a área restante;
+- switches de dispositivo e aparência ficam na barra superior.
 
 Mobile:
 
 - ícone menor;
-- canvas com altura reduzida;
-- rótulos dos quatro estágios permanecem visíveis;
-- descrição detalhada mostra apenas o estágio ativo;
-- tablist permite rolagem horizontal sem esconder o foco.
+- painel com altura de `623 px`;
+- navegação se torna horizontal e rolável sem barra nativa visível;
+- código e switches são ocultos;
+- preview ocupa toda a área restante sem overflow horizontal.
 
 ## Projetos em destaque
 
@@ -173,10 +165,11 @@ Os nomes, slugs, resumos e estados vêm de `conteudo/projetos/projetos.json`.
 
 Componentes previstos:
 
-- `MethodFeatureIcon`: ativo e movimento do ícone exclusivo;
-- `MethodSystemCanvas`: desenho procedural 2D;
-- `MethodSystemStage`: conteúdo acessível de cada estágio;
-- `BuildsCardsGrid`: controlador dos estágios e tablist;
+- `MethodFeatureIcon`: exibição estática do ícone exclusivo;
+- `BuildsCardsGrid`: painel, controlador dos estágios e tablist;
+- `MethodCode`: visualização do código do estágio ativo;
+- `MethodPreview`: preview responsivo do estágio ativo;
+- `ToolbarSwitch`: alternância acessível de dispositivo e aparência;
 - `FeaturedProjectShowcase`: módulo protagonista;
 - `SupportingProjectModule`: módulo de apoio;
 - `ProjectStatusLabel`: adaptação visual do status existente.
@@ -199,20 +192,19 @@ tecnologia assistiva.
 
 ## Movimento e desempenho
 
-- O canvas usa `requestAnimationFrame` e limita o pixel ratio a `2`.
-- `ResizeObserver` ajusta o canvas sem listeners globais de layout.
-- A animação pausa quando a seção não está visível.
-- `prefers-reduced-motion` renderiza um frame estático.
+- O painel não usa canvas, WebGL, iframe, vídeo ou Spline.
+- Código e preview são renderizados diretamente no DOM.
+- As transições se limitam a cor, largura e posição do switch.
+- `prefers-reduced-motion` remove essas transições.
 - O ícone é carregado como imagem otimizada pelo Next.
-- Não será introduzido WebGL ou Spline nessas seções.
-- O canvas é decorativo; a interação pertence aos controles HTML.
 
 ## Acessibilidade
 
-- O canvas terá `aria-hidden="true"`.
 - O seletor de método usará `role="tablist"`, `role="tab"` e
   `aria-selected`.
 - Setas esquerda e direita moverão o foco entre os estágios.
+- Os controles de dispositivo e aparência usarão `role="switch"` e
+  `aria-checked`.
 - Todos os links `Ver projeto` manterão destino e nome acessível.
 - O foco visível usará branco/cinza com contraste adequado na cena escura.
 - Imagens dos projetos manterão os textos alternativos do conteúdo.
@@ -224,9 +216,10 @@ Os testes unitários da home serão atualizados para verificar:
 
 - título e descrição centralizados do método;
 - ausência do ícone `N`;
-- presença do canvas e fallback HTML;
+- ausência de canvas e presença do painel DOM;
 - quatro tabs acessíveis;
 - mudança de estágio por clique, foco e teclado;
+- mudança de dispositivo e aparência pelos switches;
 - ausência de três cards genéricos equivalentes;
 - presença de um protagonista e dois módulos de apoio;
 - seleção do protagonista pelo slug;
