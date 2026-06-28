@@ -25,13 +25,14 @@ export function HeroSection() {
             </p>
             <h1 className="max-w-[11.4em] font-heading text-[2.35rem] font-semibold leading-[1.04] text-foreground [text-wrap:balance] min-[390px]:text-[2.45rem] sm:text-[3.15rem] sm:leading-[1.03] lg:max-w-[14.9em] lg:text-[3.08rem] lg:leading-[1.04] xl:text-[3.18rem]">
               <span className="nite-metal-text">
-                Tecnologia aplicada, aprendizagem e projetos em evolução.
+                Desafios reais se transformam em aprendizagem, experiências e
+                projetos em evolução.
               </span>
             </h1>
             <p className="mx-auto max-w-[36rem] text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8 lg:mx-0 lg:text-xl">
-              O NITE conecta estudantes, professores e desafios institucionais
-              em um portal para acompanhar frentes, oportunidades e movimentos
-              do núcleo com contexto e transparência.
+              Estudantes, professores e diferentes áreas se conectam para
+              investigar problemas, experimentar possibilidades e construir
+              soluções com impacto dentro e fora da universidade.
             </p>
           </div>
 
