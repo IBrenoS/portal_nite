@@ -26,7 +26,7 @@ describe("HomePage", () => {
     const headings = screen.getAllByRole("heading", { level: 1 });
     expect(headings).toHaveLength(1);
     expect(headings[0]).toHaveTextContent(
-      "Tecnologia aplicada, aprendizagem e projetos em evolução.",
+      "Desafios reais se transformam em aprendizagem, experiências e projetos em evolução.",
     );
 
     const hero = within(screen.getByTestId("hero-section"));
@@ -35,7 +35,7 @@ describe("HomePage", () => {
     ).toBeInTheDocument();
     expect(
       hero.getByText(
-        "O NITE conecta estudantes, professores e desafios institucionais em um portal para acompanhar frentes, oportunidades e movimentos do núcleo com contexto e transparência.",
+        "Estudantes, professores e diferentes áreas se conectam para investigar problemas, experimentar possibilidades e construir soluções com impacto dentro e fora da universidade.",
       ),
     ).toBeInTheDocument();
     const heroPrimaryCta = hero.getByRole("link", {
@@ -81,6 +81,8 @@ describe("HomePage", () => {
       "Próximo passo",
       "dashboard",
       "painel operacional",
+      "Tecnologia aplicada, aprendizagem e projetos em evolução.",
+      "O NITE conecta estudantes, professores e desafios institucionais em um portal para acompanhar frentes, oportunidades e movimentos do núcleo com contexto e transparência.",
     ]) {
       expect(hero.queryByText(forbidden)).not.toBeInTheDocument();
     }
@@ -111,9 +113,7 @@ describe("HomePage", () => {
     );
     expect(buildsHeading).toHaveTextContent("Método aplicado");
     expect(
-      builds.getByText(
-        "O NITE organiza desafios acadêmicos em recortes, protótipos e registros públicos.",
-      ),
+      builds.getByText("Toda ideia precisa de um caminho para ganhar forma."),
     ).toBeInTheDocument();
     expect(
       builds.queryByRole("link", { name: /Explorar projetos/i }),
@@ -182,10 +182,10 @@ describe("HomePage", () => {
     const methodTabs = builds.getAllByRole("tab");
     expect(methodTabs).toHaveLength(4);
     for (const file of [
-      "recorte.tsx",
+      "desafio.tsx",
       "prototipo.tsx",
-      "evidencia.tsx",
-      "circulacao.tsx",
+      "evolucao.tsx",
+      "impacto.tsx",
     ]) {
       expect(builds.getByRole("tab", { name: file })).toBeInTheDocument();
     }
@@ -193,13 +193,13 @@ describe("HomePage", () => {
       expect(tab).toHaveClass("text-sm");
       expect(tab.querySelector("[data-tsx-file-icon]")).toHaveTextContent("TS");
     }
-    expect(builds.getByRole("tab", { name: "recorte.tsx" })).toHaveAttribute(
+    expect(builds.getByRole("tab", { name: "desafio.tsx" })).toHaveAttribute(
       "aria-selected",
       "true",
     );
     expect(builds.getByRole("tabpanel")).toHaveAttribute(
       "aria-labelledby",
-      "method-tab-recorte",
+      "method-tab-desafio",
     );
     expect(buildsSection.querySelector("[data-method-code-pane]")).toHaveClass(
       "hidden",
@@ -226,17 +226,17 @@ describe("HomePage", () => {
     );
     expect(
       buildsSection.querySelectorAll("[data-method-code-line]"),
-    ).toHaveLength(26);
+    ).toHaveLength(27);
 
     expect(
       within(builds.getByRole("tabpanel")).getByRole("heading", {
-        name: "Problema publicável",
+        name: "Desafio claro",
       }),
     ).toBeInTheDocument();
     const previewHeading = within(builds.getByRole("tabpanel")).getByRole(
       "heading",
       {
-        name: "Problema publicável",
+        name: "Desafio claro",
       },
     );
     expect(previewHeading).toHaveClass(
@@ -248,7 +248,7 @@ describe("HomePage", () => {
     );
     expect(previewHeading).not.toHaveClass("text-[clamp(1.75rem,3vw,2.5rem)]");
     const previewDescription = within(builds.getByRole("tabpanel")).getByText(
-      "A demanda deixa de ser uma ideia solta e vira um contexto claro, com limites, público e critérios de leitura.",
+      "Transformamos uma ideia ampla em um problema com contexto, limites, público e critérios de sucesso.",
     );
     expect(previewDescription).toHaveClass(
       "text-base",
@@ -261,26 +261,50 @@ describe("HomePage", () => {
       "--method-preview-heading": "#f5f7fb",
       "--method-preview-body": "rgb(214 224 237 / 0.82)",
       "--method-preview-label": "rgb(176 199 217 / 0.7)",
-      "--method-preview-output": "#f2f7ff",
       "--method-preview-rule": "rgb(176 199 217 / 0.16)",
     });
-    const methodOutput = within(builds.getByRole("tabpanel"))
-      .getByText("brief, hipótese, restrições e próximos passos")
-      .closest("[data-method-preview-output]");
-    expect(methodOutput).toBeInTheDocument();
-    expect(methodOutput).toHaveClass(
-      "rounded-xl",
+    expect(
+      within(builds.getByRole("tabpanel")).getByText(
+        "Cada iniciativa começa definindo o desafio e apontando o que se pretende investigar. O resultado dessa fase é um objetivo claro e uma hipótese inicial para guiar a próxima etapa.",
+      ),
+    ).toBeInTheDocument();
+    expect(
+      buildsSection.querySelector("[data-method-preview-note]"),
+    ).toHaveClass(
       "border",
       "border-[var(--method-preview-rule)]",
-      "bg-[var(--method-preview-output-surface)]",
-      "p-5",
+      "bg-[var(--method-preview-note-surface)]",
     );
 
     expect(
-      within(builds.getByRole("tabpanel")).getByText(
-        "brief, hipótese, restrições e próximos passos",
-      ),
-    ).toBeInTheDocument();
+      within(builds.getByRole("tabpanel")).queryByText("Saída da etapa"),
+    ).not.toBeInTheDocument();
+    expect(
+      buildsSection.querySelector("[data-method-preview-output]"),
+    ).not.toBeInTheDocument();
+    expect(
+      buildsSection.querySelector("[data-method-code-pane]"),
+    ).toHaveTextContent("const desafio = defineMethod({");
+    expect(
+      buildsSection.querySelector("[data-method-code-pane]"),
+    ).toHaveTextContent(
+      'saida: "objetivo, hipótese, limites e próximos passos"',
+    );
+    expect(
+      buildsSection.querySelector("[data-method-code-pane]"),
+    ).toHaveTextContent("<MethodLayout.Eyebrow>");
+    expect(
+      buildsSection.querySelector("[data-method-code-pane]"),
+    ).toHaveTextContent("Método aplicado · {desafio.etapa}");
+    expect(
+      buildsSection.querySelector("[data-method-code-pane]"),
+    ).toHaveTextContent("</MethodLayout.Eyebrow>");
+    expect(
+      buildsSection.querySelector("[data-method-code-pane]"),
+    ).toHaveTextContent("<MethodNote>{desafio.resumo}</MethodNote>");
+    expect(
+      buildsSection.querySelector("[data-method-code-pane]"),
+    ).not.toHaveTextContent("<Text>{desafio.etapa}</Text>");
 
     for (const oldBuildCopy of [
       "Antes de virar projeto, uma demanda precisa virar evidência.",
@@ -293,6 +317,7 @@ describe("HomePage", () => {
       "Conversor NITE",
       "Desafio, método, evidência e rota pública na mesma superfície.",
       "Saída esperada",
+      "Saída da etapa",
       "Artefatos possíveis",
       "Saídas concretas para transformar desafios acadêmicos em tecnologia aplicada.",
       "Software aplicado",
@@ -692,10 +717,10 @@ describe("HomePage", () => {
     render(<HomePage />);
 
     const builds = within(screen.getByTestId("builds-section"));
-    const recorteTab = builds.getByRole("tab", { name: "recorte.tsx" });
+    const desafioTab = builds.getByRole("tab", { name: "desafio.tsx" });
     const prototipoTab = builds.getByRole("tab", { name: "prototipo.tsx" });
-    const circulacaoTab = builds.getByRole("tab", {
-      name: "circulacao.tsx",
+    const impactoTab = builds.getByRole("tab", {
+      name: "impacto.tsx",
     });
     const mobileSwitch = builds.getByRole("switch", {
       name: "Visualização mobile",
@@ -707,14 +732,14 @@ describe("HomePage", () => {
       .getByTestId("builds-section")
       .querySelector("[data-method-preview-frame]");
 
-    expect(recorteTab).toHaveAttribute("aria-selected", "true");
+    expect(desafioTab).toHaveAttribute("aria-selected", "true");
 
     await user.click(prototipoTab);
 
     expect(prototipoTab).toHaveAttribute("aria-selected", "true");
-    expect(recorteTab).toHaveAttribute("aria-selected", "false");
+    expect(desafioTab).toHaveAttribute("aria-selected", "false");
     expect(builds.getByRole("tabpanel")).toHaveTextContent(
-      "interface, prova de conceito, fluxo ou demonstração",
+      "As perguntas viram coisas tangíveis. O foco aqui é experimentar e aprender rapidamente.",
     );
     expect(
       screen
@@ -726,15 +751,15 @@ describe("HomePage", () => {
 
     await user.keyboard("{ArrowRight}");
 
-    expect(builds.getByRole("tab", { name: "evidencia.tsx" })).toHaveFocus();
+    expect(builds.getByRole("tab", { name: "evolucao.tsx" })).toHaveFocus();
 
     await user.keyboard("{End}");
 
-    expect(circulacaoTab).toHaveFocus();
-    expect(circulacaoTab).toHaveAttribute("aria-selected", "true");
+    expect(impactoTab).toHaveFocus();
+    expect(impactoTab).toHaveAttribute("aria-selected", "true");
     expect(prototipoTab).toHaveAttribute("aria-selected", "false");
     expect(builds.getByRole("tabpanel")).toHaveTextContent(
-      "página pública, chamada, guia ou atualização",
+      "Ao final, a solução não fica dentro do núcleo; ela se conecta com pessoas e contextos diversos.",
     );
 
     await user.click(mobileSwitch);
@@ -750,7 +775,6 @@ describe("HomePage", () => {
       "--method-preview-heading": "#0b1220",
       "--method-preview-body": "rgb(51 65 85 / 0.86)",
       "--method-preview-label": "rgb(51 65 85 / 0.64)",
-      "--method-preview-output": "#102033",
       "--method-preview-rule": "rgb(15 23 42 / 0.12)",
     });
   });

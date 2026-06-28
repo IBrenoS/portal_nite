@@ -12,44 +12,52 @@ import { cn } from "@/lib/utils";
 
 const methodStages = [
   {
-    id: "recorte",
-    file: "recorte.tsx",
-    variable: "recorte",
-    label: "Recorte",
-    title: "Problema publicável",
+    id: "desafio",
+    file: "desafio.tsx",
+    variable: "desafio",
+    label: "Desafio",
+    title: "Desafio claro",
     description:
-      "A demanda deixa de ser uma ideia solta e vira um contexto claro, com limites, público e critérios de leitura.",
-    output: "brief, hipótese, restrições e próximos passos",
+      "Transformamos uma ideia ampla em um problema com contexto, limites, público e critérios de sucesso.",
+    output: "objetivo, hipótese, limites e próximos passos",
+    summary:
+      "Cada iniciativa começa definindo o desafio e apontando o que se pretende investigar. O resultado dessa fase é um objetivo claro e uma hipótese inicial para guiar a próxima etapa.",
   },
   {
     id: "prototipo",
     file: "prototipo.tsx",
     variable: "prototipo",
     label: "Protótipo",
-    title: "Artefato testável",
+    title: "Protótipo testável",
     description:
-      "Software, dados, automação, robótica ou experiência digital ganham forma suficiente para validação prática.",
+      "Ideias ganham forma em interfaces, provas de conceito ou experiências digitais que podem ser testadas e refinadas.",
     output: "interface, prova de conceito, fluxo ou demonstração",
+    summary:
+      "As perguntas viram coisas tangíveis. O foco aqui é experimentar e aprender rapidamente.",
   },
   {
-    id: "evidencia",
-    file: "evidencia.tsx",
-    variable: "evidencia",
-    label: "Evidência",
-    title: "Rastro verificável",
+    id: "evolucao",
+    file: "evolucao.tsx",
+    variable: "evolucao",
+    label: "Evolução",
+    title: "Evolução contínua",
     description:
-      "O avanço só vira narrativa pública quando há contexto, status, evidência e limites bem descritos.",
-    output: "registro, documentação, stack e status",
+      "Com base nos testes e aprendizados, aprimoramos a solução e registramos decisões, tecnologia e status de cada passo.",
+    output: "registro, documentação, tecnologia e status",
+    summary:
+      "Documentação e visibilidade não são burocracia, mas uma memória viva do projeto.",
   },
   {
-    id: "circulacao",
-    file: "circulacao.tsx",
-    variable: "circulacao",
-    label: "Circulação",
-    title: "Caminho para a comunidade",
+    id: "impacto",
+    file: "impacto.tsx",
+    variable: "impacto",
+    label: "Impacto",
+    title: "Impacto e compartilhamento",
     description:
-      "A entrega encontra uma rota pública coerente: projeto, oportunidade, atualização, oficina ou contato institucional.",
+      "A entrega encontra uma rota pública: projeto, oportunidade, atualização, oficina ou guia. O conhecimento alcança a comunidade e inspira novos desafios.",
     output: "página pública, chamada, guia ou atualização",
+    summary:
+      "Ao final, a solução não fica dentro do núcleo; ela se conecta com pessoas e contextos diversos.",
   },
 ] as const;
 
@@ -84,7 +92,7 @@ function MethodCode({ stage }: { stage: MethodStage }) {
       { text: "import", tone: "keyword" },
       { text: " { ", tone: "punctuation" },
       {
-        text: "Heading, MethodLayout, MethodOutput, Text",
+        text: "Heading, MethodLayout, MethodNote, Text",
         tone: "function",
       },
       { text: " } ", tone: "punctuation" },
@@ -95,8 +103,10 @@ function MethodCode({ stage }: { stage: MethodStage }) {
     [{ text: " " }],
     [
       { text: "const", tone: "keyword" },
-      { text: " stage ", tone: "function" },
-      { text: "= {", tone: "punctuation" },
+      { text: ` ${stage.variable} `, tone: "function" },
+      { text: "= ", tone: "punctuation" },
+      { text: "defineMethod", tone: "function" },
+      { text: "({", tone: "punctuation" },
     ],
     [
       { text: "  etapa", tone: "property" },
@@ -123,8 +133,13 @@ function MethodCode({ stage }: { stage: MethodStage }) {
       { text: ",", tone: "punctuation" },
     ],
     [
-      { text: "} ", tone: "punctuation" },
-      { text: "as const", tone: "keyword" },
+      { text: "  resumo", tone: "property" },
+      { text: ": ", tone: "punctuation" },
+      { text: `"${stage.summary}"`, tone: "string" },
+      { text: ",", tone: "punctuation" },
+    ],
+    [
+      { text: "})", tone: "punctuation" },
       { text: ";", tone: "punctuation" },
     ],
     [{ text: " " }],
@@ -139,30 +154,30 @@ function MethodCode({ stage }: { stage: MethodStage }) {
     ],
     [{ text: "    <MethodLayout>", tone: "function" }],
     [{ text: "      <MethodLayout.Header>", tone: "function" }],
+    [{ text: "        <MethodLayout.Eyebrow>", tone: "function" }],
     [
-      { text: "        <Text>", tone: "function" },
-      { text: "{stage.etapa}", tone: "property" },
-      { text: "</Text>", tone: "function" },
+      { text: "          Método aplicado · ", tone: "punctuation" },
+      { text: `{${stage.variable}.etapa}`, tone: "property" },
     ],
+    [{ text: "        </MethodLayout.Eyebrow>", tone: "function" }],
     [
       { text: "        <Heading>", tone: "function" },
-      { text: "{stage.titulo}", tone: "property" },
+      { text: `{${stage.variable}.titulo}`, tone: "property" },
       { text: "</Heading>", tone: "function" },
     ],
     [{ text: "      </MethodLayout.Header>", tone: "function" }],
     [{ text: "      <MethodLayout.Body>", tone: "function" }],
     [
       { text: "        <Text>", tone: "function" },
-      { text: "{stage.descricao}", tone: "property" },
+      { text: `{${stage.variable}.descricao}`, tone: "property" },
       { text: "</Text>", tone: "function" },
     ],
     [{ text: "      </MethodLayout.Body>", tone: "function" }],
     [
-      { text: '      <MethodOutput label="', tone: "function" },
-      { text: 'Saída da etapa">', tone: "string" },
+      { text: "      <MethodNote>", tone: "function" },
+      { text: `{${stage.variable}.resumo}`, tone: "property" },
+      { text: "</MethodNote>", tone: "function" },
     ],
-    [{ text: "        {stage.saida}", tone: "property" }],
-    [{ text: "      </MethodOutput>", tone: "function" }],
     [{ text: "    </MethodLayout>", tone: "function" }],
     [{ text: "  );", tone: "punctuation" }],
     [{ text: "}", tone: "punctuation" }],
@@ -281,11 +296,10 @@ function MethodPreview({
     "--method-preview-label": isLight
       ? "rgb(51 65 85 / 0.64)"
       : "rgb(176 199 217 / 0.7)",
-    "--method-preview-output": isLight ? "#102033" : "#f2f7ff",
     "--method-preview-rule": isLight
       ? "rgb(15 23 42 / 0.12)"
       : "rgb(176 199 217 / 0.16)",
-    "--method-preview-output-surface": isLight
+    "--method-preview-note-surface": isLight
       ? "rgb(15 23 42 / 0.035)"
       : "rgb(176 199 217 / 0.045)",
   } as CSSProperties;
@@ -324,14 +338,11 @@ function MethodPreview({
         </p>
 
         <div
-          data-method-preview-output=""
-          className="mt-10 max-w-[30rem] rounded-xl border border-[var(--method-preview-rule)] bg-[var(--method-preview-output-surface)] p-5"
+          data-method-preview-note=""
+          className="mt-10 max-w-[31rem] rounded-xl border border-[var(--method-preview-rule)] bg-[var(--method-preview-note-surface)] p-5"
         >
-          <p className="font-mono text-[0.66rem] leading-none font-medium tracking-[0.16em] text-[var(--method-preview-label)] uppercase">
-            Saída da etapa
-          </p>
-          <p className="mt-4 max-w-[28rem] text-base leading-7 font-semibold text-[var(--method-preview-output)]">
-            {stage.output}
+          <p className="max-w-[29rem] text-base leading-7 font-medium text-[var(--method-preview-body)]">
+            {stage.summary}
           </p>
         </div>
       </div>
@@ -354,7 +365,7 @@ function MethodPreview({
 
 export function BuildsCardsGrid() {
   const [activeStageId, setActiveStageId] =
-    useState<MethodStage["id"]>("recorte");
+    useState<MethodStage["id"]>("desafio");
   const [device, setDevice] = useState<PreviewDevice>("desktop");
   const [appearance, setAppearance] = useState<PreviewAppearance>("dark");
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);

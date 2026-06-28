@@ -15,9 +15,10 @@ entrega validada.
 
 A composição segue a opção `Palco de Produto` revisada:
 
-- `Método aplicado` usa um ícone 3D exclusivo, título e descrição centralizados.
-- Um único painel técnico apresenta `Recorte`, `Protótipo`, `Evidência` e
-  `Circulação`.
+- `Método aplicado` usa um ícone 3D exclusivo, título e frase-ponte
+  centralizados.
+- Um único painel técnico apresenta `Desafio claro`, `Protótipo testável`,
+  `Evolução contínua` e `Impacto e compartilhamento`.
 - `Projetos em destaque` tem `Software aplicado` como protagonista.
 - `Robótica educacional` e `Dados e IA` aparecem como módulos de apoio.
 - As três frentes continuam exibindo o estado `Em estruturação`.
@@ -62,7 +63,7 @@ O cabeçalho será centralizado e terá:
 
 1. ícone 3D exclusivo do método;
 2. título `Método aplicado`;
-3. descrição atual do NITE, sem CTA.
+3. frase-ponte `Toda ideia precisa de um caminho para ganhar forma.`, sem CTA.
 
 O texto anterior `Antes de virar projeto, uma demanda precisa virar evidência.`
 deixa de ser o título principal da seção. Sua ideia permanece representada pelo
@@ -89,17 +90,20 @@ da Resend sem usar `<canvas>` ou iframe. Toda a interface é DOM React:
 
 - barra superior de 48 px com controles de janela;
 - controles segmentados de dispositivo e aparência no desktop;
-- lista lateral com ícone `TS`, fonte de `14 px` e os arquivos `recorte.tsx`,
-  `prototipo.tsx`, `evidencia.tsx` e `circulacao.tsx`;
+- lista lateral com ícone `TS`, fonte de `14 px` e os arquivos `desafio.tsx`,
+  `prototipo.tsx`, `evolucao.tsx` e `impacto.tsx`;
 - código com numeração de linhas, realce de sintaxe e barras de rolagem vertical
   e horizontal;
 - preview do método que muda junto com o arquivo ativo;
-- preview sem cabeçalho, assinatura ou numeração adicional;
+- preview sem cabeçalho, assinatura, numeração adicional ou bloco `Saída da
+etapa`;
 - aparência escura por padrão e variação clara controlada pelo switch;
 - preview mobile limitado a 350 px quando o controle de dispositivo está ativo.
 
-Cada arquivo representa um estágio e preserva seu rótulo, título, descrição e
-saída. Clique, foco e teclado atualizam simultaneamente o código e o preview.
+Cada arquivo representa um estágio com `etapa`, `titulo`, `descricao`, `saida` e
+`resumo`. O código mostra também a `saida`, enquanto o preview traduz o estágio
+em HTML simples com título, descrição e um card narrativo. Clique, foco e teclado
+atualizam simultaneamente o código e o preview.
 
 ### Responsividade
 
