@@ -14,13 +14,13 @@ const realProjectFixture = {
   slug: "projeto-real-lista",
   title: "Projeto real na lista",
   summary:
-    "Resumo controlado para validar card real com capa pública autorizada.",
+    "Resumo controlado para validar card real com capa publica autorizada.",
   description:
-    "Descrição controlada para validar a listagem de projetos em modo real.",
+    "Descricao controlada para validar a listagem de projetos em modo real.",
   problem:
-    "Confirmar que a listagem usa imagem e data somente para conteúdo real.",
+    "Confirmar que a listagem usa uma capa unica, sem diferenciar origem visual.",
   context:
-    "Fixture unitária isolada do JSON oficial para preparar o caminho de publicação real.",
+    "Fixture unitaria isolada do JSON oficial para preparar o caminho de publicacao real.",
   audience: ["Estudantes"],
   category: "Programação",
   year: 2026,
@@ -32,7 +32,7 @@ const realProjectFixture = {
   coverImage: "/images/projetos/programacao-lab-card.png",
   alt: "Capa autorizada de teste para projeto real na lista.",
   featured: true,
-  technologies: ["Next.js", "TypeScript"],
+  technologies: ["Next.js", "TypeScript", "API", "Dados extras"],
   deliverables: [
     {
       type: "demo",
@@ -52,25 +52,64 @@ const realProjectFixture = {
   ],
   highlights: [],
   objective:
-    "Objetivo validado de teste para comprovar a renderização real do card.",
+    "Objetivo validado de teste para comprovar a renderizacao real do card.",
   results: "Resultado validado de teste para a listagem.",
   links: [],
 } satisfies Project;
 
+function makeProject(
+  overrides: Partial<Project> & Pick<Project, "slug" | "title">,
+): Project {
+  const { slug, title, ...rest } = overrides;
+
+  return {
+    ...realProjectFixture,
+    slug,
+    title,
+    summary: `Resumo curto do ${title} para validar o Explorer.`,
+    description: `Descricao detalhada do ${title} para fixture controlada.`,
+    problem: `Problema do ${title} para busca e filtros.`,
+    context: `Contexto do ${title} para busca e filtros.`,
+    coverImage: `/images/projetos/${slug}.png`,
+    alt: `Capa do ${title} usada no Explorer.`,
+    technologies: ["Next.js"],
+    ...rest,
+  };
+}
+
+async function chooseFilter(
+  user: ReturnType<typeof userEvent.setup>,
+  label: string,
+  option: RegExp | string,
+) {
+  await user.click(screen.getByRole("combobox", { name: label }));
+  await user.click(await screen.findByRole("option", { name: option }));
+}
+
+function explorerCards() {
+  return Array.from(
+    document.querySelectorAll<HTMLElement>(
+      "[data-component='project-explorer-card']",
+    ),
+  );
+}
+
 describe("ProjectsPage", () => {
-  it("renderiza listagem com ProjectCard, StatusBadge e links reais", () => {
+  it("renderiza a pagina como Explorer/Catalogo, sem repetir a vitrine da Home", () => {
     render(<ProjectsPage />);
 
     expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
     expect(
-      screen.getByRole("heading", { level: 1, name: "Projetos do NITE" }),
+      screen.getByRole("heading", { level: 1, name: "Projetos" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", {
-        level: 2,
-        name: "Lista de projetos",
-      }),
+      screen.getByText(
+        "Encontre iniciativas, pesquisas, protótipos e soluções do NITE.",
+      ),
     ).toBeInTheDocument();
+    expect(screen.queryByText("Projetos do NITE")).not.toBeInTheDocument();
+    expect(screen.queryByText("Lista de projetos")).not.toBeInTheDocument();
+    expect(screen.queryByText("Projetos em destaque")).not.toBeInTheDocument();
 
     const main = within(screen.getByRole("main"));
     const footer = screen.getByRole("contentinfo");
@@ -80,24 +119,45 @@ describe("ProjectsPage", () => {
     expect(footer.querySelector("[data-footer-transition-divider]")).toBeNull();
     expect(footer.querySelector("[data-footer-transition-glow]")).toBeNull();
 
-    expect(document.querySelectorAll("[data-slot='card']")).toHaveLength(3);
+    expect(screen.getByTestId("projects-filterable-list")).toHaveAttribute(
+      "data-projects-explorer",
+      "true",
+    );
+    expect(explorerCards()).toHaveLength(3);
+    expect(
+      document.querySelector("[data-component='project-card']"),
+    ).toBeNull();
+    expect(document.querySelectorAll("[data-slot='card']")).toHaveLength(0);
     expect(
       document.querySelectorAll(
         "[data-slot='status-badge'][data-status='draft']",
       ).length,
     ).toBe(3);
-    expect(main.queryByText("Visual editorial")).not.toBeInTheDocument();
+
     expect(
-      main.getByAltText(
-        /Ilustração editorial da frente de software aplicado/i,
-      ),
+      main.getByPlaceholderText("Pesquisar projetos..."),
     ).toBeInTheDocument();
+    expect(main.getByRole("combobox", { name: "Status" })).toBeInTheDocument();
     expect(
-      main.queryByText("Imagem ou evidência pública ainda indisponível."),
+      main.getByRole("combobox", { name: "Tecnologia" }),
+    ).toBeInTheDocument();
+    expect(main.getByRole("combobox", { name: "Área" })).toBeInTheDocument();
+    expect(main.getByRole("combobox", { name: "Ano" })).toBeInTheDocument();
+    expect(
+      main.getByRole("combobox", { name: "Ordenar por" }),
+    ).toBeInTheDocument();
+
+    expect(
+      main.getByAltText(/Ilustração editorial da frente de software aplicado/i),
+    ).toBeInTheDocument();
+    expect(main.queryByText("Evidência pública")).not.toBeInTheDocument();
+    expect(main.queryByText("Visual editorial")).not.toBeInTheDocument();
+    expect(main.queryByText("Objetivo")).not.toBeInTheDocument();
+    expect(main.queryByText("Próximo passo")).not.toBeInTheDocument();
+    expect(main.queryByText("Stack")).not.toBeInTheDocument();
+    expect(
+      main.queryByText("Última atualização pendente de dado validado."),
     ).not.toBeInTheDocument();
-    expect(
-      main.getAllByText("Última atualização pendente de dado validado."),
-    ).toHaveLength(3);
 
     expect(
       main.getByRole("link", { name: /Software aplicado/i }),
@@ -109,131 +169,140 @@ describe("ProjectsPage", () => {
       "href",
       "/projetos/dados-e-ia",
     );
-
-    expect(screen.queryByText("Responsável")).not.toBeInTheDocument();
-    expect(screen.queryByText("Métrica")).not.toBeInTheDocument();
+    expect(main.getAllByText("Ver projeto")).toHaveLength(3);
   });
 
-  it("filtra por status, área, combinação e permite limpar filtros", async () => {
-    const user = userEvent.setup();
-
-    render(<ProjectsPage />);
-
-    const main = within(screen.getByRole("main"));
-
-    expect(document.querySelectorAll("[data-slot='card']")).toHaveLength(3);
-    expect(
-      main.getByRole("button", { name: /Todos, 3 itens, ativo/i }),
-    ).toHaveAttribute("aria-pressed", "true");
-    expect(
-      main.getByRole("button", { name: /Todas, 3 itens, ativo/i }),
-    ).toHaveAttribute("aria-pressed", "true");
-
-    await user.click(
-      main.getByRole("button", { name: /Em andamento, 0 itens/i }),
-    );
-
-    expect(document.querySelectorAll("[data-slot='card']")).toHaveLength(0);
-    expect(
-      main.getByText("Nenhum projeto corresponde aos filtros atuais.", {
-        exact: false,
-      }),
-    ).toBeInTheDocument();
-    expect(
-      main.getByRole("button", { name: /Em andamento, 0 itens, ativo/i }),
-    ).toHaveAttribute("aria-pressed", "true");
-
-    await user.click(main.getByRole("button", { name: /Todos, 3 itens/i }));
-    await user.click(main.getByRole("button", { name: /Robótica, 1 item/i }));
-
-    expect(document.querySelectorAll("[data-slot='card']")).toHaveLength(1);
-    expect(
-      main.getByRole("link", { name: /Robótica educacional/i }),
-    ).toBeInTheDocument();
-    expect(
-      main.queryByRole("link", { name: /Software aplicado/i }),
-    ).not.toBeInTheDocument();
-
-    await user.click(
-      main.getByRole("button", { name: /Em estruturação, 3 itens/i }),
-    );
-
-    expect(document.querySelectorAll("[data-slot='card']")).toHaveLength(1);
-    expect(
-      main.getByRole("button", {
-        name: /Em estruturação, 3 itens, ativo/i,
-      }),
-    ).toHaveAttribute("aria-pressed", "true");
-    expect(
-      main.getByRole("button", { name: /Robótica, 1 item, ativo/i }),
-    ).toHaveAttribute("aria-pressed", "true");
-
-    await user.click(main.getByRole("button", { name: "Limpar filtros" }));
-
-    expect(document.querySelectorAll("[data-slot='card']")).toHaveLength(3);
-    expect(
-      main.getByRole("button", { name: /Todos, 3 itens, ativo/i }),
-    ).toHaveAttribute("aria-pressed", "true");
-    expect(
-      main.getByRole("button", { name: /Todas, 3 itens, ativo/i }),
-    ).toHaveAttribute("aria-pressed", "true");
-  });
-
-  it("filtra por busca textual e tecnologia sem criar rotas de tag", async () => {
+  it("filtra por busca, status, area, tecnologia e ano via toolbar compacta", async () => {
     const user = userEvent.setup();
 
     render(<ProjectsPage />);
 
     const main = within(screen.getByRole("main"));
     const search = main.getByRole("searchbox", {
-      name: "Buscar projetos por nome, resumo, categoria ou tecnologia",
+      name: "Pesquisar projetos",
     });
+
+    expect(explorerCards()).toHaveLength(3);
+    expect(main.getByText("3 resultados exibidos.")).toBeInTheDocument();
 
     await user.type(search, "python");
 
-    expect(document.querySelectorAll("[data-slot='card']")).toHaveLength(1);
+    expect(explorerCards()).toHaveLength(1);
     expect(main.getByRole("link", { name: /Dados e IA/i })).toBeInTheDocument();
     expect(
       main.queryByRole("link", { name: /Software aplicado/i }),
     ).not.toBeInTheDocument();
 
     await user.clear(search);
-    await user.click(main.getByRole("button", { name: /Arduino, 1 item/i }));
+    await chooseFilter(user, "Status", /Em andamento/);
 
-    expect(document.querySelectorAll("[data-slot='card']")).toHaveLength(1);
+    expect(explorerCards()).toHaveLength(0);
+    expect(
+      main.getByText("Nenhum projeto corresponde aos filtros atuais.", {
+        exact: false,
+      }),
+    ).toBeInTheDocument();
+
+    await chooseFilter(user, "Status", /^Todos$/);
+    await chooseFilter(user, "Área", /Robótica/);
+
+    expect(explorerCards()).toHaveLength(1);
     expect(
       main.getByRole("link", { name: /Robótica educacional/i }),
     ).toBeInTheDocument();
+
+    await chooseFilter(user, "Tecnologia", /Arduino/);
+
+    expect(explorerCards()).toHaveLength(1);
     expect(
-      main.getByRole("button", { name: /Arduino, 1 item, ativo/i }),
-    ).toHaveAttribute("aria-pressed", "true");
+      main.getByRole("link", { name: /Robótica educacional/i }),
+    ).toBeInTheDocument();
+
+    await chooseFilter(user, "Ano", "2026");
+
+    expect(explorerCards()).toHaveLength(1);
 
     await user.click(main.getByRole("button", { name: "Limpar filtros" }));
 
     expect(search).toHaveValue("");
-    expect(document.querySelectorAll("[data-slot='card']")).toHaveLength(3);
+    expect(explorerCards()).toHaveLength(3);
+    expect(main.getByText("3 resultados exibidos.")).toBeInTheDocument();
   });
 
-  it("declara metadata institucional de portfolio", () => {
+  it("ordena mantendo ordem editorial, mais recentes e A-Z", async () => {
+    const user = userEvent.setup();
+    const alpha = makeProject({
+      slug: "alpha",
+      title: "Alpha",
+      lastUpdated: "2026-05-01",
+      year: 2025,
+    });
+    const zeta = makeProject({
+      slug: "zeta",
+      title: "Zeta",
+      lastUpdated: "2026-06-01",
+      year: 2026,
+    });
+    const beta = makeProject({
+      slug: "beta",
+      title: "Beta",
+      lastUpdated: "2026-04-01",
+      year: 2024,
+    });
+
+    render(<ProjectsFilterableList projects={[zeta, beta, alpha]} />);
+
+    expect(
+      explorerCards().map(
+        (card) => within(card).getByRole("heading").textContent,
+      ),
+    ).toEqual(["Zeta", "Beta", "Alpha"]);
+
+    await chooseFilter(user, "Ordenar por", "Mais recentes");
+
+    expect(
+      explorerCards().map(
+        (card) => within(card).getByRole("heading").textContent,
+      ),
+    ).toEqual(["Zeta", "Alpha", "Beta"]);
+
+    await chooseFilter(user, "Ordenar por", "A-Z");
+
+    expect(
+      explorerCards().map(
+        (card) => within(card).getByRole("heading").textContent,
+      ),
+    ).toEqual(["Alpha", "Beta", "Zeta"]);
+  });
+
+  it("declara metadata institucional de catalogo", () => {
     expect(metadata.title).toBe("Projetos | NITE");
-    expect(metadata.description).toContain("frentes e projetos do NITE");
+    expect(metadata.description).toContain("iniciativas, pesquisas");
     expect(metadata.alternates?.canonical?.toString()).toContain("/projetos");
   });
 
-  it("renderiza ProjectCard em modo real com capa e data via fixture controlada", () => {
+  it("renderiza card de catalogo com capa unica, tres tags e sem metadados narrativos", () => {
     render(<ProjectsFilterableList projects={[realProjectFixture]} />);
 
     const card = screen.getByRole("link", { name: /Projeto real na lista/i });
     const cardContent = within(card);
 
     expect(card).toHaveAttribute("href", "/projetos/projeto-real-lista");
+    expect(card).toHaveAttribute("data-component", "project-explorer-card");
+    expect(card).toHaveAttribute("data-card-family", "project-discovery");
+    expect(card).toHaveAttribute("data-card-variant", "catalog");
     expect(screen.getByAltText(realProjectFixture.alt)).toBeInTheDocument();
     expect(cardContent.getByText("Em andamento")).toBeInTheDocument();
+    expect(cardContent.getByText("Next.js")).toBeInTheDocument();
+    expect(cardContent.getByText("TypeScript")).toBeInTheDocument();
+    expect(cardContent.getByText("API")).toBeInTheDocument();
+    expect(cardContent.queryByText("Dados extras")).not.toBeInTheDocument();
+    expect(cardContent.getByText("Ver projeto")).toBeInTheDocument();
+    expect(screen.queryByText("Evidência pública")).not.toBeInTheDocument();
     expect(
-      cardContent.getByText("Última atualização: 18/05/2026"),
-    ).toBeInTheDocument();
-    expect(
-      screen.queryByText("Imagem ou evidência pública ainda indisponível."),
+      screen.queryByText("Última atualização: 18/05/2026"),
     ).not.toBeInTheDocument();
+    expect(screen.queryByText("Objetivo")).not.toBeInTheDocument();
+    expect(screen.queryByText("Próximo passo")).not.toBeInTheDocument();
   });
 });

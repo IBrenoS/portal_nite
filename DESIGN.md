@@ -102,6 +102,7 @@ O design precisa parecer institucional e tecnologico ao mesmo tempo. Cards, boto
 O sistema rejeita dados inventados, promessa operacional, rotas futuras que parecam prontas, neon permanente, glow dominante, grid decorativo excessivo e landing page generica de SaaS.
 
 **Key Characteristics:**
+
 - Dark-first com light mode derivado, nao paralelo.
 - Azul eletrico como acento raro e funcional.
 - Superficies tecnicas transparentes com borda sutil.
@@ -189,6 +190,35 @@ O sistema usa profundidade hibrida: superficies, bordas e contraste fazem a maio
 - **Shadow Strategy:** sem sombra por default; hover pode usar superficie/borda antes de lift.
 - **Border:** `--nite-border-subtle` em repouso e `--nite-border-hover` em interacao.
 - **Internal Padding:** `16px` nos primitives; secoes compostas podem respirar mais por contexto.
+
+### Navigation Goal: Projetos relacionados
+
+A secao `Projetos relacionados` existe para incentivar a continuidade da
+navegacao depois que o usuario conclui a leitura de um projeto. Ela nao
+reapresenta o catalogo nem resume novamente cada iniciativa.
+
+Seus cards funcionam como convites para descobrir outro projeto e devem permitir
+uma decisao rapida, usando somente o contexto necessario para a escolha. A secao
+nao compete em peso visual ou densidade de informacao com o conteudo principal
+da pagina individual.
+
+### NITE Discovery Frame
+
+O `NITE Discovery Frame` identifica cards de descoberta compacta, como a
+variante de projetos relacionados. Ele pertence a mesma familia visual do
+Explorer e diferencia contexto por densidade, nunca por uma linguagem paralela.
+
+- **Background:** `--nite-background`.
+- **Radius:** `24px`.
+- **Border:** `color(display-p3 0.882 0.949 0.996 / 0.183)`, sem borda inferior.
+- **Top Signal:** linha unica de `150px` por `1px`, sem blur, com centro em
+  `rgba(143, 143, 143, 0.67)`.
+- **Border Veil:** gradiente vertical de transparente em `0%` para
+  `--nite-background` em `50%` e `100%`, fazendo a borda desaparecer na base.
+- **Motion:** zoom discreto somente na capa e realce de CTA/foco; sem lift,
+  sombra pesada ou informacao dependente de hover.
+- **Accessibility:** foco visivel, conteudo completo sem hover e transicoes
+  desativadas quando `prefers-reduced-motion` estiver ativo.
 
 ### Inputs / Fields
 

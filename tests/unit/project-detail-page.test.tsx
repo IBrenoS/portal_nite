@@ -101,7 +101,7 @@ const realProjectFixture = {
 } satisfies Project;
 
 describe("ProjectPage", () => {
-  it("renderiza detalhe de projeto com StatusBadge real", async () => {
+  it("renderiza frente em estruturação como acompanhamento público honesto", async () => {
     await renderProjectPage("software-aplicado");
 
     expect(
@@ -109,6 +109,54 @@ describe("ProjectPage", () => {
         level: 1,
         name: "Software aplicado",
       }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("link", { name: /Ver detalhes/i }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: /Voltar para projetos/i }),
+    ).toHaveAttribute("href", "/#projetos");
+    expect(
+      screen.getByRole("heading", {
+        level: 2,
+        name: "O que está sendo construído",
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { level: 2, name: "Sobre esta frente" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", {
+        level: 2,
+        name: "O que está sendo feito agora",
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", {
+        level: 2,
+        name: "Registros e evidências",
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { level: 2, name: "Quem está construindo" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { level: 2, name: "Descrição" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { level: 2, name: "Problema e contexto" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { level: 2, name: "Objetivo" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { level: 3, name: "Desafio" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { level: 3, name: "Contexto" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { level: 3, name: "Objetivo atual" }),
     ).toBeInTheDocument();
     expect(
       document.querySelectorAll(
@@ -130,13 +178,17 @@ describe("ProjectPage", () => {
     expect(
       screen.getByText("Pendente de validação pública"),
     ).toBeInTheDocument();
+    expect(screen.getAllByText("Mapeamento da frente")).toHaveLength(1);
+    expect(screen.getByText("Programação")).toBeInTheDocument();
+    expect(screen.getByText("Estudantes")).toBeInTheDocument();
+    expect(screen.getByText("Next.js")).toBeInTheDocument();
     expect(
       screen.queryByText(
         "Conteúdo em estruturação editorial; não representa um projeto ativo validado.",
       ),
     ).not.toBeInTheDocument();
     expect(
-      screen.queryByRole("heading", { level: 2, name: "Resultados" }),
+      screen.queryByRole("heading", { level: 3, name: "Resultado publicado" }),
     ).not.toBeInTheDocument();
     expect(
       screen.queryByText(
@@ -147,14 +199,75 @@ describe("ProjectPage", () => {
       screen.getByText("Evidências públicas em validação"),
     ).toBeInTheDocument();
     expect(
-      screen.queryByRole("heading", { level: 2, name: "Entregáveis" }),
+      screen.getByText(
+        "Fotos, entregáveis, métricas, registros e links só aparecem quando o conteúdo estiver validado para publicação.",
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { level: 3, name: "Entregáveis" }),
     ).not.toBeInTheDocument();
     expect(
-      screen.queryByRole("heading", { level: 2, name: "Galeria" }),
+      screen.queryByRole("heading", {
+        level: 3,
+        name: "Fotografias e materiais",
+      }),
     ).not.toBeInTheDocument();
     expect(
-      screen.queryByRole("heading", { level: 2, name: "Links" }),
+      screen.queryByRole("heading", { level: 3, name: "Links públicos" }),
     ).not.toBeInTheDocument();
+  }, 10000);
+
+  it("renderiza relacionados como faixa de descoberta compacta", async () => {
+    await renderProjectPage("software-aplicado");
+
+    const relatedSection = document.querySelector(
+      "[data-component='related-projects-discovery']",
+    ) as HTMLElement;
+    const related = within(relatedSection);
+
+    expect(relatedSection).toBeInTheDocument();
+    expect(relatedSection).toHaveAttribute("data-nite-scene", "inverse");
+    expect(relatedSection).toHaveAttribute("data-related-projects-count", "2");
+    expect(
+      related.getByRole("heading", {
+        level: 2,
+        name: "Continue explorando os projetos do NITE.",
+      }),
+    ).toBeInTheDocument();
+    expect(related.getByText("Projetos Relacionados")).toBeInTheDocument();
+    expect(
+      related.queryByText(
+        "Conheça outras frentes que dialogam com este projeto.",
+      ),
+    ).not.toBeInTheDocument();
+    expect(
+      related.getByRole("heading", {
+        level: 3,
+        name: "Robótica educacional",
+      }),
+    ).toBeInTheDocument();
+    expect(
+      related.getByRole("heading", { level: 3, name: "Dados e IA" }),
+    ).toBeInTheDocument();
+    expect(related.queryAllByText("Mapeamento da frente")).toHaveLength(0);
+    expect(related.getAllByRole("link", { name: /Ver projeto/i })).toHaveLength(
+      2,
+    );
+    expect(
+      related.getByRole("link", { name: /Ver todos os projetos/i }),
+    ).toHaveAttribute("href", "/projetos");
+    expect(
+      relatedSection.querySelector("[data-component='project-card']"),
+    ).not.toBeInTheDocument();
+    expect(
+      relatedSection.querySelectorAll(
+        "[data-component='related-project-card']",
+      ),
+    ).toHaveLength(2);
+    expect(related.queryByText("Objetivo")).not.toBeInTheDocument();
+    expect(related.queryByText("Próximo passo")).not.toBeInTheDocument();
+    expect(related.queryByText("Última atualização")).not.toBeInTheDocument();
+    expect(related.queryByText("Stack")).not.toBeInTheDocument();
   }, 10000);
 
   it("renderiza campos reais e autorizados quando recebe fixture real", async () => {
@@ -178,41 +291,111 @@ describe("ProjectPage", () => {
         "Imagem autorizada de teste para capa de projeto real validado.",
       ),
     ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("link", { name: /Ver detalhes/i }),
+    ).not.toBeInTheDocument();
     expect(screen.getByText("Última atualização")).toBeInTheDocument();
     expect(screen.getAllByText("18/05/2026").length).toBeGreaterThanOrEqual(1);
+    expect(
+      screen.getByRole("heading", {
+        level: 2,
+        name: "O que está sendo construído",
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { level: 2, name: "Sobre esta frente" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", {
+        level: 2,
+        name: "Registros e evidências",
+      }),
+    ).toBeInTheDocument();
     expect(screen.getAllByText("Demo validada").length).toBeGreaterThanOrEqual(
       1,
     );
     expect(
-      within(
-        screen.getByRole("heading", { level: 2, name: "Entregáveis" })
-          .parentElement as HTMLElement,
-      ).getByRole("link", { name: "Abrir" }),
+      screen.getByRole("link", { name: /Abrir Demo validada/i }),
     ).toHaveAttribute("href", "https://example.com/demo");
     expect(
-      screen.getByRole("heading", { level: 2, name: "Resultados" }),
+      screen.getByRole("heading", { level: 3, name: "Entregáveis" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { level: 3, name: "Resultado publicado" }),
     ).toBeInTheDocument();
     expect(
       screen.getByText(
         "Resultado real validado de teste para comprovar a seção pública de resultados.",
       ),
     ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { level: 3, name: "Métricas" }),
+    ).toBeInTheDocument();
     expect(screen.getByText("Entregas validadas")).toBeInTheDocument();
     expect(
       screen.getByText("Fonte: Fonte validada de teste"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { level: 2, name: "Quem está construindo" }),
     ).toBeInTheDocument();
     expect(screen.getByText("Equipe autorizada de teste")).toBeInTheDocument();
     expect(
       screen.queryByText("Equipe interna sem autorização pública"),
     ).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { level: 3, name: "Registros" }),
+    ).toBeInTheDocument();
     expect(screen.getByText("Registro validado")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", {
+        level: 3,
+        name: "Fotografias e materiais",
+      }),
+    ).toBeInTheDocument();
     expect(
       screen.getByAltText(
         "Galeria autorizada de teste para projeto real validado.",
       ),
     ).toBeInTheDocument();
     expect(
+      screen.getByRole("heading", { level: 3, name: "Links públicos" }),
+    ).toBeInTheDocument();
+    expect(
       screen.getByRole("link", { name: /Documento público/i }),
     ).toHaveAttribute("href", "https://example.com/documento");
+    expect(
+      within(
+        screen.getByRole("heading", { level: 2, name: "Sobre esta frente" })
+          .parentElement as HTMLElement,
+      ).getByText(
+        "Objetivo validado de teste para comprovar a renderização real do projeto.",
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { level: 2, name: "Resultados" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { level: 2, name: "Changelog" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { level: 2, name: "Equipe pública" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { level: 2, name: "Entregáveis" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { level: 2, name: "Galeria" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { level: 2, name: "Links" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByText("Evidências públicas em validação"),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(
+        "Fotos, entregáveis, métricas, registros e links só aparecem quando o conteúdo estiver validado para publicação.",
+      ),
+    ).not.toBeInTheDocument();
   });
 });
