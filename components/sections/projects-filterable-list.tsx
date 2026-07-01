@@ -1,34 +1,52 @@
 "use client";
 
+import type { Route } from "next";
+import { Select } from "@base-ui/react/select";
+import { CheckIcon, ChevronDownIcon, SearchIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import type { Project } from "@/biblioteca/esquemas";
-import {
-  ProjectCard,
-  projectStatusLabels,
-  type ProjectCardStatus,
-  type ProjectCardVisual,
-} from "@/components/sections/project-card";
+import { ProjectDiscoveryCard } from "@/components/sections/project-discovery-card";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
+import {
+  statusBadgeLabels,
+  type StatusBadgeStatus,
+} from "@/components/ui/status-badge";
 
 type ProjectsFilterableListProps = {
   projects: Project[];
 };
 
-type StatusFilter = ProjectCardStatus | "all";
+type ProjectExplorerStatus = Extract<
+  StatusBadgeStatus,
+  "draft" | "in_progress" | "validated" | "done" | "archived"
+>;
+type StatusFilter = ProjectExplorerStatus | "all";
 type AreaFilter = string | "all";
 type TechnologyFilter = string | "all";
+type YearFilter = string | "all";
+type SortOption = "editorial" | "recent" | "az";
+
+type FilterOption<T extends string> = {
+  count?: number;
+  label: string;
+  value: T;
+};
+
+type ProjectExplorerCover = {
+  alt: string;
+  src: string;
+};
 
 const statusFilterLabels = {
   all: "Todos",
-  draft: projectStatusLabels.draft,
-  in_progress: projectStatusLabels.in_progress,
-  validated: projectStatusLabels.validated,
-  done: projectStatusLabels.done,
-  archived: projectStatusLabels.archived,
+  draft: statusBadgeLabels.draft,
+  in_progress: statusBadgeLabels.in_progress,
+  validated: statusBadgeLabels.validated,
+  done: statusBadgeLabels.done,
+  archived: statusBadgeLabels.archived,
 } satisfies Record<StatusFilter, string>;
 
 const projectCardStatusByProjectStatus = {
@@ -38,9 +56,9 @@ const projectCardStatusByProjectStatus = {
   "em-prototipo": "in_progress",
   ativo: "in_progress",
   concluido: "done",
-} satisfies Record<Project["status"], ProjectCardStatus>;
+} satisfies Record<Project["status"], ProjectExplorerStatus>;
 
-const statusFilterOrder: readonly ProjectCardStatus[] = [
+const statusFilterOrder: readonly ProjectExplorerStatus[] = [
   "draft",
   "in_progress",
   "validated",
@@ -48,35 +66,26 @@ const statusFilterOrder: readonly ProjectCardStatus[] = [
   "archived",
 ];
 
-const projectDateFormatter = new Intl.DateTimeFormat("pt-BR", {
-  day: "2-digit",
-  month: "2-digit",
-  timeZone: "UTC",
-  year: "numeric",
-});
-
-function isProjectPublicationReady(project: Project) {
-  return project.contentState === "real";
-}
-
-function hasProjectPublicEvidence(project: Project) {
-  return (
-    isProjectPublicationReady(project) &&
-    (project.deliverables.some(
-      (deliverable) =>
-        deliverable.status === "disponivel" && Boolean(deliverable.href),
-    ) ||
-      project.gallery.length > 0 ||
-      project.links.length > 0)
-  );
-}
-
-function formatProjectDate(date: string) {
-  return projectDateFormatter.format(new Date(`${date}T00:00:00Z`));
-}
+const sortOptions = [
+  { label: "Ordem editorial", value: "editorial" },
+  { label: "Mais recentes", value: "recent" },
+  { label: "A-Z", value: "az" },
+] satisfies readonly FilterOption<SortOption>[];
 
 function getProjectCardStatus(project: Project) {
   return projectCardStatusByProjectStatus[project.status];
+}
+
+function getProjectCover(project: Project): ProjectExplorerCover {
+  return project.illustration
+    ? {
+        alt: project.illustration.alt,
+        src: project.illustration.src,
+      }
+    : {
+        alt: project.alt,
+        src: project.coverImage,
+      };
 }
 
 function getUniqueAreas(projects: Project[]) {
@@ -91,10 +100,16 @@ function getUniqueTechnologies(projects: Project[]) {
   ).sort((current, next) => current.localeCompare(next, "pt-BR"));
 }
 
+function getUniqueYears(projects: Project[]) {
+  return Array.from(new Set(projects.map((project) => project.year))).sort(
+    (current, next) => next - current,
+  );
+}
+
 function getStatusCounts(projects: Project[]) {
   const counts = Object.fromEntries(
     statusFilterOrder.map((status) => [status, 0]),
-  ) as Record<ProjectCardStatus, number>;
+  ) as Record<ProjectExplorerStatus, number>;
 
   for (const project of projects) {
     counts[getProjectCardStatus(project)] += 1;
@@ -120,6 +135,14 @@ function getTechnologyCounts(projects: Project[]) {
   }, {});
 }
 
+function getYearCounts(projects: Project[]) {
+  return projects.reduce<Record<string, number>>((counts, project) => {
+    const year = String(project.year);
+    counts[year] = (counts[year] ?? 0) + 1;
+    return counts;
+  }, {});
+}
+
 function normalizeSearch(value: string) {
   return value
     .normalize("NFD")
@@ -138,10 +161,8 @@ function projectMatchesSearch(project: Project, query: string) {
       project.title,
       project.summary,
       project.description,
-      project.problem,
-      project.context,
       project.category,
-      project.currentPhase,
+      project.year,
       ...project.technologies,
     ].join(" "),
   );
@@ -149,25 +170,22 @@ function projectMatchesSearch(project: Project, query: string) {
   return searchableText.includes(query);
 }
 
-function getProjectVisual(
-  project: Project,
-  isPublicationReady: boolean,
-): ProjectCardVisual | undefined {
-  if (isPublicationReady) {
-    return {
-      kind: "evidence",
-      src: project.coverImage,
-      alt: project.alt,
-    };
+function sortProjects(projects: Project[], sort: SortOption) {
+  if (sort === "editorial") {
+    return projects;
   }
 
-  return project.illustration
-    ? {
-        kind: "illustration",
-        src: project.illustration.src,
-        alt: project.illustration.alt,
-      }
-    : undefined;
+  return [...projects].sort((current, next) => {
+    if (sort === "az") {
+      return current.title.localeCompare(next.title, "pt-BR");
+    }
+
+    const dateOrder = next.lastUpdated.localeCompare(current.lastUpdated);
+
+    return dateOrder === 0
+      ? current.title.localeCompare(next.title, "pt-BR")
+      : dateOrder;
+  });
 }
 
 export function ProjectsFilterableList({
@@ -177,6 +195,8 @@ export function ProjectsFilterableList({
   const [selectedArea, setSelectedArea] = useState<AreaFilter>("all");
   const [selectedTechnology, setSelectedTechnology] =
     useState<TechnologyFilter>("all");
+  const [selectedYear, setSelectedYear] = useState<YearFilter>("all");
+  const [selectedSort, setSelectedSort] = useState<SortOption>("editorial");
   const [searchQuery, setSearchQuery] = useState("");
 
   const areas = useMemo(() => getUniqueAreas(projects), [projects]);
@@ -184,56 +204,123 @@ export function ProjectsFilterableList({
     () => getUniqueTechnologies(projects),
     [projects],
   );
+  const years = useMemo(() => getUniqueYears(projects), [projects]);
   const statusCounts = useMemo(() => getStatusCounts(projects), [projects]);
   const areaCounts = useMemo(() => getAreaCounts(projects), [projects]);
   const technologyCounts = useMemo(
     () => getTechnologyCounts(projects),
     [projects],
   );
+  const yearCounts = useMemo(() => getYearCounts(projects), [projects]);
   const normalizedSearchQuery = useMemo(
     () => normalizeSearch(searchQuery),
     [searchQuery],
   );
 
-  const filteredProjects = useMemo(
-    () =>
-      projects.filter((project) => {
-        const statusMatches =
-          selectedStatus === "all" ||
-          getProjectCardStatus(project) === selectedStatus;
-        const areaMatches =
-          selectedArea === "all" || project.category === selectedArea;
-        const technologyMatches =
-          selectedTechnology === "all" ||
-          project.technologies.includes(selectedTechnology);
-        const searchMatches = projectMatchesSearch(
-          project,
-          normalizedSearchQuery,
-        );
-
-        return (
-          statusMatches && areaMatches && technologyMatches && searchMatches
-        );
-      }),
-    [
-      normalizedSearchQuery,
-      projects,
-      selectedArea,
-      selectedStatus,
-      selectedTechnology,
+  const statusOptions = useMemo<FilterOption<StatusFilter>[]>(
+    () => [
+      { count: projects.length, label: statusFilterLabels.all, value: "all" },
+      ...statusFilterOrder.map((status) => ({
+        count: statusCounts[status],
+        label: statusFilterLabels[status],
+        value: status,
+      })),
     ],
+    [projects.length, statusCounts],
   );
+  const technologyOptions = useMemo<FilterOption<TechnologyFilter>[]>(
+    () => [
+      {
+        count: projects.length,
+        label: "Todas as tecnologias",
+        value: "all",
+      },
+      ...technologies.map((technology) => ({
+        count: technologyCounts[technology] ?? 0,
+        label: technology,
+        value: technology,
+      })),
+    ],
+    [projects.length, technologies, technologyCounts],
+  );
+  const areaOptions = useMemo<FilterOption<AreaFilter>[]>(
+    () => [
+      { count: projects.length, label: "Todas as áreas", value: "all" },
+      ...areas.map((area) => ({
+        count: areaCounts[area] ?? 0,
+        label: area,
+        value: area,
+      })),
+    ],
+    [areaCounts, areas, projects.length],
+  );
+  const yearOptions = useMemo<FilterOption<YearFilter>[]>(
+    () => [
+      { count: projects.length, label: "Todos os anos", value: "all" },
+      ...years.map((year) => {
+        const value = String(year);
+
+        return {
+          count: yearCounts[value] ?? 0,
+          label: value,
+          value,
+        };
+      }),
+    ],
+    [projects.length, yearCounts, years],
+  );
+
+  const filteredProjects = useMemo(() => {
+    const matches = projects.filter((project) => {
+      const statusMatches =
+        selectedStatus === "all" ||
+        getProjectCardStatus(project) === selectedStatus;
+      const areaMatches =
+        selectedArea === "all" || project.category === selectedArea;
+      const technologyMatches =
+        selectedTechnology === "all" ||
+        project.technologies.includes(selectedTechnology);
+      const yearMatches =
+        selectedYear === "all" || String(project.year) === selectedYear;
+      const searchMatches = projectMatchesSearch(
+        project,
+        normalizedSearchQuery,
+      );
+
+      return (
+        statusMatches &&
+        areaMatches &&
+        technologyMatches &&
+        yearMatches &&
+        searchMatches
+      );
+    });
+
+    return sortProjects(matches, selectedSort);
+  }, [
+    normalizedSearchQuery,
+    projects,
+    selectedArea,
+    selectedSort,
+    selectedStatus,
+    selectedTechnology,
+    selectedYear,
+  ]);
 
   const hasActiveFilters =
     selectedStatus !== "all" ||
     selectedArea !== "all" ||
     selectedTechnology !== "all" ||
+    selectedYear !== "all" ||
+    selectedSort !== "editorial" ||
     searchQuery.trim().length > 0;
 
   function clearFilters() {
     setSelectedStatus("all");
     setSelectedArea("all");
     setSelectedTechnology("all");
+    setSelectedYear("all");
+    setSelectedSort("editorial");
     setSearchQuery("");
   }
 
@@ -247,116 +334,73 @@ export function ProjectsFilterableList({
   }
 
   return (
-    <div className="grid gap-8" data-testid="projects-filterable-list">
-      <div className="grid gap-5 rounded-lg border border-border bg-card/58 p-4 sm:p-5">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-          <div>
-            <h3 className="font-heading text-lg font-semibold text-foreground">
-              Filtros
-            </h3>
-            <p className="mt-1 text-sm leading-6 text-muted-foreground">
-              Combine busca, status, área e tecnologia para refinar a listagem.
-            </p>
+    <div
+      className="grid gap-7"
+      data-projects-explorer="true"
+      data-testid="projects-filterable-list"
+    >
+      <div className="grid gap-4 rounded-2xl border border-nite-border-subtle bg-nite-surface/35 p-3 sm:p-4">
+        <div className="grid gap-3 lg:grid-cols-[minmax(18rem,1fr)_auto] lg:items-center">
+          <div className="relative">
+            <SearchIcon
+              className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+              aria-hidden="true"
+            />
+            <Input
+              id="project-search"
+              type="search"
+              value={searchQuery}
+              aria-label="Pesquisar projetos"
+              placeholder="Pesquisar projetos..."
+              onChange={(event) => setSearchQuery(event.target.value)}
+              className="h-11 pl-10"
+            />
           </div>
+
           <Button
             type="button"
-            variant="ghost"
+            variant="quiet"
             size="sm"
             disabled={!hasActiveFilters}
             onClick={clearFilters}
+            className="min-h-11 justify-self-start lg:justify-self-end"
           >
             Limpar filtros
           </Button>
         </div>
 
-        <div className="grid gap-2">
-          <label
-            htmlFor="project-search"
-            className="font-mono text-xs uppercase tracking-[0.16em] text-muted-foreground"
-          >
-            Busca
-          </label>
-          <Input
-            id="project-search"
-            type="search"
-            value={searchQuery}
-            aria-label="Buscar projetos por nome, resumo, categoria ou tecnologia"
-            placeholder="Buscar por nome, tecnologia ou frente"
-            onChange={(event) => setSearchQuery(event.target.value)}
+        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
+          <ExplorerSelect
+            label="Status"
+            onValueChange={setSelectedStatus}
+            options={statusOptions}
+            value={selectedStatus}
+          />
+          <ExplorerSelect
+            label="Tecnologia"
+            onValueChange={setSelectedTechnology}
+            options={technologyOptions}
+            value={selectedTechnology}
+          />
+          <ExplorerSelect
+            label="Área"
+            onValueChange={setSelectedArea}
+            options={areaOptions}
+            value={selectedArea}
+          />
+          <ExplorerSelect
+            label="Ano"
+            onValueChange={setSelectedYear}
+            options={yearOptions}
+            value={selectedYear}
+          />
+          <ExplorerSelect
+            label="Ordenar por"
+            onValueChange={setSelectedSort}
+            options={sortOptions}
+            value={selectedSort}
           />
         </div>
-
-        <fieldset className="grid gap-3">
-          <legend className="font-mono text-xs uppercase tracking-[0.16em] text-muted-foreground">
-            Status
-          </legend>
-          <div className="flex flex-wrap gap-2" aria-label="Filtrar por status">
-            <FilterButton
-              active={selectedStatus === "all"}
-              count={projects.length}
-              label={statusFilterLabels.all}
-              onClick={() => setSelectedStatus("all")}
-            />
-            {statusFilterOrder.map((status) => (
-              <FilterButton
-                key={status}
-                active={selectedStatus === status}
-                count={statusCounts[status]}
-                label={statusFilterLabels[status]}
-                onClick={() => setSelectedStatus(status)}
-              />
-            ))}
-          </div>
-        </fieldset>
-
-        <fieldset className="grid gap-3">
-          <legend className="font-mono text-xs uppercase tracking-[0.16em] text-muted-foreground">
-            Tecnologia
-          </legend>
-          <div
-            className="flex flex-wrap gap-2"
-            aria-label="Filtrar por tecnologia"
-          >
-            <FilterButton
-              active={selectedTechnology === "all"}
-              count={projects.length}
-              label="Todas as tecnologias"
-              onClick={() => setSelectedTechnology("all")}
-            />
-            {technologies.map((technology) => (
-              <FilterButton
-                key={technology}
-                active={selectedTechnology === technology}
-                count={technologyCounts[technology] ?? 0}
-                label={technology}
-                onClick={() => setSelectedTechnology(technology)}
-              />
-            ))}
-          </div>
-        </fieldset>
-
-        <fieldset className="grid gap-3">
-          <legend className="font-mono text-xs uppercase tracking-[0.16em] text-muted-foreground">
-            Área
-          </legend>
-          <div className="flex flex-wrap gap-2" aria-label="Filtrar por área">
-            <FilterButton
-              active={selectedArea === "all"}
-              count={projects.length}
-              label="Todas"
-              onClick={() => setSelectedArea("all")}
-            />
-            {areas.map((area) => (
-              <FilterButton
-                key={area}
-                active={selectedArea === area}
-                count={areaCounts[area] ?? 0}
-                label={area}
-                onClick={() => setSelectedArea(area)}
-              />
-            ))}
-          </div>
-        </fieldset>
 
         <p
           className="text-sm leading-6 text-muted-foreground"
@@ -371,40 +415,14 @@ export function ProjectsFilterableList({
       <div id="project-list-results">
         {filteredProjects.length > 0 ? (
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {filteredProjects.map((project) => {
-              const isPublicationReady = isProjectPublicationReady(project);
-
-              return (
-                <ProjectCard
-                  key={project.slug}
-                  title={project.title}
-                  summary={project.summary}
-                  area={project.category}
-                  status={getProjectCardStatus(project)}
-                  problem={project.problem}
-                  objective={
-                    project.objective ??
-                    "Objetivo em validação editorial antes de publicação pública."
-                  }
-                  stack={project.technologies}
-                  nextStep={project.nextStep}
-                  updatedAt={
-                    isPublicationReady
-                      ? formatProjectDate(project.lastUpdated)
-                      : undefined
-                  }
-                  href={`/projetos/${project.slug}`}
-                  visual={getProjectVisual(project, isPublicationReady)}
-                  hasPublicEvidence={hasProjectPublicEvidence(project)}
-                  headingLevel={3}
-                />
-              );
-            })}
+            {filteredProjects.map((project) => (
+              <ProjectExplorerCard key={project.slug} project={project} />
+            ))}
           </div>
         ) : (
           <EmptyState
             title="Nenhum projeto encontrado"
-            description="Nenhum projeto corresponde aos filtros atuais. Limpe os filtros ou escolha outra combinação de status e área."
+            description="Nenhum projeto corresponde aos filtros atuais. Limpe os filtros ou escolha outra combinação de busca, status, tecnologia, área e ano."
           />
         )}
       </div>
@@ -412,45 +430,109 @@ export function ProjectsFilterableList({
   );
 }
 
-function FilterButton({
-  active,
-  count,
+function ExplorerSelect<T extends string>({
   label,
-  onClick,
+  onValueChange,
+  options,
+  value,
 }: {
-  active: boolean;
-  count: number;
   label: string;
-  onClick: () => void;
+  onValueChange: (value: T) => void;
+  options: readonly FilterOption<T>[];
+  value: T;
 }) {
-  const countLabel = count === 1 ? "1 item" : `${count} itens`;
-  const accessibleLabel = active
-    ? `${label}, ${countLabel}, ativo`
-    : `${label}, ${countLabel}`;
+  const selectedOption = options.find((option) => option.value === value);
 
   return (
-    <Button
-      type="button"
-      variant={active ? "secondary" : "outline"}
-      size="sm"
-      aria-label={accessibleLabel}
-      aria-pressed={active}
-      aria-controls="project-list-results"
-      onClick={onClick}
-      className={cn(
-        "min-h-10 gap-2",
-        active && "border-nite-brand-accent/45",
-      )}
+    <Select.Root
+      modal={false}
+      onValueChange={(nextValue) => {
+        if (typeof nextValue === "string") {
+          onValueChange(nextValue as T);
+        }
+      }}
+      value={value}
     >
-      <span>{label}</span>
-      <span className="rounded-full border border-border px-1.5 py-0.5 text-[0.68rem] leading-none text-muted-foreground">
-        {count}
-      </span>
-      {active ? (
-        <span className="rounded-full bg-nite-brand-accent/12 px-1.5 py-0.5 text-[0.64rem] uppercase tracking-[0.12em] text-nite-brand-accent">
-          Ativo
+      <Select.Trigger
+        aria-label={label}
+        className="group/select inline-flex min-h-11 w-full items-center justify-between gap-3 rounded-xl border border-nite-border-soft bg-transparent px-3 py-2 text-left text-sm text-nite-text-primary outline-none transition-colors hover:border-nite-border-hover hover:bg-nite-surface-subtle focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 data-[popup-open]:border-nite-border-hover data-[popup-open]:bg-nite-surface-subtle"
+      >
+        <span className="grid min-w-0 gap-0.5">
+          <span className="font-mono text-[0.62rem] uppercase tracking-[0.14em] text-muted-foreground">
+            {label}
+          </span>
+          <Select.Value>
+            {() => (
+              <span className="truncate">
+                {selectedOption?.label ?? options[0]?.label ?? label}
+              </span>
+            )}
+          </Select.Value>
         </span>
-      ) : null}
-    </Button>
+        <Select.Icon>
+          <ChevronDownIcon
+            className="size-4 text-muted-foreground transition-transform group-data-[popup-open]/select:rotate-180"
+            aria-hidden="true"
+          />
+        </Select.Icon>
+      </Select.Trigger>
+
+      <Select.Portal>
+        <Select.Positioner
+          align="start"
+          className="z-50"
+          collisionPadding={12}
+          sideOffset={8}
+        >
+          <Select.Popup className="min-w-[var(--anchor-width)] overflow-hidden rounded-xl border border-nite-border-soft bg-nite-overlay p-1 text-sm text-nite-text-primary shadow-[0_24px_70px_rgb(0_0_0/0.34)] backdrop-blur-md outline-none">
+            <Select.List>
+              {options.map((option) => (
+                <Select.Item
+                  key={option.value}
+                  value={option.value}
+                  className="grid cursor-default grid-cols-[1fr_auto_auto] items-center gap-2 rounded-lg px-3 py-2 outline-none transition-colors data-[highlighted]:bg-nite-surface-subtle data-[selected]:text-nite-text-primary"
+                >
+                  <Select.ItemText className="truncate">
+                    {option.label}
+                  </Select.ItemText>
+                  {typeof option.count === "number" ? (
+                    <span
+                      aria-hidden="true"
+                      className="rounded-full border border-nite-border-subtle px-1.5 py-0.5 text-[0.68rem] leading-none text-muted-foreground"
+                    >
+                      {option.count}
+                    </span>
+                  ) : null}
+                  <Select.ItemIndicator className="text-nite-brand-accent">
+                    <CheckIcon className="size-3.5" aria-hidden="true" />
+                  </Select.ItemIndicator>
+                </Select.Item>
+              ))}
+            </Select.List>
+          </Select.Popup>
+        </Select.Positioner>
+      </Select.Portal>
+    </Select.Root>
+  );
+}
+
+function ProjectExplorerCard({ project }: { project: Project }) {
+  const status = getProjectCardStatus(project);
+  const cover = getProjectCover(project);
+
+  return (
+    <ProjectDiscoveryCard
+      variant="catalog"
+      item={{
+        href: `/projetos/${project.slug}` as Route,
+        title: project.title,
+        summary: project.summary,
+        category: project.category,
+        status,
+        statusLabel: statusFilterLabels[status],
+        stack: project.technologies,
+        cover,
+      }}
+    />
   );
 }
