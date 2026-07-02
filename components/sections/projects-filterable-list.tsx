@@ -339,7 +339,7 @@ export function ProjectsFilterableList({
       data-projects-explorer="true"
       data-testid="projects-filterable-list"
     >
-      <div className="grid gap-4 rounded-2xl border border-nite-border-subtle bg-nite-surface/35 p-3 sm:p-4">
+      <div className="grid gap-4 rounded-2xl border border-nite-border-subtle bg-nite-surface/55 p-3 sm:p-4">
         <div className="grid gap-3 lg:grid-cols-[minmax(18rem,1fr)_auto] lg:items-center">
           <div className="relative">
             <SearchIcon

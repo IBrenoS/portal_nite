@@ -247,6 +247,22 @@
   --nite-shadow-lift: var(--nite-light-shadow-lift);
 }
 
+[data-nite-scene="inverse"] {
+  --background: var(--nite-background);
+  --foreground: var(--nite-text-primary);
+  --card: var(--nite-surface);
+  --card-foreground: var(--nite-text-primary);
+  --primary: var(--nite-brand-primary);
+  --primary-foreground: var(--nite-action-text);
+  --secondary: var(--nite-surface-elevated);
+  --muted: var(--nite-section);
+  --muted-foreground: var(--nite-text-secondary);
+  --accent: var(--nite-brand-soft);
+  --destructive: var(--nite-status-error);
+  --border: var(--nite-border-subtle);
+  --ring: var(--nite-focus);
+}
+
 * {
   box-sizing: border-box;
 }

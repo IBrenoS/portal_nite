@@ -98,15 +98,113 @@ describe("ProjectsPage", () => {
   it("renderiza a pagina como Explorer/Catalogo, sem repetir a vitrine da Home", () => {
     render(<ProjectsPage />);
 
+    const pattern = screen.getByTestId("projects-pattern-grid-trail");
+    const canvas = screen.getByTestId("projects-pattern-grid-trail-canvas");
+    const heroCopy = screen.getByTestId("projects-hero-copy");
+    const lightBloom = screen.getByTestId("projects-resend-light-bloom");
+    const greenLight = screen.getByTestId("projects-resend-green-light");
+    const searchPanelShell = screen.getByTestId("projects-search-panel-shell");
+    const heading = screen.getByRole("heading", {
+      level: 1,
+      name: "Ideias em movimento. Projetos em construção.",
+    });
+    const description = screen.getByText(
+      "Veja como estudantes, professores e o NITE transformam desafios em experiências práticas.",
+    );
+
+    expect(pattern).toHaveAttribute(
+      "data-background-source",
+      "nite-design-system",
+    );
+    expect(pattern).toHaveAttribute("data-grid-size", "20");
+    expect(pattern).toHaveAttribute("data-trail-count", "7");
+    expect(pattern).toHaveAttribute("data-min-trail-length", "100");
+    expect(pattern).toHaveAttribute("data-max-trail-length", "500");
+    expect(pattern).toHaveClass("bg-nite-background");
+    expect(canvas).toHaveClass("absolute", "left-0", "top-0");
+    expect(canvas).toHaveStyle({
+      maskImage:
+        "radial-gradient(closest-side, #000000 30%, #000000 31%, #00000000 100%)",
+    });
+    expect(heroCopy).toHaveClass(
+      "z-10",
+      "items-center",
+      "justify-center",
+      "text-center",
+      "w-[calc(100%-3rem)]",
+      "max-w-[47.5rem]",
+      "md:absolute",
+      "md:left-1/2",
+      "md:top-[258px]",
+      "md:w-[47.5rem]",
+      "md:-translate-x-1/2",
+    );
+    expect(heading).toHaveClass(
+      "text-[clamp(3.15rem,8vw,4rem)]",
+      "font-semibold",
+      "leading-[1]",
+      "tracking-normal",
+    );
+    expect(description).toHaveClass(
+      "max-w-[34rem]",
+      "sm:text-lg",
+      "sm:leading-8",
+    );
+    expect(lightBloom).toHaveAttribute("aria-hidden", "true");
+    expect(lightBloom.getAttribute("src")).toContain("projects-hero-light.png");
+    expect(lightBloom).toHaveAttribute("width", "868");
+    expect(lightBloom).toHaveAttribute("height", "582");
+    expect(lightBloom).toHaveClass(
+      "absolute",
+      "bottom-20",
+      "left-1/2",
+      "z-[1]",
+      "-translate-x-1/2",
+      "translate-y-1/3",
+      "rotate-[235deg]",
+      "pointer-events-none",
+    );
+    expect(greenLight).toHaveClass(
+      "absolute",
+      "inset-0",
+      "left-1/2",
+      "-translate-x-1/2",
+      "h-full",
+      "w-full",
+      "md:w-[70vw]",
+      "z-[2]",
+      "bg-[#2DCFBF]",
+      "mix-blend-color",
+      "pointer-events-none",
+    );
+    expect(greenLight).toHaveStyle({
+      maskImage:
+        "radial-gradient(circle, rgba(0, 0, 0, 1) 20%, rgba(0, 0, 0, 0) 90%)",
+      maskSize: "100% 100%",
+    });
+    expect(searchPanelShell).toHaveClass(
+      "relative",
+      "z-10",
+      "-mt-24",
+      "lg:-mt-[270px]",
+    );
+    expect(
+      document.querySelector("[src*='/static/product-pages/light.png']"),
+    ).toBeNull();
+    expect(
+      document.querySelector("[src*='projects-hero-light.png']"),
+    ).toBeInTheDocument();
+    expect(
+      document.querySelector("[src*='resend.com/static/product-pages']"),
+    ).toBeNull();
+    expect(
+      document.querySelector("[style*='/static/product-pages/noise.png']"),
+    ).toBeNull();
+
     expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
-    expect(
-      screen.getByRole("heading", { level: 1, name: "Projetos" }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        "Encontre iniciativas, pesquisas, protótipos e soluções do NITE.",
-      ),
-    ).toBeInTheDocument();
+    expect(heading).toBeInTheDocument();
+    expect(description).toBeInTheDocument();
+    expect(screen.queryByText("Explorer")).not.toBeInTheDocument();
     expect(screen.queryByText("Projetos do NITE")).not.toBeInTheDocument();
     expect(screen.queryByText("Lista de projetos")).not.toBeInTheDocument();
     expect(screen.queryByText("Projetos em destaque")).not.toBeInTheDocument();
