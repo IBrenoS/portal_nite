@@ -198,6 +198,98 @@ test.describe("resend-inspired footer layout", () => {
     expect(measurements.overlap).toBeLessThanOrEqual(71);
   });
 
+  test("projects hero integrates pattern canvas and catalog without overflow", async ({
+    page,
+  }) => {
+    const projectsUrl = process.env.PROJECTS_VISUAL_BASE_URL
+      ? new URL("/projetos", process.env.PROJECTS_VISUAL_BASE_URL).toString()
+      : "/projetos";
+
+    await page.setViewportSize({ width: 1920, height: 958 });
+    await openStablePage(page, projectsUrl, "dark");
+
+    const desktop = await page.evaluate(() => {
+      const scene = document.querySelector<HTMLElement>(
+        "[data-nite-scene='inverse']",
+      );
+      const pattern = document.querySelector<HTMLElement>(
+        "[data-testid='projects-pattern-grid-trail']",
+      );
+      const canvas = document.querySelector<HTMLCanvasElement>(
+        "[data-testid='projects-pattern-grid-trail-canvas']",
+      );
+      const lightBloom = document.querySelector<HTMLElement>(
+        "[data-testid='projects-resend-light-bloom']",
+      );
+      const greenLight = document.querySelector<HTMLElement>(
+        "[data-testid='projects-resend-green-light']",
+      );
+      const heroCopy = document.querySelector<HTMLElement>(
+        "[data-testid='projects-hero-copy']",
+      );
+      const panel = document.querySelector<HTMLElement>(
+        "[data-testid='projects-search-panel-shell']",
+      );
+      const catalog = document.querySelector<HTMLElement>(
+        "[data-testid='projects-filterable-list']",
+      );
+      const heroStage = pattern?.parentElement;
+
+      if (
+        !scene ||
+        !pattern ||
+        !canvas ||
+        !lightBloom ||
+        !greenLight ||
+        !heroCopy ||
+        !panel ||
+        !catalog ||
+        !heroStage
+      ) {
+        throw new Error("Projects hero contract not found.");
+      }
+
+      const heroRect = heroStage.getBoundingClientRect();
+      const panelRect = panel.getBoundingClientRect();
+
+      return {
+        backgroundColor: getComputedStyle(scene).backgroundColor,
+        canvasHeight: canvas.height,
+        canvasWidth: canvas.width,
+        hasHorizontalOverflow:
+          document.documentElement.scrollWidth >
+          document.documentElement.clientWidth,
+        panelEndsAfterHero: panelRect.bottom > heroRect.bottom,
+        panelOverlapsHero: panelRect.top < heroRect.bottom,
+        patternSource: pattern.getAttribute("data-background-source"),
+      };
+    });
+
+    expect(desktop).toEqual({
+      backgroundColor: "rgb(9, 9, 10)",
+      canvasHeight: expect.any(Number),
+      canvasWidth: expect.any(Number),
+      hasHorizontalOverflow: false,
+      panelEndsAfterHero: true,
+      panelOverlapsHero: true,
+      patternSource: "nite-design-system",
+    });
+    expect(desktop.canvasHeight).toBeGreaterThan(0);
+    expect(desktop.canvasWidth).toBeGreaterThan(0);
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.reload({ waitUntil: "domcontentloaded" });
+    await page.locator("body").waitFor();
+
+    const mobileOverflow = await page.evaluate(
+      () =>
+        document.documentElement.scrollWidth >
+        document.documentElement.clientWidth,
+    );
+
+    expect(mobileOverflow).toBe(false);
+  });
+
   test("internal route footer remains clean", async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 958 });
     await openStablePage(page, "/projetos", "dark");
