@@ -1,6 +1,6 @@
 ---
 name: Portal NITE
-description: Portal institucional premium para projetos, oportunidades e atualizacoes do NITE UNIJORGE.
+description: Portal institucional do NITE UNIJORGE para projetos, oportunidades, pessoas e registros públicos.
 colors:
   dark-background: "#09090A"
   dark-section: "#0D111C"
@@ -23,7 +23,7 @@ colors:
 typography:
   display:
     fontFamily: "Sora, Bahnschrift, Segoe UI, sans-serif"
-    fontSize: "clamp(2.35rem, 5vw, 4.5rem)"
+    fontSize: "clamp(2.75rem, 7vw, 6rem)"
     fontWeight: 600
     lineHeight: 1.04
     letterSpacing: "0"
@@ -52,10 +52,14 @@ typography:
     lineHeight: 1.3
     letterSpacing: "0.14em"
 rounded:
-  sm: "8px"
-  md: "12px"
-  lg: "16px"
-  xl: "24px"
+  xs: "4px"
+  sm: "6px"
+  md: "8px"
+  lg: "12px"
+  xl: "16px"
+  2xl: "20px"
+  3xl: "24px"
+  pill: "9999px"
 spacing:
   xs: "8px"
   sm: "12px"
@@ -67,26 +71,32 @@ components:
   button-primary:
     backgroundColor: "{colors.dark-surface}"
     textColor: "{colors.dark-text-primary}"
-    rounded: "{rounded.lg}"
+    rounded: "{rounded.xl}"
     padding: "10px 20px"
     height: "44px"
-  button-ghost:
+  button-quiet:
     backgroundColor: "transparent"
     textColor: "{colors.dark-text-secondary}"
-    rounded: "{rounded.lg}"
+    rounded: "{rounded.md}"
     padding: "10px 20px"
     height: "44px"
   card-default:
     backgroundColor: "transparent"
     textColor: "{colors.dark-text-primary}"
-    rounded: "{rounded.md}"
+    rounded: "{rounded.lg}"
     padding: "16px"
   input-default:
     backgroundColor: "{colors.dark-surface}"
     textColor: "{colors.dark-text-primary}"
-    rounded: "{rounded.md}"
+    rounded: "{rounded.lg}"
     padding: "10px 12px"
     height: "40px"
+  status-badge:
+    backgroundColor: "{colors.dark-section}"
+    textColor: "{colors.dark-text-secondary}"
+    rounded: "{rounded.pill}"
+    padding: "4px 10px"
+    height: "28px"
 ---
 
 # Design System: Portal NITE
@@ -95,45 +105,48 @@ components:
 
 **Creative North Star: "Circuito Institucional Metalico"**
 
-O sistema visual do Portal NITE trata o nucleo como uma infraestrutura viva de tecnologia aplicada dentro da UNIJORGE. A superficie principal e dark, tecnica e contida; a energia vem da logo, do azul eletrico pontual, de motion funcional e de camadas discretas, nao de decoracao espalhada.
+O sistema visual do Portal NITE trata o núcleo como uma infraestrutura viva de tecnologia aplicada dentro da UNIJORGE. A superfície principal é dark, técnica e contida; a energia vem da logo, do azul elétrico pontual, de imagens reais autorizadas, de movimento funcional e de camadas discretas.
 
-O design precisa parecer institucional e tecnologico ao mesmo tempo. Cards, botoes, badges, campos, header e footer compartilham bordas sutis, raio contido, contraste alto e foco visivel. A interface aceita momentos cinematograficos, mas cada momento precisa sustentar clareza, performance e conteudo real.
+O design parece institucional e tecnológico ao mesmo tempo. Cards, botões, badges, campos, header e footer compartilham bordas sutis, raio contido, contraste alto e foco visível. Cenas de marca podem ser cinematográficas ou fotográficas, mas cada uma sustenta clareza, performance, conteúdo real e movimento reduzido.
 
-O sistema rejeita dados inventados, promessa operacional, rotas futuras que parecam prontas, neon permanente, glow dominante, grid decorativo excessivo e landing page generica de SaaS.
+O sistema rejeita dados inventados, promessa operacional, rotas futuras que pareçam prontas, neon permanente, glow dominante, texto em gradiente, grid decorativo genérico e landing page genérica de SaaS.
 
 **Key Characteristics:**
 
-- Dark-first com light mode derivado, nao paralelo.
-- Azul eletrico como acento raro e funcional.
-- Superficies tecnicas transparentes com borda sutil.
+- Dark-first com light mode derivado, não paralelo.
+- Azul elétrico como acento raro e funcional.
+- Cenas específicas podem usar imagem ou uma cor local sem alterar os tokens globais.
+- Superfícies técnicas transparentes com borda sutil.
 - Tipografia Sora para voz institucional e Geist para leitura.
-- Motion curto, acessivel e subordinado a navegacao.
+- Movimento acessível e subordinado à navegação.
 
 ## 2. Colors
 
-A paleta e escura, fria e metalica, com azul eletrico reservado para acao, leitura e identidade.
+A paleta é escura, fria e metálica, com azul elétrico reservado para ação, leitura e identidade.
 
 ### Primary
 
-- **Azul Eletrico NITE** (`#2563EB` dark, `#1D4ED8` light): identidade, acentos principais e estados de destaque. Use com parcimonia; o azul deve chamar atencao porque aparece pouco.
-- **Ciano de Sinal** (`#38BDF8` dark, `#0369A1` light): microdestaques, icones, labels tecnicas e glows pontuais.
+- **Azul Elétrico NITE** (`#2563EB` dark, `#1D4ED8` light): identidade, acentos principais e estados de destaque. O azul chama atenção porque aparece pouco.
+- **Ciano de Sinal** (`#38BDF8` dark, `#0369A1` light): microdestaques, ícones, labels técnicas e glows pontuais.
 
 ### Neutral
 
-- **Preto Nucleo** (`#09090A`): fundo global dark e base da presenca premium.
-- **Secao Tecnica** (`#0D111C`): bloco extenso quando a pagina precisa de separacao sem linha pesada.
-- **Vidro Metalico** (`#18191CE0`): superficies de menu, campos e paineis.
-- **Claro Metalico** (`#F4F7FA`): base light fria e tecnica, derivada do dark-first sem virar papel creme.
-- **Secao Clara Tecnica** (`#E8EEF5`): separacao light em azul-cinza suave, usada quando a pagina precisa de respiro sem calor editorial.
-- **Texto Principal** (`#F0F0F0` dark, `#0B1220` light): leitura primaria.
-- **Texto Secundario** (`#A1A4A5` dark, `#334155` light): descricao, metadados e apoio.
-- **Borda Sutil** (`#B0C7D925`): contorno tecnico de cards e controles.
+- **Preto Núcleo** (`#09090A`): fundo global dark e base da presença institucional.
+- **Seção Técnica** (`#0D111C`): bloco extenso quando a página precisa de separação sem linha pesada.
+- **Vidro Metálico** (`#18191CE0`): superfícies de menu, campos e painéis.
+- **Claro Metálico** (`#F4F7FA`): base light fria e técnica, derivada do dark-first sem virar papel creme.
+- **Seção Clara Técnica** (`#E8EEF5`): separação light em azul-cinza suave.
+- **Texto Principal** (`#F0F0F0` dark, `#0B1220` light): leitura primária.
+- **Texto Secundário** (`#A1A4A5` dark, `#334155` light): descrição, metadados e apoio.
+- **Borda Sutil** (`#B0C7D925`): contorno técnico de cards e controles.
 
 ### Named Rules
 
-**The Rare Blue Rule.** O azul e um sinal, nao uma atmosfera. Se uma dobra inteira fica azulada, a composicao perdeu hierarquia.
+**The Rare Blue Rule.** O azul é um sinal, não uma atmosfera. Se uma dobra inteira fica azulada, a composição perdeu hierarquia.
 
-**The Honest Surface Rule.** Superficies podem ser transparentes, mas texto e foco precisam manter contraste AA em uso real.
+**The Scoped Scene Rule.** Cores de cena, como o teal `#2DCFBF` do hero de projetos, ficam restritas àquela composição e nunca substituem os tokens globais.
+
+**The Honest Surface Rule.** Superfícies podem ser transparentes, mas texto, placeholder e foco mantêm contraste AA em uso real.
 
 ## 3. Typography
 
@@ -141,55 +154,59 @@ A paleta e escura, fria e metalica, com azul eletrico reservado para acao, leitu
 **Body Font:** Geist, com Bahnschrift e Segoe UI como fallback.
 **Label/Mono Font:** Geist Mono, com Cascadia Mono e Consolas como fallback.
 
-**Character:** Sora da peso institucional aos titulos sem cair em editorial serifado. Geist mantem leitura limpa, tecnica e neutra para conteudo de projeto, navegacao, formularios e estados.
+**Character:** Sora dá peso institucional aos títulos sem cair em editorial serifado. Geist mantém leitura limpa, técnica e neutra para conteúdo, navegação, formulários e estados.
 
 ### Hierarchy
 
-- **Display** (600, `clamp(2.35rem, 5vw, 4.5rem)`, `1.04`): hero, CTA final e momentos de marca. Usar `text-wrap: balance` quando houver quebra longa.
-- **Headline** (600, `clamp(2rem, 4vw, 3rem)`, `1.1`): secoes principais e paginas internas.
-- **Title** (600, `1.25rem`, `1.25`): cards, grupos de menu e blocos de conteudo.
-- **Body** (400, `1rem`, `1.75`): paragrafos, descricoes e conteudo institucional. Manter linhas em torno de 65-75ch.
+- **Display** (600–700, `clamp(2.75rem, 7vw, 6rem)`, `1.00–1.10`): hero, CTA final e momentos de marca. O teto de `6rem` é absoluto.
+- **Headline** (600, `clamp(2rem, 4vw, 3rem)`, `1.1`): seções principais e páginas internas.
+- **Title** (500–600, `1.25rem`, `1.25`): cards, grupos de menu e blocos de conteúdo.
+- **Body** (400, `1rem`, `1.75`): parágrafos, descrições e conteúdo institucional, com linhas em torno de 65–75ch.
 - **Label** (500, `0.75rem`, `0.14em`, uppercase curto): chips, stack, metadados e pequenos sinais de sistema.
 
 ### Named Rules
 
-**The No Editorial Costume Rule.** NITE e tecnico-institucional, nao revista. Nao trocar a voz por serifas editoriais, italicos ornamentais ou grids de magazine sem uma spec explicita.
+**The Solid Type Rule.** Títulos são sólidos. Texto em gradiente, outline decorativo ou tracking abaixo de `-0.04em` é proibido.
+
+**The No Editorial Costume Rule.** NITE é técnico-institucional, não revista. Não trocar a voz por serifas editoriais, itálicos ornamentais ou grids de magazine sem direção aprovada.
 
 ## 4. Elevation
 
-O sistema usa profundidade hibrida: superficies, bordas e contraste fazem a maior parte do trabalho; sombras aparecem como apoio em paineis, hover e composicoes especiais. O default e contido, sem ghost-card decorativo.
+O sistema usa profundidade híbrida: superfícies, bordas e contraste fazem a maior parte do trabalho; sombras aparecem em painéis flutuantes, hover e composições especiais. O padrão é contido, sem ghost-card decorativo.
 
 ### Shadow Vocabulary
 
-- **Lift Sutil** (`0 24px 70px rgb(0 0 0 / 0.42)` dark, `0 18px 48px rgb(15 23 42 / 0.14)` light): paineis e superficies que precisam se destacar do fundo.
-- **Acao Glass** (`0 1px 3px rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)`): botoes e CTAs em repouso.
-- **Acao Hover** (`0 18px 48px rgb(255 255 255 / 0.12)` dark): resposta pontual de CTA, nunca sombra padrao de todos os cards.
+- **Lift Sutil** (`0 24px 70px rgb(0 0 0 / 0.42)` dark, `0 18px 48px rgb(15 23 42 / 0.14)` light): painéis e superfícies que precisam se destacar do fundo.
+- **Ação Glass** (`0 1px 3px rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)`): botões e CTAs em repouso.
+- **Ação Hover** (`0 18px 48px rgb(255 255 255 / 0.12)` dark): resposta pontual de CTA, nunca sombra padrão de todos os cards.
 
 ### Named Rules
 
-**The Border-First Rule.** Cards e controles primeiro usam borda, superficie e contraste. Sombra forte precisa justificar estado, camada ou cena.
+**The Border-First Rule.** Cards e controles usam primeiro borda, superfície e contraste. Sombra forte precisa justificar estado, camada ou cena.
 
 ## 5. Components
 
 ### Buttons
 
-- **Shape:** cantos contidos, normalmente `8px`; CTAs especiais podem ir a `16px`, mas nao viram pilulas gigantes por padrao.
-- **Primary:** `nite-glass-action`, superficie translucida, borda glass, texto claro e hover que inverte contraste.
-- **Hover / Focus:** transicoes curtas, foco por ring consistente e `active:translate-y-px` para feedback minimo.
-- **Secondary / Ghost / Link:** preservam hierarquia. Secundarios usam superficie; ghosts usam fundo transparente; links usam azul apenas quando a acao pede sinal forte.
+- **Shape:** `8px` por padrão; CTAs spotlight usam `16px`. Pill fica restrito a chips e badges.
+- **Primary / Spotlight:** superfície glass, borda de `2px`, texto claro e hover que inverte contraste.
+- **Quiet / Outline / Secondary / Ghost:** preservam hierarquia por borda, superfície e cor; não adicionam sombra decorativa.
+- **Invisible / Link:** ações textuais sem caixa, usadas quando a estrutura já fornece contexto.
+- **Hover / Focus / Disabled:** transições curtas, ring consistente, deslocamento ativo de `1px` e estado desabilitado explícito.
 
 ### Chips
 
-- **Style:** caps mono curto, raio full, borda fina e fundo tonal. Chips comunicam area, stack ou status curto; nao carregam paragrafo.
-- **State:** quando status importa, texto visivel acompanha qualquer cor.
+- **Style:** mono curto em caps, raio pill, borda fina e fundo tonal. Chips comunicam área, stack ou categoria curta.
+- **State:** badges de status usam texto visível e indicador opcional; a cor nunca é a única informação.
 
 ### Cards / Containers
 
-- **Corner Style:** `12px` como padrao.
-- **Background:** transparente ou `--nite-surface`, nunca card branco generico no dark.
-- **Shadow Strategy:** sem sombra por default; hover pode usar superficie/borda antes de lift.
-- **Border:** `--nite-border-subtle` em repouso e `--nite-border-hover` em interacao.
-- **Internal Padding:** `16px` nos primitives; secoes compostas podem respirar mais por contexto.
+- **Corner Style:** `12px` no primitive; composições de descoberta podem chegar a `24px` quando a cena justifica.
+- **Background:** transparente ou `--nite-surface`, nunca card branco genérico no dark.
+- **Shadow Strategy:** sem sombra por padrão; hover usa superfície e borda antes de lift.
+- **Border:** `--nite-border-subtle` em repouso e `--nite-border-hover` em interação.
+- **Internal Padding:** `16px` no primitive; seções compostas respiram conforme a densidade do conteúdo.
+- **Structure:** cards aninhados são proibidos; divisões internas usam spacing ou separadores.
 
 ### Navigation Goal: Projetos relacionados
 
@@ -222,34 +239,37 @@ Explorer e diferencia contexto por densidade, nunca por uma linguagem paralela.
 
 ### Inputs / Fields
 
-- **Style:** `nite-form-field`, altura `40px`, `12px` de raio, superficie tokenizada e borda soft.
-- **Focus:** troca de borda, superficie focus e ring por `--nite-focus`.
-- **Error / Disabled:** erro por texto e estado sem depender apenas de vermelho; disabled reduz opacidade e interacao.
+- **Style:** altura `40px`, raio `12px`, superfície tokenizada e borda soft.
+- **Focus:** troca de borda e superfície, com ring por `--nite-focus`.
+- **Placeholder:** mantém contraste legível; não usa cinza decorativamente apagado.
+- **Error / Disabled:** erro por texto e estado sem depender apenas de vermelho; disabled reduz opacidade e interação.
 
 ### Navigation
 
-O header usa marca a esquerda, grupos expansivos com botoes reais no desktop, links reais dentro do MegaMenu e menu mobile em camadas. O MegaMenu e compacto, integrado ao fundo e acessivel por teclado; nao e full-width. No mobile, a primeira camada mostra grupos, a segunda mostra links do grupo com voltar e fechar.
+O header usa marca à esquerda, grupos expansíveis com botões reais no desktop, links reais no MegaMenu e menu mobile em camadas. O MegaMenu é compacto, integrado ao fundo e acessível por teclado; no mobile, funciona como diálogo com trap de foco, voltar e fechar. Itens planejados aparecem como indisponíveis, sem navegação falsa.
 
 ### Signature Component
 
-A logo animada NITE e o principal ativo de marca. Ela pode protagonizar a primeira dobra e cenas finais, mas o efeito 3D/eletrico nao deve ser repetido como decoracao em todo componente.
+A logo animada NITE é o principal ativo de marca. Ela pode protagonizar a primeira dobra e cenas finais, mas o efeito 3D/elétrico não se repete como decoração. Timeline fotográfica e hero técnico de projetos são cenas específicas, não primitives reutilizáveis.
 
 ## 6. Do's and Don'ts
 
 ### Do:
 
-- **Do** usar `--nite-*` como contrato canonico para cor, superficie, foco, status e sombra.
+- **Do** usar `--nite-*` como contrato canônico para cor, superfície, foco, status e sombra.
 - **Do** preservar dark-first e light mode derivado com contraste real.
-- **Do** usar azul eletrico para acao, leitura e identidade pontual.
-- **Do** manter status, oportunidades, projetos e evidencias honestos, com texto claro quando algo esta pendente.
+- **Do** usar azul elétrico para ação, leitura e identidade pontual.
+- **Do** restringir cores, grids e imagens de cena ao contexto aprovado, sem promovê-los a token global.
+- **Do** manter status, oportunidades, projetos, pessoas e evidências honestos, com texto claro quando algo está pendente.
 - **Do** validar teclado, foco, contraste, responsividade e `prefers-reduced-motion` antes de chamar uma entrega de pronta.
-- **Do** deixar a logo ser protagonista em cenas de marca, mantendo o restante do sistema mais contido.
+- **Do** usar imagens locais autorizadas com texto alternativo significativo.
 
 ### Don't:
 
-- **Don't** inventar dados institucionais, metricas, depoimentos, datas, responsaveis, equipes, fotos, resultados, vagas ou evidencias.
-- **Don't** apresentar placeholders, rotas futuras, formularios futuros ou oportunidades futuras como funcionalidades prontas.
-- **Don't** usar neon permanente, glow dominante, grid decorativo excessivo ou gradientes competindo com conteudo.
-- **Don't** transformar o portal em landing page generica de SaaS com cards iguais, hero-metric template ou copy inflada.
-- **Don't** copiar layout, assets, textos, imagens ou identidade de referencias externas.
-- **Don't** depender apenas de cor, icone ou animacao para comunicar estado.
+- **Don't** inventar dados institucionais, métricas, depoimentos, datas, responsáveis, equipes, fotos, resultados, vagas ou evidências.
+- **Don't** publicar nomes, imagens, perfis ou vínculos sem autorização explícita.
+- **Don't** apresentar placeholders, rotas futuras, formulários futuros ou oportunidades futuras como funcionalidades prontas.
+- **Don't** usar neon permanente, glow dominante, texto em gradiente ou grid decorativo genérico; grids só pertencem a cenas técnicas com função definida.
+- **Don't** transformar o portal em landing page genérica de SaaS com cards iguais, hero-metric template ou copy inflada.
+- **Don't** copiar layout, ativos, textos, imagens ou identidade de referências externas.
+- **Don't** depender apenas de cor, ícone ou animação para comunicar estado.
