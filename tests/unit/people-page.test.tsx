@@ -143,6 +143,46 @@ describe("PeoplePage", () => {
     ).not.toBeInTheDocument();
   });
 
+  it("renderiza o trigger de busca com a estilização compacta da referencia", async () => {
+    await renderPeoplePage();
+
+    const searchTrigger = screen.getByRole("button", {
+      name: /Buscar pessoas/i,
+    });
+    const shortcuts = searchTrigger.querySelectorAll("kbd");
+
+    expect(searchTrigger).toHaveClass(
+      "h-10",
+      "w-[200px]",
+      "gap-0",
+      "justify-between",
+      "rounded-[1rem]",
+      "px-3",
+      "py-0",
+      "font-normal",
+    );
+    expect(searchTrigger.querySelector("svg")).toHaveClass("size-[18px]");
+    expect(shortcuts).toHaveLength(2);
+
+    for (const shortcut of shortcuts) {
+      expect(shortcut).toHaveClass(
+        "inline-flex",
+        "h-5",
+        "min-w-5",
+        "items-center",
+        "justify-center",
+        "rounded-md",
+        "border-0",
+        "bg-nite-surface-subtle",
+        "px-1",
+        "font-sans",
+        "text-xs",
+        "font-normal",
+        "text-muted-foreground",
+      );
+    }
+  });
+
   it("abre a busca por clique e pelo atalho Ctrl+K", async () => {
     const user = userEvent.setup();
 
@@ -153,7 +193,7 @@ describe("PeoplePage", () => {
       screen.getByRole("dialog", { name: "Buscar pessoas" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByPlaceholderText("Buscar pessoas autorizadas..."),
+      screen.getByPlaceholderText("Procurando pessoas..."),
     ).toHaveFocus();
     expect(
       within(screen.getByRole("dialog", { name: "Buscar pessoas" })).getByText(
@@ -168,6 +208,101 @@ describe("PeoplePage", () => {
     expect(
       screen.getByRole("dialog", { name: "Buscar pessoas" }),
     ).toBeInTheDocument();
+  });
+
+  it("renderiza a busca aberta no padrão visual de command palette", async () => {
+    const user = userEvent.setup();
+    const { container } = await renderPeoplePage();
+
+    await user.click(screen.getByRole("button", { name: /Buscar pessoas/i }));
+
+    const dialog = screen.getByRole("dialog", { name: "Buscar pessoas" });
+    const overlay = container.querySelector("[data-search-overlay]");
+    const list = container.querySelector("[data-search-list]");
+    const heading = container.querySelector("[data-search-group-heading]");
+    const firstResult = within(dialog).getByRole("link", {
+      name: /Breno Cerqueira/i,
+    });
+
+    expect(overlay).toHaveClass(
+      "fixed",
+      "inset-0",
+      "z-[1000]",
+      "bg-background/95",
+    );
+    expect(overlay?.className).not.toContain("backdrop-blur");
+    expect(dialog).toHaveClass(
+      "fixed",
+      "left-1/2",
+      "top-0",
+      "z-[1000]",
+      "w-full",
+      "max-w-[660px]",
+      "-translate-x-1/2",
+      "translate-y-[25vh]",
+      "rounded-[1.3rem]",
+      "p-0",
+      "shadow-none",
+    );
+    expect(dialog.querySelector("[data-search-input-wrapper]")).toHaveClass(
+      "mt-1",
+      "h-[49px]",
+      "justify-between",
+      "border-b",
+      "px-5",
+      "py-1",
+    );
+    expect(screen.getByRole("button", { name: "Fechar busca" })).toHaveClass(
+      "cursor-pointer",
+      "p-0",
+    );
+    expect(screen.getByText("Esc")).toHaveClass(
+      "inline-flex",
+      "h-5",
+      "min-w-5",
+      "rounded-md",
+      "bg-nite-surface-subtle",
+      "px-1",
+      "text-xs",
+    );
+    expect(screen.getByPlaceholderText("Procurando pessoas...")).toHaveClass(
+      "min-h-8",
+      "py-2",
+      "text-base",
+      "focus-visible:shadow-none",
+    );
+    expect(list).toHaveClass(
+      "max-h-[300px]",
+      "overflow-y-auto",
+      "overflow-x-hidden",
+      "p-1.5",
+    );
+    expect(heading).toHaveClass(
+      "flex",
+      "min-h-7",
+      "items-end",
+      "px-3",
+      "pr-4",
+      "text-xs",
+    );
+    expect(firstResult).toHaveClass(
+      "mx-1",
+      "my-1",
+      "min-h-8",
+      "justify-between",
+      "gap-3",
+      "rounded-xl",
+      "px-3",
+      "py-2",
+      "text-sm",
+      "bg-nite-surface",
+      "text-foreground",
+    );
+    expect(
+      within(firstResult)
+        .getByAltText("Foto de perfil autorizada de Breno Cerqueira.")
+        .closest("span"),
+    ).toHaveClass("size-6");
   });
 
   it("renderiza cards autorizados quando houver pessoas publicas", async () => {

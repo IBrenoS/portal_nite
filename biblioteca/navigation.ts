@@ -24,7 +24,6 @@ const instagramChannel = siteConfig.publicChannels.find(
 const contactNavigationItems: SiteNavigationItem[] = [
   { label: "Falar com o NITE", href: "/contato", status: "mvp" },
   { label: "Propor desafio", href: "/contato", status: "planned" },
-  { label: "E-mail", href: "/contato", status: "planned" },
 ];
 
 if (instagramChannel) {
@@ -66,7 +65,7 @@ const headerNavigationGroups: SiteNavigationGroup[] = [
     href: "/atualizacoes",
     items: [
       {
-        label: "NIT News",
+        label: "Nite News",
         href: "/atualizacoes",
         status: "mvp",
       },

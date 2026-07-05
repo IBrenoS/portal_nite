@@ -43,17 +43,17 @@ const readinessSignals: ReadinessSignal[] = [
   },
 ];
 
-type ReadinessPremiumTimelineProps = {
+type ReadinessSignalPathProps = {
   className?: string;
 };
 
-export function ReadinessPremiumTimeline({
+export function ReadinessSignalPath({
   className,
-}: ReadinessPremiumTimelineProps) {
+}: ReadinessSignalPathProps) {
   return (
     <div
-      data-component="readiness-resend-timeline"
-      data-implementation-reference="resend-inbound-timeline"
+      data-component="readiness-signal-path"
+      data-implementation-reference="readiness-signal-path"
       className={cn(
         "mx-auto flex w-full flex-col items-center justify-center gap-[1.125rem] px-0 py-12 !pt-10 text-pretty sm:py-24",
         className,
@@ -70,20 +70,20 @@ export function ReadinessPremiumTimeline({
           return (
             <li
               key={signal.id}
-              data-component="readiness-resend-step-row"
+              data-component="readiness-signal-step-row"
               className="grid w-full grid-cols-[2rem_1fr] gap-x-6 md:grid-cols-[6rem_1fr_2fr] md:gap-x-10"
             >
               <div
-                data-component="readiness-resend-marker-column"
+                data-component="readiness-signal-marker-column"
                 className="flex flex-col items-center"
                 aria-hidden="true"
               >
                 <span
-                  data-component="readiness-resend-dot"
+                  data-component="readiness-signal-dot"
                   className="mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full border-2 border-white/40"
                 />
                 <span
-                  data-component="readiness-resend-line"
+                  data-component="readiness-signal-line"
                   className={cn(
                     "mt-2 w-px flex-1 bg-white/[0.08]",
                     isLast &&
@@ -110,7 +110,7 @@ export function ReadinessPremiumTimeline({
               </div>
 
               <div
-                data-component="readiness-resend-visual-column"
+                data-component="readiness-signal-visual-column"
                 className={cn(
                   "hidden items-start justify-end md:flex",
                   isLast ? "" : "pb-20",
@@ -129,16 +129,16 @@ export function ReadinessPremiumTimeline({
 function ReadinessVisualPanel({ signal }: { signal: ReadinessSignal }) {
   return (
     <div
-      data-component="readiness-resend-panel"
+      data-component="readiness-signal-panel"
       className="relative w-full max-w-[30rem] overflow-hidden"
       aria-hidden="true"
     >
       <div
-        data-component="readiness-resend-panel-shell"
+        data-component="readiness-signal-panel-shell"
         className="overflow-visible rounded-tr-[3rem] border-x border-t border-[#212629] bg-[radial-gradient(100%_100%_at_50%_0%,rgba(255,255,255,0.10)_0%,rgba(255,255,255,0.00)_100%)]"
       >
         <div
-          data-component="readiness-resend-panel-frame"
+          data-component="readiness-signal-panel-frame"
           className="flex items-center justify-end gap-2 border-b border-[#212629] p-5 pl-8"
         >
           {signal.id === "interesse" ? <InterestPanel /> : null}
@@ -148,11 +148,11 @@ function ReadinessVisualPanel({ signal }: { signal: ReadinessSignal }) {
         </div>
       </div>
       <span
-        data-component="readiness-resend-shell-mask-left"
+        data-component="readiness-signal-shell-mask-left"
         className="pointer-events-none absolute inset-y-0 left-0 z-10 w-[5.25rem] bg-[linear-gradient(to_right,var(--nite-background)_0%,var(--nite-background)_35%,color-mix(in_srgb,var(--nite-background)_78%,transparent)_62%,transparent_100%)]"
       />
       <span
-        data-component="readiness-resend-shell-mask-bottom"
+        data-component="readiness-signal-shell-mask-bottom"
         className="pointer-events-none absolute bottom-0 left-0 z-10 h-[46%] w-full bg-[linear-gradient(to_top,var(--nite-background)_0%,color-mix(in_srgb,var(--nite-background)_72%,transparent)_44%,transparent_100%)]"
       />
     </div>
@@ -173,7 +173,7 @@ function PanelShell({
     >
       {children}
       <div
-        data-component="readiness-resend-panel-glow"
+        data-component="readiness-signal-panel-glow"
         className="absolute bottom-0 w-full pointer-events-none"
       >
         <span className="absolute right-[-6rem] h-[8rem] w-[8rem] rounded-full bg-[#22FF991C] blur-[8rem] sm:right-[-7.5rem] sm:h-[10rem] sm:w-[10rem] sm:blur-[10rem]" />
@@ -300,7 +300,7 @@ function RhythmPanel() {
 
 function RegisterPanel() {
   return (
-    <PanelShell component="readiness-resend-code-panel">
+    <PanelShell component="readiness-signal-code-panel">
       <pre className="overflow-hidden font-mono text-sm leading-5 text-white/70">
         <code>{`export const registro = {
   tipo: "decisao",
@@ -314,7 +314,7 @@ function RegisterPanel() {
 
 function ContextPanel() {
   return (
-    <PanelShell component="readiness-resend-terminal">
+    <PanelShell component="readiness-signal-terminal">
       <h4 className="text-base font-medium leading-6 text-white">
         Resolve context
       </h4>

@@ -24,7 +24,7 @@ describe("navegacao institucional", () => {
     expect(futureNavigationRoutes).not.toContain("/sobre");
   });
 
-  it("centraliza NIT News em Atualizacoes sem Registros redundante", () => {
+  it("centraliza Nite News em Atualizacoes sem Registros redundante", () => {
     const updatesGroup = headerNavigationGroups.find(
       (group) => group.id === "atualizacoes",
     );
@@ -32,7 +32,7 @@ describe("navegacao institucional", () => {
     expect(updatesGroup?.items).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          label: "NIT News",
+          label: "Nite News",
           href: "/atualizacoes",
           status: "mvp",
         }),
@@ -73,5 +73,15 @@ describe("navegacao institucional", () => {
         note: "Disponível apenas quando houver processo validado.",
       },
     ]);
+  });
+
+  it("remove o item de e-mail do menu de contato", () => {
+    const contactGroup = headerNavigationGroups.find(
+      (group) => group.id === "contato",
+    );
+
+    expect(contactGroup?.items.some((item) => item.label === "E-mail")).toBe(
+      false,
+    );
   });
 });

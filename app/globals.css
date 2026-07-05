@@ -479,36 +479,46 @@ body {
 
 .nite-final-wordmark {
   --nite-spotlight-x: 50%;
-  --nite-spotlight-y: 38%;
+  --nite-spotlight-y: 42%;
+  --nite-wordmark-spotlight: #f8fafc;
   isolation: isolate;
 }
 
-.nite-final-wordmark::before {
-  content: "";
-  position: absolute;
-  top: -6.25rem;
-  left: -6.25rem;
-  width: 12.5rem;
-  height: 12.5rem;
-  border-radius: 9999px;
-  pointer-events: none;
-  z-index: 2;
-  background: radial-gradient(6.25rem, rgb(255 255 255 / 0.56), transparent);
-  mix-blend-mode: soft-light;
-  opacity: 0;
-  transform: translateX(var(--nite-spotlight-x))
-    translateY(var(--nite-spotlight-y));
-  transition: opacity 500ms var(--nite-ease-out);
-  will-change: transform;
+:root[data-theme="light"] .nite-final-wordmark {
+  --nite-wordmark-spotlight: #0b1220;
 }
 
-.nite-final-wordmark:hover::before {
-  opacity: 1;
+.nite-final-wordmark::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(
+    circle 8rem at var(--nite-spotlight-x) var(--nite-spotlight-y),
+    color-mix(in srgb, var(--nite-wordmark-spotlight) 76%, transparent) 0%,
+    color-mix(in srgb, var(--nite-wordmark-spotlight) 36%, transparent) 42%,
+    transparent 78%
+  );
+  mask-image: url("/images/brand/nite-logo-footer.webp");
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: 100% 100%;
+  opacity: 0;
+  transition: opacity 320ms var(--nite-ease-out);
+  -webkit-mask-image: url("/images/brand/nite-logo-footer.webp");
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+}
+
+.nite-final-wordmark[data-spotlight-active="true"]::after {
+  opacity: 0.92;
 }
 
 .nite-final-wordmark-image {
   filter: brightness(0.72) saturate(0.82);
-  opacity: 0.68;
+  opacity: 0.55;
 }
 
 .nite-footer-transition-divider {
@@ -580,14 +590,34 @@ body {
   overflow: hidden;
   border: 1px solid rgb(255 255 255 / 0.08);
   border-radius: 1.5rem;
-  background:
-    linear-gradient(120deg, rgb(56 189 248 / 0.16), transparent 34%),
-    linear-gradient(300deg, rgb(241 90 77 / 0.13), transparent 42%),
-    url("/images/timeline/timeline-background.jpeg") center 42% / cover
-      no-repeat,
-    #141413;
+  background: #141413;
   color: #faf9f5;
   box-shadow: 0 28px 90px rgb(0 0 0 / 0.38);
+}
+
+.timeline-image-sequence {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+  background: #141413;
+}
+
+.timeline-image-sequence-layer {
+  position: absolute;
+  inset: 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: 0;
+  transform: scale(1.02);
+  transition:
+    opacity 1200ms ease,
+    transform 6000ms ease;
+}
+
+.timeline-image-sequence-layer[data-active="true"] {
+  opacity: 1;
+  transform: scale(1.06);
 }
 
 .timeline-premium-scroll-bg::before {
@@ -595,10 +625,16 @@ body {
   position: absolute;
   inset: 0;
   z-index: -1;
-  background-image:
+  background:
+    linear-gradient(120deg, rgb(56 189 248 / 0.16), transparent 34%),
+    linear-gradient(300deg, rgb(241 90 77 / 0.13), transparent 42%),
     linear-gradient(rgb(250 249 245 / 0.08) 1px, transparent 1px),
     linear-gradient(90deg, rgb(250 249 245 / 0.08) 1px, transparent 1px);
-  background-size: 3.5rem 3.5rem;
+  background-size:
+    auto,
+    auto,
+    3.5rem 3.5rem,
+    3.5rem 3.5rem;
   mask-image: linear-gradient(
     90deg,
     transparent,
@@ -637,6 +673,21 @@ body {
   display: grid;
   max-width: 34rem;
   gap: clamp(1.25rem, 2vw, 1.75rem);
+}
+
+.timeline-premium-content[data-narrative-visibility="hidden"] {
+  pointer-events: none;
+}
+
+.timeline-narrative-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.timeline-narrative-letter {
+  display: inline-block;
+  transform-origin: 50% 50%;
+  will-change: opacity, transform;
 }
 
 .timeline-premium-eyebrow {
@@ -713,6 +764,10 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .nite-final-wordmark::after {
+    content: none;
+  }
+
   .timeline-premium-scroll-bg {
     max-width: 100%;
     margin-block: 0;
@@ -725,6 +780,18 @@ body {
   .timeline-premium-button {
     opacity: 1;
     transform: none;
+  }
+
+  .timeline-image-sequence-layer {
+    transition: none;
+    transform: none;
+  }
+
+  .timeline-narrative-letter {
+    opacity: 1 !important;
+    transform: none !important;
+    visibility: visible !important;
+    will-change: auto;
   }
 
   *,

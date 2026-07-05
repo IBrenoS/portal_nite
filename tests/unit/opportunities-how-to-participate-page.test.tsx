@@ -191,23 +191,23 @@ describe("OpportunitiesHowToParticipatePage", () => {
     expect(heroSymbol?.style.getPropertyValue("--pointer-x")).toBe("159px");
   });
 
-  it("mantem hero em tokens NITE e permite a paleta Resend na timeline", () => {
+  it("mantem hero em tokens NITE e permite a paleta escura no caminho de sinais", () => {
     render(<HowToParticipatePage />);
 
     const mainElement = screen.getByRole("main");
     const hero = document.querySelector(
       "[data-component='resend-inspired-hero']",
     );
-    const timeline = document.querySelector(
-      "[data-component='readiness-resend-timeline']",
+    const signalPath = document.querySelector(
+      "[data-component='readiness-signal-path']",
     );
     const heroVisualContracts = Array.from(
       hero?.querySelectorAll<HTMLElement>("*") ?? [],
     )
       .map((element) => `${element.className} ${element.getAttribute("style")}`)
       .join(" ");
-    const timelineVisualContracts = Array.from(
-      timeline?.querySelectorAll<HTMLElement>("*") ?? [],
+    const signalPathVisualContracts = Array.from(
+      signalPath?.querySelectorAll<HTMLElement>("*") ?? [],
     )
       .map((element) => `${element.className} ${element.getAttribute("style")}`)
       .join(" ");
@@ -216,10 +216,10 @@ describe("OpportunitiesHowToParticipatePage", () => {
     expect(heroVisualContracts).not.toMatch(
       /bg-black|border-white|text-white|from-white|via-zinc|to-white|sky-\d|#[0-9a-f]{3,8}|rgba?\(/i,
     );
-    expect(timelineVisualContracts).toContain("border-[#212629]");
-    expect(timelineVisualContracts).toContain("bg-black");
-    expect(timelineVisualContracts).toContain("from-white/5");
-    expect(timelineVisualContracts).toContain("text-white");
+    expect(signalPathVisualContracts).toContain("border-[#212629]");
+    expect(signalPathVisualContracts).toContain("bg-black");
+    expect(signalPathVisualContracts).toContain("from-white/5");
+    expect(signalPathVisualContracts).toContain("text-white");
   });
 
   it("mantem a linguagem aprovada e evita termos rejeitados no conteudo visivel", () => {
@@ -297,7 +297,7 @@ describe("OpportunitiesHowToParticipatePage", () => {
     expect(opportunityLink).toHaveClass("h-12", "rounded-2xl");
   });
 
-  it("recria a anatomia vertical da timeline Inbound da Resend", () => {
+  it("recria a anatomia vertical do caminho de sinais de prontidão", () => {
     render(<HowToParticipatePage />);
 
     expect(
@@ -318,11 +318,11 @@ describe("OpportunitiesHowToParticipatePage", () => {
 
     const removedDataPrefix = `data-${"bl"}${"ender"}`;
     const removedMarkerSelector = `[data-${"sync"}-${"key"}]`;
-    const readinessTimeline = document.querySelector(
-      "[data-component='readiness-resend-timeline']",
+    const readinessSignalPath = document.querySelector(
+      "[data-component='readiness-signal-path']",
     );
     const rows = document.querySelectorAll(
-      "[data-component='readiness-resend-step-row']",
+      "[data-component='readiness-signal-step-row']",
     );
 
     expect(
@@ -331,12 +331,12 @@ describe("OpportunitiesHowToParticipatePage", () => {
     expect(
       document.querySelector("[data-component='readiness-visual-gap']"),
     ).not.toBeInTheDocument();
-    expect(readinessTimeline).toBeInTheDocument();
-    expect(readinessTimeline).toHaveAttribute(
+    expect(readinessSignalPath).toBeInTheDocument();
+    expect(readinessSignalPath).toHaveAttribute(
       "data-implementation-reference",
-      "resend-inbound-timeline",
+      "readiness-signal-path",
     );
-    expect(readinessTimeline).toHaveClass(
+    expect(readinessSignalPath).toHaveClass(
       "mx-auto",
       "flex",
       "w-full",
@@ -358,48 +358,48 @@ describe("OpportunitiesHowToParticipatePage", () => {
 
     expect(
       document.querySelectorAll(
-        "[data-component='readiness-resend-marker-column']",
+        "[data-component='readiness-signal-marker-column']",
       ),
     ).toHaveLength(4);
     expect(
-      document.querySelectorAll("[data-component='readiness-resend-dot']"),
+      document.querySelectorAll("[data-component='readiness-signal-dot']"),
     ).toHaveLength(4);
     expect(
-      document.querySelectorAll("[data-component='readiness-resend-line']"),
+      document.querySelectorAll("[data-component='readiness-signal-line']"),
     ).toHaveLength(4);
     expect(
       document.querySelectorAll(
-        "[data-component='readiness-resend-visual-column']",
+        "[data-component='readiness-signal-visual-column']",
       ),
     ).toHaveLength(4);
     expect(
-      document.querySelectorAll("[data-component='readiness-resend-panel']"),
+      document.querySelectorAll("[data-component='readiness-signal-panel']"),
     ).toHaveLength(4);
     expect(
       document.querySelectorAll(
-        "[data-component='readiness-resend-shell-mask-left']",
+        "[data-component='readiness-signal-shell-mask-left']",
       ),
     ).toHaveLength(4);
     expect(
       document.querySelectorAll(
-        "[data-component='readiness-resend-shell-mask-bottom']",
+        "[data-component='readiness-signal-shell-mask-bottom']",
       ),
     ).toHaveLength(4);
     for (const panel of document.querySelectorAll(
-      "[data-component='readiness-resend-panel']",
+      "[data-component='readiness-signal-panel']",
     )) {
       expect(
         panel.querySelector(
-          "[data-component='readiness-resend-shell-mask-left']",
+          "[data-component='readiness-signal-shell-mask-left']",
         ),
       ).toHaveClass("absolute", "inset-y-0", "left-0", "z-10");
       expect(
         panel.querySelector(
-          "[data-component='readiness-resend-shell-mask-bottom']",
+          "[data-component='readiness-signal-shell-mask-bottom']",
         ),
       ).toHaveClass("absolute", "bottom-0", "left-0", "z-10");
       const shell = panel.querySelector(
-        "[data-component='readiness-resend-panel-shell']",
+        "[data-component='readiness-signal-panel-shell']",
       );
       expect(shell).toBeInTheDocument();
       expect(shell).toHaveClass(
@@ -412,11 +412,11 @@ describe("OpportunitiesHowToParticipatePage", () => {
     }
     expect(
       document.querySelectorAll(
-        "[data-component='readiness-resend-panel-frame']",
+        "[data-component='readiness-signal-panel-frame']",
       ),
     ).toHaveLength(4);
     for (const frame of document.querySelectorAll(
-      "[data-component='readiness-resend-panel-frame']",
+      "[data-component='readiness-signal-panel-frame']",
     )) {
       expect(frame).toHaveClass(
         "flex",
@@ -432,32 +432,32 @@ describe("OpportunitiesHowToParticipatePage", () => {
     }
     expect(
       document.querySelectorAll(
-        "[data-component='readiness-resend-panel-fade-left']",
+        "[data-component='readiness-signal-panel-fade-left']",
       ),
     ).toHaveLength(0);
     expect(
       document.querySelectorAll(
-        "[data-component='readiness-resend-panel-fade-bottom']",
+        "[data-component='readiness-signal-panel-fade-bottom']",
       ),
     ).toHaveLength(0);
     expect(
       document.querySelectorAll(
-        "[data-component='readiness-resend-panel-glow']",
+        "[data-component='readiness-signal-panel-glow']",
       ),
     ).toHaveLength(4);
     expect(
       document.querySelectorAll(
-        "[data-component='readiness-resend-window-dot']",
+        "[data-component='readiness-signal-window-dot']",
       ),
     ).toHaveLength(0);
     expect(
-      document.querySelector("[data-component='readiness-resend-code-panel']"),
+      document.querySelector("[data-component='readiness-signal-code-panel']"),
     ).toBeInTheDocument();
     expect(
-      document.querySelector("[data-component='readiness-resend-terminal']"),
+      document.querySelector("[data-component='readiness-signal-terminal']"),
     ).toBeInTheDocument();
     for (const heading of document.querySelectorAll(
-      "[data-component='readiness-resend-panel'] h4",
+      "[data-component='readiness-signal-panel'] h4",
     )) {
       expect(heading).not.toHaveClass("font-heading");
     }
@@ -479,7 +479,7 @@ describe("OpportunitiesHowToParticipatePage", () => {
     expect(document.querySelector("img[src*='stage']")).not.toBeInTheDocument();
     expect(
       screen.queryByRole("tablist", {
-        name: "Sinais de prontidão em timeline",
+        name: "Sinais de prontidão em abas",
       }),
     ).not.toBeInTheDocument();
     expect(screen.queryAllByRole("tab")).toHaveLength(0);

@@ -16,7 +16,7 @@ import { PremiumHeroIcon } from "@/components/sections/premium-hero-icon";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-import { ReadinessPremiumTimeline } from "./readiness-premium-timeline";
+import { ReadinessSignalPath } from "./readiness-signal-path";
 
 const pageTitle = "Como participar | Oportunidades";
 const pageDescription =
@@ -214,7 +214,7 @@ export default function HowToParticipatePage() {
               </p>
             </div>
 
-            <ReadinessPremiumTimeline />
+            <ReadinessSignalPath />
             <ReadinessFinalCta />
           </Container>
         </section>

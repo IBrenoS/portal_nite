@@ -1,4 +1,5 @@
 import {
+  act,
   cleanup,
   render,
   screen,
@@ -6,20 +7,48 @@ import {
   within,
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import HomePage from "@/app/page";
+import {
+  getTimelineNarrativeGraphemes,
+  isTimelineImageSequenceReady,
+  TimelineNarrativeContent,
+  TimelineImageSequence,
+  timelineNarrativeAnimationDuration,
+  timelineNarrativeIdleDelayMs,
+  timelineNarrativeLetterStagger,
+  timelineSequenceImages,
+} from "@/components/sections/living-timeline-section";
 import { validateNiteSvgContract } from "@/components/ui/validate-nite-svg-contract";
+
+function mockReducedMotionPreference(matches: boolean) {
+  vi.stubGlobal(
+    "matchMedia",
+    vi.fn().mockImplementation((query: string) => ({
+      addEventListener: vi.fn(),
+      addListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+      matches: query === "(prefers-reduced-motion: reduce)" ? matches : false,
+      media: query,
+      onchange: null,
+      removeEventListener: vi.fn(),
+      removeListener: vi.fn(),
+    })),
+  );
+}
 
 afterEach(() => {
   cleanup();
+  vi.useRealTimers();
+  vi.unstubAllGlobals();
   window.localStorage.clear();
   document.documentElement.removeAttribute("data-theme");
   document.documentElement.removeAttribute("data-theme-preference");
   document.documentElement.classList.remove("dark");
 });
 
-describe("HomePage", () => {
+describe("HomePage", { timeout: 15_000 }, () => {
   it("renderiza a home pública sem rótulos internos", () => {
     render(<HomePage />);
 
@@ -444,21 +473,22 @@ describe("HomePage", () => {
     expect(timeline).toHaveAttribute("data-nite-scene", "timeline");
     expect(timeline).toHaveAttribute("data-scroll", "section");
     expect(timeline).toHaveAttribute("data-public-milestones", "0");
-    expect(within(timeline).getByText("Timeline")).toBeInTheDocument();
-    expect(
-      within(timeline).getByText("O NITE em trajetória"),
-    ).toBeInTheDocument();
-    expect(
-      within(timeline).getByText(
-        "Uma leitura visual dos marcos que estruturam o núcleo, suas frentes e seus próximos passos.",
-      ),
-    ).toBeInTheDocument();
-    expect(within(timeline).getByText("Continuar leitura")).toBeInTheDocument();
+    const timelineNarrative = within(timeline).getByTestId(
+      "timeline-narrative-content",
+    );
+    expect(timelineNarrative).toHaveTextContent("Timeline");
+    expect(within(timeline).getByRole("heading", { level: 2 })).toHaveTextContent(
+      "O NITE em trajetória",
+    );
+    expect(timelineNarrative).toHaveTextContent(
+      "Uma leitura visual dos marcos que estruturam o núcleo, suas frentes e seus próximos passos.",
+    );
+    expect(timelineNarrative).toHaveTextContent("Continuar leitura");
     const timelineCta = within(timeline).getByRole("link", {
       name: "Continuar leitura sobre a timeline do NITE",
     });
 
-    expect(timelineCta).toHaveAttribute("href", "/atualizacoes");
+    expect(timelineCta).toHaveAttribute("href", "/sobre");
     expect(timelineCta).toHaveClass(
       "timeline-premium-button",
       "w-fit",
@@ -471,6 +501,34 @@ describe("HomePage", () => {
     expect(
       timeline.querySelector("[data-scroll='container']"),
     ).toBeInTheDocument();
+    const imageSequence = timeline.querySelector(
+      "[data-component='timeline-image-sequence']",
+    );
+
+    expect(imageSequence).toBeInTheDocument();
+    expect(imageSequence).toHaveAttribute("aria-hidden", "true");
+    expect(imageSequence).toHaveAttribute("data-autoplay-interval-ms", "5000");
+    expect(
+      Array.from(
+        imageSequence?.querySelectorAll<HTMLElement>(
+          "[data-component='timeline-image-sequence-layer']",
+        ) ?? [],
+      ).map((layer) => layer.dataset.imageSrc),
+    ).toEqual([
+      "/images/timeline/timeline-sequence-07-19-combo-nite.jpg",
+      "/images/timeline/timeline-sequence-06-18-nite-cimatec.jpg",
+      "/images/timeline/timeline-sequence-06-11-mostra-projetos.jpg",
+      "/images/timeline/timeline-sequence-05-23-semana-engenharia.jpg",
+      "/images/timeline/timeline-sequence-lab-context.jpeg",
+    ]);
+    expect(
+      imageSequence?.querySelector(
+        "[data-component='timeline-image-sequence-layer'][data-active='true']",
+      ),
+    ).toHaveAttribute(
+      "data-image-src",
+      "/images/timeline/timeline-sequence-07-19-combo-nite.jpg",
+    );
     expect(timeline.querySelector(".timeline-premium-asset-image")).toBeNull();
     expect(within(timeline).queryByText("Acervo em curadoria")).toBeNull();
     expect(within(timeline).queryByText("Marcos validados")).toBeNull();
@@ -482,6 +540,9 @@ describe("HomePage", () => {
       screen.queryByAltText(
         "Mesa de trabalho tecnológica com notebook, placa eletrônica e luzes azuis em ambiente institucional.",
       ),
+    ).toBeNull();
+    expect(
+      timeline.querySelector("[data-component='timeline-image-sequence'] button"),
     ).toBeNull();
     const finalCtaSection = screen.getByTestId("final-cta-section");
     const finalCta = within(finalCtaSection);
@@ -676,7 +737,7 @@ describe("HomePage", () => {
     expect(
       footer.getByRole("link", { name: "Todos os projetos" }),
     ).toHaveAttribute("href", "/projetos");
-    expect(footer.getByRole("link", { name: "NIT News" })).toHaveAttribute(
+    expect(footer.getByRole("link", { name: "Nite News" })).toHaveAttribute(
       "href",
       "/atualizacoes",
     );
@@ -777,6 +838,221 @@ describe("HomePage", () => {
       "--method-preview-label": "rgb(51 65 85 / 0.64)",
       "--method-preview-rule": "rgb(15 23 42 / 0.12)",
     });
+  });
+
+  it("pausa e retoma a sequência visual da timeline sem reiniciar a imagem atual", () => {
+    vi.useFakeTimers();
+
+    const { container, rerender } = render(
+      <TimelineImageSequence
+        active
+        images={timelineSequenceImages}
+        intervalMs={5000}
+      />,
+    );
+    const getActiveImageSrc = () =>
+      container
+        .querySelector(
+          "[data-component='timeline-image-sequence-layer'][data-active='true']",
+        )
+        ?.getAttribute("data-image-src");
+
+    expect(getActiveImageSrc()).toBe(
+      "/images/timeline/timeline-sequence-07-19-combo-nite.jpg",
+    );
+
+    act(() => {
+      vi.advanceTimersByTime(5000);
+    });
+
+    expect(getActiveImageSrc()).toBe(
+      "/images/timeline/timeline-sequence-06-18-nite-cimatec.jpg",
+    );
+
+    rerender(
+      <TimelineImageSequence
+        active={false}
+        images={timelineSequenceImages}
+        intervalMs={5000}
+      />,
+    );
+
+    act(() => {
+      vi.advanceTimersByTime(15000);
+    });
+
+    expect(getActiveImageSrc()).toBe(
+      "/images/timeline/timeline-sequence-06-18-nite-cimatec.jpg",
+    );
+
+    rerender(
+      <TimelineImageSequence
+        active
+        images={timelineSequenceImages}
+        intervalMs={5000}
+      />,
+    );
+
+    act(() => {
+      vi.advanceTimersByTime(5000);
+    });
+
+    expect(getActiveImageSrc()).toBe(
+      "/images/timeline/timeline-sequence-06-11-mostra-projetos.jpg",
+    );
+  });
+
+  it("libera a sequência visual no primeiro enquadramento medido da timeline", () => {
+    expect(isTimelineImageSequenceReady(0.07)).toBe(false);
+    expect(isTimelineImageSequenceReady(0.08)).toBe(true);
+  });
+
+  it("oculta e reconstroi a narrativa letra por letra no ciclo de idle", () => {
+    vi.useFakeTimers();
+
+    render(<TimelineNarrativeContent imageSequenceActive />);
+
+    const narrative = screen.getByTestId("timeline-narrative-content");
+    const letters = narrative.querySelectorAll("[data-timeline-narrative-letter]");
+    const animationTotalMs =
+      (timelineNarrativeAnimationDuration +
+        timelineNarrativeLetterStagger * Math.max(letters.length - 1, 0)) *
+        1000 +
+      100;
+
+    expect(narrative).toHaveAttribute("data-narrative-animation-state", "visible");
+    expect(narrative).toHaveAttribute("data-narrative-visibility", "visible");
+
+    act(() => {
+      vi.advanceTimersByTime(timelineNarrativeIdleDelayMs);
+    });
+
+    expect(narrative).toHaveAttribute("data-narrative-animation-state", "hiding");
+    expect(narrative).toHaveAttribute("data-narrative-visibility", "hidden");
+
+    act(() => {
+      vi.advanceTimersByTime(animationTotalMs);
+    });
+
+    expect(narrative).toHaveAttribute(
+      "data-narrative-animation-state",
+      "hidden",
+    );
+
+    act(() => {
+      window.dispatchEvent(new WheelEvent("wheel"));
+    });
+
+    expect(narrative).toHaveAttribute("data-narrative-animation-state", "showing");
+    expect(narrative).toHaveAttribute("data-narrative-visibility", "visible");
+
+    act(() => {
+      vi.advanceTimersByTime(animationTotalMs);
+    });
+
+    expect(narrative).toHaveAttribute(
+      "data-narrative-animation-state",
+      "visible",
+    );
+  });
+
+  it("fragmenta a narrativa por grafemas sem perder texto, espacos ou acessibilidade", () => {
+    render(<TimelineNarrativeContent imageSequenceActive={false} />);
+
+    const narrative = screen.getByTestId("timeline-narrative-content");
+    const letterFragments = narrative.querySelectorAll(
+      "[data-timeline-narrative-letter]",
+    );
+    const wordWrappers = narrative.querySelectorAll(
+      "[data-timeline-narrative-word-wrapper]",
+    );
+    const visualTitle = within(narrative)
+      .getByRole("heading", { name: "O NITE em trajetória" })
+      .querySelector("[data-timeline-narrative-visual]");
+
+    expect(letterFragments.length).toBeGreaterThan(70);
+    expect(
+      narrative.querySelector("[data-timeline-narrative-word]"),
+    ).not.toBeInTheDocument();
+    expect(wordWrappers.length).toBeGreaterThan(12);
+    expect(Array.from(wordWrappers).every((word) => word.childElementCount > 0))
+      .toBe(true);
+    expect(narrative).toHaveTextContent("Timeline");
+    expect(visualTitle).toHaveTextContent("O NITE em trajetória");
+    expect(
+      screen.getByRole("link", {
+        name: "Continuar leitura sobre a timeline do NITE",
+      }),
+    ).toHaveTextContent("Continuar leitura");
+    expect(
+      Array.from(letterFragments)
+        .map((fragment) => fragment.textContent)
+        .join(""),
+    ).toContain("ONITEemtrajetória");
+  });
+
+  it("segmenta acentos e grafemas compostos como unidades visuais", () => {
+    const graphemes = getTimelineNarrativeGraphemes(
+      "e\u0301 ação 👨‍👩‍👧‍👦",
+    );
+
+    expect(graphemes).toContain("e\u0301");
+    expect(graphemes).toContain("👨‍👩‍👧‍👦");
+  });
+
+  it("interrompe a desmontagem em andamento e reconstroi sem iniciar timelines concorrentes", () => {
+    vi.useFakeTimers();
+
+    render(<TimelineNarrativeContent imageSequenceActive />);
+
+    const narrative = screen.getByTestId("timeline-narrative-content");
+    const letters = narrative.querySelectorAll("[data-timeline-narrative-letter]");
+    const animationTotalMs =
+      (timelineNarrativeAnimationDuration +
+        timelineNarrativeLetterStagger * Math.max(letters.length - 1, 0)) *
+        1000 +
+      100;
+
+    act(() => {
+      vi.advanceTimersByTime(timelineNarrativeIdleDelayMs);
+    });
+
+    expect(narrative).toHaveAttribute("data-narrative-animation-state", "hiding");
+
+    act(() => {
+      window.dispatchEvent(new Event("pointerdown"));
+    });
+
+    expect(narrative).toHaveAttribute("data-narrative-animation-state", "showing");
+
+    act(() => {
+      vi.advanceTimersByTime(animationTotalMs);
+    });
+
+    expect(narrative).toHaveAttribute(
+      "data-narrative-animation-state",
+      "visible",
+    );
+    expect(
+      Array.from(letters).every((letter) => letter.getAttribute("style") === ""),
+    ).toBe(true);
+  });
+
+  it("mantem a narrativa visivel e estavel com movimento reduzido", () => {
+    vi.useFakeTimers();
+    mockReducedMotionPreference(true);
+
+    render(<TimelineNarrativeContent imageSequenceActive />);
+
+    const narrative = screen.getByTestId("timeline-narrative-content");
+
+    act(() => {
+      vi.advanceTimersByTime(timelineNarrativeIdleDelayMs * 3);
+    });
+
+    expect(narrative).toHaveAttribute("data-narrative-animation-state", "visible");
+    expect(narrative).toHaveAttribute("data-narrative-visibility", "visible");
+    expect(narrative).not.toHaveAttribute("aria-hidden");
   });
 
   it("mantem o foco dentro do menu mobile em camadas", async () => {

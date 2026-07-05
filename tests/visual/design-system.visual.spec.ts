@@ -155,6 +155,63 @@ test.describe("mobile design system snapshots", () => {
 });
 
 test.describe("resend-inspired footer layout", () => {
+  for (const theme of themes) {
+    test(`wordmark masks the pointer spotlight in ${theme} mode`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 1920, height: 958 });
+      await openStablePage(page, "/", theme);
+      await page.emulateMedia({
+        colorScheme: theme,
+        reducedMotion: "no-preference",
+      });
+
+      const wordmark = page.locator(".nite-final-wordmark");
+      const spotlight = await wordmark.evaluate((wordmark) => {
+        const style = getComputedStyle(wordmark, "::after");
+        const bounds = wordmark.getBoundingClientRect();
+        const image = wordmark.querySelector(".nite-final-wordmark-image");
+
+        return {
+          backgroundImage: style.backgroundImage,
+          content: style.content,
+          height: Number.parseFloat(style.height),
+          imageOpacity: image ? getComputedStyle(image).opacity : null,
+          maskImage: style.maskImage,
+          mixBlendMode: style.mixBlendMode,
+          spotlightColor: style.getPropertyValue("--nite-wordmark-spotlight"),
+          width: Number.parseFloat(style.width),
+          wordmarkHeight: bounds.height,
+          wordmarkWidth: bounds.width,
+        };
+      });
+
+      expect(spotlight.backgroundImage).toContain("radial-gradient");
+      expect(spotlight.backgroundImage).toContain("128px");
+      expect(spotlight.backgroundImage).toContain("/ 0.76");
+      expect(spotlight.backgroundImage).toContain("/ 0.36");
+      expect(spotlight.content).toBe('""');
+      expect(spotlight.imageOpacity).toBe("0.68");
+      expect(spotlight.maskImage).toContain("nite-logo-footer.webp");
+      expect(spotlight.mixBlendMode).toBe("normal");
+      expect(spotlight.spotlightColor.trim()).toBe(
+        theme === "dark" ? "#f8fafc" : "#0b1220",
+      );
+      expect(spotlight.width).toBeCloseTo(spotlight.wordmarkWidth, 0);
+      expect(spotlight.height).toBeCloseTo(spotlight.wordmarkHeight, 0);
+
+      await wordmark.hover({ position: { x: 1072, y: 96 } });
+      await expect(wordmark).toHaveAttribute("data-spotlight-active", "true");
+      await expect
+        .poll(() =>
+          wordmark.evaluate(
+            (element) => getComputedStyle(element, "::after").opacity,
+          ),
+        )
+        .toBe("0.92");
+    });
+  }
+
   test("desktop footer preserves the Resend proportions and wordmark overlap", async ({
     page,
   }) => {
