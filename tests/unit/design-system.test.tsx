@@ -55,6 +55,97 @@ describe("design system base", () => {
     expect(globalStyles).toContain(
       "--color-nite-surface-elevated: var(--nite-surface-elevated);",
     );
+    expect(globalStyles).toContain(
+      "--color-nite-brand-primary: var(--nite-brand-primary);",
+    );
+  });
+
+  it("mantem a timeline como subcena escura local sobre superficie global", () => {
+    const globalStyles = readFileSync(
+      join(process.cwd(), "app", "globals.css"),
+      "utf8",
+    );
+
+    expect(globalStyles).toContain("--timeline-frame-background: #141413;");
+    expect(globalStyles).toContain("--timeline-frame-text-primary: #faf9f5;");
+    expect(globalStyles).toContain(
+      "--timeline-frame-text-secondary: rgb(250 249 245 / 0.72);",
+    );
+    expect(globalStyles).toContain(
+      "--timeline-frame-border: rgb(255 255 255 / 0.08);",
+    );
+    expect(globalStyles).toContain(
+      "--timeline-frame-divider: rgb(250 249 245 / 0.38);",
+    );
+    expect(globalStyles).toContain(
+      "--timeline-frame-shadow: 0 28px 90px rgb(0 0 0 / 0.38);",
+    );
+    expect(globalStyles).toContain(
+      "background: var(--timeline-frame-background);",
+    );
+    expect(globalStyles).toContain(
+      "color: var(--timeline-frame-text-primary);",
+    );
+    expect(globalStyles).toContain(
+      "border-color: var(--timeline-frame-border);",
+    );
+    expect(globalStyles).toContain("box-shadow: var(--timeline-frame-shadow);");
+    expect(globalStyles).toContain(
+      "background: var(--timeline-frame-background);\n}",
+    );
+    expect(globalStyles).toContain(
+      "border-bottom: 1px solid var(--timeline-frame-divider);",
+    );
+    expect(globalStyles).toContain(
+      "color: var(--timeline-frame-text-secondary);",
+    );
+    expect(globalStyles).toContain(
+      ".timeline-premium-scroll-bg .timeline-premium-button {\n  color: var(--timeline-cta-text);",
+    );
+    expect(globalStyles).toContain(
+      ".timeline-premium-scroll-bg .timeline-premium-button:hover,\n.timeline-premium-scroll-bg .timeline-premium-button:focus-visible",
+    );
+    expect(globalStyles).not.toContain(
+      "border: 1px solid rgb(255 255 255 / 0.08);",
+    );
+    expect(globalStyles).not.toContain("\n  background: #141413;");
+    expect(globalStyles).not.toContain("\n  color: #faf9f5;");
+  });
+
+  it("mantem o wordmark transparente e limita o spotlight as letras", () => {
+    const globalStyles = readFileSync(
+      join(process.cwd(), "app", "globals.css"),
+      "utf8",
+    );
+
+    expect(globalStyles).toContain(
+      ".nite-final-wordmark {\n  --wordmark-spotlight-x: 50%;",
+    );
+    expect(globalStyles).toContain("--wordmark-spotlight-color: #f8fafc;");
+    expect(globalStyles).toContain("--wordmark-spotlight-radius: 8rem;");
+    expect(globalStyles).toContain(
+      "--wordmark-spotlight-active-opacity: 0.92;",
+    );
+    expect(globalStyles).toContain(
+      "--wordmark-image-filter: brightness(0.72) saturate(0.82);",
+    );
+    expect(globalStyles).toContain(
+      ':root[data-theme="light"] .nite-final-wordmark {',
+    );
+    expect(globalStyles).toContain(
+      "--wordmark-image-filter: brightness(0.58) contrast(1.2) saturate(0.72);",
+    );
+    expect(globalStyles).toContain("--wordmark-image-opacity: 0.75;");
+    expect(globalStyles).toContain(
+      "--wordmark-spotlight-active-opacity: 0.48;",
+    );
+    expect(globalStyles).toContain(
+      'mask-image: url("/images/brand/nite-logo-footer.webp");',
+    );
+    expect(globalStyles).toContain("filter: var(--wordmark-image-filter);");
+    expect(globalStyles).not.toContain("--wordmark-stage-background:");
+    expect(globalStyles).not.toContain("--footer-transition-from:");
+    expect(globalStyles).not.toContain("--footer-transition-to:");
   });
 
   it("renderiza componentes essenciais do M2", () => {

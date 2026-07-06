@@ -7,6 +7,7 @@
 @theme inline {
   --font-sans: var(--font-geist), "Bahnschrift", "Segoe UI", sans-serif;
   --font-heading: var(--font-sora), "Bahnschrift", "Segoe UI", sans-serif;
+  --font-resend: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), "Cascadia Mono", "Consolas", monospace;
   --color-nite-background: var(--nite-background);
   --color-nite-section: var(--nite-section);
@@ -26,6 +27,7 @@
   --color-nite-action-hover-text: var(--nite-action-hover-text);
   --color-nite-focus: var(--nite-focus);
   --color-nite-icon-muted: var(--nite-icon-muted);
+  --color-nite-brand-primary: var(--nite-brand-primary);
   --color-nite-brand-accent: var(--nite-brand-accent);
   --color-status-draft: var(--nite-status-draft);
   --color-status-progress: var(--nite-status-progress);
@@ -425,21 +427,113 @@ body {
     color: transparent;
   }
 
-  .nite-hero-glow {
-    background: radial-gradient(
-      ellipse at 50% 42%,
-      var(--nite-brand-glow),
-      var(--nite-brand-soft) 34%,
-      transparent 68%
+  .projectsSection {
+    --projects-visual-background: var(--nite-section);
+    --projects-visual-border: var(--nite-border-subtle);
+    --projects-visual-text: var(--nite-text-primary);
+    --projects-visual-text-secondary: var(--nite-text-secondary);
+    --projects-visual-text-muted: var(--nite-text-muted);
+    --projects-visual-inset: color-mix(
+      in srgb,
+      var(--nite-surface) 72%,
+      transparent
+    );
+    --projects-visual-inset-subtle: color-mix(
+      in srgb,
+      var(--nite-surface-subtle) 82%,
+      transparent
+    );
+    --projects-visual-accent: var(--nite-brand-accent);
+    --projects-visual-accent-secondary: var(--nite-brand-primary);
+    --projects-visual-veil: linear-gradient(
+      180deg,
+      transparent 42%,
+      color-mix(in srgb, var(--nite-background) 76%, transparent) 100%
+    );
+    --projects-image-overlay: linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--nite-background) 30%, transparent),
+      transparent 42%,
+      color-mix(in srgb, var(--nite-background) 84%, transparent)
     );
   }
 
-  .nite-surface-glow {
-    background: radial-gradient(
-      ellipse at 50% 44%,
-      color-mix(in srgb, var(--nite-surface-subtle) 18%, transparent),
-      transparent 68%
+  [data-component="nite-method-system"] {
+    --method-panel-background: #050505;
+    --method-panel-surface: #09090a;
+    --method-panel-control-background: #080808;
+    --method-panel-border: rgb(255 255 255 / 0.1);
+    --method-panel-text: #f5f5f5;
+    --method-panel-text-muted: rgb(255 255 255 / 0.6);
+    --method-panel-text-dim: rgb(255 255 255 / 0.45);
+    --method-panel-active-text: #6ea8ff;
+    --method-panel-active-surface: rgb(255 255 255 / 0.07);
+    --method-panel-hover-surface: rgb(255 255 255 / 0.04);
+    --method-panel-control-active-surface: rgb(255 255 255 / 0.08);
+    --method-panel-file-active-surface: #172554;
+    --method-panel-file-active-text: #60a5fa;
+    --method-panel-focus: var(--nite-focus);
+    --method-panel-scrollbar: rgb(255 255 255 / 0.42);
+    --method-panel-scrollbar-thumb: rgb(255 255 255 / 0.4);
+    --method-syntax-default: #a7b6c2;
+    --method-syntax-keyword: #c792ea;
+    --method-syntax-function: #82aaff;
+    --method-syntax-property: #f07178;
+    --method-syntax-string: #c3e88d;
+    --method-syntax-punctuation: #89a4ba;
+    --method-syntax-line-number: rgb(255 255 255 / 0.25);
+  }
+
+  :root[data-theme="light"] [data-component="nite-method-system"] {
+    --method-panel-background: var(--nite-light-surface-focus);
+    --method-panel-surface: var(--nite-light-section);
+    --method-panel-control-background: var(--nite-light-surface-elevated);
+    --method-panel-border: var(--nite-light-border-soft);
+    --method-panel-text: var(--nite-light-text-primary);
+    --method-panel-text-muted: var(--nite-light-text-secondary);
+    --method-panel-text-dim: var(--nite-light-text-muted);
+    --method-panel-active-text: var(--nite-light-brand-accent);
+    --method-panel-active-surface: var(--nite-light-brand-soft);
+    --method-panel-hover-surface: var(--nite-light-surface-subtle);
+    --method-panel-control-active-surface: var(--nite-light-surface-subtle);
+    --method-panel-file-active-surface: var(--nite-light-brand-soft);
+    --method-panel-file-active-text: var(--nite-light-brand-primary);
+    --method-panel-scrollbar: rgb(15 23 42 / 0.38);
+    --method-panel-scrollbar-thumb: rgb(15 23 42 / 0.34);
+    --method-syntax-default: var(--nite-light-text-secondary);
+    --method-syntax-keyword: var(--nite-light-status-validated);
+    --method-syntax-function: var(--nite-light-brand-accent);
+    --method-syntax-property: var(--nite-light-status-error);
+    --method-syntax-string: var(--nite-light-status-done);
+    --method-syntax-punctuation: var(--nite-light-text-muted);
+    --method-syntax-line-number: rgb(15 23 42 / 0.36);
+  }
+
+  .method-preview {
+    --method-preview-background: #050505;
+    --method-preview-text: #f5f5f5;
+    --method-preview-heading: var(--nite-dark-text-primary);
+    --method-preview-body: var(--nite-dark-text-secondary);
+    --method-preview-label: var(--nite-dark-text-muted);
+    --method-preview-rule: var(--nite-dark-border-subtle);
+    --method-preview-note-surface: var(--nite-dark-surface-subtle);
+    --method-preview-accent-glow: rgb(37 99 235 / 0.13);
+    background-image: radial-gradient(
+      circle at 50% 0%,
+      var(--method-preview-accent-glow),
+      transparent 38%
     );
+  }
+
+  .method-preview[data-appearance="light"] {
+    --method-preview-background: #fff;
+    --method-preview-text: #141414;
+    --method-preview-heading: var(--nite-light-text-primary);
+    --method-preview-body: var(--nite-light-text-secondary);
+    --method-preview-label: var(--nite-light-text-muted);
+    --method-preview-rule: var(--nite-light-border-subtle);
+    --method-preview-note-surface: var(--nite-light-surface-subtle);
+    --method-preview-accent-glow: rgb(37 99 235 / 0.1);
   }
 
   [data-nite-scene="unijorge-brand-text"].unijorge-lit {
@@ -478,14 +572,20 @@ body {
 }
 
 .nite-final-wordmark {
-  --nite-spotlight-x: 50%;
-  --nite-spotlight-y: 42%;
-  --nite-wordmark-spotlight: #f8fafc;
+  --wordmark-spotlight-x: 50%;
+  --wordmark-spotlight-y: 42%;
+  --wordmark-spotlight-color: #f8fafc;
+  --wordmark-spotlight-radius: 8rem;
+  --wordmark-spotlight-active-opacity: 0.92;
+  --wordmark-image-filter: brightness(0.72) saturate(0.82);
+  --wordmark-image-opacity: 0.55;
   isolation: isolate;
 }
 
 :root[data-theme="light"] .nite-final-wordmark {
-  --nite-wordmark-spotlight: #0b1220;
+  --wordmark-spotlight-active-opacity: 0.48;
+  --wordmark-image-filter: brightness(0.58) contrast(1.2) saturate(0.72);
+  --wordmark-image-opacity: 0.75;
 }
 
 .nite-final-wordmark::after {
@@ -495,9 +595,10 @@ body {
   z-index: 2;
   pointer-events: none;
   background: radial-gradient(
-    circle 8rem at var(--nite-spotlight-x) var(--nite-spotlight-y),
-    color-mix(in srgb, var(--nite-wordmark-spotlight) 76%, transparent) 0%,
-    color-mix(in srgb, var(--nite-wordmark-spotlight) 36%, transparent) 42%,
+    circle var(--wordmark-spotlight-radius) at var(--wordmark-spotlight-x)
+      var(--wordmark-spotlight-y),
+    color-mix(in srgb, var(--wordmark-spotlight-color) 76%, transparent) 0%,
+    color-mix(in srgb, var(--wordmark-spotlight-color) 36%, transparent) 42%,
     transparent 78%
   );
   mask-image: url("/images/brand/nite-logo-footer.webp");
@@ -513,12 +614,12 @@ body {
 }
 
 .nite-final-wordmark[data-spotlight-active="true"]::after {
-  opacity: 0.92;
+  opacity: var(--wordmark-spotlight-active-opacity);
 }
 
 .nite-final-wordmark-image {
-  filter: brightness(0.72) saturate(0.82);
-  opacity: 0.55;
+  filter: var(--wordmark-image-filter);
+  opacity: var(--wordmark-image-opacity);
 }
 
 .nite-footer-transition-divider {
@@ -581,6 +682,14 @@ body {
 }
 
 .timeline-premium-scroll-bg {
+  --timeline-frame-background: #141413;
+  --timeline-frame-text-primary: #faf9f5;
+  --timeline-frame-text-secondary: rgb(250 249 245 / 0.72);
+  --timeline-frame-border: rgb(255 255 255 / 0.08);
+  --timeline-frame-divider: rgb(250 249 245 / 0.38);
+  --timeline-frame-shadow: 0 28px 90px rgb(0 0 0 / 0.38);
+  --timeline-cta-text: var(--timeline-frame-text-primary);
+  --timeline-cta-hover-text: #fff;
   position: relative;
   isolation: isolate;
   display: flex;
@@ -588,11 +697,12 @@ body {
   max-width: min(79.5rem, calc(100% - 2rem));
   margin: clamp(2.5rem, 5vw, 4rem) auto;
   overflow: hidden;
-  border: 1px solid rgb(255 255 255 / 0.08);
+  border: 1px solid transparent;
+  border-color: var(--timeline-frame-border);
   border-radius: 1.5rem;
-  background: #141413;
-  color: #faf9f5;
-  box-shadow: 0 28px 90px rgb(0 0 0 / 0.38);
+  background: var(--timeline-frame-background);
+  color: var(--timeline-frame-text-primary);
+  box-shadow: var(--timeline-frame-shadow);
 }
 
 .timeline-image-sequence {
@@ -600,7 +710,7 @@ body {
   inset: 0;
   z-index: -2;
   overflow: hidden;
-  background: #141413;
+  background: var(--timeline-frame-background);
 }
 
 .timeline-image-sequence-layer {
@@ -692,8 +802,8 @@ body {
 
 .timeline-premium-eyebrow {
   width: fit-content;
-  border-bottom: 1px solid rgb(250 249 245 / 0.38);
-  color: rgb(250 249 245 / 0.72);
+  border-bottom: 1px solid var(--timeline-frame-divider);
+  color: var(--timeline-frame-text-secondary);
   font-family: var(--font-mono);
   font-size: clamp(0.82rem, 1.1vw, 0.95rem);
   line-height: 1.3;
@@ -702,7 +812,7 @@ body {
 
 .timeline-premium-title {
   max-width: 8ch;
-  color: #faf9f5;
+  color: var(--timeline-frame-text-primary);
   font-family: var(--font-heading);
   font-size: clamp(3.35rem, 7vw, 6rem);
   font-weight: 700;
@@ -712,10 +822,19 @@ body {
 
 .timeline-premium-description {
   max-width: 31ch;
-  color: rgb(250 249 245 / 0.72);
+  color: var(--timeline-frame-text-secondary);
   font-size: clamp(1.05rem, 1.4vw, 1.25rem);
   letter-spacing: 0;
   line-height: 1.55;
+}
+
+.timeline-premium-scroll-bg .timeline-premium-button {
+  color: var(--timeline-cta-text);
+}
+
+.timeline-premium-scroll-bg .timeline-premium-button:hover,
+.timeline-premium-scroll-bg .timeline-premium-button:focus-visible {
+  color: var(--timeline-cta-hover-text);
 }
 
 @media (prefers-reduced-motion: no-preference) {

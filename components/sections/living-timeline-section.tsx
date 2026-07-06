@@ -232,7 +232,8 @@ function TimelineImageSequence({
   intervalMs?: number;
 }) {
   const [activeIndex, setActiveIndex] = useState(0);
-  const resolvedActiveIndex = images.length > 0 ? activeIndex % images.length : 0;
+  const resolvedActiveIndex =
+    images.length > 0 ? activeIndex % images.length : 0;
 
   useEffect(() => {
     if (!active || images.length <= 1) {
@@ -281,8 +282,7 @@ function TimelineNarrativeContent({
   imageSequenceActive: boolean;
 }) {
   const narrativeRef = useRef<HTMLDivElement>(null);
-  const animationStateRef =
-    useRef<TimelineNarrativeAnimationState>("visible");
+  const animationStateRef = useRef<TimelineNarrativeAnimationState>("visible");
   const animationCompletionTimerRef = useRef<number | null>(null);
   const idleTimerRef = useRef<number | null>(null);
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
@@ -562,7 +562,7 @@ function TimelineNarrativeContent({
         href={timelineCtaHref}
         className={cn(
           buttonVariants({ variant: "invisible", size: "lg" }),
-          "timeline-premium-button",
+          "timeline-premium-button text-[var(--timeline-cta-text)] hover:text-[var(--timeline-cta-hover-text)] focus-visible:text-[var(--timeline-cta-hover-text)]",
         )}
         aria-label="Continuar leitura sobre a timeline do NITE"
         data-cta="Home timeline"
@@ -828,7 +828,9 @@ export function LivingTimelineSection({ events }: LivingTimelineSectionProps) {
           images={timelineSequenceImages}
         />
         <div className="timeline-premium-container" data-scroll="container">
-          <TimelineNarrativeContent imageSequenceActive={isImageSequenceActive} />
+          <TimelineNarrativeContent
+            imageSequenceActive={isImageSequenceActive}
+          />
         </div>
       </div>
     </section>

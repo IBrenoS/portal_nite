@@ -32,10 +32,9 @@ export function ProjectsOperatingSection({
   return (
     <section
       id="projetos"
-      className="relative isolate bg-nite-background py-24 text-nite-text-primary sm:py-32 lg:py-40"
+      className="projectsSection relative isolate bg-nite-background py-24 text-nite-text-primary sm:py-32 lg:py-40"
       data-projects-operating-section=""
-      data-projects-layout="resend-editorial"
-      data-nite-scene="inverse"
+      data-projects-layout="editorial"
       data-surface="nite-background"
       data-testid="projects-operating-section"
     >
@@ -44,7 +43,7 @@ export function ProjectsOperatingSection({
           <p className="font-mono text-xs font-medium uppercase tracking-[0.2em] text-nite-brand-accent">
             PROJETOS
           </p>
-          <h2 className="font-heading text-[clamp(2.25rem,4vw,3.35rem)] leading-[1.08] font-semibold tracking-normal text-nite-text-primary">
+          <h2 className="font-heading text-[clamp(2rem,4vw,3rem)] leading-[1.1] font-semibold tracking-normal text-nite-text-primary">
             Projetos em destaque
           </h2>
           <p className="max-w-[31rem] text-base leading-7 text-nite-text-secondary">

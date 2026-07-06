@@ -8,6 +8,16 @@ type PeopleDirectoryProps = {
   people: Person[];
 };
 
+function getPersonListName(person: Person) {
+  const listName = person.listName?.trim();
+
+  if (listName) {
+    return listName;
+  }
+
+  return person.name.trim().split(/\s+/).filter(Boolean)[0] ?? person.name;
+}
+
 export function PeopleDirectory({ people }: PeopleDirectoryProps) {
   if (people.length === 0) {
     return (
@@ -40,26 +50,33 @@ export function PeopleDirectory({ people }: PeopleDirectoryProps) {
       <h2 id="pessoas-lista" className="sr-only">
         Pessoas publicadas
       </h2>
-      <ul className="relative mx-auto flex h-min w-full max-w-[60rem] flex-wrap justify-center gap-x-10 gap-y-16 overflow-visible px-6 pb-12">
+      <ul
+        className="relative mx-auto grid h-min w-full max-w-[37rem] grid-cols-3 justify-items-center gap-x-3 gap-y-10 overflow-visible px-4 pb-12 font-resend sm:max-w-[44rem] sm:gap-x-10 sm:gap-y-16 sm:px-6 lg:max-w-[60rem] lg:grid-cols-5 lg:px-0"
+        data-component="people-directory-list"
+      >
         {people.map((person) => (
           <li key={person.slug}>
             <Link
               href={`/pessoas/${person.slug}` as Route}
-              aria-label={`${person.name} ${person.role} ${person.location}`}
-              className="group/person relative flex w-36 flex-col items-center justify-center gap-4 outline-offset-[0.625rem] outline-nite-border-strong transition-transform duration-[360ms] ease-nite-out will-change-transform hover:scale-[1.06] focus-visible:scale-[1.06] motion-reduce:transition-none sm:w-40"
+              aria-label={[person.name, person.role, person.location]
+                .filter(Boolean)
+                .join(" ")}
+              className="group/person relative flex w-full min-w-0 flex-col items-center justify-center gap-3 outline-offset-[0.625rem] outline-nite-border-strong transition-transform duration-[360ms] ease-nite-out will-change-transform hover:scale-[1.06] focus-visible:scale-[1.06] motion-reduce:transition-none sm:gap-4"
             >
               <PersonAvatar
                 person={person}
-                className="size-24 group-hover/person:border-nite-border-hover group-hover/person:brightness-110 group-focus-visible/person:border-nite-border-hover sm:size-[8.875rem]"
-                imageSizes="(min-width: 640px) 8.875rem, 6rem"
+                className="size-24 group-hover/person:border-nite-border-hover group-hover/person:brightness-110 group-focus-visible/person:border-nite-border-hover max-[559px]:size-[clamp(3rem,15vw,6rem)] sm:size-36"
+                imageSizes="(min-width: 640px) 9rem, 6rem"
               />
-              <span className="grid max-w-full gap-1 text-center">
+              <span className="grid w-full min-w-0 max-w-full gap-1 text-center">
                 <span className="text-sm font-semibold text-foreground transition-colors duration-300">
-                  {person.name}
+                  {getPersonListName(person)}
                 </span>
-                <span className="mx-auto max-w-[90%] text-xs leading-5 text-muted-foreground">
-                  {person.location}
-                </span>
+                {person.location ? (
+                  <span className="mx-auto max-w-[80%] text-[0.8125rem] text-muted-foreground">
+                    {person.location}
+                  </span>
+                ) : null}
               </span>
             </Link>
           </li>

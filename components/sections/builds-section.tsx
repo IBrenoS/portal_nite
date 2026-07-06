@@ -9,7 +9,6 @@ export function BuildsSection() {
       id="metodo"
       className="bg-nite-background py-24 text-nite-text-primary sm:py-32 lg:py-40"
       data-builds-section=""
-      data-nite-scene="inverse"
       data-surface="nite-background"
       data-testid="builds-section"
     >

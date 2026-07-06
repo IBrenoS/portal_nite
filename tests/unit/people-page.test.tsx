@@ -64,7 +64,7 @@ function expectImageSrcToContain(image: HTMLElement, path: string) {
 
 describe("PeoplePage", () => {
   it("renderiza Breno na listagem com avatar local e destino publico", async () => {
-    await renderPeoplePage();
+    const { container } = await renderPeoplePage();
 
     expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
     expect(
@@ -89,21 +89,57 @@ describe("PeoplePage", () => {
     ).not.toBeInTheDocument();
 
     const brenoCard = main.getByRole("link", {
-      name: /Breno Cerqueira Gestor & Software Engineer Salvador, Brazil/i,
+      name: /Breno Cerqueira Gestor & Software Engineer Salvador, Brasil/i,
     });
 
     expect(brenoCard).toHaveAttribute("href", "/pessoas/breno-cerqueira");
+    const brenoAvatarImage = within(brenoCard).getByAltText(
+      "Foto de perfil autorizada de Breno Cerqueira.",
+    );
+    const brenoAvatar = brenoAvatarImage.closest("span");
+
     expectImageSrcToContain(
-      within(brenoCard).getByAltText(
-        "Foto de perfil autorizada de Breno Cerqueira.",
-      ),
+      brenoAvatarImage,
       "/images/pessoas/breno-cerqueira.jpeg",
     );
-    expect(within(brenoCard).getByText("Salvador, Brazil")).toBeInTheDocument();
+    expect(brenoAvatar).toHaveClass("size-24", "sm:size-36");
+    expect(brenoAvatarImage).toHaveAttribute(
+      "sizes",
+      "(min-width: 640px) 9rem, 6rem",
+    );
+    const brenoDisplayName = within(brenoCard).getByText("Breno");
+    const brenoLocation = within(brenoCard).getByText("Salvador, Brasil");
+
+    expect(brenoDisplayName).toHaveClass("text-sm", "font-semibold");
+    expect(brenoLocation).toHaveClass("max-w-[80%]", "text-[0.8125rem]");
+    expect(brenoLocation).not.toHaveClass("text-xs");
+    expect(brenoLocation).not.toHaveClass("leading-5");
+    expect(
+      within(brenoCard).queryByText("Breno Cerqueira"),
+    ).not.toBeInTheDocument();
+    expect(brenoLocation).toBeInTheDocument();
+    const joaoVictorCard = main.getByRole("link", {
+      name: /João Victor Dórea Eng. Computação & Automação Industrial Salvador, Brasil/i,
+    });
+
+    expect(within(joaoVictorCard).getByText("João Victor")).toBeInTheDocument();
+    expect(
+      within(joaoVictorCard).queryByText("João Victor Dórea"),
+    ).not.toBeInTheDocument();
     expect(
       within(brenoCard).queryByText("Gestor & Software Engineer"),
     ).not.toBeInTheDocument();
     expect(screen.queryByText("Zeno Rocha")).not.toBeInTheDocument();
+
+    const peopleList = container.querySelector(
+      "[data-component='people-directory-list']",
+    );
+
+    expect(peopleList).toHaveClass("font-resend");
+    expect(peopleList).toHaveClass("grid-cols-3", "lg:grid-cols-5");
+    expect(peopleList).toHaveClass("lg:px-0");
+    expect(brenoCard).toHaveClass("w-full", "min-w-0");
+    expect(brenoCard).not.toHaveClass("w-36", "sm:w-40");
   });
 
   it("renderiza estado vazio honesto quando nao houver pessoas publicas", async () => {
@@ -372,8 +408,14 @@ describe("PersonPage", () => {
     expect(
       screen.getByRole("heading", { level: 1, name: "Breno Cerqueira" }),
     ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { level: 1, name: "Breno Cerqueira" }),
+    ).toHaveClass("font-resend");
+    expect(
+      screen.getByRole("heading", { level: 1, name: "Breno Cerqueira" }),
+    ).not.toHaveClass("font-heading");
     expect(screen.getByText("Gestor & Software Engineer")).toBeInTheDocument();
-    expect(screen.getByText("Salvador, Brazil")).toBeInTheDocument();
+    expect(screen.getByText("Salvador, Brasil")).toBeInTheDocument();
     expect(breno?.summary).toBe("Just do it");
     expect(screen.queryByText("Just do it")).not.toBeInTheDocument();
     expectImageSrcToContain(
@@ -389,7 +431,9 @@ describe("PersonPage", () => {
     ).toHaveAttribute("href", "https://www.linkedin.com/in/brenocerq/");
 
     const profileMeta = container.querySelector("[data-person-profile-meta]");
+    const profileShell = container.querySelector("[data-person-profile-shell]");
 
+    expect(profileShell).toHaveClass("font-resend");
     expect(profileMeta?.querySelector(".lucide-link")).not.toBeInTheDocument();
 
     const clubsBlock = screen.getByText("Clubs").parentElement;

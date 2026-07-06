@@ -3,7 +3,7 @@
     "slug": "breno-cerqueira",
     "name": "Breno Cerqueira",
     "role": "Gestor & Software Engineer",
-    "location": "Salvador, Brazil",
+    "location": "Salvador, Brasil",
     "summary": "Just do it",
     "public": true,
     "authorized": true,
@@ -13,8 +13,14 @@
       "alt": "Foto de perfil autorizada de Breno Cerqueira."
     },
     "initials": "BC",
-    "interests": ["IA", "Programação"],
-    "clubs": ["Café", "Leitura"],
+    "interests": [
+      "IA",
+      "Programação"
+    ],
+    "clubs": [
+      "Café",
+      "Leitura"
+    ],
     "links": [
       {
         "label": "GitHub",
@@ -23,6 +29,495 @@
       {
         "label": "LinkedIn",
         "href": "https://www.linkedin.com/in/brenocerq/"
+      }
+    ],
+    "entries": []
+  },
+  {
+    "slug": "raquel-santana",
+    "name": "Raquel Santana",
+    "role": "Ciência da Computação",
+    "location": "Salvador, Brasil",
+    "summary": "Perfil autorizado para publicação no Portal NITE.",
+    "public": true,
+    "authorized": true,
+    "contentState": "real",
+    "avatar": {
+      "src": "/images/pessoas/raquel-santana.webp",
+      "alt": "Foto de perfil autorizada de Raquel Santana."
+    },
+    "initials": "RS",
+    "interests": [
+      "IA",
+      "Programação"
+    ],
+    "clubs": [
+      "Café",
+      "Leitura"
+    ],
+    "links": [
+      {
+        "label": "LinkedIn",
+        "href": "https://www.linkedin.com/in/raquelsps"
+      },
+      {
+        "label": "GitHub",
+        "href": "https://github.com/rachelsps"
+      }
+    ],
+    "entries": []
+  },
+  {
+    "slug": "joao-victor-dorea",
+    "name": "João Victor Dórea",
+    "listName": "João Victor",
+    "role": "Eng. Computação & Automação Industrial",
+    "location": "Salvador, Brasil",
+    "summary": "Perfil autorizado para publicação no Portal NITE.",
+    "public": true,
+    "authorized": true,
+    "contentState": "real",
+    "avatar": {
+      "src": "/images/pessoas/joao-victor-dorea.webp",
+      "alt": "Foto de perfil autorizada de João Victor Dórea."
+    },
+    "initials": "JV",
+    "interests": [
+      "IA",
+      "Programação"
+    ],
+    "clubs": [
+      "Café",
+      "Leitura"
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "href": "https://github.com/Joao-Victor17"
+      },
+      {
+        "label": "LinkedIn",
+        "href": "https://www.linkedin.com/in/cupolo"
+      }
+    ],
+    "entries": []
+  },
+  {
+    "slug": "aiza-barretto",
+    "name": "Aíza Barretto",
+    "role": "Ciência da Computação & Gestão",
+    "summary": "Perfil autorizado para publicação no Portal NITE.",
+    "public": true,
+    "authorized": true,
+    "contentState": "real",
+    "avatar": {
+      "src": "/images/pessoas/aiza-barretto.webp",
+      "alt": "Foto de perfil autorizada de Aíza Barretto."
+    },
+    "initials": "AB",
+    "interests": [
+      "IA",
+      "Programação"
+    ],
+    "clubs": [
+      "Café",
+      "Leitura"
+    ],
+    "links": [
+      {
+        "label": "LinkedIn",
+        "href": "https://www.linkedin.com/in/a%C3%ADza-barretto"
+      }
+    ],
+    "entries": []
+  },
+  {
+    "slug": "igor-jeronimo",
+    "name": "Igor Jerônimo",
+    "role": "Ciência da Computação",
+    "location": "Jacobina, Brasil",
+    "summary": "Perfil autorizado para publicação no Portal NITE.",
+    "public": true,
+    "authorized": true,
+    "contentState": "real",
+    "avatar": {
+      "src": "/images/pessoas/igor-jeronimo.webp",
+      "alt": "Foto de perfil autorizada de Igor Jerônimo."
+    },
+    "initials": "IJ",
+    "interests": [
+      "IA",
+      "Programação"
+    ],
+    "clubs": [
+      "Café",
+      "Leitura"
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "href": "https://github.com/ginhoh"
+      },
+      {
+        "label": "LinkedIn",
+        "href": "https://www.linkedin.com/in/igorjeronimo"
+      }
+    ],
+    "entries": []
+  },
+  {
+    "slug": "marcus-vinicius-da-silva-santos",
+    "name": "Marcus Vinícius da Silva Santos",
+    "listName": "Marcus Vinícius",
+    "role": "Eng. Computação & Dev. Sistemas",
+    "location": "Salvador, Brasil",
+    "summary": "Perfil autorizado para publicação no Portal NITE.",
+    "public": true,
+    "authorized": true,
+    "contentState": "real",
+    "avatar": {
+      "src": "/images/pessoas/marcus-vinicius-da-silva-santos.webp",
+      "alt": "Foto de perfil autorizada de Marcus Vinícius da Silva Santos."
+    },
+    "initials": "MV",
+    "interests": [
+      "IA",
+      "Programação"
+    ],
+    "clubs": [
+      "Café",
+      "Leitura"
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "href": "https://github.com/MarcusV2005"
+      }
+    ],
+    "entries": []
+  },
+  {
+    "slug": "cecilia-brito",
+    "name": "Cecília Brito",
+    "role": "Medicina Veterinária",
+    "location": "Salvador, Brasil",
+    "summary": "Perfil autorizado para publicação no Portal NITE.",
+    "public": true,
+    "authorized": true,
+    "contentState": "real",
+    "avatar": {
+      "src": "/images/pessoas/cecilia-brito.webp",
+      "alt": "Foto de perfil autorizada de Cecília Brito."
+    },
+    "initials": "CB",
+    "interests": [
+      "IA",
+      "Programação"
+    ],
+    "clubs": [
+      "Café",
+      "Leitura"
+    ],
+    "links": [
+      {
+        "label": "LinkedIn",
+        "href": "https://www.linkedin.com/in/cecilia-cas%C3%A9-brito-71a8a0265/"
+      }
+    ],
+    "entries": []
+  },
+  {
+    "slug": "caua-oliveira",
+    "name": "Cauã Oliveira",
+    "role": "Ciência da Computação",
+    "location": "Salvador, Brasil",
+    "summary": "Perfil autorizado para publicação no Portal NITE.",
+    "public": true,
+    "authorized": true,
+    "contentState": "real",
+    "avatar": {
+      "src": "/images/pessoas/caua-oliveira.webp",
+      "alt": "Foto de perfil autorizada de Cauã Oliveira."
+    },
+    "initials": "CO",
+    "interests": [
+      "IA",
+      "Programação"
+    ],
+    "clubs": [
+      "Café",
+      "Leitura"
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "href": "https://github.com/Caua-Oliveira"
+      },
+      {
+        "label": "LinkedIn",
+        "href": "https://www.linkedin.com/in/cau%C3%A3-oliveira-cruz-09906a220/"
+      }
+    ],
+    "entries": []
+  },
+  {
+    "slug": "paulo-henrique-espirito-santo-de-almeida",
+    "name": "Paulo Henrique Espírito Santo de Almeida",
+    "listName": "Paulo Henrique",
+    "role": "Ciência da Computação",
+    "location": "Salvador, Brasil",
+    "summary": "Perfil autorizado para publicação no Portal NITE.",
+    "public": true,
+    "authorized": true,
+    "contentState": "real",
+    "avatar": {
+      "src": "/images/pessoas/paulo-henrique-espirito-santo-de-almeida.webp",
+      "alt": "Foto de perfil autorizada de Paulo Henrique Espírito Santo de Almeida."
+    },
+    "initials": "PH",
+    "interests": [
+      "IA",
+      "Programação"
+    ],
+    "clubs": [
+      "Café",
+      "Leitura"
+    ],
+    "links": [
+      {
+        "label": "LinkedIn",
+        "href": "https://www.linkedin.com/in/paulo-henrique-almeida-8158661aa"
+      }
+    ],
+    "entries": []
+  },
+  {
+    "slug": "guilherme-machado-duarte",
+    "name": "Guilherme Machado Duarte",
+    "role": "Análise e Desenvolvimento de Sistemas",
+    "location": "Salvador, Brasil",
+    "summary": "Perfil autorizado para publicação no Portal NITE.",
+    "public": true,
+    "authorized": true,
+    "contentState": "real",
+    "avatar": {
+      "src": "/images/pessoas/guilherme-machado-duarte.webp",
+      "alt": "Foto de perfil autorizada de Guilherme Machado Duarte."
+    },
+    "initials": "GM",
+    "interests": [
+      "IA",
+      "Programação"
+    ],
+    "clubs": [
+      "Café",
+      "Leitura"
+    ],
+    "links": [
+      {
+        "label": "LinkedIn",
+        "href": "https://www.linkedin.com/in/guilherme-machado-87b7a5295"
+      }
+    ],
+    "entries": []
+  },
+  {
+    "slug": "renan-pires-andrade",
+    "name": "Renan Pires Andrade",
+    "role": "Ciência da Computação",
+    "location": "Salvador, Brasil",
+    "summary": "Perfil autorizado para publicação no Portal NITE.",
+    "public": true,
+    "authorized": true,
+    "contentState": "real",
+    "avatar": {
+      "src": "/images/pessoas/renan-pires-andrade.webp",
+      "alt": "Foto de perfil autorizada de Renan Pires Andrade."
+    },
+    "initials": "RA",
+    "interests": [
+      "IA",
+      "Programação"
+    ],
+    "clubs": [
+      "Café",
+      "Leitura"
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "href": "https://github.com/nanzim2"
+      },
+      {
+        "label": "LinkedIn",
+        "href": "https://www.linkedin.com/in/renan-andrade-dev/"
+      }
+    ],
+    "entries": []
+  },
+  {
+    "slug": "vitor-dos-anjos-silva-de-araujo",
+    "name": "Vitor dos Anjos Silva de Araujo",
+    "role": "Ciência da Computação & Eng. Energia",
+    "summary": "Perfil autorizado para publicação no Portal NITE.",
+    "public": true,
+    "authorized": true,
+    "contentState": "real",
+    "avatar": {
+      "src": "/images/pessoas/vitor-dos-anjos-silva-de-araujo.webp",
+      "alt": "Foto de perfil autorizada de Vitor dos Anjos Silva de Araujo."
+    },
+    "initials": "VA",
+    "interests": [
+      "IA",
+      "Programação"
+    ],
+    "clubs": [
+      "Café",
+      "Leitura"
+    ],
+    "links": [
+      {
+        "label": "LinkedIn",
+        "href": "https://www.linkedin.com/in/vitor-araujo-48a95b2aa"
+      }
+    ],
+    "entries": []
+  },
+  {
+    "slug": "santhiago-santos",
+    "name": "Santhiago Santos",
+    "role": "Ex-competidor FIRST Robotics",
+    "location": "Salvador, Brasil",
+    "summary": "Perfil autorizado para publicação no Portal NITE.",
+    "public": true,
+    "authorized": true,
+    "contentState": "real",
+    "avatar": {
+      "src": "/images/pessoas/santhiago-santos.webp",
+      "alt": "Foto de perfil autorizada de Santhiago Santos."
+    },
+    "initials": "SS",
+    "interests": [
+      "IA",
+      "Programação"
+    ],
+    "clubs": [
+      "Café",
+      "Leitura"
+    ],
+    "links": [
+      {
+        "label": "LinkedIn",
+        "href": "https://www.linkedin.com/in/santhiago-santos-657580358"
+      },
+      {
+        "label": "GitHub",
+        "href": "https://github.com/santhiago125"
+      }
+    ],
+    "entries": []
+  },
+  {
+    "slug": "william-silva-lago",
+    "name": "William Silva Lago",
+    "role": "Ciência da Computação & Dev. Sistemas",
+    "location": "Salvador, Brasil",
+    "summary": "Perfil autorizado para publicação no Portal NITE.",
+    "public": true,
+    "authorized": true,
+    "contentState": "real",
+    "avatar": {
+      "src": "/images/pessoas/william-silva-lago.webp",
+      "alt": "Foto de perfil autorizada de William Silva Lago."
+    },
+    "initials": "WS",
+    "interests": [
+      "IA",
+      "Programação"
+    ],
+    "clubs": [
+      "Café",
+      "Leitura"
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "href": "https://github.com/WillCodee"
+      },
+      {
+        "label": "LinkedIn",
+        "href": "https://www.linkedin.com/in/william-silva-lago"
+      }
+    ],
+    "entries": []
+  },
+  {
+    "slug": "caio-guilherme-viterbo",
+    "name": "Caio Guilherme Viterbo",
+    "listName": "Caio Guilherme",
+    "role": "Ciência da Computação",
+    "location": "Salvador, Brasil",
+    "summary": "Perfil autorizado para publicação no Portal NITE.",
+    "public": true,
+    "authorized": true,
+    "contentState": "real",
+    "avatar": {
+      "src": "/images/pessoas/caio-guilherme-viterbo.webp",
+      "alt": "Foto de perfil autorizada de Caio Guilherme Viterbo."
+    },
+    "initials": "CV",
+    "interests": [
+      "IA",
+      "Programação"
+    ],
+    "clubs": [
+      "Café",
+      "Leitura"
+    ],
+    "links": [
+      {
+        "label": "LinkedIn",
+        "href": "https://www.linkedin.com/in/caioviterbo/"
+      },
+      {
+        "label": "GitHub",
+        "href": "https://github.com/caioviterbo"
+      }
+    ],
+    "entries": []
+  },
+  {
+    "slug": "joao-gilberto-de-lima-freitas",
+    "name": "João Gilberto de Lima Freitas",
+    "listName": "João Gilberto",
+    "role": "Ciência da Computação",
+    "location": "Feira de Santana, Brasil",
+    "summary": "Perfil autorizado para publicação no Portal NITE.",
+    "public": true,
+    "authorized": true,
+    "contentState": "real",
+    "avatar": {
+      "src": "/images/pessoas/joao-gilberto-de-lima-freitas.webp",
+      "alt": "Foto de perfil autorizada de João Gilberto de Lima Freitas."
+    },
+    "initials": "JF",
+    "interests": [
+      "IA",
+      "Programação"
+    ],
+    "clubs": [
+      "Café",
+      "Leitura"
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "href": "https://github.com/jhonnyfreitassa"
+      },
+      {
+        "label": "LinkedIn",
+        "href": "https://www.linkedin.com/in/joao-freitas-ab3712341"
       }
     ],
     "entries": []

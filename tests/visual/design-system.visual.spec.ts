@@ -167,6 +167,9 @@ test.describe("resend-inspired footer layout", () => {
       });
 
       const wordmark = page.locator(".nite-final-wordmark");
+      const wordmarkStage = page.locator("[data-wordmark-stage]");
+      const finalCtaSection = page.getByTestId("final-cta-section");
+      const wordmarkFooter = page.locator('[data-footer-variant="wordmark"]');
       const spotlight = await wordmark.evaluate((wordmark) => {
         const style = getComputedStyle(wordmark, "::after");
         const bounds = wordmark.getBoundingClientRect();
@@ -176,13 +179,23 @@ test.describe("resend-inspired footer layout", () => {
           backgroundImage: style.backgroundImage,
           content: style.content,
           height: Number.parseFloat(style.height),
+          imageFilter: image ? getComputedStyle(image).filter : null,
           imageOpacity: image ? getComputedStyle(image).opacity : null,
           maskImage: style.maskImage,
           mixBlendMode: style.mixBlendMode,
-          spotlightColor: style.getPropertyValue("--nite-wordmark-spotlight"),
+          spotlightColor: style.getPropertyValue("--wordmark-spotlight-color"),
           width: Number.parseFloat(style.width),
           wordmarkHeight: bounds.height,
           wordmarkWidth: bounds.width,
+        };
+      });
+      const stage = await wordmarkStage.evaluate((element) => {
+        const style = getComputedStyle(element);
+
+        return {
+          backgroundColor: style.backgroundColor,
+          backgroundImage: style.backgroundImage,
+          paddingTop: style.paddingTop,
         };
       });
 
@@ -191,12 +204,27 @@ test.describe("resend-inspired footer layout", () => {
       expect(spotlight.backgroundImage).toContain("/ 0.76");
       expect(spotlight.backgroundImage).toContain("/ 0.36");
       expect(spotlight.content).toBe('""');
-      expect(spotlight.imageOpacity).toBe("0.68");
+      expect(spotlight.imageOpacity).toBe(theme === "dark" ? "0.55" : "1");
+      expect(spotlight.imageFilter).toBe(
+        theme === "dark"
+          ? "brightness(0.72) saturate(0.82)"
+          : "brightness(0.58) contrast(1.2) saturate(0.72)",
+      );
       expect(spotlight.maskImage).toContain("nite-logo-footer.webp");
       expect(spotlight.mixBlendMode).toBe("normal");
-      expect(spotlight.spotlightColor.trim()).toBe(
-        theme === "dark" ? "#f8fafc" : "#0b1220",
+      await expect(finalCtaSection).not.toHaveAttribute(
+        "data-nite-scene",
+        "inverse",
       );
+      expect(stage.backgroundColor).toBe("rgba(0, 0, 0, 0)");
+      expect(stage.backgroundImage).toBe("none");
+      expect(stage.paddingTop).toBe("0px");
+      await expect(finalCtaSection).toHaveCSS(
+        "background-color",
+        theme === "dark" ? "rgb(9, 9, 10)" : "rgb(244, 247, 250)",
+      );
+      await expect(wordmarkFooter).toHaveCSS("background-image", "none");
+      expect(spotlight.spotlightColor.trim()).toBe("#f8fafc");
       expect(spotlight.width).toBeCloseTo(spotlight.wordmarkWidth, 0);
       expect(spotlight.height).toBeCloseTo(spotlight.wordmarkHeight, 0);
 
@@ -208,9 +236,26 @@ test.describe("resend-inspired footer layout", () => {
             (element) => getComputedStyle(element, "::after").opacity,
           ),
         )
-        .toBe("0.92");
+        .toBe(theme === "dark" ? "0.92" : "0.48");
     });
   }
+
+  test("mobile footer stays on the global theme without an empty dark transition", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await openStablePage(page, "/", "light");
+
+    const wordmark = page.locator('[data-component="nite-final-wordmark"]');
+    const wordmarkFooter = page.locator('[data-footer-variant="wordmark"]');
+
+    await expect(wordmark).toBeHidden();
+    await expect(wordmarkFooter).toHaveCSS("background-image", "none");
+    await expect(wordmarkFooter).toHaveCSS(
+      "background-color",
+      "rgb(244, 247, 250)",
+    );
+  });
 
   test("desktop footer preserves the Resend proportions and wordmark overlap", async ({
     page,

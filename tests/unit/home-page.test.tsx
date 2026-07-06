@@ -124,7 +124,7 @@ describe("HomePage", { timeout: 15_000 }, () => {
     const builds = within(buildsSection);
 
     expect(buildsSection).toHaveAttribute("id", "metodo");
-    expect(buildsSection).toHaveAttribute("data-nite-scene", "inverse");
+    expect(buildsSection).not.toHaveAttribute("data-nite-scene", "inverse");
     expect(buildsSection).toHaveAttribute("data-surface", "nite-background");
     expect(buildsSection).toHaveClass(
       "bg-nite-background",
@@ -165,9 +165,26 @@ describe("HomePage", { timeout: 15_000 }, () => {
     expect(methodFeatureIcon?.getAttribute("style")).not.toMatch(
       /animation|opacity|transform/i,
     );
-    expect(
-      buildsSection.querySelector("[data-component='nite-method-system']"),
-    ).toHaveAttribute("data-media-mode", "resend-react-dom-panel");
+    const methodSystem = buildsSection.querySelector(
+      "[data-component='nite-method-system']",
+    );
+
+    expect(methodSystem).toHaveAttribute(
+      "data-media-mode",
+      "resend-react-dom-panel",
+    );
+    expect(methodSystem).toHaveClass(
+      "bg-[var(--method-panel-background)]",
+      "text-[var(--method-panel-text)]",
+      "border-[var(--method-panel-border)]",
+      "duration-nite-micro",
+      "ease-nite-out",
+    );
+    expect(methodSystem).not.toHaveClass(
+      "rounded-[1.5rem]",
+      "bg-[#050505]",
+      "text-[#f5f5f5]",
+    );
     expect(
       buildsSection.querySelector("[data-method-window-controls]"),
     ).toBeInTheDocument();
@@ -241,6 +258,20 @@ describe("HomePage", { timeout: 15_000 }, () => {
       buildsSection.querySelector("[data-method-preview-frame]"),
     ).toHaveAttribute("data-appearance", "dark");
     expect(
+      buildsSection.querySelector("[data-method-preview-frame]"),
+    ).toHaveClass(
+      "method-preview",
+      "bg-[var(--method-preview-background)]",
+      "text-[var(--method-preview-text)]",
+      "duration-nite-micro",
+      "ease-nite-out",
+    );
+    expect(
+      buildsSection
+        .querySelector("[data-method-preview-frame]")
+        ?.getAttribute("style") ?? "",
+    ).not.toContain("--method-preview");
+    expect(
       within(builds.getByRole("tabpanel")).queryByText("NITE"),
     ).not.toBeInTheDocument();
     expect(
@@ -286,12 +317,6 @@ describe("HomePage", { timeout: 15_000 }, () => {
       "text-[var(--method-preview-body)]",
     );
     expect(previewDescription).not.toHaveClass("text-sm", "opacity-65");
-    expect(builds.getByRole("tabpanel")).toHaveStyle({
-      "--method-preview-heading": "#f5f7fb",
-      "--method-preview-body": "rgb(214 224 237 / 0.82)",
-      "--method-preview-label": "rgb(176 199 217 / 0.7)",
-      "--method-preview-rule": "rgb(176 199 217 / 0.16)",
-    });
     expect(
       within(builds.getByRole("tabpanel")).getByText(
         "Cada iniciativa começa definindo o desafio e apontando o que se pretende investigar. O resultado dessa fase é um objetivo claro e uma hipótese inicial para guiar a próxima etapa.",
@@ -371,7 +396,11 @@ describe("HomePage", { timeout: 15_000 }, () => {
     const projectsSection = screen.getByTestId("projects-operating-section");
     const projects = within(projectsSection);
 
-    expect(projectsSection).toHaveAttribute("data-nite-scene", "inverse");
+    expect(projectsSection).not.toHaveAttribute("data-nite-scene", "inverse");
+    expect(projectsSection).toHaveAttribute(
+      "data-projects-layout",
+      "editorial",
+    );
     expect(projectsSection).toHaveAttribute("data-surface", "nite-background");
     expect(projectsSection).toHaveClass(
       "bg-nite-background",
@@ -393,6 +422,10 @@ describe("HomePage", { timeout: 15_000 }, () => {
       name: "Projetos em destaque",
     });
     expect(projectsHeading).toHaveClass("font-heading", "font-semibold");
+    expect(projectsHeading).toHaveClass(
+      "text-[clamp(2rem,4vw,3rem)]",
+      "leading-[1.1]",
+    );
     expect(projectsHeading.parentElement?.className).toContain(
       "[&_h2]:font-heading",
     );
@@ -426,6 +459,32 @@ describe("HomePage", { timeout: 15_000 }, () => {
       ),
     ).toHaveLength(3);
     expect(projects.getAllByText("Em estruturação")).toHaveLength(3);
+    expect(
+      projectsSection.querySelector("[data-project-code-grid]"),
+    ).not.toBeInTheDocument();
+    expect(
+      projectsSection.querySelector("[data-project-file-tree]"),
+    ).not.toBeInTheDocument();
+    expect(projects.queryByText("EvidenceBoard.tsx")).not.toBeInTheDocument();
+    expect(projects.queryByText("Dispositivos")).not.toBeInTheDocument();
+    expect(projects.queryByText("Painel de análises")).not.toBeInTheDocument();
+    for (const visual of projectsSection.querySelectorAll(
+      "[data-project-visual]",
+    )) {
+      expect(visual).toHaveClass(
+        "rounded-lg",
+        "border-[var(--projects-visual-border)]",
+        "bg-[var(--projects-visual-background)]",
+        "shadow-nite-lift",
+        "after:[background-image:var(--projects-visual-veil)]",
+      );
+      expect(
+        visual.querySelector("[data-project-cover-image]"),
+      ).toBeInTheDocument();
+      expect(visual.querySelector("[data-project-image-overlay]")).toHaveClass(
+        "[background-image:var(--projects-image-overlay)]",
+      );
+    }
     expect(
       projects.queryByText(
         "Projetos em estruturação permanecem sinalizados até que existam evidências públicas, entregáveis reais e contexto validado para publicação.",
@@ -471,15 +530,17 @@ describe("HomePage", { timeout: 15_000 }, () => {
 
     expect(timeline).toBeInTheDocument();
     expect(timeline).toHaveAttribute("data-nite-scene", "timeline");
+    expect(timeline).not.toHaveAttribute("data-nite-scene", "inverse");
     expect(timeline).toHaveAttribute("data-scroll", "section");
     expect(timeline).toHaveAttribute("data-public-milestones", "0");
+    expect(timeline).toHaveClass("bg-background");
     const timelineNarrative = within(timeline).getByTestId(
       "timeline-narrative-content",
     );
     expect(timelineNarrative).toHaveTextContent("Timeline");
-    expect(within(timeline).getByRole("heading", { level: 2 })).toHaveTextContent(
-      "O NITE em trajetória",
-    );
+    expect(
+      within(timeline).getByRole("heading", { level: 2 }),
+    ).toHaveTextContent("O NITE em trajetória");
     expect(timelineNarrative).toHaveTextContent(
       "Uma leitura visual dos marcos que estruturam o núcleo, suas frentes e seus próximos passos.",
     );
@@ -496,8 +557,15 @@ describe("HomePage", { timeout: 15_000 }, () => {
       "bg-transparent",
       "!px-0",
     );
+    expect(timelineCta).toHaveClass("text-[var(--timeline-cta-text)]");
+    expect(timelineCta).toHaveClass(
+      "hover:text-[var(--timeline-cta-hover-text)]",
+      "focus-visible:text-[var(--timeline-cta-hover-text)]",
+    );
     expect(timeline.querySelector(".timeline-premium-clickable")).toBeNull();
-    expect(timeline.querySelector("[data-scroll='bg']")).toBeInTheDocument();
+    expect(timeline.querySelector("[data-scroll='bg']")).toHaveClass(
+      "timeline-premium-scroll-bg",
+    );
     expect(
       timeline.querySelector("[data-scroll='container']"),
     ).toBeInTheDocument();
@@ -542,18 +610,30 @@ describe("HomePage", { timeout: 15_000 }, () => {
       ),
     ).toBeNull();
     expect(
-      timeline.querySelector("[data-component='timeline-image-sequence'] button"),
+      timeline.querySelector(
+        "[data-component='timeline-image-sequence'] button",
+      ),
     ).toBeNull();
     const finalCtaSection = screen.getByTestId("final-cta-section");
     const finalCta = within(finalCtaSection);
 
-    expect(finalCtaSection).toHaveAttribute("data-nite-scene", "inverse");
-    expect(
-      finalCta.getByRole("heading", {
-        level: 2,
-        name: /NITE em evolução\.\s*Disponível para construir\./i,
-      }),
-    ).toBeInTheDocument();
+    expect(finalCtaSection).not.toHaveAttribute("data-nite-scene", "inverse");
+    expect(finalCtaSection).toHaveClass(
+      "bg-nite-background",
+      "text-nite-text-primary",
+    );
+    const finalHeading = finalCta.getByRole("heading", {
+      level: 2,
+      name: /NITE em evolução\.\s*Disponível para construir\./i,
+    });
+
+    expect(finalHeading).toBeInTheDocument();
+    expect(finalHeading.querySelector("span")).toHaveClass(
+      "text-nite-text-primary",
+    );
+    expect(finalHeading.querySelector("span")).not.toHaveClass(
+      "nite-gradient-text",
+    );
     const finalPrimaryCta = finalCta.getByRole("link", {
       name: /Explorar projetos/i,
     });
@@ -580,10 +660,16 @@ describe("HomePage", { timeout: 15_000 }, () => {
     );
     expect(finalSecondaryCta).not.toHaveClass("!px-0");
     expect(finalSecondaryCta.querySelector("svg")).toBeInTheDocument();
-    expect(document.querySelector(".nite-final-wordmark")).toHaveAttribute(
-      "aria-hidden",
-      "true",
+    const wordmarkStage = finalCtaSection.querySelector(
+      "[data-wordmark-stage]",
     );
+    const finalWordmark = wordmarkStage?.querySelector(
+      "[data-component='nite-final-wordmark']",
+    );
+
+    expect(wordmarkStage).not.toHaveAttribute("data-nite-scene");
+    expect(finalWordmark).toHaveAttribute("aria-hidden", "true");
+    expect(finalWordmark).not.toHaveAttribute("data-nite-scene");
     expect(
       document.querySelector(".nite-final-wordmark-image"),
     ).toHaveAttribute("src", expect.stringContaining("nite-logo-footer.webp"));
@@ -616,6 +702,11 @@ describe("HomePage", { timeout: 15_000 }, () => {
       "aria-hidden",
       "true",
     );
+    expect(document.querySelector(".nite-hero-glow")).toBeNull();
+    expect(document.querySelector(".nite-surface-glow")).toBeNull();
+    expect(
+      document.querySelector(".animated-nite-logo")?.getAttribute("class"),
+    ).not.toContain("drop-shadow");
     expect(
       document.querySelector("#logo-final")?.closest(".nite-panel"),
     ).toBeNull();
@@ -832,12 +923,9 @@ describe("HomePage", { timeout: 15_000 }, () => {
 
     expect(lightSwitch).toHaveAttribute("aria-checked", "true");
     expect(previewFrame).toHaveAttribute("data-appearance", "light");
-    expect(previewFrame).toHaveStyle({
-      "--method-preview-heading": "#0b1220",
-      "--method-preview-body": "rgb(51 65 85 / 0.86)",
-      "--method-preview-label": "rgb(51 65 85 / 0.64)",
-      "--method-preview-rule": "rgb(15 23 42 / 0.12)",
-    });
+    expect(previewFrame?.getAttribute("style") ?? "").not.toContain(
+      "--method-preview",
+    );
   });
 
   it("pausa e retoma a sequência visual da timeline sem reiniciar a imagem atual", () => {
@@ -913,21 +1001,29 @@ describe("HomePage", { timeout: 15_000 }, () => {
     render(<TimelineNarrativeContent imageSequenceActive />);
 
     const narrative = screen.getByTestId("timeline-narrative-content");
-    const letters = narrative.querySelectorAll("[data-timeline-narrative-letter]");
+    const letters = narrative.querySelectorAll(
+      "[data-timeline-narrative-letter]",
+    );
     const animationTotalMs =
       (timelineNarrativeAnimationDuration +
         timelineNarrativeLetterStagger * Math.max(letters.length - 1, 0)) *
         1000 +
       100;
 
-    expect(narrative).toHaveAttribute("data-narrative-animation-state", "visible");
+    expect(narrative).toHaveAttribute(
+      "data-narrative-animation-state",
+      "visible",
+    );
     expect(narrative).toHaveAttribute("data-narrative-visibility", "visible");
 
     act(() => {
       vi.advanceTimersByTime(timelineNarrativeIdleDelayMs);
     });
 
-    expect(narrative).toHaveAttribute("data-narrative-animation-state", "hiding");
+    expect(narrative).toHaveAttribute(
+      "data-narrative-animation-state",
+      "hiding",
+    );
     expect(narrative).toHaveAttribute("data-narrative-visibility", "hidden");
 
     act(() => {
@@ -943,7 +1039,10 @@ describe("HomePage", { timeout: 15_000 }, () => {
       window.dispatchEvent(new WheelEvent("wheel"));
     });
 
-    expect(narrative).toHaveAttribute("data-narrative-animation-state", "showing");
+    expect(narrative).toHaveAttribute(
+      "data-narrative-animation-state",
+      "showing",
+    );
     expect(narrative).toHaveAttribute("data-narrative-visibility", "visible");
 
     act(() => {
@@ -975,8 +1074,9 @@ describe("HomePage", { timeout: 15_000 }, () => {
       narrative.querySelector("[data-timeline-narrative-word]"),
     ).not.toBeInTheDocument();
     expect(wordWrappers.length).toBeGreaterThan(12);
-    expect(Array.from(wordWrappers).every((word) => word.childElementCount > 0))
-      .toBe(true);
+    expect(
+      Array.from(wordWrappers).every((word) => word.childElementCount > 0),
+    ).toBe(true);
     expect(narrative).toHaveTextContent("Timeline");
     expect(visualTitle).toHaveTextContent("O NITE em trajetória");
     expect(
@@ -992,9 +1092,7 @@ describe("HomePage", { timeout: 15_000 }, () => {
   });
 
   it("segmenta acentos e grafemas compostos como unidades visuais", () => {
-    const graphemes = getTimelineNarrativeGraphemes(
-      "e\u0301 ação 👨‍👩‍👧‍👦",
-    );
+    const graphemes = getTimelineNarrativeGraphemes("e\u0301 ação 👨‍👩‍👧‍👦");
 
     expect(graphemes).toContain("e\u0301");
     expect(graphemes).toContain("👨‍👩‍👧‍👦");
@@ -1006,7 +1104,9 @@ describe("HomePage", { timeout: 15_000 }, () => {
     render(<TimelineNarrativeContent imageSequenceActive />);
 
     const narrative = screen.getByTestId("timeline-narrative-content");
-    const letters = narrative.querySelectorAll("[data-timeline-narrative-letter]");
+    const letters = narrative.querySelectorAll(
+      "[data-timeline-narrative-letter]",
+    );
     const animationTotalMs =
       (timelineNarrativeAnimationDuration +
         timelineNarrativeLetterStagger * Math.max(letters.length - 1, 0)) *
@@ -1017,13 +1117,19 @@ describe("HomePage", { timeout: 15_000 }, () => {
       vi.advanceTimersByTime(timelineNarrativeIdleDelayMs);
     });
 
-    expect(narrative).toHaveAttribute("data-narrative-animation-state", "hiding");
+    expect(narrative).toHaveAttribute(
+      "data-narrative-animation-state",
+      "hiding",
+    );
 
     act(() => {
       window.dispatchEvent(new Event("pointerdown"));
     });
 
-    expect(narrative).toHaveAttribute("data-narrative-animation-state", "showing");
+    expect(narrative).toHaveAttribute(
+      "data-narrative-animation-state",
+      "showing",
+    );
 
     act(() => {
       vi.advanceTimersByTime(animationTotalMs);
@@ -1034,7 +1140,9 @@ describe("HomePage", { timeout: 15_000 }, () => {
       "visible",
     );
     expect(
-      Array.from(letters).every((letter) => letter.getAttribute("style") === ""),
+      Array.from(letters).every(
+        (letter) => letter.getAttribute("style") === "",
+      ),
     ).toBe(true);
   });
 
@@ -1050,7 +1158,10 @@ describe("HomePage", { timeout: 15_000 }, () => {
       vi.advanceTimersByTime(timelineNarrativeIdleDelayMs * 3);
     });
 
-    expect(narrative).toHaveAttribute("data-narrative-animation-state", "visible");
+    expect(narrative).toHaveAttribute(
+      "data-narrative-animation-state",
+      "visible",
+    );
     expect(narrative).toHaveAttribute("data-narrative-visibility", "visible");
     expect(narrative).not.toHaveAttribute("aria-hidden");
   });

@@ -63,7 +63,7 @@ export function PeopleSearchDialog({
     }
 
     return people.filter((person) =>
-      [person.name, person.role, person.location, person.summary]
+      [person.name, person.role, person.location ?? "", person.summary]
         .join(" ")
         .toLocaleLowerCase("pt-BR")
         .includes(normalizedQuery),

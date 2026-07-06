@@ -6,8 +6,8 @@ import type { CSSProperties, PointerEvent } from "react";
 import { cn } from "@/lib/utils";
 
 type NiteWordmarkSpotlightStyle = CSSProperties & {
-  "--nite-spotlight-x": string;
-  "--nite-spotlight-y": string;
+  "--wordmark-spotlight-x": string;
+  "--wordmark-spotlight-y": string;
 };
 
 type NiteFinalWordmarkProps = {
@@ -20,25 +20,25 @@ export function NiteFinalWordmark({ className }: NiteFinalWordmarkProps) {
 
     event.currentTarget.dataset.spotlightActive = "true";
     event.currentTarget.style.setProperty(
-      "--nite-spotlight-x",
+      "--wordmark-spotlight-x",
       `${event.clientX - bounds.left}px`,
     );
     event.currentTarget.style.setProperty(
-      "--nite-spotlight-y",
+      "--wordmark-spotlight-y",
       `${event.clientY - bounds.top}px`,
     );
   };
 
   const handlePointerLeave = (event: PointerEvent<HTMLDivElement>) => {
     event.currentTarget.dataset.spotlightActive = "false";
-    event.currentTarget.style.setProperty("--nite-spotlight-x", "50%");
-    event.currentTarget.style.setProperty("--nite-spotlight-y", "42%");
+    event.currentTarget.style.setProperty("--wordmark-spotlight-x", "50%");
+    event.currentTarget.style.setProperty("--wordmark-spotlight-y", "42%");
   };
 
   return (
     <div
       aria-hidden="true"
-      data-nite-scene="wordmark"
+      data-component="nite-final-wordmark"
       data-spotlight-active="false"
       className={cn(
         "nite-final-wordmark relative mx-auto hidden aspect-[56/15] w-full max-w-7xl overflow-hidden sm:block",
@@ -48,8 +48,8 @@ export function NiteFinalWordmark({ className }: NiteFinalWordmarkProps) {
       onPointerMove={handlePointerMove}
       style={
         {
-          "--nite-spotlight-x": "50%",
-          "--nite-spotlight-y": "42%",
+          "--wordmark-spotlight-x": "50%",
+          "--wordmark-spotlight-y": "42%",
         } as NiteWordmarkSpotlightStyle
       }
     >

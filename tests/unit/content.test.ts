@@ -130,23 +130,52 @@ describe("conteudo estruturado", () => {
   });
 
   it("carrega colecao de pessoas autorizadas e indexaveis", () => {
-    expect(personContentStateValues).toEqual(["real", "em-estruturacao"]);
-    expect(getPeople().map((person) => person.slug)).toEqual([
+    const expectedPeopleSlugs = [
       "breno-cerqueira",
-    ]);
-    expect(getPersonSlugs()).toEqual([{ slug: "breno-cerqueira" }]);
+      "raquel-santana",
+      "joao-victor-dorea",
+      "aiza-barretto",
+      "igor-jeronimo",
+      "marcus-vinicius-da-silva-santos",
+      "cecilia-brito",
+      "caua-oliveira",
+      "paulo-henrique-espirito-santo-de-almeida",
+      "guilherme-machado-duarte",
+      "renan-pires-andrade",
+      "vitor-dos-anjos-silva-de-araujo",
+      "santhiago-santos",
+      "william-silva-lago",
+      "caio-guilherme-viterbo",
+      "joao-gilberto-de-lima-freitas",
+    ];
+
+    expect(personContentStateValues).toEqual(["real", "em-estruturacao"]);
+    expect(getPeople().map((person) => person.slug)).toEqual(
+      expectedPeopleSlugs,
+    );
+    expect(getPersonSlugs()).toEqual(
+      expectedPeopleSlugs.map((slug) => ({ slug })),
+    );
     expect(getPersonBySlug("breno-cerqueira")).toMatchObject({
       public: true,
       authorized: true,
       contentState: "real",
     });
+    expect(getPersonBySlug("joao-gilberto-de-lima-freitas")).toMatchObject({
+      role: "Ciência da Computação",
+      location: "Feira de Santana, Brasil",
+    });
+    expect(getPersonBySlug("aiza-barretto")?.location).toBeUndefined();
+    expect(
+      getPersonBySlug("vitor-dos-anjos-silva-de-araujo")?.location,
+    ).toBeUndefined();
     expect(getPersonBySlug("ana-silva")).toBeUndefined();
-    expect(getPublicPeople().map((person) => person.slug)).toEqual([
-      "breno-cerqueira",
-    ]);
-    expect(getIndexablePeople().map((person) => person.slug)).toEqual([
-      "breno-cerqueira",
-    ]);
+    expect(getPublicPeople().map((person) => person.slug)).toEqual(
+      expectedPeopleSlugs,
+    );
+    expect(getIndexablePeople().map((person) => person.slug)).toEqual(
+      expectedPeopleSlugs,
+    );
   });
 
   it("filtra pessoas publicas e indexaveis somente quando ha autorizacao", () => {

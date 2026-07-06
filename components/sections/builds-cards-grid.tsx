@@ -1,12 +1,7 @@
 "use client";
 
 import { Monitor, Moon, Smartphone, Sun, type LucideIcon } from "lucide-react";
-import {
-  useRef,
-  useState,
-  type CSSProperties,
-  type KeyboardEvent,
-} from "react";
+import { useRef, useState, type KeyboardEvent } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -66,11 +61,11 @@ type PreviewDevice = "desktop" | "mobile";
 type PreviewAppearance = "dark" | "light";
 
 const codeTokenClasses = {
-  keyword: "text-[#c792ea]",
-  function: "text-[#82aaff]",
-  property: "text-[#f07178]",
-  string: "text-[#c3e88d]",
-  punctuation: "text-[#89a4ba]",
+  keyword: "text-[var(--method-syntax-keyword)]",
+  function: "text-[var(--method-syntax-function)]",
+  property: "text-[var(--method-syntax-property)]",
+  string: "text-[var(--method-syntax-string)]",
+  punctuation: "text-[var(--method-syntax-punctuation)]",
 } as const;
 
 type CodeTone = keyof typeof codeTokenClasses;
@@ -184,7 +179,7 @@ function MethodCode({ stage }: { stage: MethodStage }) {
   ];
 
   return (
-    <pre className="min-w-max px-5 py-4 font-mono text-xs leading-7 text-[#a7b6c2]">
+    <pre className="min-w-max px-5 py-4 font-mono text-xs leading-7 text-[var(--method-syntax-default)]">
       <code>
         {lines.map((line, index) => (
           <span
@@ -194,7 +189,7 @@ function MethodCode({ stage }: { stage: MethodStage }) {
           >
             <span
               aria-hidden="true"
-              className="select-none pr-4 text-right text-white/25"
+              className="select-none pr-4 text-right text-[var(--method-syntax-line-number)]"
             >
               {index + 1}
             </span>
@@ -238,21 +233,23 @@ function ToolbarSwitch({
       aria-label={label}
       aria-checked={checked}
       title={label}
-      className="flex h-9 overflow-hidden rounded-lg border border-white/10 bg-[#080808] text-white/45 transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/60 motion-reduce:transition-none"
+      className="flex h-9 overflow-hidden rounded-lg border border-[var(--method-panel-border)] bg-[var(--method-panel-control-background)] text-[var(--method-panel-text-dim)] transition-colors duration-nite-micro ease-nite-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--method-panel-focus)] motion-reduce:transition-none"
       onClick={() => onCheckedChange(!checked)}
     >
       <span
         className={cn(
-          "grid w-8 place-items-center transition-colors duration-200 motion-reduce:transition-none",
-          !checked && "bg-white/[0.08] text-white",
+          "grid w-8 place-items-center transition-colors duration-nite-micro ease-nite-out motion-reduce:transition-none",
+          !checked &&
+            "bg-[var(--method-panel-control-active-surface)] text-[var(--method-panel-text)]",
         )}
       >
         <OffIcon aria-hidden="true" className="size-4" />
       </span>
       <span
         className={cn(
-          "grid w-8 place-items-center border-l border-white/10 transition-colors duration-200 motion-reduce:transition-none",
-          checked && "bg-white/[0.08] text-white",
+          "grid w-8 place-items-center border-l border-[var(--method-panel-border)] transition-colors duration-nite-micro ease-nite-out motion-reduce:transition-none",
+          checked &&
+            "bg-[var(--method-panel-control-active-surface)] text-[var(--method-panel-text)]",
         )}
       >
         <OnIcon aria-hidden="true" className="size-4" />
@@ -268,7 +265,9 @@ function TsxFileIcon({ active }: { active: boolean }) {
       data-tsx-file-icon=""
       className={cn(
         "grid size-4 shrink-0 place-items-center rounded-[3px] text-[0.5rem] leading-none font-semibold tracking-[-0.02em]",
-        active ? "bg-[#172554] text-[#60a5fa]" : "bg-white/10 text-white/45",
+        active
+          ? "bg-[var(--method-panel-file-active-surface)] text-[var(--method-panel-file-active-text)]"
+          : "bg-[var(--method-panel-control-active-surface)] text-[var(--method-panel-text-dim)]",
       )}
     >
       TS
@@ -287,23 +286,6 @@ function MethodPreview({
   device: PreviewDevice;
   stage: MethodStage;
 }) {
-  const isLight = appearance === "light";
-  const previewToneVars = {
-    "--method-preview-heading": isLight ? "#0b1220" : "#f5f7fb",
-    "--method-preview-body": isLight
-      ? "rgb(51 65 85 / 0.86)"
-      : "rgb(214 224 237 / 0.82)",
-    "--method-preview-label": isLight
-      ? "rgb(51 65 85 / 0.64)"
-      : "rgb(176 199 217 / 0.7)",
-    "--method-preview-rule": isLight
-      ? "rgb(15 23 42 / 0.12)"
-      : "rgb(176 199 217 / 0.16)",
-    "--method-preview-note-surface": isLight
-      ? "rgb(15 23 42 / 0.035)"
-      : "rgb(176 199 217 / 0.045)",
-  } as CSSProperties;
-
   return (
     <div
       id="method-active-stage"
@@ -313,18 +295,9 @@ function MethodPreview({
       data-device={device}
       data-appearance={appearance}
       className={cn(
-        "mx-auto flex h-full w-full flex-col overflow-hidden rounded-2xl border transition-[max-width,background-color,color] duration-300 motion-reduce:transition-none",
+        "method-preview mx-auto flex h-full w-full flex-col overflow-hidden rounded-2xl border border-[var(--method-preview-rule)] bg-[var(--method-preview-background)] text-[var(--method-preview-text)] transition-[max-width,background-color,color] duration-nite-micro ease-nite-out motion-reduce:transition-none",
         device === "mobile" ? "max-w-[21.875rem]" : "max-w-full",
-        isLight
-          ? "border-black/10 bg-white text-[#141414]"
-          : "border-white/10 bg-[#050505] text-[#f5f5f5]",
       )}
-      style={{
-        ...previewToneVars,
-        backgroundImage: isLight
-          ? "radial-gradient(circle at 50% 0%, rgb(37 99 235 / 0.1), transparent 38%)"
-          : "radial-gradient(circle at 50% 0%, rgb(37 99 235 / 0.13), transparent 38%)",
-      }}
     >
       <div className="flex flex-1 flex-col justify-center px-6 py-10 sm:px-8">
         <p className="mb-5 font-mono text-[0.68rem] leading-none font-medium tracking-[0.16em] text-[var(--method-preview-label)] uppercase">
@@ -353,7 +326,7 @@ function MethodPreview({
             key={item.id}
             aria-hidden="true"
             className={cn(
-              "h-px flex-1 bg-current transition-opacity duration-200 motion-reduce:transition-none",
+              "h-px flex-1 bg-current transition-opacity duration-nite-micro ease-nite-out motion-reduce:transition-none",
               index <= activeIndex ? "opacity-70" : "opacity-15",
             )}
           />
@@ -409,14 +382,14 @@ export function BuildsCardsGrid() {
 
   return (
     <div
-      className="h-[38.9375rem] overflow-hidden rounded-[1.5rem] border border-nite-border-subtle bg-[#050505] text-[#f5f5f5] md:h-[43.75rem]"
+      className="h-[38.9375rem] overflow-hidden rounded-3xl border border-[var(--method-panel-border)] bg-[var(--method-panel-background)] text-[var(--method-panel-text)] transition-colors duration-nite-micro ease-nite-out md:h-[43.75rem]"
       data-builds-grid=""
       data-component="nite-method-system"
       data-media-mode="resend-react-dom-panel"
     >
       <div
         data-method-window-controls=""
-        className="flex h-12 items-center justify-between border-b border-white/10 px-4"
+        className="flex h-12 items-center justify-between border-b border-[var(--method-panel-border)] px-4"
       >
         <div aria-hidden="true" className="flex items-center gap-2">
           <span className="size-2.5 rounded-full bg-[#ed6a5e]" />
@@ -447,7 +420,7 @@ export function BuildsCardsGrid() {
       </div>
 
       <div className="flex h-[calc(100%-3rem)] min-h-0 flex-col md:flex-row">
-        <aside className="h-10 shrink-0 border-b border-white/10 md:h-auto md:w-[12.5rem] md:border-r md:border-b-0">
+        <aside className="h-10 shrink-0 border-b border-[var(--method-panel-border)] md:h-auto md:w-[12.5rem] md:border-r md:border-b-0">
           <div
             role="tablist"
             aria-label="Etapas do método aplicado"
@@ -470,10 +443,10 @@ export function BuildsCardsGrid() {
                   aria-selected={isActive}
                   tabIndex={isActive ? 0 : -1}
                   className={cn(
-                    "flex h-9 shrink-0 items-center gap-2 rounded-lg px-2.5 font-sans text-sm transition-colors duration-200 motion-reduce:transition-none md:w-full md:text-left",
+                    "flex h-9 shrink-0 items-center gap-2 rounded-lg px-2.5 font-sans text-sm transition-colors duration-nite-micro ease-nite-out motion-reduce:transition-none md:w-full md:text-left",
                     isActive
-                      ? "bg-white/[0.07] text-[#6ea8ff]"
-                      : "text-white/60 hover:bg-white/[0.04] hover:text-white/85",
+                      ? "bg-[var(--method-panel-active-surface)] text-[var(--method-panel-active-text)]"
+                      : "text-[var(--method-panel-text-muted)] hover:bg-[var(--method-panel-hover-surface)] hover:text-[var(--method-panel-text)]",
                   )}
                   onClick={() => activateStage(index)}
                   onFocus={() => activateStage(index)}
@@ -491,14 +464,14 @@ export function BuildsCardsGrid() {
           <div
             data-method-code-pane=""
             aria-label={`Código da etapa ${activeStage.label}`}
-            className="hidden min-h-0 min-w-0 w-1/2 overflow-scroll border-r border-white/10 bg-[#050505] [scrollbar-color:rgb(255_255_255/0.42)_transparent] [scrollbar-width:thin] [&::-webkit-scrollbar]:size-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-white/40 [&::-webkit-scrollbar-track]:bg-transparent md:block"
+            className="hidden min-h-0 min-w-0 w-1/2 overflow-scroll border-r border-[var(--method-panel-border)] bg-[var(--method-panel-background)] [scrollbar-color:var(--method-panel-scrollbar)_transparent] [scrollbar-width:thin] [&::-webkit-scrollbar]:size-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[var(--method-panel-scrollbar-thumb)] [&::-webkit-scrollbar-track]:bg-transparent md:block"
           >
             <MethodCode stage={activeStage} />
           </div>
 
           <div
             data-method-preview-pane=""
-            className="min-w-0 flex-1 bg-[#09090a] p-2.5"
+            className="min-w-0 flex-1 bg-[var(--method-panel-surface)] p-2.5"
           >
             <MethodPreview
               activeIndex={safeActiveIndex}

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Sora } from "next/font/google";
+import { Geist, Geist_Mono, Inter, Sora } from "next/font/google";
 import Script from "next/script";
 
 import "@/app/globals.css";
@@ -15,6 +15,12 @@ const headingFont = Sora({
 
 const bodyFont = Geist({
   variable: "--font-geist",
+  display: "swap",
+  subsets: ["latin"],
+});
+
+const resendFont = Inter({
+  variable: "--font-inter",
   display: "swap",
   subsets: ["latin"],
 });
@@ -48,7 +54,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html
       lang={siteConfig.locale}
-      className={`${headingFont.variable} ${bodyFont.variable} ${monoFont.variable}`}
+      className={`${headingFont.variable} ${bodyFont.variable} ${resendFont.variable} ${monoFont.variable}`}
       data-scroll-behavior="smooth"
       suppressHydrationWarning
     >

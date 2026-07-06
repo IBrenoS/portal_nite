@@ -11,13 +11,12 @@ export function FinalCtaSection() {
     <section
       id="contato"
       className="relative overflow-hidden bg-nite-background pb-24 pt-24 text-nite-text-primary sm:pb-0 sm:pt-28 lg:pt-36"
-      data-nite-scene="inverse"
       data-surface="clean"
       data-testid="final-cta-section"
     >
       <Container size="xl" className="relative text-center">
         <h2 className="mx-auto max-w-5xl pb-3 font-heading text-5xl font-semibold leading-none sm:text-6xl lg:text-7xl">
-          <span className="nite-gradient-text">
+          <span className="text-nite-text-primary">
             NITE em evolução.
             <br />
             Disponível para construir.
@@ -46,9 +45,13 @@ export function FinalCtaSection() {
             <ChevronRightIcon className="size-3.5 text-nite-text-muted transition-colors group-hover:text-nite-text-primary/75" />
           </Link>
         </div>
-
-        <NiteFinalWordmark className="mt-20 sm:mt-24 lg:mt-28" />
       </Container>
+
+      <div className="mt-20 sm:mt-24 lg:mt-28" data-wordmark-stage="">
+        <Container size="xl">
+          <NiteFinalWordmark />
+        </Container>
+      </div>
     </section>
   );
 }

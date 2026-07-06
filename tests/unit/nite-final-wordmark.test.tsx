@@ -6,11 +6,13 @@ import { NiteFinalWordmark } from "@/components/sections/nite-final-wordmark";
 afterEach(cleanup);
 
 describe("NiteFinalWordmark", () => {
-  it("mantem o contêiner transparente para sobrepor o fundo da seção", () => {
+  it("expõe o componente sem assumir o tema visual do palco", () => {
     const { container } = render(<NiteFinalWordmark />);
     const wordmark = container.querySelector(".nite-final-wordmark");
 
     expect(wordmark).toBeInTheDocument();
+    expect(wordmark).toHaveAttribute("data-component", "nite-final-wordmark");
+    expect(wordmark).not.toHaveAttribute("data-nite-scene");
     expect(wordmark).not.toHaveClass("bg-nite-background");
   });
 
@@ -36,16 +38,22 @@ describe("NiteFinalWordmark", () => {
 
     fireEvent.pointerMove(wordmark!, { clientX: 210, clientY: 95 });
 
-    expect(wordmark?.style.getPropertyValue("--nite-spotlight-x")).toBe(
+    expect(wordmark?.style.getPropertyValue("--wordmark-spotlight-x")).toBe(
       "200px",
     );
-    expect(wordmark?.style.getPropertyValue("--nite-spotlight-y")).toBe("75px");
+    expect(wordmark?.style.getPropertyValue("--wordmark-spotlight-y")).toBe(
+      "75px",
+    );
     expect(wordmark).toHaveAttribute("data-spotlight-active", "true");
 
     fireEvent.pointerLeave(wordmark!);
 
-    expect(wordmark?.style.getPropertyValue("--nite-spotlight-x")).toBe("50%");
-    expect(wordmark?.style.getPropertyValue("--nite-spotlight-y")).toBe("42%");
+    expect(wordmark?.style.getPropertyValue("--wordmark-spotlight-x")).toBe(
+      "50%",
+    );
+    expect(wordmark?.style.getPropertyValue("--wordmark-spotlight-y")).toBe(
+      "42%",
+    );
     expect(wordmark).toHaveAttribute("data-spotlight-active", "false");
   });
 });

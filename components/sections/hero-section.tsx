@@ -62,14 +62,6 @@ export function HeroSection() {
           className="relative isolate order-1 flex min-h-[10rem] items-center justify-center overflow-visible sm:order-none sm:min-h-[24rem] lg:min-h-[35rem]"
           data-hero-visual=""
         >
-          <div
-            aria-hidden="true"
-            className="nite-hero-glow pointer-events-none absolute inset-x-[2%] top-[12%] z-0 h-[62%] blur-3xl"
-          />
-          <div
-            aria-hidden="true"
-            className="nite-surface-glow pointer-events-none absolute inset-x-[12%] top-[24%] z-0 h-[44%] opacity-70 blur-xl"
-          />
           <AnimatedNiteLogo className="relative z-10 w-full max-w-[8rem] min-[430px]:max-w-[9.5rem] sm:max-w-[20rem] lg:max-w-[20rem] xl:max-w-[21.5rem]" />
         </div>
       </Container>

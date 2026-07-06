@@ -114,10 +114,17 @@ const personEntrySchema = z.object({
 export const personSchema = z.object({
   slug: slugSchema,
   name: z.string().min(2).describe("Nome publico autorizado da pessoa."),
+  listName: z
+    .string()
+    .min(2)
+    .max(32)
+    .optional()
+    .describe("Nome curto exibido na grade publica de pessoas."),
   role: z.string().min(3).describe("Funcao, papel ou frente principal."),
   location: z
     .string()
     .min(3)
+    .optional()
     .describe("Localidade publica autorizada da pessoa."),
   summary: z
     .string()

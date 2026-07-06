@@ -123,7 +123,10 @@ export function PersonProfileShell({ person }: PersonProfileShellProps) {
   }, [activeFilter, person.entries]);
 
   return (
-    <div className="mb-10 grid w-full gap-12 lg:min-h-[calc(100svh+160rem)] lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-24">
+    <div
+      className="mb-10 grid w-full gap-12 font-resend lg:min-h-[calc(100svh+160rem)] lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-24"
+      data-person-profile-shell=""
+    >
       <aside className="group/person relative flex h-fit w-full flex-col lg:sticky lg:top-[4.5rem]">
         <Link
           href={"/pessoas" as Route}
@@ -140,7 +143,7 @@ export function PersonProfileShell({ person }: PersonProfileShellProps) {
         />
 
         <div className="mt-4 grid gap-2">
-          <h1 className="font-heading text-[2.25rem] font-normal leading-[1.3] tracking-normal text-foreground">
+          <h1 className="font-resend text-[2.25rem] font-normal leading-[1.3] tracking-normal text-foreground">
             {person.name}
           </h1>
           <p className="text-sm font-semibold leading-5 text-foreground">
@@ -152,11 +155,13 @@ export function PersonProfileShell({ person }: PersonProfileShellProps) {
           className="mt-4 flex w-full flex-col gap-2 text-[0.8125rem] leading-[1.160714rem] text-muted-foreground"
           data-person-profile-meta=""
         >
-          <div className="relative flex w-full items-center justify-start gap-2">
-            <MapPinIcon aria-hidden="true" className="size-4 shrink-0" />
-            <dt className="sr-only">Localização</dt>
-            <dd>{person.location}</dd>
-          </div>
+          {person.location ? (
+            <div className="relative flex w-full items-center justify-start gap-2">
+              <MapPinIcon aria-hidden="true" className="size-4 shrink-0" />
+              <dt className="sr-only">Localização</dt>
+              <dd>{person.location}</dd>
+            </div>
+          ) : null}
           {person.links.map((link) => {
             const { displayLabel, Icon } = buildSocialProfile(
               link,
