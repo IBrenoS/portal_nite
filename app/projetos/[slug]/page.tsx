@@ -1,6 +1,7 @@
 import type { Metadata, Route } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import {
   ArrowLeftIcon,
   CalendarClockIcon,
@@ -91,7 +92,92 @@ const projectDateFormatter = new Intl.DateTimeFormat("pt-BR", {
   year: "numeric",
 });
 
-const detailPanelClassName = cardVariants();
+type ProjectDetailPanelProps = ComponentPropsWithoutRef<"article"> & {
+  as?: "article" | "aside" | "li";
+};
+
+type ProjectDetailMediaPanelProps = ComponentPropsWithoutRef<"div"> & {
+  as?: "div" | "figure";
+};
+
+function ProjectDetailSection({
+  className,
+  ...props
+}: ComponentPropsWithoutRef<"section">) {
+  return <section className={cn("grid gap-5", className)} {...props} />;
+}
+
+function ProjectDetailSectionHeader({
+  description,
+  eyebrow,
+  title,
+}: {
+  description?: ReactNode;
+  eyebrow?: string;
+  title: string;
+}) {
+  return (
+    <div className="grid gap-3">
+      {eyebrow ? (
+        <p className="font-mono text-xs uppercase tracking-[0.16em] text-nite-brand-accent">
+          {eyebrow}
+        </p>
+      ) : null}
+      <h2 className="font-heading text-2xl font-semibold text-foreground sm:text-3xl">
+        {title}
+      </h2>
+      {description ? (
+        <p className="max-w-3xl text-base leading-8 text-muted-foreground">
+          {description}
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
+function ProjectDetailPanel({
+  as: Component = "article",
+  className,
+  ...props
+}: ProjectDetailPanelProps) {
+  return (
+    <Component
+      className={cn(cardVariants(), "rounded-lg p-5", className)}
+      {...props}
+    />
+  );
+}
+
+function ProjectDetailTextLink({
+  className,
+  ...props
+}: ComponentPropsWithoutRef<"a">) {
+  return (
+    <a
+      className={cn(
+        "inline-flex min-h-10 items-center gap-2 rounded-lg text-sm font-semibold text-nite-brand-accent transition-colors duration-nite-micro ease-nite-out hover:text-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+function ProjectDetailMediaPanel({
+  as: Component = "div",
+  className,
+  ...props
+}: ProjectDetailMediaPanelProps) {
+  return (
+    <Component
+      className={cn(
+        "nite-panel overflow-hidden rounded-lg border border-border",
+        className,
+      )}
+      {...props}
+    />
+  );
+}
 
 function getProjectContentStateLabel(contentState: Project["contentState"]) {
   return projectContentStateLabels[contentState];
@@ -326,7 +412,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                     href={externalAction.href}
                     className={cn(
                       buttonVariants({ variant: "primary", size: "lg" }),
-                      "w-fit rounded-md",
+                      "w-fit",
                     )}
                     target="_blank"
                     rel="noreferrer"
@@ -339,7 +425,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                   href="/#projetos"
                   className={cn(
                     buttonVariants({ variant: "outline", size: "lg" }),
-                    "w-fit rounded-md",
+                    "w-fit",
                   )}
                 >
                   <ArrowLeftIcon data-icon="inline-start" />
@@ -348,7 +434,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               </div>
             </div>
 
-            <div className="nite-panel overflow-hidden rounded-lg border border-border">
+            <ProjectDetailMediaPanel className="!shadow-none">
               {projectVisual ? (
                 <div
                   className="relative aspect-[16/10] bg-muted"
@@ -362,7 +448,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                     sizes="(max-width: 1024px) 100vw, 760px"
                     className="object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background/72 via-background/10 to-transparent" />
                 </div>
               ) : (
                 <EmptyState
@@ -371,7 +456,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                   description="Esta frente está em estruturação editorial. Quando houver imagem, registro ou evidência pública validada, o material será exibido aqui."
                 />
               )}
-            </div>
+            </ProjectDetailMediaPanel>
           </Container>
         </section>
 
@@ -380,11 +465,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             size="xl"
             className="grid gap-8 lg:grid-cols-[0.34fr_0.66fr]"
           >
-            <aside
-              className={cn(
-                detailPanelClassName,
-                "grid h-fit gap-5 rounded-lg p-5 lg:sticky lg:top-28",
-              )}
+            <ProjectDetailPanel
+              as="aside"
+              className="grid h-fit gap-5 lg:sticky lg:top-28"
               aria-label="Painel de acompanhamento do projeto"
             >
               <div className="grid gap-2">
@@ -447,117 +530,85 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                   </dd>
                 </div>
               </dl>
-            </aside>
+            </ProjectDetailPanel>
 
             <div className="flex flex-col gap-12">
-              <section className="grid gap-5">
-                <div className="grid gap-3">
-                  <p className="font-mono text-xs uppercase tracking-[0.16em] text-nite-brand-accent">
-                    Frente em acompanhamento
-                  </p>
-                  <h2 className="font-heading text-2xl font-semibold text-foreground sm:text-3xl">
-                    O que está sendo construído
-                  </h2>
-                  <p className="max-w-3xl text-base leading-8 text-muted-foreground">
-                    {project.description}
-                  </p>
-                </div>
+              <ProjectDetailSection>
+                <ProjectDetailSectionHeader
+                  eyebrow="Frente em acompanhamento"
+                  title="O que está sendo construído"
+                  description={project.description}
+                />
 
                 {project.highlights.length > 0 ? (
                   <div className="grid gap-3 sm:grid-cols-3">
                     {project.highlights.map((highlight) => (
-                      <article
-                        key={highlight}
-                        className={cn(detailPanelClassName, "rounded-lg p-4")}
-                      >
+                      <ProjectDetailPanel key={highlight} className="p-4">
                         <p className="text-sm leading-6 text-muted-foreground">
                           {highlight}
                         </p>
-                      </article>
+                      </ProjectDetailPanel>
                     ))}
                   </div>
                 ) : null}
-              </section>
+              </ProjectDetailSection>
 
-              <section className="grid gap-5">
-                <h2 className="font-heading text-2xl font-semibold text-foreground sm:text-3xl">
-                  Sobre esta frente
-                </h2>
-                <p className="max-w-3xl text-base leading-8 text-muted-foreground">
-                  O contexto principal fica agrupado para explicar por que a
-                  frente existe e o que ela tenta validar agora.
-                </p>
+              <ProjectDetailSection>
+                <ProjectDetailSectionHeader
+                  title="Sobre esta frente"
+                  description="O contexto principal fica agrupado para explicar por que a frente existe e o que ela tenta validar agora."
+                />
                 <div className="grid gap-4 md:grid-cols-3">
-                  <article
-                    className={cn(detailPanelClassName, "rounded-lg p-5")}
-                  >
+                  <ProjectDetailPanel>
                     <h3 className="font-heading text-lg font-semibold text-foreground">
                       Desafio
                     </h3>
                     <p className="mt-3 text-sm leading-6 text-muted-foreground">
                       {project.problem}
                     </p>
-                  </article>
-                  <article
-                    className={cn(detailPanelClassName, "rounded-lg p-5")}
-                  >
+                  </ProjectDetailPanel>
+                  <ProjectDetailPanel>
                     <h3 className="font-heading text-lg font-semibold text-foreground">
                       Contexto
                     </h3>
                     <p className="mt-3 text-sm leading-6 text-muted-foreground">
                       {project.context}
                     </p>
-                  </article>
-                  <article
-                    className={cn(detailPanelClassName, "rounded-lg p-5")}
-                  >
+                  </ProjectDetailPanel>
+                  <ProjectDetailPanel>
                     <h3 className="font-heading text-lg font-semibold text-foreground">
                       Objetivo atual
                     </h3>
                     <p className="mt-3 text-sm leading-6 text-muted-foreground">
                       {objectiveText}
                     </p>
-                  </article>
+                  </ProjectDetailPanel>
                 </div>
-              </section>
+              </ProjectDetailSection>
 
-              <section className="grid gap-5">
-                <div className="grid gap-3">
-                  <h2 className="font-heading text-2xl font-semibold text-foreground sm:text-3xl">
-                    O que está sendo feito agora
-                  </h2>
-                  <p className="max-w-3xl text-base leading-8 text-muted-foreground">
-                    A página acompanha a próxima ação pública da frente sem
-                    sugerir entregáveis que ainda não foram validados.
-                  </p>
-                </div>
+              <ProjectDetailSection>
+                <ProjectDetailSectionHeader
+                  title="O que está sendo feito agora"
+                  description="A página acompanha a próxima ação pública da frente sem sugerir entregáveis que ainda não foram validados."
+                />
                 <div className="grid gap-4 md:grid-cols-2">
-                  <article
-                    className={cn(detailPanelClassName, "rounded-lg p-5")}
-                  >
+                  <ProjectDetailPanel>
                     <h3 className="font-heading text-lg font-semibold text-foreground">
                       Objetivo de trabalho
                     </h3>
                     <p className="mt-3 text-sm leading-6 text-muted-foreground">
                       {objectiveText}
                     </p>
-                  </article>
-                  <article
-                    className={cn(detailPanelClassName, "rounded-lg p-5")}
-                  >
+                  </ProjectDetailPanel>
+                  <ProjectDetailPanel>
                     <h3 className="font-heading text-lg font-semibold text-foreground">
                       Próxima movimentação
                     </h3>
                     <p className="mt-3 text-sm leading-6 text-muted-foreground">
                       {project.nextStep}
                     </p>
-                  </article>
-                  <article
-                    className={cn(
-                      detailPanelClassName,
-                      "rounded-lg p-5 md:col-span-2",
-                    )}
-                  >
+                  </ProjectDetailPanel>
+                  <ProjectDetailPanel className="md:col-span-2">
                     <h3 className="font-heading text-lg font-semibold text-foreground">
                       Entregável em desenvolvimento
                     </h3>
@@ -566,35 +617,27 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                         ? primaryDeliverable.label
                         : "Nenhum entregável público foi validado para esta frente ainda."}
                     </p>
-                  </article>
+                  </ProjectDetailPanel>
                 </div>
-              </section>
+              </ProjectDetailSection>
 
-              <section className="grid gap-5">
-                <div className="grid gap-3">
-                  <h2 className="font-heading text-2xl font-semibold text-foreground sm:text-3xl">
-                    Registros e evidências
-                  </h2>
-                  <p className="max-w-3xl text-base leading-8 text-muted-foreground">
-                    Esta área concentra o que já pode ser conferido
-                    publicamente: fotos, entregáveis, métricas, registros e
-                    materiais externos.
-                  </p>
-                </div>
+              <ProjectDetailSection>
+                <ProjectDetailSectionHeader
+                  title="Registros e evidências"
+                  description="Esta área concentra o que já pode ser conferido publicamente: fotos, entregáveis, métricas, registros e materiais externos."
+                />
 
                 {hasEvidence ? (
                   <div className="grid gap-6">
                     {hasResults ? (
-                      <article
-                        className={cn(detailPanelClassName, "rounded-lg p-5")}
-                      >
+                      <ProjectDetailPanel>
                         <h3 className="font-heading text-lg font-semibold text-foreground">
                           Resultado publicado
                         </h3>
                         <p className="mt-3 text-base leading-8 text-muted-foreground">
                           {project.results}
                         </p>
-                      </article>
+                      </ProjectDetailPanel>
                     ) : null}
 
                     {hasGallery ? (
@@ -604,9 +647,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                         </h3>
                         <div className="grid gap-4 sm:grid-cols-2">
                           {project.gallery.map((image) => (
-                            <figure
+                            <ProjectDetailMediaPanel
+                              as="figure"
                               key={image.src}
-                              className="nite-panel overflow-hidden rounded-lg border border-border"
                             >
                               <div className="relative aspect-[16/10]">
                                 <Image
@@ -617,7 +660,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                                   className="object-cover"
                                 />
                               </div>
-                            </figure>
+                            </ProjectDetailMediaPanel>
                           ))}
                         </div>
                       </section>
@@ -630,12 +673,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                         </h3>
                         <div className="grid gap-3">
                           {project.deliverables.map((deliverable) => (
-                            <article
+                            <ProjectDetailPanel
                               key={`${deliverable.type}-${deliverable.label}`}
-                              className={cn(
-                                detailPanelClassName,
-                                "rounded-lg p-5",
-                              )}
                             >
                               <div className="flex flex-wrap items-start justify-between gap-3">
                                 <div>
@@ -651,9 +690,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                                   </p>
                                 </div>
                                 {deliverable.href ? (
-                                  <a
+                                  <ProjectDetailTextLink
                                     href={deliverable.href}
-                                    className="inline-flex min-h-10 items-center gap-2 rounded-md text-sm font-semibold text-nite-brand-accent transition-colors hover:text-foreground"
                                     target="_blank"
                                     rel="noreferrer"
                                   >
@@ -662,10 +700,10 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                                       className="size-4"
                                       aria-hidden="true"
                                     />
-                                  </a>
+                                  </ProjectDetailTextLink>
                                 ) : null}
                               </div>
-                            </article>
+                            </ProjectDetailPanel>
                           ))}
                         </div>
                       </section>
@@ -678,12 +716,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                         </h3>
                         <div className="grid gap-3 sm:grid-cols-3">
                           {project.metrics.map((metric) => (
-                            <article
+                            <ProjectDetailPanel
                               key={`${metric.label}-${metric.value}`}
-                              className={cn(
-                                detailPanelClassName,
-                                "rounded-lg p-5",
-                              )}
                             >
                               <p className="font-heading text-2xl font-semibold text-foreground">
                                 {metric.value}
@@ -692,11 +726,11 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                                 {metric.label}
                               </p>
                               {metric.source ? (
-                                <p className="mt-3 text-xs text-nite-text-secondary">
+                                <p className="mt-3 text-xs text-muted-foreground">
                                   Fonte: {metric.source}
                                 </p>
                               ) : null}
-                            </article>
+                            </ProjectDetailPanel>
                           ))}
                         </div>
                       </section>
@@ -709,14 +743,11 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                         </h3>
                         <ol className="grid gap-3">
                           {project.changelog.map((entry) => (
-                            <li
+                            <ProjectDetailPanel
+                              as="li"
                               key={`${entry.date}-${entry.title}`}
-                              className={cn(
-                                detailPanelClassName,
-                                "rounded-lg p-5",
-                              )}
                             >
-                              <div className="flex flex-wrap items-center gap-2 text-sm text-nite-text-secondary">
+                              <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
                                 <CalendarClockIcon
                                   className="size-4"
                                   aria-hidden="true"
@@ -729,7 +760,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                               <p className="mt-2 text-sm leading-6 text-muted-foreground">
                                 {entry.description}
                               </p>
-                            </li>
+                            </ProjectDetailPanel>
                           ))}
                         </ol>
                       </section>
@@ -742,10 +773,10 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                         </h3>
                         <div className="flex flex-wrap gap-3">
                           {project.links.map((link) => (
-                            <a
+                            <ProjectDetailTextLink
                               key={link.href}
                               href={link.href}
-                              className="inline-flex min-h-11 items-center gap-2 rounded-md border border-border px-3 py-2 text-sm font-semibold text-nite-brand-accent transition-colors hover:text-foreground"
+                              className="min-h-11 border border-border px-3 py-2"
                               target="_blank"
                               rel="noreferrer"
                             >
@@ -754,7 +785,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                                 className="size-4"
                                 aria-hidden="true"
                               />
-                            </a>
+                            </ProjectDetailTextLink>
                           ))}
                         </div>
                       </section>
@@ -766,27 +797,20 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                     description="Fotos, entregáveis, métricas, registros e links só aparecem quando o conteúdo estiver validado para publicação."
                   />
                 )}
-              </section>
+              </ProjectDetailSection>
 
-              <section className="grid gap-5">
-                <div className="grid gap-3">
-                  <h2 className="font-heading text-2xl font-semibold text-foreground sm:text-3xl">
-                    Quem está construindo
-                  </h2>
-                  <p className="max-w-3xl text-base leading-8 text-muted-foreground">
-                    Participantes e colaborações aparecem apenas quando houver
-                    autorização e contexto público suficiente.
-                  </p>
-                </div>
+              <ProjectDetailSection>
+                <ProjectDetailSectionHeader
+                  title="Quem está construindo"
+                  description="Participantes e colaborações aparecem apenas quando houver autorização e contexto público suficiente."
+                />
                 {publicTeam.length > 0 ? (
                   <ul className="grid gap-3">
                     {publicTeam.map((member) => (
-                      <li
+                      <ProjectDetailPanel
+                        as="li"
                         key={`${member.name}-${member.role}`}
-                        className={cn(
-                          detailPanelClassName,
-                          "flex-row items-start gap-3 rounded-lg p-4",
-                        )}
+                        className="flex-row items-start gap-3 p-4"
                       >
                         <UsersIcon
                           className="mt-0.5 size-4 text-nite-brand-accent"
@@ -800,7 +824,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                             {member.role}
                           </p>
                         </div>
-                      </li>
+                      </ProjectDetailPanel>
                     ))}
                   </ul>
                 ) : (
@@ -809,7 +833,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                     description="Nomes e grupos só serão exibidos quando houver autorização e contexto público suficiente."
                   />
                 )}
-              </section>
+              </ProjectDetailSection>
             </div>
           </Container>
         </section>

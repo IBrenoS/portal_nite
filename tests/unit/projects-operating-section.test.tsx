@@ -53,6 +53,14 @@ describe("ProjectsOperatingSection", () => {
     expect(rows[0]).toHaveAttribute("data-project-layout", "visual-first");
     expect(rows[1]).toHaveAttribute("data-project-layout", "copy-first");
     expect(rows[2]).toHaveAttribute("data-project-layout", "visual-first");
+    for (const row of rows) {
+      expect(row).toHaveAttribute(
+        "data-project-mobile-pattern",
+        "visual-first",
+      );
+      expect(row.firstElementChild).toHaveAttribute("data-project-visual");
+      expect(row.lastElementChild).toHaveAttribute("data-project-copy");
+    }
     expect(
       section.querySelector("[data-project-visual='code-workbench']"),
     ).toBeInTheDocument();
@@ -68,9 +76,9 @@ describe("ProjectsOperatingSection", () => {
         "rounded-lg",
         "border-[var(--projects-visual-border)]",
         "bg-[var(--projects-visual-background)]",
-        "shadow-nite-lift",
-        "after:[background-image:var(--projects-visual-veil)]",
+        "shadow-none",
       );
+      expect(visual).not.toHaveClass("shadow-nite-lift");
       expect(visual.className).not.toContain("before:bg-[linear-gradient");
       expect(visual.className).not.toContain("rounded-[0.55rem]");
       expect(visual.className).not.toContain(
@@ -80,9 +88,15 @@ describe("ProjectsOperatingSection", () => {
       expect(
         visual.querySelector("[data-project-cover-image]"),
       ).toBeInTheDocument();
-      expect(visual.querySelector("[data-project-image-overlay]")).toHaveClass(
-        "[background-image:var(--projects-image-overlay)]",
+      expect(
+        visual.querySelector("[data-project-cover-image]"),
+      ).not.toHaveClass("opacity-80", "saturate-90");
+      expect(visual).not.toHaveClass(
+        "after:[background-image:var(--projects-visual-veil)]",
       );
+      expect(
+        visual.querySelector("[data-project-image-overlay]"),
+      ).not.toBeInTheDocument();
       expect(visual.querySelector("svg")).toBeNull();
     }
     expect(section.querySelector("[data-project-code-grid]")).toBeNull();

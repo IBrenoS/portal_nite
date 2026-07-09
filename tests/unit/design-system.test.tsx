@@ -60,6 +60,61 @@ describe("design system base", () => {
     );
   });
 
+  it("mantem tokens locais da hero da pagina de projetos sem promover o verde ao tema global", () => {
+    const globalStyles = readFileSync(
+      join(process.cwd(), "app", "globals.css"),
+      "utf8",
+    );
+
+    expect(globalStyles).toContain(".projectsPage {");
+    expect(globalStyles).toContain("--projects-hero-accent: #2DCFBF;");
+    expect(globalStyles).toContain(
+      "--projects-hero-canvas-background: var(--nite-background);",
+    );
+    expect(globalStyles).toContain(
+      "--projects-hero-grid-color: rgba(170, 170, 170, 0.1);",
+    );
+    expect(globalStyles).toContain(
+      "--projects-hero-trail-color: rgba(255, 255, 255, 0.5);",
+    );
+    expect(globalStyles).toContain(
+      "--projects-hero-node-color: rgba(255, 255, 255, 1);",
+    );
+    expect(globalStyles).toContain(
+      "--projects-hero-green-field-opacity: 1;",
+    );
+    expect(globalStyles).toContain(
+      "--projects-hero-green-field-blend: color;",
+    );
+    expect(globalStyles).toContain(':root[data-theme="light"] .projectsPage {');
+    expect(globalStyles).toContain(
+      "--projects-hero-grid-color: rgba(15, 118, 110, 0.16);",
+    );
+    expect(globalStyles).toContain(
+      "--projects-hero-trail-color: rgba(15, 118, 110, 0.62);",
+    );
+    expect(globalStyles).toContain(
+      "--projects-hero-node-color: rgba(15, 118, 110, 0.95);",
+    );
+    expect(globalStyles).toContain(
+      "--projects-hero-green-field-opacity: 0.24;",
+    );
+    expect(globalStyles).toContain(
+      "--projects-hero-green-field-blend: multiply;",
+    );
+    expect(globalStyles).toContain(".projectsHeroGreenField {");
+    expect(globalStyles).toContain("background: var(--projects-hero-accent);");
+    expect(globalStyles).toContain(
+      "mix-blend-mode: var(--projects-hero-green-field-blend);",
+    );
+    expect(globalStyles).toContain(
+      "opacity: var(--projects-hero-green-field-opacity);",
+    );
+    expect(globalStyles).not.toContain(
+      "--color-nite-brand-accent: #2DCFBF;",
+    );
+  });
+
   it("mantem a timeline como subcena escura local sobre superficie global", () => {
     const globalStyles = readFileSync(
       join(process.cwd(), "app", "globals.css"),
@@ -67,6 +122,10 @@ describe("design system base", () => {
     );
 
     expect(globalStyles).toContain("--timeline-frame-background: #141413;");
+    expect(globalStyles).toContain("min-height: auto;");
+    expect(globalStyles).toContain(
+      "padding-block: clamp(2.5rem, 6vw, 4rem) 0;",
+    );
     expect(globalStyles).toContain("--timeline-frame-text-primary: #faf9f5;");
     expect(globalStyles).toContain(
       "--timeline-frame-text-secondary: rgb(250 249 245 / 0.72);",
@@ -82,6 +141,9 @@ describe("design system base", () => {
     );
     expect(globalStyles).toContain(
       "background: var(--timeline-frame-background);",
+    );
+    expect(globalStyles).toContain(
+      "margin: clamp(2.5rem, 5vw, 4rem) auto 0;",
     );
     expect(globalStyles).toContain(
       "color: var(--timeline-frame-text-primary);",

@@ -475,15 +475,21 @@ describe("HomePage", { timeout: 15_000 }, () => {
         "rounded-lg",
         "border-[var(--projects-visual-border)]",
         "bg-[var(--projects-visual-background)]",
-        "shadow-nite-lift",
-        "after:[background-image:var(--projects-visual-veil)]",
+        "shadow-none",
       );
+      expect(visual).not.toHaveClass("shadow-nite-lift");
       expect(
         visual.querySelector("[data-project-cover-image]"),
       ).toBeInTheDocument();
-      expect(visual.querySelector("[data-project-image-overlay]")).toHaveClass(
-        "[background-image:var(--projects-image-overlay)]",
+      expect(
+        visual.querySelector("[data-project-cover-image]"),
+      ).not.toHaveClass("opacity-80", "saturate-90");
+      expect(visual).not.toHaveClass(
+        "after:[background-image:var(--projects-visual-veil)]",
       );
+      expect(
+        visual.querySelector("[data-project-image-overlay]"),
+      ).not.toBeInTheDocument();
     }
     expect(
       projects.queryByText(

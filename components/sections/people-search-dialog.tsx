@@ -84,7 +84,7 @@ export function PeopleSearchDialog({
       >
         <span className="inline-flex min-w-0 items-center gap-2">
           <SearchIcon aria-hidden="true" className="size-[18px] shrink-0" />
-          <span className="truncate">Search…</span>
+          <span className="truncate">Buscar…</span>
         </span>
         <span className="inline-flex shrink-0 items-center gap-1">
           <kbd className="inline-flex h-5 min-w-5 select-none items-center justify-center rounded-md border-0 bg-nite-surface-subtle px-1 font-sans text-xs font-normal text-muted-foreground">
@@ -101,7 +101,7 @@ export function PeopleSearchDialog({
           <div
             aria-hidden="true"
             className="fixed inset-0 z-[1000] bg-background/95 transition-opacity duration-200 ease-out"
-            data-search-overlay=""
+            data-people-search-overlay=""
             onClick={closeDialog}
           />
           <div
@@ -112,7 +112,7 @@ export function PeopleSearchDialog({
           >
             <div
               className="mt-1 flex h-[49px] items-center justify-between border-b border-border px-5 py-1"
-              data-search-input-wrapper=""
+              data-people-search-input-wrapper=""
             >
               <div className="flex flex-1 items-center gap-2">
                 <button
@@ -150,14 +150,14 @@ export function PeopleSearchDialog({
             <div
               id="people-search-list"
               className="max-h-[300px] overflow-y-auto overflow-x-hidden p-1.5 scroll-p-2.5"
-              data-search-list=""
+              data-people-search-list=""
               role="listbox"
               aria-label="Sugestões"
             >
               <div
                 aria-hidden="true"
                 className="flex min-h-7 select-none items-end px-3 pr-4 text-xs text-muted-foreground"
-                data-search-group-heading=""
+                data-people-search-group-heading=""
               >
                 Pessoas
               </div>

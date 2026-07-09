@@ -1,3 +1,6 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+
 import {
   cleanup,
   fireEvent,
@@ -44,6 +47,16 @@ describe("OpportunitiesHowToParticipatePage", () => {
       main.getByRole("heading", { level: 2, name: "Sinais de prontidão" }),
     ).toBeInTheDocument();
     expect(main.queryByText("Como ler os sinais")).not.toBeInTheDocument();
+    const readinessSection = document.querySelector(
+      "[data-component='readiness-section']",
+    );
+
+    expect(readinessSection).toBeInTheDocument();
+    expect(readinessSection).not.toHaveAttribute("data-nite-scene", "inverse");
+    expect(readinessSection).toHaveClass(
+      "bg-nite-background",
+      "text-nite-text-primary",
+    );
     expect(
       main.getByText(
         "Entrar no NITE não é escolher um rótulo. É encontrar sincronia entre interesse, repertório, ritmo e contexto de projeto.",
@@ -53,6 +66,7 @@ describe("OpportunitiesHowToParticipatePage", () => {
       "md:text-[1.125rem]",
       "md:leading-[1.5]",
       "font-normal",
+      "text-nite-text-secondary",
       "text-balance",
     );
     expect(
@@ -191,7 +205,7 @@ describe("OpportunitiesHowToParticipatePage", () => {
     expect(heroSymbol?.style.getPropertyValue("--pointer-x")).toBe("159px");
   });
 
-  it("mantem hero em tokens NITE e permite a paleta escura no caminho de sinais", () => {
+  it("mantem hero e caminho de sinais conectados aos tokens NITE", () => {
     render(<HowToParticipatePage />);
 
     const mainElement = screen.getByRole("main");
@@ -216,10 +230,80 @@ describe("OpportunitiesHowToParticipatePage", () => {
     expect(heroVisualContracts).not.toMatch(
       /bg-black|border-white|text-white|from-white|via-zinc|to-white|sky-\d|#[0-9a-f]{3,8}|rgba?\(/i,
     );
-    expect(signalPathVisualContracts).toContain("border-[#212629]");
-    expect(signalPathVisualContracts).toContain("bg-black");
-    expect(signalPathVisualContracts).toContain("from-white/5");
-    expect(signalPathVisualContracts).toContain("text-white");
+    expect(signalPathVisualContracts).not.toMatch(
+      /bg-black|border-white|text-white|from-white|via-zinc|to-white|sky-\d|border-\[#212629\]|text-\[#8C8C8C\]|text-\[#6B6B6B\]|#[0-9a-f]{3,8}|rgba?\(/i,
+    );
+    expect(signalPathVisualContracts).toContain(
+      "border-[var(--readiness-panel-border)]",
+    );
+    expect(signalPathVisualContracts).toContain(
+      "border-[var(--readiness-card-border)]",
+    );
+    expect(signalPathVisualContracts).toContain(
+      "border-[var(--readiness-field-border)]",
+    );
+    expect(signalPathVisualContracts).toContain(
+      "text-[var(--readiness-field-text)]",
+    );
+    expect(signalPathVisualContracts).toContain("text-nite-text-primary");
+    expect(signalPathVisualContracts).toContain("text-nite-text-secondary");
+  });
+
+  it("define tokens locais de prontidao sem contaminar o design system global", () => {
+    const pageSource = readFileSync(
+      join(
+        process.cwd(),
+        "app",
+        "oportunidades",
+        "como-participar",
+        "page.tsx",
+      ),
+      "utf8",
+    );
+    const signalPathSource = readFileSync(
+      join(
+        process.cwd(),
+        "app",
+        "oportunidades",
+        "como-participar",
+        "readiness-signal-path.tsx",
+      ),
+      "utf8",
+    );
+    const styles = readFileSync(
+      join(
+        process.cwd(),
+        "app",
+        "oportunidades",
+        "como-participar",
+        "readiness.module.css",
+      ),
+      "utf8",
+    );
+
+    expect(pageSource).toContain("styles.readinessSection");
+    expect(pageSource).toContain('data-component="readiness-section"');
+    expect(pageSource).not.toContain('data-nite-scene="inverse"');
+    expect(pageSource).not.toContain("text-[#8C8C8C]");
+    expect(signalPathSource).toContain("styles.pathLine");
+    expect(signalPathSource).toContain("styles.pathLineTerminal");
+    expect(signalPathSource).toContain("styles.panelHighlight");
+    expect(signalPathSource).toContain("styles.cardSurface");
+    expect(signalPathSource).toContain(
+      "border-[var(--readiness-panel-border)]",
+    );
+    expect(signalPathSource).toContain("text-[var(--readiness-code-text)]");
+    expect(signalPathSource).not.toMatch(
+      /border-\[#212629\]|bg-black|text-white|from-white\/5|border-white|bg-white|text-\[#8C8C8C\]|text-\[#6B6B6B\]|#22FF991C|#44FFA493/i,
+    );
+    expect(styles).toContain(".readinessSection {");
+    expect(styles).toContain("--readiness-marker-border:");
+    expect(styles).toContain("--readiness-panel-border:");
+    expect(styles).toContain("--readiness-card-surface:");
+    expect(styles).toContain("--readiness-field-bg:");
+    expect(styles).toContain("--readiness-log-bg:");
+    expect(styles).toContain("--readiness-accent-green-soft:");
+    expect(styles).toContain(':root[data-theme="light"] .readinessSection');
   });
 
   it("mantem a linguagem aprovada e evita termos rejeitados no conteudo visivel", () => {
@@ -407,7 +491,7 @@ describe("OpportunitiesHowToParticipatePage", () => {
         "rounded-tr-[3rem]",
         "border-x",
         "border-t",
-        "border-[#212629]",
+        "border-[var(--readiness-panel-border)]",
       );
     }
     expect(
@@ -424,7 +508,7 @@ describe("OpportunitiesHowToParticipatePage", () => {
         "justify-end",
         "gap-2",
         "border-b",
-        "border-[#212629]",
+        "border-[var(--readiness-panel-border)]",
         "p-5",
         "pl-8",
       );

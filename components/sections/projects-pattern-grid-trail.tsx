@@ -3,6 +3,7 @@
 import type { CSSProperties } from "react";
 import { useEffect, useMemo, useRef } from "react";
 
+import { THEME_CHANGE_EVENT } from "@/biblioteca/theme";
 import { cn } from "@/lib/utils";
 
 type ProjectsPatternGridTrailProps = {
@@ -57,6 +58,35 @@ function readCustomColor(
   return (
     getComputedStyle(element).getPropertyValue(propertyName).trim() || fallback
   );
+}
+
+function resolveCanvasConfig(
+  root: HTMLElement,
+  config: Required<Omit<ProjectsPatternGridTrailProps, "className">>,
+) {
+  return {
+    ...config,
+    backgroundColor: readCustomColor(
+      root,
+      config.backgroundColor,
+      "#09090A",
+    ),
+    circleColor: readCustomColor(
+      root,
+      config.circleColor,
+      "rgba(255, 255, 255, 1)",
+    ),
+    gridColor: readCustomColor(
+      root,
+      config.gridColor,
+      "rgba(170, 170, 170, 0.1)",
+    ),
+    trailColor: readCustomColor(
+      root,
+      config.trailColor,
+      "rgba(255, 255, 255, 0.5)",
+    ),
+  };
 }
 
 function randomGridTrail(
@@ -269,33 +299,7 @@ export function ProjectsPatternGridTrail({
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
-    const canvasBackground = readCustomColor(
-      root,
-      config.backgroundColor,
-      "#09090A",
-    );
-    const gridStroke = readCustomColor(
-      root,
-      config.gridColor,
-      "rgba(170, 170, 170, 0.1)",
-    );
-    const trailStroke = readCustomColor(
-      root,
-      config.trailColor,
-      "rgba(255, 255, 255, 0.5)",
-    );
-    const circleFill = readCustomColor(
-      root,
-      config.circleColor,
-      "rgba(255, 255, 255, 1)",
-    );
-    const resolvedConfig = {
-      ...config,
-      backgroundColor: canvasBackground,
-      circleColor: circleFill,
-      gridColor: gridStroke,
-      trailColor: trailStroke,
-    };
+    let resolvedConfig = resolveCanvasConfig(root, config);
 
     const resizeCanvas = () => {
       const rect = root.getBoundingClientRect();
@@ -303,7 +307,7 @@ export function ProjectsPatternGridTrail({
 
       canvas.width = rect.width * pixelRatio;
       canvas.height = rect.height * pixelRatio;
-      context.scale(pixelRatio, pixelRatio);
+      context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
       canvas.style.width = `${rect.width}px`;
       canvas.style.height = `${rect.height}px`;
       trails = Array.from({ length: resolvedConfig.trailCount }, () =>
@@ -384,6 +388,15 @@ export function ProjectsPatternGridTrail({
       }
     };
 
+    const refreshCanvasTheme = () => {
+      resolvedConfig = resolveCanvasConfig(root, config);
+      resizeCanvas();
+
+      if (prefersReducedMotion) {
+        renderFrame();
+      }
+    };
+
     resizeCanvas();
 
     const resizeObserver =
@@ -391,13 +404,30 @@ export function ProjectsPatternGridTrail({
         ? null
         : new ResizeObserver(() => {
             resizeCanvas();
+
+            if (prefersReducedMotion) {
+              renderFrame();
+            }
           });
 
     resizeObserver?.observe(root);
+    window.addEventListener(THEME_CHANGE_EVENT, refreshCanvasTheme);
+
+    const themeObserver =
+      typeof MutationObserver === "undefined"
+        ? null
+        : new MutationObserver(refreshCanvasTheme);
+
+    themeObserver?.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
     renderFrame();
 
     return () => {
       resizeObserver?.disconnect();
+      themeObserver?.disconnect();
+      window.removeEventListener(THEME_CHANGE_EVENT, refreshCanvasTheme);
       cancelAnimationFrame(animationFrame);
     };
   }, [config]);
@@ -406,7 +436,7 @@ export function ProjectsPatternGridTrail({
     WebkitMaskImage: defaultMaskImage,
     WebkitMaskPosition: "center",
     WebkitMaskSize: "100% 100%",
-    backgroundColor: "var(--nite-background)",
+    backgroundColor,
     maskImage: defaultMaskImage,
     maskPosition: "center",
     maskSize: "100% 100%",
@@ -422,10 +452,14 @@ export function ProjectsPatternGridTrail({
         className,
       )}
       data-background-source="nite-design-system"
+      data-background-color={backgroundColor}
+      data-circle-color={circleColor}
+      data-grid-color={gridColor}
       data-grid-size={gridSize}
       data-max-trail-length={maxTrailLength}
       data-min-trail-length={minTrailLength}
       data-testid="projects-pattern-grid-trail"
+      data-trail-color={trailColor}
       data-trail-count={trailCount}
     >
       <canvas

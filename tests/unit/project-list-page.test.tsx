@@ -1,3 +1,6 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+
 import { cleanup, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it } from "vitest";
@@ -101,9 +104,10 @@ describe("ProjectsPage", () => {
     const pattern = screen.getByTestId("projects-pattern-grid-trail");
     const canvas = screen.getByTestId("projects-pattern-grid-trail-canvas");
     const heroCopy = screen.getByTestId("projects-hero-copy");
-    const lightBloom = screen.getByTestId("projects-resend-light-bloom");
-    const greenLight = screen.getByTestId("projects-resend-green-light");
+    const lightBloom = screen.getByTestId("projects-hero-light-bloom");
+    const greenLight = screen.getByTestId("projects-hero-green-field");
     const searchPanelShell = screen.getByTestId("projects-search-panel-shell");
+    const projectsPage = pattern.closest("section");
     const heading = screen.getByRole("heading", {
       level: 1,
       name: "Ideias em movimento. Projetos em construção.",
@@ -112,9 +116,32 @@ describe("ProjectsPage", () => {
       "Veja como estudantes, professores e o NITE transformam desafios em experiências práticas.",
     );
 
+    expect(projectsPage).toHaveAttribute("data-projects-page", "");
+    expect(projectsPage).not.toHaveAttribute("data-nite-scene", "inverse");
+    expect(projectsPage).toHaveClass(
+      "projectsPage",
+      "bg-nite-background",
+      "text-nite-text-primary",
+    );
     expect(pattern).toHaveAttribute(
       "data-background-source",
       "nite-design-system",
+    );
+    expect(pattern).toHaveAttribute(
+      "data-background-color",
+      "var(--projects-hero-canvas-background)",
+    );
+    expect(pattern).toHaveAttribute(
+      "data-grid-color",
+      "var(--projects-hero-grid-color)",
+    );
+    expect(pattern).toHaveAttribute(
+      "data-trail-color",
+      "var(--projects-hero-trail-color)",
+    );
+    expect(pattern).toHaveAttribute(
+      "data-circle-color",
+      "var(--projects-hero-node-color)",
     );
     expect(pattern).toHaveAttribute("data-grid-size", "20");
     expect(pattern).toHaveAttribute("data-trail-count", "7");
@@ -173,10 +200,11 @@ describe("ProjectsPage", () => {
       "w-full",
       "md:w-[70vw]",
       "z-[2]",
-      "bg-[#2DCFBF]",
-      "mix-blend-color",
+      "projectsHeroGreenField",
       "pointer-events-none",
     );
+    expect(greenLight.className).not.toContain("bg-[#2DCFBF]");
+    expect(greenLight.className).not.toContain("mix-blend-color");
     expect(greenLight).toHaveStyle({
       maskImage:
         "radial-gradient(circle, rgba(0, 0, 0, 1) 20%, rgba(0, 0, 0, 0) 90%)",
@@ -191,6 +219,8 @@ describe("ProjectsPage", () => {
     expect(
       document.querySelector("[src*='/static/product-pages/light.png']"),
     ).toBeNull();
+    expect(screen.queryByTestId("projects-resend-light-bloom")).toBeNull();
+    expect(screen.queryByTestId("projects-resend-green-light")).toBeNull();
     expect(
       document.querySelector("[src*='projects-hero-light.png']"),
     ).toBeInTheDocument();
@@ -384,13 +414,23 @@ describe("ProjectsPage", () => {
 
     const card = screen.getByRole("link", { name: /Projeto real na lista/i });
     const cardContent = within(card);
+    const category = cardContent.getByText("Programação").closest("span");
+    const status = cardContent
+      .getByText("Em andamento")
+      .closest("[data-slot='status-badge']");
 
     expect(card).toHaveAttribute("href", "/projetos/projeto-real-lista");
     expect(card).toHaveAttribute("data-component", "project-explorer-card");
     expect(card).toHaveAttribute("data-card-family", "project-discovery");
     expect(card).toHaveAttribute("data-card-variant", "catalog");
+    expect(card.className).toContain("hover:shadow-nite-lift");
+    expect(card.className).toContain("duration-nite-micro");
+    expect(card.className).toContain("ease-nite-out");
+    expect(card.className).not.toContain("hover:shadow-[0_18px_54px");
     expect(screen.getByAltText(realProjectFixture.alt)).toBeInTheDocument();
-    expect(cardContent.getByText("Em andamento")).toBeInTheDocument();
+    expect(category).toHaveClass("bg-nite-surface-subtle");
+    expect(status).toHaveClass("bg-muted/40", "text-muted-foreground");
+    expect(status?.className).not.toContain("bg-nite-background/35");
     expect(cardContent.getByText("Next.js")).toBeInTheDocument();
     expect(cardContent.getByText("TypeScript")).toBeInTheDocument();
     expect(cardContent.getByText("API")).toBeInTheDocument();
@@ -402,5 +442,26 @@ describe("ProjectsPage", () => {
     ).not.toBeInTheDocument();
     expect(screen.queryByText("Objetivo")).not.toBeInTheDocument();
     expect(screen.queryByText("Próximo passo")).not.toBeInTheDocument();
+  });
+
+  it("mantem o canvas preparado para redesenhar quando o tema muda", () => {
+    const source = readFileSync(
+      join(
+        process.cwd(),
+        "components",
+        "sections",
+        "projects-pattern-grid-trail.tsx",
+      ),
+      "utf8",
+    );
+
+    expect(source).toContain('THEME_CHANGE_EVENT');
+    expect(source).toContain('window.addEventListener(THEME_CHANGE_EVENT');
+    expect(source).toContain('window.removeEventListener(THEME_CHANGE_EVENT');
+    expect(source).toContain('new MutationObserver');
+    expect(source).toContain('attributeFilter: ["data-theme"]');
+    expect(source).toContain(
+      "if (prefersReducedMotion) {\n              renderFrame();\n            }",
+    );
   });
 });

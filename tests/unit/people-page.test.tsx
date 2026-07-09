@@ -34,6 +34,13 @@ const personFixture = {
         alt: "Imagem autorizada de teste para registro de pessoa.",
       },
     },
+    {
+      title: "Registro sem link externo",
+      date: "2026-05-21",
+      category: "pessoal",
+      description:
+        "Registro autorizado sem destino externo para validar semântica sem link falso.",
+    },
   ],
 };
 
@@ -76,9 +83,10 @@ describe("PeoplePage", () => {
 
     const main = within(screen.getByRole("main"));
 
-    expect(
-      main.getByRole("link", { name: "Junte-se a nós" }),
-    ).toHaveAttribute("href", "/oportunidades");
+    expect(main.getByRole("link", { name: "Junte-se a nós" })).toHaveAttribute(
+      "href",
+      "/oportunidades",
+    );
     expect(
       main.getByRole("button", { name: /Buscar pessoas/i }),
     ).toBeInTheDocument();
@@ -89,7 +97,7 @@ describe("PeoplePage", () => {
     ).not.toBeInTheDocument();
 
     const brenoCard = main.getByRole("link", {
-      name: /Breno Cerqueira Gestor & Software Engineer Salvador, Brasil/i,
+      name: /Breno Cerqueira Software Engineer Salvador, Brasil/i,
     });
 
     expect(brenoCard).toHaveAttribute("href", "/pessoas/breno-cerqueira");
@@ -197,6 +205,10 @@ describe("PeoplePage", () => {
       "py-0",
       "font-normal",
     );
+    expect(within(searchTrigger).getByText("Buscar…")).toBeInTheDocument();
+    expect(
+      within(searchTrigger).queryByText("Search…"),
+    ).not.toBeInTheDocument();
     expect(searchTrigger.querySelector("svg")).toHaveClass("size-[18px]");
     expect(shortcuts).toHaveLength(2);
 
@@ -228,9 +240,7 @@ describe("PeoplePage", () => {
     expect(
       screen.getByRole("dialog", { name: "Buscar pessoas" }),
     ).toBeInTheDocument();
-    expect(
-      screen.getByPlaceholderText("Procurando pessoas..."),
-    ).toHaveFocus();
+    expect(screen.getByPlaceholderText("Procurando pessoas...")).toHaveFocus();
     expect(
       within(screen.getByRole("dialog", { name: "Buscar pessoas" })).getByText(
         "Breno Cerqueira",
@@ -253,9 +263,11 @@ describe("PeoplePage", () => {
     await user.click(screen.getByRole("button", { name: /Buscar pessoas/i }));
 
     const dialog = screen.getByRole("dialog", { name: "Buscar pessoas" });
-    const overlay = container.querySelector("[data-search-overlay]");
-    const list = container.querySelector("[data-search-list]");
-    const heading = container.querySelector("[data-search-group-heading]");
+    const overlay = container.querySelector("[data-people-search-overlay]");
+    const list = container.querySelector("[data-people-search-list]");
+    const heading = container.querySelector(
+      "[data-people-search-group-heading]",
+    );
     const firstResult = within(dialog).getByRole("link", {
       name: /Breno Cerqueira/i,
     });
@@ -280,7 +292,9 @@ describe("PeoplePage", () => {
       "p-0",
       "shadow-none",
     );
-    expect(dialog.querySelector("[data-search-input-wrapper]")).toHaveClass(
+    expect(
+      dialog.querySelector("[data-people-search-input-wrapper]"),
+    ).toHaveClass(
       "mt-1",
       "h-[49px]",
       "justify-between",
@@ -288,6 +302,18 @@ describe("PeoplePage", () => {
       "px-5",
       "py-1",
     );
+    expect(
+      container.querySelector("[data-search-overlay]"),
+    ).not.toBeInTheDocument();
+    expect(
+      container.querySelector("[data-search-list]"),
+    ).not.toBeInTheDocument();
+    expect(
+      container.querySelector("[data-search-group-heading]"),
+    ).not.toBeInTheDocument();
+    expect(
+      dialog.querySelector("[data-search-input-wrapper]"),
+    ).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Fechar busca" })).toHaveClass(
       "cursor-pointer",
       "p-0",
@@ -372,9 +398,8 @@ describe("PeoplePage", () => {
   });
 
   it("mantem Breno como pessoa publica real e autorizada no conteudo", async () => {
-    const { getPeople, getPublicPeople, isPersonPublic } = await import(
-      "@/biblioteca/conteudo"
-    );
+    const { getPeople, getPublicPeople, isPersonPublic } =
+      await import("@/biblioteca/conteudo");
     const breno = getPeople().find(
       (person) => person.slug === "breno-cerqueira",
     );
@@ -414,7 +439,7 @@ describe("PersonPage", () => {
     expect(
       screen.getByRole("heading", { level: 1, name: "Breno Cerqueira" }),
     ).not.toHaveClass("font-heading");
-    expect(screen.getByText("Gestor & Software Engineer")).toBeInTheDocument();
+    expect(screen.getByText("Software Engineer")).toBeInTheDocument();
     expect(screen.getByText("Salvador, Brasil")).toBeInTheDocument();
     expect(breno?.summary).toBe("Just do it");
     expect(screen.queryByText("Just do it")).not.toBeInTheDocument();
@@ -436,21 +461,26 @@ describe("PersonPage", () => {
     expect(profileShell).toHaveClass("font-resend");
     expect(profileMeta?.querySelector(".lucide-link")).not.toBeInTheDocument();
 
-    const clubsBlock = screen.getByText("Clubs").parentElement;
+    const traitsBlock = screen.getByText("Clubes e interesses").parentElement;
 
-    expect(clubsBlock).toHaveClass("border-t");
-    expect(screen.queryByText("Clubs e interesses")).not.toBeInTheDocument();
+    expect(traitsBlock).toHaveClass("border-t");
+    expect(screen.queryByText("Clubs")).not.toBeInTheDocument();
 
     for (const label of [
-      "Club: Café",
-      "Club: Leitura",
+      "Clube: Café",
+      "Clube: Leitura",
       "Interesse: IA",
       "Interesse: Programação",
     ]) {
       const trait = screen.getByLabelText(label);
 
       expect(trait).toBeInTheDocument();
+      expect(trait).toHaveClass("group/profile-trait");
+      expect(trait).not.toHaveClass("group/club-item");
       expect(trait.querySelector("svg")).toBeInTheDocument();
+      expect(trait.querySelector("svg")).toHaveClass(
+        "group-hover/profile-trait:-rotate-6",
+      );
     }
 
     const registros = within(
@@ -464,7 +494,9 @@ describe("PersonPage", () => {
       "Handbook",
       "Pessoal",
     ]) {
-      expect(registros.getByRole("button", { name: label })).toBeInTheDocument();
+      expect(
+        registros.getByRole("button", { name: label }),
+      ).toBeInTheDocument();
     }
 
     expect(
@@ -493,7 +525,7 @@ describe("PersonPage", () => {
     expect(screen.getByText("Salvador, BA")).toBeInTheDocument();
     expect(screen.getByText("AS")).toBeInTheDocument();
     expect(screen.queryByText(personFixture.summary)).not.toBeInTheDocument();
-    expect(screen.getByText("Clubs")).toBeInTheDocument();
+    expect(screen.getByText("Clubes e interesses")).toBeInTheDocument();
     expect(screen.getByText("Pesquisa aplicada")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Todos" })).toHaveAttribute(
       "data-active",
@@ -507,6 +539,51 @@ describe("PersonPage", () => {
     expect(
       screen.getByRole("link", { name: /Registro autorizado de projeto/i }),
     ).toHaveAttribute("href", "https://example.com/registro");
+    expect(
+      screen.queryByRole("link", { name: /Registro sem link externo/i }),
+    ).not.toBeInTheDocument();
+    const unlinkedEntryTitles = screen.getAllByText(
+      "Registro sem link externo",
+    );
+
+    expect(unlinkedEntryTitles).not.toHaveLength(0);
+    expect(
+      unlinkedEntryTitles.some((entryTitle) =>
+        Boolean(entryTitle.closest("article")),
+      ),
+    ).toBe(true);
+    expect(
+      unlinkedEntryTitles.every((entryTitle) => !entryTitle.closest("a")),
+    ).toBe(true);
+  });
+
+  it("mantem o perfil individual em tokens globais sem ajustes locais questionaveis", async () => {
+    vi.doMock("@/biblioteca/conteudo", () => ({
+      isPersonPublic: (person: typeof personFixture) =>
+        person.public && person.authorized && person.contentState === "real",
+      getPersonBySlug: (slug: string) =>
+        slug === personFixture.slug ? personFixture : undefined,
+      getPersonSlugs: () => [{ slug: personFixture.slug }],
+    }));
+
+    await renderPersonPage(personFixture.slug);
+
+    const { readFileSync } = await import("node:fs");
+    const { join } = await import("node:path");
+    const source = readFileSync(
+      join(process.cwd(), "components", "sections", "person-profile-shell.tsx"),
+      "utf8",
+    );
+
+    expect(source).not.toContain("lg:min-h-[calc(100svh+160rem)]");
+    expect(source).not.toContain("duration-200 ease-linear");
+    expect(source).not.toContain("group/club-item");
+    expect(source).not.toContain('href={entry.href ?? "#registros-pessoa"}');
+    expect(source).toContain("duration-nite-micro");
+    expect(source).toContain("ease-nite-out");
+    expect(source).toContain("group/profile-trait");
+    expect(source).toContain("const entryContent =");
+    expect(source).toContain("entry.href ? (");
   });
 
   it("nao expõe pessoa sem autorizacao publica", async () => {

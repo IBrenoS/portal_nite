@@ -1,3 +1,6 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+
 import {
   cleanup,
   fireEvent,
@@ -114,9 +117,22 @@ describe("RelatedProjectsDiscovery", () => {
     const summary = screen.getByText(
       "Resumo controlado do projeto relacionado 1.",
     );
+    const category = screen.getByText("Programação").closest("span");
+    const status = screen
+      .getByText("Em estruturação")
+      .closest("[data-slot='status-badge']");
+    const imageFade = card.querySelector(
+      "[data-component='related-project-card-image-fade']",
+    );
 
     expect(section).toHaveAttribute("data-related-projects-layout", "single");
     expect(section).toHaveAttribute("data-related-projects-count", "1");
+    expect(section).toHaveAttribute("data-surface", "nite-background");
+    expect(section).not.toHaveAttribute("data-nite-scene", "inverse");
+    expect(section).toHaveClass(
+      "bg-nite-background",
+      "text-nite-text-primary",
+    );
     expect(title).toHaveClass("text-nite-text-primary");
     expect(title).not.toHaveClass("text-foreground");
     expect(carousel).toHaveAttribute("data-related-projects-carousel", "false");
@@ -134,12 +150,11 @@ describe("RelatedProjectsDiscovery", () => {
       "rounded-3xl",
       "border",
       "border-b-0",
+      "border-[var(--related-card-border)]",
       "bg-nite-background",
       "sm:w-[22rem]",
     );
-    expect(card.getAttribute("style")).toContain(
-      "color(display-p3 0.882 0.949 0.996 / 0.183)",
-    );
+    expect(card).not.toHaveAttribute("style");
     expect(card.getAttribute("class")).not.toContain("min-h");
     expect(card.getAttribute("class")).not.toContain("shadow");
     expect(card.getAttribute("class")).not.toContain("radial-gradient");
@@ -154,9 +169,7 @@ describe("RelatedProjectsDiscovery", () => {
       "-translate-x-1/2",
       "-translate-y-1/2",
     );
-    expect(topLine?.getAttribute("class")).toContain(
-      "rgba(143,143,143,0.67)_50%",
-    );
+    expect(topLine?.getAttribute("class")).not.toContain("linear-gradient");
     expect(
       card.querySelectorAll("[data-component*='card-top-line']"),
     ).toHaveLength(1);
@@ -169,12 +182,7 @@ describe("RelatedProjectsDiscovery", () => {
       "h-[calc(100%_+_4px)]",
       "w-[calc(100%_+_4px)]",
     );
-    expect(borderVeil?.getAttribute("class")).toContain(
-      "var(--nite-background)_50%",
-    );
-    expect(borderVeil?.getAttribute("class")).toContain(
-      "var(--nite-background)_100%",
-    );
+    expect(borderVeil?.getAttribute("class")).not.toContain("linear-gradient");
 
     expect(link).toHaveAttribute("data-card-family", "project-discovery");
     expect(link).toHaveAttribute("data-card-variant", "related");
@@ -190,12 +198,16 @@ describe("RelatedProjectsDiscovery", () => {
     expect(image.getAttribute("class")).toContain(
       "group-hover/card:scale-[1.025]",
     );
+    expect(image.getAttribute("class")).toContain("duration-nite-micro");
+    expect(image.getAttribute("class")).toContain("ease-nite-out");
     expect(image.getAttribute("class")).toContain(
       "motion-reduce:group-hover/card:scale-100",
     );
+    expect(imageFade?.getAttribute("class")).not.toContain("linear-gradient");
 
-    expect(screen.getByText("Programação")).toBeInTheDocument();
-    expect(screen.getByText("Em estruturação")).toBeInTheDocument();
+    expect(category).toHaveClass("bg-[var(--related-chip-background)]");
+    expect(status).toHaveClass("bg-muted/40", "text-muted-foreground");
+    expect(status?.className).not.toContain("bg-nite-background/35");
     expect(screen.getByText("Next.js")).toBeInTheDocument();
     expect(screen.getByText("TypeScript")).toBeInTheDocument();
     expect(screen.getByText("UI responsiva")).toBeInTheDocument();
@@ -380,5 +392,63 @@ describe("RelatedProjectsDiscovery", () => {
         "nite:related-projects-scroll:/projetos/software-aplicado",
       ),
     ).toBeNull();
+  });
+
+  it("define tokens locais do NITE Discovery Frame sem literais dark-first no TSX", () => {
+    const source = readFileSync(
+      join(
+        process.cwd(),
+        "components",
+        "sections",
+        "related-projects-discovery.tsx",
+      ),
+      "utf8",
+    );
+    const styles = readFileSync(
+      join(
+        process.cwd(),
+        "components",
+        "sections",
+        "related-projects-discovery.module.css",
+      ),
+      "utf8",
+    );
+
+    expect(source).toContain("relatedProjectsDiscovery");
+    expect(source).toContain("border-[var(--related-card-border)]");
+    expect(source).toContain("styles.relatedCardTopLine");
+    expect(source).toContain("styles.relatedCardBorderVeil");
+    expect(source).toContain("styles.relatedCardImageFade");
+    expect(source).not.toContain("color(display-p3 0.882 0.949 0.996");
+    expect(source).not.toContain("rgba(225,242,254");
+    expect(source).not.toContain("rgba(143,143,143");
+    expect(styles).toContain(".relatedProjectsDiscovery {");
+    expect(styles).toContain(".relatedCardTopLine {");
+    expect(styles).toContain(".relatedCardBorderVeil {");
+    expect(styles).toContain(".relatedCardImageFade {");
+    expect(styles).toContain(
+      "--related-card-background: var(--nite-background);",
+    );
+    expect(styles).toContain("--related-card-border: var(--nite-border-subtle);");
+    expect(styles).toContain("--related-card-top-line-gradient:");
+    expect(styles).toContain("--related-card-border-veil:");
+    expect(styles).toContain("--related-card-image-fade:");
+    expect(styles).toContain(
+      "background: var(--related-card-top-line-gradient);",
+    );
+    expect(styles).toContain("background: var(--related-card-border-veil);");
+    expect(styles).toContain("background: var(--related-card-image-fade);");
+    expect(styles).toContain(
+      "--related-chip-background: var(--nite-surface-subtle);",
+    );
+    expect(styles).toContain(':root[data-theme="dark"] .relatedProjectsDiscovery');
+    expect(styles).toContain(
+      "--related-card-border: color(display-p3 0.882 0.949 0.996 / 0.183);",
+    );
+    expect(styles).toContain(
+      "--related-card-top-line: rgba(143, 143, 143, 0.67);",
+    );
+    expect(styles).toContain(':root[data-theme="light"] .relatedProjectsDiscovery');
+    expect(styles).toContain("--related-card-image-fade: none;");
   });
 });

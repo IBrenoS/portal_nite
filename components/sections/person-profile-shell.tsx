@@ -111,7 +111,7 @@ function getTraitIcon(label: string) {
 export function PersonProfileShell({ person }: PersonProfileShellProps) {
   const [activeFilter, setActiveFilter] = useState<FilterId>("todos");
   const profileTraits = [
-    ...person.clubs.map((label) => ({ label, type: "Club" })),
+    ...person.clubs.map((label) => ({ label, type: "Clube" })),
     ...person.interests.map((label) => ({ label, type: "Interesse" })),
   ];
   const filteredEntries = useMemo(() => {
@@ -124,13 +124,13 @@ export function PersonProfileShell({ person }: PersonProfileShellProps) {
 
   return (
     <div
-      className="mb-10 grid w-full gap-12 font-resend lg:min-h-[calc(100svh+160rem)] lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-24"
+      className="mb-10 grid w-full gap-12 font-resend lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-24"
       data-person-profile-shell=""
     >
       <aside className="group/person relative flex h-fit w-full flex-col lg:sticky lg:top-[4.5rem]">
         <Link
           href={"/pessoas" as Route}
-          className="relative inline-flex w-fit items-center gap-1 text-sm font-normal text-muted-foreground transition-colors duration-200 ease-linear hover:text-foreground"
+          className="relative inline-flex w-fit items-center gap-1 text-sm font-normal text-muted-foreground transition-colors duration-nite-micro ease-nite-out hover:text-foreground"
         >
           <ArrowLeftIcon aria-hidden="true" className="size-4" />
           Todas as pessoas
@@ -175,24 +175,24 @@ export function PersonProfileShell({ person }: PersonProfileShellProps) {
               >
                 <Icon aria-hidden="true" className="size-4 shrink-0" />
                 <dt className="sr-only">{link.label}</dt>
-              <dd>
-                <a
-                  href={link.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-muted-foreground transition-colors duration-200 ease-linear hover:text-foreground"
-                >
-                  {displayLabel}
-                </a>
-              </dd>
-            </div>
+                <dd>
+                  <a
+                    href={link.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-muted-foreground transition-colors duration-nite-micro ease-nite-out hover:text-foreground"
+                  >
+                    {displayLabel}
+                  </a>
+                </dd>
+              </div>
             );
           })}
         </dl>
 
         {profileTraits.length > 0 ? (
           <div className="mt-5 flex w-full flex-col gap-5 border-t border-border pt-5 text-sm leading-5 text-muted-foreground">
-            <p>Clubs</p>
+            <p>Clubes e interesses</p>
             <ul className="relative flex w-full flex-wrap justify-start gap-2">
               {profileTraits.map((trait) => {
                 const Icon = getTraitIcon(trait.label);
@@ -201,11 +201,11 @@ export function PersonProfileShell({ person }: PersonProfileShellProps) {
                   <li
                     key={`${trait.type}-${trait.label}`}
                     aria-label={`${trait.type}: ${trait.label}`}
-                    className="group/club-item relative flex size-20 items-center justify-center overflow-hidden rounded-full border-2 border-border bg-nite-surface-subtle p-4 text-muted-foreground transition-colors duration-200 ease-linear hover:border-nite-border-hover hover:text-foreground"
+                    className="group/profile-trait relative flex size-20 items-center justify-center overflow-hidden rounded-full border-2 border-border bg-nite-surface-subtle p-4 text-muted-foreground transition-colors duration-nite-micro ease-nite-out hover:border-nite-border-hover hover:text-foreground"
                   >
                     <Icon
                       aria-hidden="true"
-                      className="size-full transition-transform duration-200 ease-nite-out group-hover/club-item:-rotate-6"
+                      className="size-full transition-transform duration-nite-micro ease-nite-out group-hover/profile-trait:-rotate-6"
                       strokeWidth={1.75}
                     />
                     <span className="sr-only">{trait.label}</span>
@@ -249,14 +249,9 @@ export function PersonProfileShell({ person }: PersonProfileShellProps) {
 
         {filteredEntries.length > 0 ? (
           <ul className="relative grid h-auto min-h-max grid-cols-1 gap-8 transition-all duration-500 ease-nite-out xl:grid-cols-2 xl:gap-y-16">
-            {filteredEntries.map((entry) => (
-              <li key={`${entry.category}-${entry.title}-${entry.date}`}>
-                <a
-                  href={entry.href ?? "#registros-pessoa"}
-                  target={entry.href ? "_blank" : undefined}
-                  rel={entry.href ? "noreferrer" : undefined}
-                  className="group/entry flex h-full flex-col items-stretch gap-4 rounded-sm pb-2 text-sm text-muted-foreground outline-offset-[0.625rem] outline-nite-border-strong transition-[transform,opacity] duration-[360ms] ease-nite-out hover:-translate-y-1 focus-visible:-translate-y-1 motion-reduce:transition-none"
-                >
+            {filteredEntries.map((entry) => {
+              const entryContent = (
+                <>
                   <span className="relative block aspect-[1.9] overflow-hidden border border-border bg-nite-surface-subtle">
                     {entry.image ? (
                       <Image
@@ -286,9 +281,28 @@ export function PersonProfileShell({ person }: PersonProfileShellProps) {
                     </span>
                     <span className="leading-6">{entry.description}</span>
                   </span>
-                </a>
-              </li>
-            ))}
+                </>
+              );
+              const entryClassName =
+                "group/entry flex h-full flex-col items-stretch gap-4 rounded-sm pb-2 text-sm text-muted-foreground outline-offset-[0.625rem] outline-nite-border-strong transition-[transform,opacity] duration-[360ms] ease-nite-out hover:-translate-y-1 focus-visible:-translate-y-1 motion-reduce:transition-none";
+
+              return (
+                <li key={`${entry.category}-${entry.title}-${entry.date}`}>
+                  {entry.href ? (
+                    <a
+                      href={entry.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={entryClassName}
+                    >
+                      {entryContent}
+                    </a>
+                  ) : (
+                    <article className={entryClassName}>{entryContent}</article>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         ) : (
           <EmptyState

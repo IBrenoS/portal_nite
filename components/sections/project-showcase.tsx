@@ -36,17 +36,29 @@ function ProjectTechnologyTag({ children }: { children: string }) {
   );
 }
 
-function ProjectCopy({ project, href }: { project: Project; href: Route }) {
+function ProjectCopy({
+  project,
+  href,
+  className,
+}: {
+  project: Project;
+  href: Route;
+  className?: string;
+}) {
   return (
     <div
       data-project-copy=""
-      className="flex min-w-0 flex-col items-start justify-center gap-6"
+      className={cn(
+        "flex min-w-0 flex-col items-start justify-center gap-6",
+        className,
+      )}
     >
       <StatusBadge
         status="draft"
         tone="quiet"
         size="sm"
         showIndicator={false}
+        className="hidden lg:inline-flex"
       />
       <div className="grid max-w-[31rem] gap-4">
         <h3 className="font-heading text-[clamp(2rem,4vw,2.75rem)] leading-[1.06] font-semibold tracking-normal text-nite-text-primary">
@@ -91,8 +103,7 @@ function VisualShell({
       aria-hidden="true"
       data-project-visual={visual}
       className={cn(
-        "relative min-h-[23rem] overflow-hidden rounded-lg border border-[var(--projects-visual-border)] bg-[var(--projects-visual-background)] shadow-nite-lift",
-        "after:absolute after:inset-0 after:z-20 after:[background-image:var(--projects-visual-veil)] after:content-['']",
+        "relative min-h-[23rem] overflow-hidden rounded-lg border border-[var(--projects-visual-border)] bg-[var(--projects-visual-background)] shadow-none",
         className,
       )}
     >
@@ -102,23 +113,29 @@ function VisualShell({
         fill
         sizes="(max-width: 1024px) 100vw, 58vw"
         data-project-cover-image=""
-        className="object-cover opacity-80 saturate-90"
-      />
-      <div
-        data-project-image-overlay=""
-        className="absolute inset-0 z-10 [background-image:var(--projects-image-overlay)]"
+        className="object-cover"
       />
     </div>
   );
 }
 
-function ProjectVisualPanel({ project }: { project: Project }) {
+function ProjectVisualPanel({
+  project,
+  className,
+}: {
+  project: Project;
+  className?: string;
+}) {
   const visual = projectVisual(project);
   const heightClass =
     visual === "robotics-lab" ? "min-h-[25rem]" : "min-h-[24rem]";
 
   return (
-    <VisualShell project={project} visual={visual} className={heightClass} />
+    <VisualShell
+      project={project}
+      visual={visual}
+      className={cn(heightClass, className)}
+    />
   );
 }
 
@@ -128,27 +145,31 @@ export function ProjectShowcaseRow({
   layout,
   role,
 }: ProjectShowcaseRowProps) {
-  const visual = <ProjectVisualPanel project={project} />;
-  const copy = <ProjectCopy project={project} href={href} />;
+  const desktopCopyFirst = layout === "copy-first";
+  const visual = (
+    <ProjectVisualPanel
+      project={project}
+      className={desktopCopyFirst ? "lg:order-2" : undefined}
+    />
+  );
+  const copy = (
+    <ProjectCopy
+      project={project}
+      href={href}
+      className={desktopCopyFirst ? "lg:order-1" : undefined}
+    />
+  );
 
   return (
     <article
       data-project-showcase-row=""
       data-project-role={role}
       data-project-layout={layout}
+      data-project-mobile-pattern="visual-first"
       className="grid gap-8 py-10 sm:py-12 lg:grid-cols-[minmax(0,0.58fr)_minmax(19rem,0.42fr)] lg:items-center lg:gap-16"
     >
-      {layout === "visual-first" ? (
-        <>
-          {visual}
-          {copy}
-        </>
-      ) : (
-        <>
-          {copy}
-          {visual}
-        </>
-      )}
+      {visual}
+      {copy}
     </article>
   );
 }

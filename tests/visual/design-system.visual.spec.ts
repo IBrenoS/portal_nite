@@ -312,7 +312,7 @@ test.describe("resend-inspired footer layout", () => {
 
     const desktop = await page.evaluate(() => {
       const scene = document.querySelector<HTMLElement>(
-        "[data-nite-scene='inverse']",
+        "[data-projects-page]",
       );
       const pattern = document.querySelector<HTMLElement>(
         "[data-testid='projects-pattern-grid-trail']",
@@ -321,10 +321,10 @@ test.describe("resend-inspired footer layout", () => {
         "[data-testid='projects-pattern-grid-trail-canvas']",
       );
       const lightBloom = document.querySelector<HTMLElement>(
-        "[data-testid='projects-resend-light-bloom']",
+        "[data-testid='projects-hero-light-bloom']",
       );
       const greenLight = document.querySelector<HTMLElement>(
-        "[data-testid='projects-resend-green-light']",
+        "[data-testid='projects-hero-green-field']",
       );
       const heroCopy = document.querySelector<HTMLElement>(
         "[data-testid='projects-hero-copy']",
@@ -358,6 +358,7 @@ test.describe("resend-inspired footer layout", () => {
         backgroundColor: getComputedStyle(scene).backgroundColor,
         canvasHeight: canvas.height,
         canvasWidth: canvas.width,
+        hasInverseScene: scene.hasAttribute("data-nite-scene"),
         hasHorizontalOverflow:
           document.documentElement.scrollWidth >
           document.documentElement.clientWidth,
@@ -371,6 +372,7 @@ test.describe("resend-inspired footer layout", () => {
       backgroundColor: "rgb(9, 9, 10)",
       canvasHeight: expect.any(Number),
       canvasWidth: expect.any(Number),
+      hasInverseScene: false,
       hasHorizontalOverflow: false,
       panelEndsAfterHero: true,
       panelOverlapsHero: true,

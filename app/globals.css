@@ -445,17 +445,32 @@ body {
     );
     --projects-visual-accent: var(--nite-brand-accent);
     --projects-visual-accent-secondary: var(--nite-brand-primary);
-    --projects-visual-veil: linear-gradient(
-      180deg,
-      transparent 42%,
-      color-mix(in srgb, var(--nite-background) 76%, transparent) 100%
-    );
-    --projects-image-overlay: linear-gradient(
-      90deg,
-      color-mix(in srgb, var(--nite-background) 30%, transparent),
-      transparent 42%,
-      color-mix(in srgb, var(--nite-background) 84%, transparent)
-    );
+  }
+
+  .projectsPage {
+    --projects-hero-accent: #2DCFBF;
+    --projects-hero-canvas-background: var(--nite-background);
+    --projects-hero-grid-color: rgba(170, 170, 170, 0.1);
+    --projects-hero-trail-color: rgba(255, 255, 255, 0.5);
+    --projects-hero-node-color: rgba(255, 255, 255, 1);
+    --projects-hero-green-field-opacity: 1;
+    --projects-hero-green-field-blend: color;
+    --project-card-chip-background: var(--nite-surface-subtle);
+    --projects-filter-popup-shadow: var(--nite-shadow-lift);
+  }
+
+  :root[data-theme="light"] .projectsPage {
+    --projects-hero-grid-color: rgba(15, 118, 110, 0.16);
+    --projects-hero-trail-color: rgba(15, 118, 110, 0.62);
+    --projects-hero-node-color: rgba(15, 118, 110, 0.95);
+    --projects-hero-green-field-opacity: 0.24;
+    --projects-hero-green-field-blend: multiply;
+  }
+
+  .projectsHeroGreenField {
+    background: var(--projects-hero-accent);
+    mix-blend-mode: var(--projects-hero-green-field-blend);
+    opacity: var(--projects-hero-green-field-opacity);
   }
 
   [data-component="nite-method-system"] {
@@ -674,10 +689,10 @@ body {
 
 .timeline-premium-section {
   display: flex;
-  min-height: min(56rem, calc(100svh + 2rem));
+  min-height: auto;
   flex-direction: column;
   justify-content: center;
-  padding-block: clamp(2.5rem, 6vw, 4rem);
+  padding-block: clamp(2.5rem, 6vw, 4rem) 0;
   overflow: clip;
 }
 
@@ -695,7 +710,7 @@ body {
   display: flex;
   width: 100%;
   max-width: min(79.5rem, calc(100% - 2rem));
-  margin: clamp(2.5rem, 5vw, 4rem) auto;
+  margin: clamp(2.5rem, 5vw, 4rem) auto 0;
   overflow: hidden;
   border: 1px solid transparent;
   border-color: var(--timeline-frame-border);
@@ -849,13 +864,13 @@ body {
 
 @media (max-width: 767px) {
   .timeline-premium-section {
-    min-height: 44rem;
-    padding-block: 1.5rem;
+    min-height: auto;
+    padding-block: 1.5rem 0;
   }
 
   .timeline-premium-scroll-bg {
     max-width: calc(100% - 2rem);
-    margin-block: 2.5rem;
+    margin: 2.5rem auto 0;
   }
 
   .timeline-premium-container {

@@ -484,7 +484,7 @@ function ExplorerSelect<T extends string>({
           collisionPadding={12}
           sideOffset={8}
         >
-          <Select.Popup className="min-w-[var(--anchor-width)] overflow-hidden rounded-xl border border-nite-border-soft bg-nite-overlay p-1 text-sm text-nite-text-primary shadow-[0_24px_70px_rgb(0_0_0/0.34)] backdrop-blur-md outline-none">
+          <Select.Popup className="min-w-[var(--anchor-width)] overflow-hidden rounded-xl border border-nite-border-soft bg-nite-overlay p-1 text-sm text-nite-text-primary shadow-nite-lift backdrop-blur-md outline-none">
             <Select.List>
               {options.map((option) => (
                 <Select.Item

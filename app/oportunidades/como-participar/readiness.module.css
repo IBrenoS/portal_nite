@@ -1,0 +1,110 @@
+.readinessSection {
+  --readiness-muted: var(--nite-text-secondary);
+  --readiness-muted-strong: var(--nite-text-muted);
+
+  --readiness-marker-border: color-mix(
+    in srgb,
+    var(--nite-border-strong) 72%,
+    transparent
+  );
+  --readiness-path-line: color-mix(
+    in srgb,
+    var(--nite-border-subtle) 76%,
+    transparent
+  );
+  --readiness-path-line-terminal: linear-gradient(
+    to bottom,
+    var(--readiness-path-line),
+    transparent
+  );
+
+  --readiness-panel-border: var(--nite-border-subtle);
+  --readiness-panel-highlight: radial-gradient(
+    100% 100% at 50% 0%,
+    color-mix(in srgb, var(--nite-text-primary) 10%, transparent) 0%,
+    transparent 100%
+  );
+  --readiness-panel-mask-left: linear-gradient(
+    to right,
+    var(--nite-background) 0%,
+    var(--nite-background) 35%,
+    color-mix(in srgb, var(--nite-background) 78%, transparent) 62%,
+    transparent 100%
+  );
+  --readiness-panel-mask-bottom: linear-gradient(
+    to top,
+    var(--nite-background) 0%,
+    color-mix(in srgb, var(--nite-background) 72%, transparent) 44%,
+    transparent 100%
+  );
+
+  --readiness-card-border: var(--nite-border-subtle);
+  --readiness-card-surface: linear-gradient(
+    to bottom right,
+    color-mix(in srgb, var(--nite-surface) 58%, transparent),
+    transparent
+  );
+  --readiness-card-text: var(--nite-text-primary);
+  --readiness-card-muted: var(--nite-text-secondary);
+
+  --readiness-field-bg: var(--nite-surface-subtle);
+  --readiness-field-border: var(--nite-border-subtle);
+  --readiness-field-text: var(--nite-text-primary);
+  --readiness-field-label: var(--nite-text-muted);
+
+  --readiness-log-bg: var(--nite-surface-subtle);
+  --readiness-log-border: var(--nite-border-subtle);
+  --readiness-log-label: var(--nite-text-muted);
+  --readiness-log-value: var(--nite-text-primary);
+
+  --readiness-primary-action-bg: var(--nite-text-primary);
+  --readiness-primary-action-text: var(--nite-background);
+  --readiness-secondary-action-bg: var(--nite-surface-subtle);
+  --readiness-secondary-action-border: var(--nite-border-subtle);
+  --readiness-secondary-action-text: var(--nite-text-secondary);
+
+  --readiness-key-bg: color-mix(in srgb, currentColor 10%, transparent);
+  --readiness-key-text: color-mix(in srgb, currentColor 48%, transparent);
+  --readiness-key-muted: color-mix(in srgb, currentColor 54%, transparent);
+  --readiness-code-text: var(--nite-text-secondary);
+
+  --readiness-accent-green-soft: rgb(34 255 153 / 0.11);
+  --readiness-accent-green-strong: rgb(68 255 164 / 0.58);
+}
+
+:root[data-theme="light"] .readinessSection {
+  --readiness-accent-green-soft: rgb(13 148 136 / 0.1);
+  --readiness-accent-green-strong: rgb(13 148 136 / 0.22);
+}
+
+.pathLine {
+  background: var(--readiness-path-line);
+}
+
+.pathLineTerminal {
+  background: var(--readiness-path-line-terminal);
+}
+
+.panelHighlight {
+  background: var(--readiness-panel-highlight);
+}
+
+.panelMaskLeft {
+  background: var(--readiness-panel-mask-left);
+}
+
+.panelMaskBottom {
+  background: var(--readiness-panel-mask-bottom);
+}
+
+.cardSurface {
+  background: var(--readiness-card-surface);
+}
+
+.glowSoft {
+  background: var(--readiness-accent-green-soft);
+}
+
+.glowStrong {
+  background: var(--readiness-accent-green-strong);
+}

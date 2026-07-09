@@ -35,12 +35,14 @@ type ProjectDiscoveryCardItem = {
 type ProjectDiscoveryCardProps = {
   item: ProjectDiscoveryCardItem;
   onNavigate?: () => void;
+  relatedImageFadeClassName?: string;
   variant: "catalog" | "related";
 };
 
 function ProjectDiscoveryCard({
   item,
   onNavigate,
+  relatedImageFadeClassName,
   variant,
 }: ProjectDiscoveryCardProps) {
   const isRelated = variant === "related";
@@ -64,13 +66,14 @@ function ProjectDiscoveryCard({
         "group/card flex text-left outline-none",
         "focus-visible:ring-3 focus-visible:ring-ring/50",
         variant === "catalog" &&
-          "min-h-full flex-col overflow-hidden rounded-2xl border border-nite-border-subtle bg-transparent transition-[background-color,border-color,box-shadow] duration-200 hover:border-nite-border-hover hover:bg-nite-surface-subtle/55 hover:shadow-[0_18px_54px_rgb(0_0_0/0.24)] focus-visible:border-ring motion-reduce:transition-none",
+          "min-h-full flex-col overflow-hidden rounded-2xl border border-nite-border-subtle bg-transparent transition-[background-color,border-color,box-shadow] duration-nite-micro ease-nite-out hover:border-nite-border-hover hover:bg-nite-surface-subtle/55 hover:shadow-nite-lift focus-visible:border-ring motion-reduce:transition-none",
         isRelated &&
           "relative z-10 h-full flex-col overflow-hidden rounded-3xl focus-visible:outline-none",
       )}
     >
       <ProjectDiscoveryVisual
         cover={item.cover}
+        relatedImageFadeClassName={relatedImageFadeClassName}
         title={item.title}
         variant={variant}
       />
@@ -84,15 +87,22 @@ function ProjectDiscoveryCard({
         )}
       >
         <div className="flex flex-wrap items-center gap-2">
-          <span className="inline-flex min-h-6 items-center rounded-full border border-nite-border-subtle bg-nite-background/35 px-2.5 py-1 text-xs leading-none text-nite-text-secondary">
+          <span
+            className={cn(
+              "inline-flex min-h-6 items-center rounded-full border border-nite-border-subtle px-2.5 py-1 text-xs leading-none text-nite-text-secondary",
+              isRelated
+                ? "bg-[var(--related-chip-background)]"
+                : "bg-nite-surface-subtle",
+            )}
+          >
             {item.category}
           </span>
           <StatusBadge
             status={item.status}
             label={item.statusLabel}
+            tone="quiet"
             showIndicator={false}
             size="sm"
-            className="border-nite-border-subtle bg-nite-background/35 text-nite-text-secondary"
           />
         </div>
 
@@ -132,10 +142,12 @@ function ProjectDiscoveryCard({
 
 function ProjectDiscoveryVisual({
   cover,
+  relatedImageFadeClassName,
   title,
   variant,
 }: {
   cover?: ProjectDiscoveryCover;
+  relatedImageFadeClassName?: string;
   title: string;
   variant: ProjectDiscoveryCardProps["variant"];
 }) {
@@ -190,7 +202,7 @@ function ProjectDiscoveryVisual({
           variant === "catalog" &&
             "duration-300 group-hover/card:scale-[1.035] motion-reduce:group-hover/card:scale-100",
           isRelated &&
-            "duration-200 group-hover/card:scale-[1.025] group-focus-visible/card:scale-[1.025] motion-reduce:group-hover/card:scale-100 motion-reduce:group-focus-visible/card:scale-100",
+            "duration-nite-micro group-hover/card:scale-[1.025] group-focus-visible/card:scale-[1.025] motion-reduce:group-hover/card:scale-100 motion-reduce:group-focus-visible/card:scale-100",
         )}
       />
       {variant === "catalog" ? (
@@ -200,7 +212,11 @@ function ProjectDiscoveryVisual({
         />
       ) : (
         <div
-          className="pointer-events-none absolute inset-0 bg-[linear-gradient(0deg,var(--nite-background)_0%,transparent_20%,transparent_100%)]"
+          data-component="related-project-card-image-fade"
+          className={cn(
+            "pointer-events-none absolute inset-0",
+            relatedImageFadeClassName,
+          )}
           aria-hidden="true"
         />
       )}

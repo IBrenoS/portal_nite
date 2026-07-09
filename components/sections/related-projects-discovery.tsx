@@ -21,6 +21,8 @@ import {
 } from "@/components/sections/project-discovery-card";
 import { cn } from "@/lib/utils";
 
+import styles from "./related-projects-discovery.module.css";
+
 type RelatedProjectDiscoveryVisual = {
   src: string;
   alt: string;
@@ -303,9 +305,11 @@ function RelatedProjectsDiscovery({ projects }: RelatedProjectsDiscoveryProps) {
 
   return (
     <section
-      className="relative isolate overflow-hidden bg-nite-background py-14 text-nite-text-primary sm:py-20"
+      className={cn(
+        styles.relatedProjectsDiscovery,
+        "relative isolate overflow-hidden bg-nite-background py-14 text-nite-text-primary sm:py-20",
+      )}
       data-component="related-projects-discovery"
-      data-nite-scene="inverse"
       data-related-projects-count={projects.length}
       data-related-projects-layout={layout}
       data-surface="nite-background"
@@ -440,24 +444,28 @@ function RelatedProjectCard({
   return (
     <article
       data-component="related-project-card"
-      style={{
-        borderColor: "color(display-p3 0.882 0.949 0.996 / 0.183)",
-      }}
-      className="group/card relative isolate flex w-[min(86vw,22rem)] flex-none snap-start flex-col gap-4 rounded-3xl border border-b-0 border-[rgba(225,242,254,0.18)] bg-nite-background sm:w-[22rem]"
+      className="group/card relative isolate flex w-[min(86vw,22rem)] flex-none snap-start flex-col gap-4 rounded-3xl border border-b-0 border-[var(--related-card-border)] bg-nite-background sm:w-[22rem]"
     >
       <div
         data-component="related-project-card-top-line"
-        className="pointer-events-none absolute left-1/2 top-0 h-px w-[150px] max-w-full -translate-x-1/2 -translate-y-1/2 bg-[linear-gradient(90deg,rgba(0,0,0,0)_0%,rgba(255,255,255,0)_0%,rgba(143,143,143,0.67)_50%,rgba(0,0,0,0)_100%)]"
+        className={cn(
+          styles.relatedCardTopLine,
+          "pointer-events-none absolute left-1/2 top-0 h-px w-[150px] max-w-full -translate-x-1/2 -translate-y-1/2",
+        )}
         aria-hidden="true"
       />
       <div
         data-component="related-project-card-border-veil"
-        className="pointer-events-none absolute -left-0.5 -top-0.5 h-[calc(100%_+_4px)] w-[calc(100%_+_4px)] bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,var(--nite-background)_50%,var(--nite-background)_100%)]"
+        className={cn(
+          styles.relatedCardBorderVeil,
+          "pointer-events-none absolute -left-0.5 -top-0.5 h-[calc(100%_+_4px)] w-[calc(100%_+_4px)]",
+        )}
         aria-hidden="true"
       />
       <ProjectDiscoveryCard
         variant="related"
         onNavigate={onNavigate}
+        relatedImageFadeClassName={styles.relatedCardImageFade}
         item={{
           href: project.href,
           title: project.title,

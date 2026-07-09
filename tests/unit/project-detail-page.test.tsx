@@ -1,3 +1,6 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+
 import { cleanup, render, screen, within } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
@@ -117,6 +120,12 @@ describe("ProjectPage", () => {
       screen.getByRole("link", { name: /Voltar para projetos/i }),
     ).toHaveAttribute("href", "/#projetos");
     expect(
+      screen.getByRole("link", { name: /Voltar para projetos/i }),
+    ).toHaveClass("rounded-lg");
+    expect(
+      screen.getByRole("link", { name: /Voltar para projetos/i }),
+    ).not.toHaveClass("rounded-md");
+    expect(
       screen.getByRole("heading", {
         level: 2,
         name: "O que está sendo construído",
@@ -171,6 +180,15 @@ describe("ProjectPage", () => {
         /Ilustração editorial da frente de software aplicado/i,
       ),
     ).toBeInTheDocument();
+    const projectVisual = document.querySelector("[data-visual-kind]");
+    const projectVisualPanel = projectVisual?.closest(".nite-panel");
+
+    expect(projectVisual).toHaveAttribute("data-visual-kind", "illustration");
+    expect(projectVisualPanel).toHaveClass("!shadow-none");
+    expect(projectVisual?.querySelector("img")).toHaveClass("object-cover");
+    expect(
+      projectVisual?.querySelector("[class*='bg-gradient-to-t']"),
+    ).not.toBeInTheDocument();
     expect(screen.queryByText("Visual editorial")).not.toBeInTheDocument();
     expect(
       screen.queryByText("Imagem ou evidência pública ainda indisponível."),
@@ -226,7 +244,8 @@ describe("ProjectPage", () => {
     const related = within(relatedSection);
 
     expect(relatedSection).toBeInTheDocument();
-    expect(relatedSection).toHaveAttribute("data-nite-scene", "inverse");
+    expect(relatedSection).not.toHaveAttribute("data-nite-scene", "inverse");
+    expect(relatedSection).toHaveAttribute("data-surface", "nite-background");
     expect(relatedSection).toHaveAttribute("data-related-projects-count", "2");
     expect(
       related.getByRole("heading", {
@@ -318,6 +337,12 @@ describe("ProjectPage", () => {
       screen.getByRole("link", { name: /Abrir Demo validada/i }),
     ).toHaveAttribute("href", "https://example.com/demo");
     expect(
+      screen.getByRole("link", { name: /Abrir Demo validada/i }),
+    ).toHaveClass("rounded-lg");
+    expect(
+      screen.getByRole("link", { name: /Abrir Demo validada/i }),
+    ).not.toHaveClass("rounded-md");
+    expect(
       screen.getByRole("heading", { level: 3, name: "Entregáveis" }),
     ).toBeInTheDocument();
     expect(
@@ -365,8 +390,9 @@ describe("ProjectPage", () => {
     ).toHaveAttribute("href", "https://example.com/documento");
     expect(
       within(
-        screen.getByRole("heading", { level: 2, name: "Sobre esta frente" })
-          .parentElement as HTMLElement,
+        screen
+          .getByRole("heading", { level: 2, name: "Sobre esta frente" })
+          .closest("section") as HTMLElement,
       ).getByText(
         "Objetivo validado de teste para comprovar a renderização real do projeto.",
       ),
@@ -397,5 +423,29 @@ describe("ProjectPage", () => {
         "Fotos, entregáveis, métricas, registros e links só aparecem quando o conteúdo estiver validado para publicação.",
       ),
     ).not.toBeInTheDocument();
+  });
+
+  it("formaliza os padroes locais da pagina sem criar tokens novos", () => {
+    const source = readFileSync(
+      join(process.cwd(), "app", "projetos", "[slug]", "page.tsx"),
+      "utf8",
+    );
+
+    expect(source).toContain("function ProjectDetailSection(");
+    expect(source).toContain("function ProjectDetailSectionHeader(");
+    expect(source).toContain("function ProjectDetailPanel(");
+    expect(source).toContain("function ProjectDetailTextLink(");
+    expect(source).toContain("function ProjectDetailMediaPanel(");
+    expect(source).not.toContain("const detailPanelClassName");
+    expect(source).not.toMatch(
+      /buttonVariants\(\{ variant: "(primary|outline)", size: "lg" \}\),\s*"w-fit rounded-md"/,
+    );
+    expect(source).not.toContain('className="inline-flex min-h-10');
+    expect(source).not.toContain('className="inline-flex min-h-11');
+    expect(source).not.toContain("text-nite-text-secondary");
+    expect(source).toContain('className={cn("grid gap-5", className)}');
+    expect(source).toContain('className={cn(cardVariants(), "rounded-lg p-5"');
+    expect(source).toContain("duration-nite-micro");
+    expect(source).toContain("ease-nite-out");
   });
 });

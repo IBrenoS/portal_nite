@@ -17,6 +17,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 import { ReadinessSignalPath } from "./readiness-signal-path";
+import styles from "./readiness.module.css";
 
 const pageTitle = "Como participar | Oportunidades";
 const pageDescription =
@@ -105,7 +106,7 @@ function ReadinessFinalCta() {
       >
         Leve seus sinais para oportunidades
       </h2>
-      <p className="mb-8 max-w-[31rem] text-balance text-center text-base font-normal leading-[1.6] text-[#8C8C8C] md:text-[1.125rem] md:leading-[1.5]">
+      <p className="mb-8 max-w-[31rem] text-balance text-center text-base font-normal leading-[1.6] text-nite-text-secondary md:text-[1.125rem] md:leading-[1.5]">
         Interesse, ritmo, registro e contexto já mostram por onde começar.
         Avance para oportunidades e encontre o ponto de entrada mais alinhado ao
         seu momento.
@@ -193,8 +194,11 @@ export default function HowToParticipatePage() {
         </section>
 
         <section
-          data-nite-scene="inverse"
-          className="bg-nite-background px-6 py-20 text-nite-text-primary sm:py-28"
+          data-component="readiness-section"
+          className={cn(
+            styles.readinessSection,
+            "bg-nite-background px-6 py-20 text-nite-text-primary sm:py-28",
+          )}
           aria-labelledby="sinais-prontidao"
         >
           <Container size="xl">
@@ -208,7 +212,7 @@ export default function HowToParticipatePage() {
               >
                 Sinais de prontidão
               </h2>
-              <p className="mx-auto w-full max-w-[32rem] text-balance text-base font-normal leading-[1.6] text-[#8C8C8C] md:text-[1.125rem] md:leading-[1.5]">
+              <p className="mx-auto w-full max-w-[32rem] text-balance text-base font-normal leading-[1.6] text-nite-text-secondary md:text-[1.125rem] md:leading-[1.5]">
                 Entrar no NITE não é escolher um rótulo. É encontrar sincronia
                 entre interesse, repertório, ritmo e contexto de projeto.
               </p>

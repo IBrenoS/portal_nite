@@ -1,0 +1,59 @@
+.relatedProjectsDiscovery {
+  --related-card-background: var(--nite-background);
+  --related-card-border: var(--nite-border-subtle);
+  --related-card-top-line: color-mix(
+    in srgb,
+    var(--nite-text-muted) 68%,
+    transparent
+  );
+  --related-card-top-line-gradient: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--related-card-top-line) 50%,
+    transparent 100%
+  );
+  --related-card-border-veil: linear-gradient(
+    180deg,
+    transparent 0%,
+    var(--nite-background) 50%,
+    var(--nite-background) 100%
+  );
+  --related-card-image-fade: linear-gradient(
+    0deg,
+    var(--nite-background) 0%,
+    transparent 20%,
+    transparent 100%
+  );
+  --related-chip-background: var(--nite-surface-subtle);
+}
+
+:root[data-theme="dark"] .relatedProjectsDiscovery {
+  --related-card-border: color(display-p3 0.882 0.949 0.996 / 0.183);
+  --related-card-top-line: rgba(143, 143, 143, 0.67);
+}
+
+:root[data-theme="light"] .relatedProjectsDiscovery {
+  --related-card-border: color-mix(
+    in srgb,
+    var(--nite-border-subtle) 92%,
+    var(--nite-brand-accent) 8%
+  );
+  --related-card-top-line: color-mix(
+    in srgb,
+    var(--nite-text-muted) 52%,
+    transparent
+  );
+  --related-card-image-fade: none;
+}
+
+.relatedCardTopLine {
+  background: var(--related-card-top-line-gradient);
+}
+
+.relatedCardBorderVeil {
+  background: var(--related-card-border-veil);
+}
+
+.relatedCardImageFade {
+  background: var(--related-card-image-fade);
+}

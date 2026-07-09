@@ -56,16 +56,22 @@ export default function ProjectsPage() {
       />
       <main id="conteudo-principal">
         <section
-          className="relative isolate overflow-hidden bg-nite-background text-nite-text-primary"
-          data-nite-scene="inverse"
+          className="projectsPage relative isolate overflow-hidden bg-nite-background text-nite-text-primary"
+          data-projects-page=""
         >
           <div className="relative mt-0 flex h-[90vh] min-h-[34rem] w-full max-w-full flex-col items-center justify-center overflow-hidden pt-16 md:h-[calc(100vh-3.75rem)] md:min-h-0">
-            <ProjectsPatternGridTrail className="z-0" />
+            <ProjectsPatternGridTrail
+              className="z-0"
+              backgroundColor="var(--projects-hero-canvas-background)"
+              circleColor="var(--projects-hero-node-color)"
+              gridColor="var(--projects-hero-grid-color)"
+              trailColor="var(--projects-hero-trail-color)"
+            />
             <Image
               aria-hidden="true"
               alt=""
               className="pointer-events-none absolute bottom-20 left-1/2 z-[1] -translate-x-1/2 translate-y-1/3 rotate-[235deg] select-none"
-              data-testid="projects-resend-light-bloom"
+              data-testid="projects-hero-light-bloom"
               height={582}
               priority
               quality={100}
@@ -74,8 +80,8 @@ export default function ProjectsPage() {
             />
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute inset-0 left-1/2 z-[2] h-full w-full -translate-x-1/2 bg-[#2DCFBF] mix-blend-color md:w-[70vw]"
-              data-testid="projects-resend-green-light"
+              className="projectsHeroGreenField pointer-events-none absolute inset-0 left-1/2 z-[2] h-full w-full -translate-x-1/2 md:w-[70vw]"
+              data-testid="projects-hero-green-field"
               style={{
                 WebkitMaskImage:
                   "radial-gradient(circle, rgba(0, 0, 0, 1) 20%, rgba(0, 0, 0, 0) 90%)",
