@@ -349,7 +349,8 @@ describe("OpportunitiesHowToParticipatePage", () => {
         name: "Leve seus sinais para oportunidades",
       }),
     ).toHaveClass(
-      "text-[3rem]",
+      "text-[2.5rem]",
+      "min-[390px]:text-[3rem]",
       "md:text-[3.5rem]",
       "tracking-tighter",
       "text-center",
