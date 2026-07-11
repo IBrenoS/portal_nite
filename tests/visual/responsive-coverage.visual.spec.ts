@@ -237,6 +237,44 @@ test.describe("responsive structural route sweep", () => {
   }
 });
 
+const projectsCompactDesktopViewports = [
+  { name: "very-short-desktop", width: 1280, height: 600 },
+  { name: "short-desktop", width: 1280, height: 720 },
+  { name: "reported-desktop", width: 1280, height: 800 },
+  { name: "university-desktop", width: 1366, height: 768 },
+] as const;
+
+test.describe("projects hero compact desktop clearance", () => {
+  for (const viewport of projectsCompactDesktopViewports) {
+    test(viewport.name, async ({ page }) => {
+      await openResponsivePage(page, "/projetos", viewport);
+
+      const measurements = await page.evaluate(() => {
+        const description = document.querySelector<HTMLElement>(
+          '[data-testid="projects-hero-copy"] p',
+        );
+        const panel = document.querySelector<HTMLElement>(
+          '[data-testid="projects-search-panel-shell"]',
+        );
+
+        if (!description || !panel) {
+          throw new Error("Projects hero clearance contract not found.");
+        }
+
+        return {
+          descriptionBottom: description.getBoundingClientRect().bottom,
+          panelTop: panel.getBoundingClientRect().top,
+        };
+      });
+
+      expect(
+        measurements.panelTop - measurements.descriptionBottom,
+        "clearance between hero description and filter panel",
+      ).toBeGreaterThanOrEqual(24);
+    });
+  }
+});
+
 const visualCases = [
   {
     route: "/sobre",

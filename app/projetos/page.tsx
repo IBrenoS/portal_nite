@@ -59,7 +59,7 @@ export default function ProjectsPage() {
           className="projectsPage relative isolate overflow-hidden bg-nite-background text-nite-text-primary"
           data-projects-page=""
         >
-          <div className="relative mt-0 flex h-[90vh] min-h-[34rem] w-full max-w-full flex-col items-center justify-center overflow-hidden pt-16 md:h-[calc(100vh-3.75rem)] md:min-h-0">
+          <div className="relative mt-0 flex h-[90vh] min-h-[34rem] w-full max-w-full flex-col items-center justify-center overflow-hidden pt-16 md:h-[calc(100vh-3.75rem)] md:min-h-[52.25rem]">
             <ProjectsPatternGridTrail
               className="z-0"
               backgroundColor="var(--projects-hero-canvas-background)"
