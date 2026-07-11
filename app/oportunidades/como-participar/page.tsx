@@ -101,7 +101,7 @@ function ReadinessFinalCta() {
       <h2
         className={cn(
           gradientTitle,
-          "mb-2 max-w-[14ch] text-center text-[3rem] leading-[120%] tracking-tighter md:text-[3.5rem]",
+          "mb-2 w-full max-w-[14ch] text-center text-[2.5rem] leading-[120%] tracking-tighter min-[390px]:text-[3rem] md:text-[3.5rem]",
         )}
       >
         Leve seus sinais para oportunidades

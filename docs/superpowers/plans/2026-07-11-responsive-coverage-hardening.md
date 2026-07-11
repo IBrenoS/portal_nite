@@ -369,3 +369,86 @@ git diff --name-status HEAD~4..HEAD
 ```
 
 Expected: responsive tests, their snapshots, and the three scoped page files are the only implementation files; `resend.md` remains an unstaged pre-existing deletion.
+
+---
+
+### Task 6: Prevent projects hero collisions in short desktop viewports
+
+**Files:**
+
+- Modify: `tests/visual/responsive-coverage.visual.spec.ts`
+- Modify: `app/projetos/page.tsx:62`
+- Update: `tests/visual/responsive-coverage.visual.spec.ts-snapshots/projects-university-desktop-chromium-win32.png`
+
+**Interfaces:**
+
+- Consumes: `openResponsivePage` and the stable `/projetos` route from Task 1.
+- Produces: a geometric clearance contract between the hero description and filter panel at 1280 x 600, 1280 x 720, 1280 x 800, and 1366 x 768.
+
+- [ ] **Step 1: Write the failing geometric collision test**
+
+Add a `projects hero compact desktop clearance` describe with these viewports:
+
+```ts
+const projectsCompactDesktopViewports = [
+  { name: "very-short-desktop", width: 1280, height: 600 },
+  { name: "short-desktop", width: 1280, height: 720 },
+  { name: "reported-desktop", width: 1280, height: 800 },
+  { name: "university-desktop", width: 1366, height: 768 },
+] as const;
+```
+
+For each viewport, navigate to `/projetos`, measure the description bottom and panel top, and assert:
+
+```ts
+expect(
+  measurements.panelTop - measurements.descriptionBottom,
+  "clearance between hero description and filter panel",
+).toBeGreaterThanOrEqual(24);
+```
+
+- [ ] **Step 2: Run the geometric test and verify RED**
+
+```powershell
+npx playwright test tests/visual/responsive-coverage.visual.spec.ts --grep "projects hero compact desktop clearance" --reporter=line
+```
+
+Expected: all four cases FAIL with negative clearance. The measured 1280 x 720 clearance is approximately -144px, 1280 x 800 is approximately -64px, and 1366 x 768 is approximately -96px.
+
+- [ ] **Step 3: Establish the minimum desktop hero height**
+
+In `app/projetos/page.tsx`, replace `md:min-h-0` with `md:min-h-[52.25rem]`:
+
+```tsx
+<div className="relative mt-0 flex h-[90vh] min-h-[34rem] w-full max-w-full flex-col items-center justify-center overflow-hidden pt-16 md:h-[calc(100vh-3.75rem)] md:min-h-[52.25rem]">
+```
+
+The 836px minimum comes from 258px copy offset + 276px rendered copy height + 32px clearance + 270px panel overlap. It preserves the existing composition and allows short viewports to scroll instead of collapsing layers.
+
+- [ ] **Step 4: Verify GREEN across short and standard desktops**
+
+```powershell
+npx playwright test tests/visual/responsive-coverage.visual.spec.ts --grep "projects hero compact desktop clearance|compact-desktop projects|university-desktop projects|standard-desktop projects" --reporter=line
+```
+
+Expected: all geometric and structural project cases PASS with at least 24px clearance.
+
+- [ ] **Step 5: Update and inspect only the affected projects baseline**
+
+```powershell
+npx playwright test tests/visual/responsive-coverage.visual.spec.ts --grep "projects-university-desktop" --update-snapshots --reporter=line
+```
+
+Expected: one snapshot PASS; the description remains fully visible above the filter panel.
+
+- [ ] **Step 6: Run verification and commit**
+
+```powershell
+npx playwright test tests/visual/responsive-coverage.visual.spec.ts --reporter=line
+npm test
+npm run typecheck
+npm run lint
+npm run build
+git add app/projetos/page.tsx tests/visual/responsive-coverage.visual.spec.ts tests/visual/responsive-coverage.visual.spec.ts-snapshots/projects-university-desktop-chromium-win32.png docs/superpowers/plans/2026-07-11-responsive-coverage-hardening.md
+git commit -m "fix: evita colisão no hero de projetos"
+```
