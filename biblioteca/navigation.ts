@@ -52,7 +52,7 @@ const headerNavigationGroups: SiteNavigationGroup[] = [
     href: "/projetos",
     items: [
       { label: "Todos os projetos", href: "/projetos", status: "mvp" },
-      { label: "Software aplicado", href: "/projetos", status: "mvp" },
+      { label: "Data Center", href: "/projetos", status: "mvp" },
       { label: "Dados e IA", href: "/projetos", status: "mvp" },
       { label: "Robótica", href: "/projetos", status: "mvp" },
       { label: "Experiência digital", href: "/projetos", status: "mvp" },

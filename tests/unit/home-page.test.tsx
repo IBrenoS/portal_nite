@@ -374,7 +374,7 @@ describe("HomePage", { timeout: 15_000 }, () => {
       "Saída da etapa",
       "Artefatos possíveis",
       "Saídas concretas para transformar desafios acadêmicos em tecnologia aplicada.",
-      "Software aplicado",
+      "Data Center",
       "Dados e IA",
       "Robótica e prototipagem",
       "Experiência digital",
@@ -448,7 +448,7 @@ describe("HomePage", { timeout: 15_000 }, () => {
         projectsSection.querySelector(
           "[data-project-role='protagonist']",
         ) as HTMLElement,
-      ).getByRole("heading", { name: "Software aplicado" }),
+      ).getByRole("heading", { name: "Data Center" }),
     ).toBeInTheDocument();
     expect(projectsSection.querySelectorAll("[data-slot='card']")).toHaveLength(
       0,
@@ -516,7 +516,7 @@ describe("HomePage", { timeout: 15_000 }, () => {
     expect(projects.queryByText("Visual editorial")).not.toBeInTheDocument();
     expect(
       projects.queryByAltText(
-        /Ilustração editorial da frente de software aplicado/i,
+        /Racks de servidores e equipamentos de rede em um data center/i,
       ),
     ).not.toBeInTheDocument();
     expect(projects.queryByText("Objetivo")).not.toBeInTheDocument();

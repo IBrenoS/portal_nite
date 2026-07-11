@@ -10,8 +10,13 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: "/projetos/software-aplicado",
+        destination: "/projetos/data-center",
+        permanent: true,
+      },
+      {
         source: "/projetos/software-aplicado-demonstrativo",
-        destination: "/projetos/software-aplicado",
+        destination: "/projetos/data-center",
         permanent: true,
       },
       {

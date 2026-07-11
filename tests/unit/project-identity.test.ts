@@ -61,3 +61,36 @@ describe("identidade de Jogos Embarcados", () => {
     ]);
   });
 });
+
+describe("identidade de Data Center", () => {
+  it("usa o novo nome, slug e a mesma capa em todos os slots", () => {
+    const project = projects.find(({ slug }) => slug === "data-center");
+    const cover = "/images/projetos/data-center.png";
+
+    expect(project).toBeDefined();
+    expect(project?.title).toBe("Data Center");
+    expect(project?.coverImage).toBe(cover);
+    expect(project?.illustration?.src).toBe(cover);
+    expect(project?.gallery.map(({ src }) => src)).toContain(cover);
+    expect(project?.seo?.title).toContain("Data Center");
+    expect(JSON.stringify(projects)).not.toMatch(/software\s+aplicado/i);
+  });
+
+  it("usa a capa pública nos metadados sociais", () => {
+    const project = getProjectBySlug("data-center");
+
+    expect(project).toBeDefined();
+
+    const metadata = buildProjectMetadata(project!);
+
+    expect(metadata.openGraph?.images).toEqual([
+      expect.objectContaining({
+        url: expect.stringContaining("/images/projetos/data-center.png"),
+        alt: project?.alt,
+      }),
+    ]);
+    expect(metadata.twitter?.images).toEqual([
+      expect.stringContaining("/images/projetos/data-center.png"),
+    ]);
+  });
+});

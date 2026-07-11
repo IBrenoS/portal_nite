@@ -126,7 +126,7 @@ expect(
     projectsSection.querySelector(
       "[data-project-role='protagonist']",
     ) as HTMLElement,
-  ).getByRole("heading", { name: "Software aplicado" }),
+  ).getByRole("heading", { name: "Data Center" }),
 ).toBeInTheDocument();
 expect(projectsSection.querySelectorAll("[data-slot='card']")).toHaveLength(0);
 expect(
@@ -176,7 +176,7 @@ import { getFeaturedProjects } from "@/biblioteca/conteudo";
 import { ProjectsOperatingSection } from "@/components/sections/projects-operating-section";
 
 describe("ProjectsOperatingSection", () => {
-  it("seleciona Software aplicado como protagonista pelo slug", () => {
+  it("seleciona Data Center como protagonista pelo slug", () => {
     render(
       <ProjectsOperatingSection
         projects={[...getFeaturedProjects()].reverse()}
@@ -190,7 +190,7 @@ describe("ProjectsOperatingSection", () => {
     expect(protagonist).toBeInTheDocument();
     expect(
       within(protagonist).getByRole("heading", {
-        name: "Software aplicado",
+        name: "Data Center",
       }),
     ).toBeInTheDocument();
     expect(screen.getAllByRole("link", { name: "Ver projeto" })).toHaveLength(
@@ -1059,7 +1059,7 @@ Inside `ProjectsOperatingSection`:
 
 ```tsx
 const protagonist =
-  projects.find((project) => project.slug === "software-aplicado") ??
+  projects.find((project) => project.slug === "data-center") ??
   projects[0];
 const supportingProjects = protagonist
   ? projects.filter((project) => project.slug !== protagonist.slug).slice(0, 2)

@@ -9,6 +9,16 @@ describe("redirecionamentos de Jogos Embarcados", () => {
     expect(redirects).toEqual(
       expect.arrayContaining([
         {
+          source: "/projetos/software-aplicado",
+          destination: "/projetos/data-center",
+          permanent: true,
+        },
+        {
+          source: "/projetos/software-aplicado-demonstrativo",
+          destination: "/projetos/data-center",
+          permanent: true,
+        },
+        {
           source: "/projetos/robotica-educacional",
           destination: "/projetos/jogos-embarcados",
           permanent: true,

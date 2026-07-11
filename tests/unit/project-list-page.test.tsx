@@ -276,7 +276,7 @@ describe("ProjectsPage", () => {
     ).toBeInTheDocument();
 
     expect(
-      main.getByAltText(/Ilustração editorial da frente de software aplicado/i),
+      main.getByAltText(/Racks de servidores, rede e console de operação/i),
     ).toBeInTheDocument();
     expect(main.queryByText("Evidência pública")).not.toBeInTheDocument();
     expect(main.queryByText("Visual editorial")).not.toBeInTheDocument();
@@ -288,8 +288,8 @@ describe("ProjectsPage", () => {
     ).not.toBeInTheDocument();
 
     expect(
-      main.getByRole("link", { name: /Software aplicado/i }),
-    ).toHaveAttribute("href", "/projetos/software-aplicado");
+      main.getByRole("link", { name: /Data Center/i }),
+    ).toHaveAttribute("href", "/projetos/data-center");
     expect(
       main.getByRole("link", { name: /Jogos Embarcados/i }),
     ).toHaveAttribute("href", "/projetos/jogos-embarcados");
@@ -324,7 +324,7 @@ describe("ProjectsPage", () => {
     expect(explorerCards()).toHaveLength(1);
     expect(main.getByRole("link", { name: /Dados e IA/i })).toBeInTheDocument();
     expect(
-      main.queryByRole("link", { name: /Software aplicado/i }),
+      main.queryByRole("link", { name: /Data Center/i }),
     ).not.toBeInTheDocument();
 
     await user.clear(search);

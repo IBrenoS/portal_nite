@@ -11,7 +11,7 @@
 ## Global Constraints
 
 - Cover 320 x 568, 360 x 640, 390 x 844, 430 x 932, 768 x 1024, 1024 x 768, 1280 x 720, 1366 x 768, 1440 x 1000, and 1920 x 1080.
-- Sweep every public route in the design specification, using `/projetos/software-aplicado` and `/pessoas/breno-cerqueira` as stable dynamic representatives.
+- Sweep every public route in the design specification, using `/projetos/data-center` and `/pessoas/breno-cerqueira` as stable dynamic representatives.
 - Fix only responsive failures reproduced by browser evidence.
 - Preserve current content, identity, routes, large-desktop composition, and existing 390px mobile composition.
 - Keep intentional horizontal scrollers locally scrollable and exclude them from page-level clipping failures.
@@ -70,7 +70,7 @@ const responsiveRoutes = [
   { name: "home", path: "/" },
   { name: "about", path: "/sobre" },
   { name: "projects", path: "/projetos" },
-  { name: "project-detail", path: "/projetos/software-aplicado" },
+  { name: "project-detail", path: "/projetos/data-center" },
   { name: "updates", path: "/atualizacoes" },
   { name: "people", path: "/pessoas" },
   { name: "person-profile", path: "/pessoas/breno-cerqueira" },

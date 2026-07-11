@@ -105,12 +105,12 @@ const realProjectFixture = {
 
 describe("ProjectPage", () => {
   it("renderiza frente em estruturação como acompanhamento público honesto", async () => {
-    await renderProjectPage("software-aplicado");
+    await renderProjectPage("data-center");
 
     expect(
       screen.getByRole("heading", {
         level: 1,
-        name: "Software aplicado",
+        name: "Data Center",
       }),
     ).toBeInTheDocument();
     expect(
@@ -177,7 +177,7 @@ describe("ProjectPage", () => {
     ).toBeGreaterThanOrEqual(2);
     expect(
       screen.getByAltText(
-        /Ilustração editorial da frente de software aplicado/i,
+        /Racks de servidores, rede e console de operação/i,
       ),
     ).toBeInTheDocument();
     const projectVisual = document.querySelector("[data-visual-kind]");
@@ -236,7 +236,7 @@ describe("ProjectPage", () => {
   }, 10000);
 
   it("renderiza relacionados como faixa de descoberta compacta", async () => {
-    await renderProjectPage("software-aplicado");
+    await renderProjectPage("data-center");
 
     const relatedSection = document.querySelector(
       "[data-component='related-projects-discovery']",

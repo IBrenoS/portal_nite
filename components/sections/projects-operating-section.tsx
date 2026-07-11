@@ -18,7 +18,7 @@ export function ProjectsOperatingSection({
   projects,
 }: ProjectsOperatingSectionProps) {
   const protagonist =
-    projects.find((project) => project.slug === "software-aplicado") ??
+    projects.find((project) => project.slug === "data-center") ??
     projects[0];
   const supportingProjects = protagonist
     ? projects

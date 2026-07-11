@@ -16,8 +16,8 @@ import {
 } from "@/components/sections/related-projects-discovery";
 
 const baseItem = {
-  href: "/projetos/software-aplicado" as RelatedProjectDiscoveryItem["href"],
-  title: "Software aplicado",
+  href: "/projetos/data-center" as RelatedProjectDiscoveryItem["href"],
+  title: "Data Center",
   summary:
     "Frente de teste para validar o card compacto de descoberta dos projetos relacionados.",
   area: "Programação",
@@ -26,8 +26,8 @@ const baseItem = {
   currentPhase: "Mapeamento da frente",
   stack: ["Next.js", "TypeScript", "UI responsiva", "Dados extras"],
   visual: {
-    src: "/images/projetos/programacao-lab-card.png",
-    alt: "Ilustração editorial da frente de software aplicado.",
+    src: "/images/projetos/data-center.png",
+    alt: "Racks de servidores e equipamentos de rede em um data center.",
   },
 } satisfies RelatedProjectDiscoveryItem;
 
@@ -69,7 +69,7 @@ function setOverflow(
 }
 
 beforeEach(() => {
-  window.history.replaceState({}, "", "/projetos/software-aplicado");
+  window.history.replaceState({}, "", "/projetos/data-center");
   window.sessionStorage.clear();
   Element.prototype.scrollBy = vi.fn();
   Element.prototype.scrollTo = vi.fn();
@@ -375,7 +375,7 @@ describe("RelatedProjectsDiscovery", () => {
 
     expect(
       window.sessionStorage.getItem(
-        "nite:related-projects-scroll:/projetos/software-aplicado",
+        "nite:related-projects-scroll:/projetos/data-center",
       ),
     ).toBe("144");
 
@@ -389,7 +389,7 @@ describe("RelatedProjectsDiscovery", () => {
     await waitFor(() => expect(restoredCarousel.scrollLeft).toBe(144));
     expect(
       window.sessionStorage.getItem(
-        "nite:related-projects-scroll:/projetos/software-aplicado",
+        "nite:related-projects-scroll:/projetos/data-center",
       ),
     ).toBeNull();
   });

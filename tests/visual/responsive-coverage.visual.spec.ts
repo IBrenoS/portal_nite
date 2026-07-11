@@ -49,7 +49,7 @@ const responsiveRoutes = [
   { name: "home", path: "/" },
   { name: "about", path: "/sobre" },
   { name: "projects", path: "/projetos" },
-  { name: "project-detail", path: "/projetos/software-aplicado" },
+  { name: "project-detail", path: "/projetos/data-center" },
   { name: "updates", path: "/atualizacoes" },
   { name: "people", path: "/pessoas" },
   { name: "person-profile", path: "/pessoas/breno-cerqueira" },

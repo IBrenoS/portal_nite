@@ -19,7 +19,7 @@ A composição segue a opção `Palco de Produto` revisada:
   centralizados.
 - Um único painel técnico apresenta `Desafio claro`, `Protótipo testável`,
   `Evolução contínua` e `Impacto e compartilhamento`.
-- `Projetos em destaque` tem `Software aplicado` como protagonista.
+- `Projetos em destaque` tem `Data Center` como protagonista.
 - `Jogos Embarcados` e `Dados e IA` aparecem como módulos de apoio.
 - As três frentes continuam exibindo o estado `Em estruturação`.
 
@@ -129,7 +129,7 @@ Mobile:
 
 A seção deixa de renderizar três `ProjectCard` equivalentes.
 
-`Software aplicado` será selecionado pelo slug `software-aplicado`, não pela
+`Data Center` será selecionado pelo slug `data-center`, não pela
 posição do array. Os demais projetos destacados formarão a grade de apoio.
 
 Estrutura:
@@ -141,7 +141,7 @@ Estrutura:
 
 ### Projeto protagonista
 
-O módulo de `Software aplicado` terá:
+O módulo de `Data Center` terá:
 
 - mídia larga com interface técnica composta por código, eventos e logs;
 - status `Em estruturação`;
@@ -186,7 +186,7 @@ em um componente específico da home.
 O fluxo de dados dos projetos permanece server-side:
 
 1. a home carrega os projetos destacados;
-2. `ProjectsOperatingSection` identifica `software-aplicado`;
+2. `ProjectsOperatingSection` identifica `data-center`;
 3. o protagonista e os módulos de apoio recebem o mesmo objeto `Project`;
 4. links continuam apontando para `/projetos/[slug]`.
 

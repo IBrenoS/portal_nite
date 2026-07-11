@@ -9,7 +9,7 @@ afterEach(() => {
 });
 
 describe("ProjectsOperatingSection", () => {
-  it("seleciona Software aplicado como protagonista pelo slug", () => {
+  it("seleciona Data Center como protagonista pelo slug", () => {
     render(
       <ProjectsOperatingSection
         projects={[...getFeaturedProjects()].reverse()}
@@ -23,7 +23,7 @@ describe("ProjectsOperatingSection", () => {
     expect(protagonist).toBeInTheDocument();
     expect(
       within(protagonist).getByRole("heading", {
-        name: "Software aplicado",
+        name: "Data Center",
       }),
     ).toBeInTheDocument();
     expect(screen.getAllByRole("link", { name: "Ver projeto" })).toHaveLength(
@@ -111,7 +111,7 @@ describe("ProjectsOperatingSection", () => {
     expect(screen.queryByText("Dispositivos")).not.toBeInTheDocument();
     expect(screen.queryByText("Painel de análises")).not.toBeInTheDocument();
     expect(
-      section.querySelector("img[src*='programacao-lab-card.png']"),
+      section.querySelector("img[src*='data-center.png']"),
     ).toBeInTheDocument();
     expect(
       section.querySelector("img[src*='jogos-embarcados.png']"),

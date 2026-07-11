@@ -1,9 +1,9 @@
 [
   {
-    "slug": "software-aplicado",
-    "title": "Software aplicado",
+    "slug": "data-center",
+    "title": "Data Center",
     "summary": "Soluções digitais criadas para aproximar desenvolvimento, experiência de usuário e aprendizagem prática.",
-    "description": "Esta frente reúne iniciativas de programação, interfaces e sistemas web pensadas para transformar desafios acadêmicos em produtos digitais claros, úteis e testáveis.",
+    "description": "A narrativa completa de Data Center está pendente de atualização editorial.",
     "problem": "Desafios acadêmicos e institucionais frequentemente precisam sair de ideias soltas para interfaces, sistemas e protótipos navegáveis que possam ser avaliados com clareza.",
     "context": "No NITE, esta frente organiza repertório, componentes, fluxos e práticas de desenvolvimento para apoiar futuras entregas digitais da comunidade UniJorge.",
     "audience": ["Estudantes", "Professores", "Gestão acadêmica"],
@@ -14,11 +14,12 @@
     "currentPhase": "Mapeamento da frente",
     "lastUpdated": "2026-05-11",
     "nextStep": "Validar projetos e evidências públicas antes de publicar entregáveis reais.",
-    "coverImage": "/images/projetos/programacao-lab-card.png",
-    "alt": "Bancada tecnológica com telas de código, notebook e iluminação azul em ambiente de desenvolvimento.",
+    "coverImage": "/images/projetos/data-center.png",
+    "coverImagePublic": true,
+    "alt": "Racks de servidores e equipamentos de rede em um data center.",
     "illustration": {
-      "src": "/images/projetos/ilustracao-software-aplicado.webp",
-      "alt": "Ilustração editorial da frente de software aplicado com blocos abstratos e linhas tecnológicas."
+      "src": "/images/projetos/data-center.png",
+      "alt": "Racks de servidores, rede e console de operação em um data center."
     },
     "featured": true,
     "contentNotice": "Conteúdo em estruturação editorial; não representa um projeto ativo validado.",
@@ -29,8 +30,8 @@
     "changelog": [],
     "gallery": [
       {
-        "src": "/images/projetos/programacao-lab-card.png",
-        "alt": "Ambiente de desenvolvimento com telas de código e luzes azuis sobre uma mesa de trabalho."
+        "src": "/images/projetos/data-center.png",
+        "alt": "Racks de servidores e equipamentos de rede em um data center."
       }
     ],
     "highlights": [
@@ -41,8 +42,8 @@
     "objective": "Aproximar estudantes de práticas modernas de desenvolvimento e criar referências visuais para projetos digitais do núcleo.",
     "results": "A frente está em estruturação editorial e aguarda evidências públicas antes de exibir resultados ou entregáveis reais.",
     "seo": {
-      "title": "Software aplicado em projetos do NITE",
-      "description": "Conheça projetos de software aplicado do NITE, com foco em desenvolvimento web, interfaces digitais, aprendizagem prática e tecnologia na universidade."
+      "title": "Data Center em projetos do NITE",
+      "description": "Conheça Data Center no NITE. A narrativa completa do projeto está em atualização editorial."
     },
     "links": []
   },

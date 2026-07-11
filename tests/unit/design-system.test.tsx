@@ -524,7 +524,7 @@ describe("design system base", () => {
       <ProjectCard
         title="Portal de testes"
         summary="Resumo validado usado apenas como fixture de teste."
-        area="Software aplicado"
+        area="Infraestrutura de testes"
         status="draft"
         problem="Contexto do projeto mantido como informacao estrutural."
         objective="Organizar uma experiencia de portfolio acessivel."
@@ -539,8 +539,8 @@ describe("design system base", () => {
         href="/projetos/portal-de-testes"
         visual={{
           kind: "illustration",
-          src: "/images/projetos/ilustracao-software-aplicado.webp",
-          alt: "Ilustração editorial da frente de software aplicado.",
+          src: "/images/projetos/data-center.png",
+          alt: "Racks de servidores e equipamentos de rede em um data center.",
         }}
         headingLevel={3}
       />,
@@ -561,13 +561,13 @@ describe("design system base", () => {
       screen.getByRole("heading", { level: 3, name: "Portal de testes" }),
     ).toBeInTheDocument();
     expect(status).toHaveAttribute("data-status", "draft");
-    expect(screen.getByText("Software aplicado")).toBeInTheDocument();
+    expect(screen.getByText("Infraestrutura de testes")).toBeInTheDocument();
     expect(screen.getByText("Next.js")).toBeInTheDocument();
     expect(screen.getByText("+1")).toBeInTheDocument();
     expect(screen.queryByText("Visual editorial")).not.toBeInTheDocument();
     expect(
       screen.getByAltText(
-        "Ilustração editorial da frente de software aplicado.",
+        "Racks de servidores e equipamentos de rede em um data center.",
       ),
     ).toBeInTheDocument();
     expect(

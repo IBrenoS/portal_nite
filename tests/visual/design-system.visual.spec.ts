@@ -7,7 +7,7 @@ const themes = ["dark", "light"] as const satisfies readonly Theme[];
 const desktopRoutes = [
   { name: "home", path: "/" },
   { name: "projects", path: "/projetos" },
-  { name: "project-detail", path: "/projetos/software-aplicado" },
+  { name: "project-detail", path: "/projetos/data-center" },
   { name: "updates", path: "/atualizacoes" },
   { name: "people", path: "/pessoas" },
   { name: "opportunities", path: "/oportunidades" },
