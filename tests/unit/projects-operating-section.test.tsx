@@ -108,7 +108,7 @@ describe("ProjectsOperatingSection", () => {
       section.querySelector("img[src*='programacao-lab-card.png']"),
     ).toBeInTheDocument();
     expect(
-      section.querySelector("img[src*='robotica-prototipo-card.png']"),
+      section.querySelector("img[src*='jogos-embarcados.png']"),
     ).toBeInTheDocument();
     expect(
       section.querySelector("img[src*='dados-ia-card.png']"),

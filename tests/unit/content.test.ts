@@ -29,7 +29,7 @@ describe("conteudo estruturado", () => {
     expect(projects).toHaveLength(3);
     expect(getProjectSlugs()).toEqual([
       { slug: "software-aplicado" },
-      { slug: "robotica-educacional" },
+      { slug: "jogos-embarcados" },
       { slug: "dados-e-ia" },
     ]);
     expect(getProjectBySlug("software-aplicado")?.title).toBe(
@@ -73,11 +73,13 @@ describe("conteudo estruturado", () => {
     ).toBe(true);
     expect(projects.map((project) => project.illustration?.src)).toEqual([
       "/images/projetos/ilustracao-software-aplicado.webp",
-      "/images/projetos/ilustracao-robotica-educacional.webp",
+      "/images/projetos/jogos-embarcados.png",
       "/images/projetos/ilustracao-dados-e-ia.webp",
     ]);
     expect(
-      projects.every((project) => {
+      projects
+        .filter((project) => project.slug !== "jogos-embarcados")
+        .every((project) => {
         const illustration = project.illustration;
 
         return Boolean(
@@ -85,8 +87,11 @@ describe("conteudo estruturado", () => {
             illustration.alt.includes("Ilustração editorial") &&
             illustration.src !== project.coverImage,
         );
-      }),
+        }),
     ).toBe(true);
+    expect(getProjectBySlug("jogos-embarcados")?.illustration?.src).toBe(
+      getProjectBySlug("jogos-embarcados")?.coverImage,
+    );
     expect(projects.every((project) => project.nextStep.length > 12)).toBe(
       true,
     );
