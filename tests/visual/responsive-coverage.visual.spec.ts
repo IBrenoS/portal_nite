@@ -58,12 +58,10 @@ const responsiveRoutes = [
   { name: "contact", path: "/contato" },
 ] as const;
 
-type ResponsiveViewport = (typeof responsiveViewports)[number];
-
 async function openResponsivePage(
   page: Page,
   path: string,
-  viewport: ResponsiveViewport,
+  viewport: { width: number; height: number },
 ) {
   const browserErrors: string[] = [];
 
@@ -92,6 +90,41 @@ async function openResponsivePage(
   await page.waitForTimeout(80);
 
   return { browserErrors, response };
+}
+
+async function prepareResponsiveScreenshot(page: Page) {
+  await page.evaluate(async () => {
+    const viewportHeight = window.innerHeight;
+
+    for (
+      let offset = 0;
+      offset < document.documentElement.scrollHeight;
+      offset += viewportHeight
+    ) {
+      window.scrollTo(0, offset);
+      await new Promise((resolve) => window.setTimeout(resolve, 45));
+    }
+
+    await Promise.all(
+      Array.from(document.images)
+        .filter((image) => !image.complete)
+        .map(
+          (image) =>
+            new Promise<void>((resolve) => {
+              const timeout = window.setTimeout(resolve, 3000);
+              const finish = () => {
+                window.clearTimeout(timeout);
+                resolve();
+              };
+
+              image.addEventListener("load", finish, { once: true });
+              image.addEventListener("error", finish, { once: true });
+            }),
+        ),
+    );
+    window.scrollTo(0, 0);
+  });
+  await page.waitForTimeout(120);
 }
 
 async function measureResponsiveLayout(page: Page) {
@@ -201,6 +234,127 @@ test.describe("responsive structural route sweep", () => {
         expect(layout.navigationMode).toBe(viewport.navigation);
       });
     }
+  }
+});
+
+const visualCases = [
+  {
+    route: "/sobre",
+    name: "about-small-mobile",
+    width: 320,
+    height: 568,
+  },
+  {
+    route: "/oportunidades/como-participar",
+    name: "how-to-small-mobile",
+    width: 320,
+    height: 568,
+  },
+  { route: "/", name: "home-tablet", width: 768, height: 1024 },
+  {
+    route: "/pessoas",
+    name: "people-tablet",
+    width: 768,
+    height: 1024,
+  },
+  {
+    route: "/contato",
+    name: "contact-tablet-landscape",
+    width: 1024,
+    height: 768,
+  },
+  {
+    route: "/",
+    name: "home-compact-desktop",
+    width: 1280,
+    height: 720,
+  },
+  {
+    route: "/projetos",
+    name: "projects-university-desktop",
+    width: 1366,
+    height: 768,
+  },
+  {
+    route: "/pessoas/breno-cerqueira",
+    name: "person-university-desktop",
+    width: 1366,
+    height: 768,
+  },
+] as const;
+
+test.describe("targeted responsive snapshots", () => {
+  for (const testCase of visualCases) {
+    test(testCase.name, async ({ page }) => {
+      await openResponsivePage(page, testCase.route, testCase);
+      await prepareResponsiveScreenshot(page);
+
+      await expect(page).toHaveScreenshot(`${testCase.name}.png`, {
+        animations: "disabled",
+        fullPage: true,
+      });
+    });
+  }
+});
+
+test.describe("responsive navigation boundaries", () => {
+  test("tablet portrait keeps the layered mobile navigation operable", async ({
+    page,
+  }) => {
+    await openResponsivePage(page, "/", { width: 768, height: 1024 });
+
+    const menuButton = page.getByRole("button", { name: "Menu", exact: true });
+    await expect(menuButton).toBeVisible();
+    await menuButton.click();
+
+    const menu = page.locator("[data-mobile-layered-menu]");
+    await expect(menu).toBeVisible();
+    await page.keyboard.press("Tab");
+
+    expect(
+      await page.evaluate(() =>
+        document
+          .querySelector("[data-mobile-layered-menu]")
+          ?.contains(document.activeElement),
+      ),
+    ).toBe(true);
+  });
+
+  for (const viewport of [
+    { name: "tablet-landscape", width: 1024, height: 768 },
+    { name: "compact-desktop", width: 1280, height: 720 },
+    { name: "university-desktop", width: 1366, height: 768 },
+  ] as const) {
+    test(`${viewport.name} keeps desktop navigation operable`, async ({
+      page,
+    }) => {
+      await openResponsivePage(page, "/", viewport);
+
+      const header = page.locator("[data-site-header]");
+      const navigation = page.locator("[data-site-nav]");
+      const themeToggle = page
+        .getByRole("button", { name: /Alterar tema da interface/ })
+        .first();
+
+      await expect(navigation).toBeVisible();
+      await expect(themeToggle).toBeVisible();
+      await expect(
+        page.getByRole("button", { name: "Menu", exact: true }),
+      ).toBeHidden();
+
+      await page
+        .locator("[data-nav-trigger]")
+        .first()
+        .getByRole("button")
+        .focus();
+      await expect(page.locator("[data-mega-menu-shell]")).toBeVisible();
+
+      expect(
+        await header.evaluate(
+          (element) => element.scrollWidth - element.clientWidth,
+        ),
+      ).toBeLessThanOrEqual(1);
+    });
   }
 });
 
