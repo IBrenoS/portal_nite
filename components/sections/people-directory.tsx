@@ -9,13 +9,13 @@ type PeopleDirectoryProps = {
 };
 
 function getPersonListName(person: Person) {
-  const listName = person.listName?.trim();
+  const nameParts = person.name.trim().split(/\s+/).filter(Boolean);
 
-  if (listName) {
-    return listName;
+  if (nameParts.length < 2) {
+    return person.name;
   }
 
-  return person.name.trim().split(/\s+/).filter(Boolean)[0] ?? person.name;
+  return `${nameParts[0]} ${nameParts[nameParts.length - 1]}`;
 }
 
 export function PeopleDirectory({ people }: PeopleDirectoryProps) {

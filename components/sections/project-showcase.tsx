@@ -166,7 +166,12 @@ export function ProjectShowcaseRow({
       data-project-role={role}
       data-project-layout={layout}
       data-project-mobile-pattern="visual-first"
-      className="grid gap-8 py-10 sm:py-12 lg:grid-cols-[minmax(0,0.58fr)_minmax(19rem,0.42fr)] lg:items-center lg:gap-16"
+      className={cn(
+        "grid gap-8 py-10 sm:py-12 lg:items-center lg:gap-16",
+        desktopCopyFirst
+          ? "lg:grid-cols-[minmax(19rem,0.42fr)_minmax(0,0.58fr)]"
+          : "lg:grid-cols-[minmax(0,0.58fr)_minmax(19rem,0.42fr)]",
+      )}
     >
       {visual}
       {copy}

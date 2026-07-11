@@ -53,6 +53,12 @@ describe("ProjectsOperatingSection", () => {
     expect(rows[0]).toHaveAttribute("data-project-layout", "visual-first");
     expect(rows[1]).toHaveAttribute("data-project-layout", "copy-first");
     expect(rows[2]).toHaveAttribute("data-project-layout", "visual-first");
+    expect(rows[0]).toHaveClass(
+      "lg:grid-cols-[minmax(0,0.58fr)_minmax(19rem,0.42fr)]",
+    );
+    expect(rows[1]).toHaveClass(
+      "lg:grid-cols-[minmax(19rem,0.42fr)_minmax(0,0.58fr)]",
+    );
     for (const row of rows) {
       expect(row).toHaveAttribute(
         "data-project-mobile-pattern",
