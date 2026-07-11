@@ -220,7 +220,7 @@ export const projectSchema = z.object({
   coverImage: z.string().min(1).describe("Imagem principal do projeto."),
   coverImagePublic: z
     .boolean()
-    .default(false)
+    .optional()
     .describe("Autoriza o uso da capa em metadados e compartilhamentos."),
   alt: z.string().min(12).describe("Texto alternativo da imagem principal."),
   illustration: imageSchema
