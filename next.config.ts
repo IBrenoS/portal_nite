@@ -15,8 +15,13 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/projetos/robotica-educacional",
+        destination: "/projetos/jogos-embarcados",
+        permanent: true,
+      },
+      {
         source: "/projetos/robotica-educacional-demonstrativo",
-        destination: "/projetos/robotica-educacional",
+        destination: "/projetos/jogos-embarcados",
         permanent: true,
       },
       {
