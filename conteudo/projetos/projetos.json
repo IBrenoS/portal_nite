@@ -47,10 +47,10 @@
     "links": []
   },
   {
-    "slug": "robotica-educacional",
-    "title": "Robótica educacional",
+    "slug": "jogos-embarcados",
+    "title": "Jogos Embarcados",
     "summary": "Protótipos, sensores e montagem de soluções físicas para explorar tecnologia de forma prática e colaborativa.",
-    "description": "A robótica educacional conecta conceitos de programação, eletrônica e prototipagem para criar experiências de aprendizagem mão na massa dentro do ecossistema do NITE.",
+    "description": "A narrativa completa de Jogos Embarcados está pendente de atualização editorial.",
     "problem": "Aprender tecnologia aplicada também exige contato com materiais, sensores, montagem e validação física, não apenas com interfaces digitais.",
     "context": "Esta frente prepara a base para oficinas, demonstrações e protótipos educacionais que aproximem estudantes de experimentação com hardware.",
     "audience": ["Estudantes", "Professores", "Comunidade acadêmica"],
@@ -61,11 +61,11 @@
     "currentPhase": "Mapeamento da frente",
     "lastUpdated": "2026-05-11",
     "nextStep": "Organizar registros, oficinas e protótipos que possam ser publicados com contexto validado.",
-    "coverImage": "/images/projetos/robotica-prototipo-card.png",
-    "alt": "Protótipo de robótica sobre bancada de laboratório com componentes eletrônicos e iluminação azul.",
+    "coverImage": "/images/projetos/jogos-embarcados.png",
+    "alt": "Jogo embarcado de pedra, papel e tesoura com três comandos iluminados sobre uma bancada.",
     "illustration": {
-      "src": "/images/projetos/ilustracao-robotica-educacional.webp",
-      "alt": "Ilustração editorial da frente de robótica educacional com formas abstratas de sensores e prototipagem."
+      "src": "/images/projetos/jogos-embarcados.png",
+      "alt": "Jogo embarcado de pedra, papel e tesoura com peças de mão e botões iluminados."
     },
     "featured": true,
     "contentNotice": "Conteúdo em estruturação editorial; não representa um projeto ativo validado.",
@@ -76,8 +76,8 @@
     "changelog": [],
     "gallery": [
       {
-        "src": "/images/projetos/robotica-prototipo-card.png",
-        "alt": "Protótipo robótico com sensores e componentes eletrônicos em uma bancada escura."
+        "src": "/images/projetos/jogos-embarcados.png",
+        "alt": "Protótipo de pedra, papel e tesoura com botões vermelho, verde e azul."
       }
     ],
     "highlights": [
@@ -88,8 +88,8 @@
     "objective": "Estimular a criação de protótipos tecnológicos que tornem a aprendizagem mais visual, prática e conectada a desafios concretos.",
     "results": "A frente está em estruturação editorial e aguarda evidências públicas antes de exibir resultados ou entregáveis reais.",
     "seo": {
-      "title": "Robótica educacional no NITE",
-      "description": "Explore iniciativas de robótica educacional do NITE, com sensores, prototipagem, programação e experiências práticas de tecnologia."
+      "title": "Jogos Embarcados no NITE",
+      "description": "Conheça Jogos Embarcados no NITE. A narrativa completa do projeto está em atualização editorial."
     },
     "links": []
   },
