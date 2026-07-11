@@ -291,8 +291,14 @@ describe("ProjectsPage", () => {
       main.getByRole("link", { name: /Software aplicado/i }),
     ).toHaveAttribute("href", "/projetos/software-aplicado");
     expect(
-      main.getByRole("link", { name: /Robótica educacional/i }),
-    ).toHaveAttribute("href", "/projetos/robotica-educacional");
+      main.getByRole("link", { name: /Jogos Embarcados/i }),
+    ).toHaveAttribute("href", "/projetos/jogos-embarcados");
+    const embeddedGamesCard = main.getByRole("link", {
+      name: /Jogos Embarcados/i,
+    });
+    expect(embeddedGamesCard?.querySelector("img")?.getAttribute("src")).toContain(
+      "jogos-embarcados.png",
+    );
     expect(main.getByRole("link", { name: /Dados e IA/i })).toHaveAttribute(
       "href",
       "/projetos/dados-e-ia",
@@ -336,14 +342,14 @@ describe("ProjectsPage", () => {
 
     expect(explorerCards()).toHaveLength(1);
     expect(
-      main.getByRole("link", { name: /Robótica educacional/i }),
+      main.getByRole("link", { name: /Jogos Embarcados/i }),
     ).toBeInTheDocument();
 
     await chooseFilter(user, "Tecnologia", /Arduino/);
 
     expect(explorerCards()).toHaveLength(1);
     expect(
-      main.getByRole("link", { name: /Robótica educacional/i }),
+      main.getByRole("link", { name: /Jogos Embarcados/i }),
     ).toBeInTheDocument();
 
     await chooseFilter(user, "Ano", "2026");

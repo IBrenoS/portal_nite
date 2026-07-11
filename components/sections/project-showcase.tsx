@@ -20,7 +20,7 @@ type ProjectShowcaseRowProps = {
 
 const visualBySlug: Record<string, ProjectVisual> = {
   "software-aplicado": "code-workbench",
-  "robotica-educacional": "robotics-lab",
+  "jogos-embarcados": "robotics-lab",
   "dados-e-ia": "analytics-dashboard",
 };
 

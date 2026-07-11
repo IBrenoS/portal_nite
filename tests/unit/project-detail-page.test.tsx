@@ -262,7 +262,7 @@ describe("ProjectPage", () => {
     expect(
       related.getByRole("heading", {
         level: 3,
-        name: "Robótica educacional",
+        name: "Jogos Embarcados",
       }),
     ).toBeInTheDocument();
     expect(

@@ -491,6 +491,23 @@ describe("HomePage", { timeout: 15_000 }, () => {
         visual.querySelector("[data-project-image-overlay]"),
       ).not.toBeInTheDocument();
     }
+    const embeddedGamesTitle = projects.getByRole("heading", {
+      level: 3,
+      name: "Jogos Embarcados",
+    });
+    const embeddedGamesRow = embeddedGamesTitle.closest(
+      "[data-project-showcase-row]",
+    );
+    expect(
+      embeddedGamesRow
+        ?.querySelector("[data-project-cover-image]")
+        ?.getAttribute("src"),
+    ).toContain("jogos-embarcados.png");
+    expect(
+      embeddedGamesRow?.querySelector(
+        "[data-project-visual='robotics-lab']",
+      ),
+    ).toBeInTheDocument();
     expect(
       projects.queryByText(
         "Projetos em estruturação permanecem sinalizados até que existam evidências públicas, entregáveis reais e contexto validado para publicação.",
