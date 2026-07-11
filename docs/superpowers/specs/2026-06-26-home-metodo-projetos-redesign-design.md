@@ -20,7 +20,7 @@ A composição segue a opção `Palco de Produto` revisada:
 - Um único painel técnico apresenta `Desafio claro`, `Protótipo testável`,
   `Evolução contínua` e `Impacto e compartilhamento`.
 - `Projetos em destaque` tem `Software aplicado` como protagonista.
-- `Robótica educacional` e `Dados e IA` aparecem como módulos de apoio.
+- `Jogos Embarcados` e `Dados e IA` aparecem como módulos de apoio.
 - As três frentes continuam exibindo o estado `Em estruturação`.
 
 ## Escopo visual
@@ -155,7 +155,7 @@ observado na Resend. Eles não afirmarão métricas, usuários ou entregas reais
 
 ### Módulos de apoio
 
-`Robótica educacional` e `Dados e IA` terão:
+`Jogos Embarcados` e `Dados e IA` terão:
 
 - visual próprio derivado das imagens reais já associadas ao projeto;
 - tratamento monocromático e máscara escura;

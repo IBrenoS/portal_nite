@@ -218,6 +218,10 @@ export const projectSchema = z.object({
     .min(12)
     .describe("Proxima acao honesta prevista para a frente ou projeto."),
   coverImage: z.string().min(1).describe("Imagem principal do projeto."),
+  coverImagePublic: z
+    .boolean()
+    .default(false)
+    .describe("Autoriza o uso da capa em metadados e compartilhamentos."),
   alt: z.string().min(12).describe("Texto alternativo da imagem principal."),
   illustration: imageSchema
     .optional()

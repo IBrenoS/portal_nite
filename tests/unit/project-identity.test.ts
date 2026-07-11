@@ -3,6 +3,9 @@ import { resolve } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { getProjectBySlug } from "@/biblioteca/conteudo";
+import { buildProjectMetadata } from "@/biblioteca/seo";
+
 type ProjectRecord = {
   slug: string;
   title: string;
@@ -36,5 +39,25 @@ describe("identidade de Jogos Embarcados", () => {
     const serialized = JSON.stringify(projects);
 
     expect(serialized).not.toMatch(/rob[oó]tica\s+educacional/i);
+  });
+
+  it("usa a capa pública nos metadados sociais", () => {
+    const project = getProjectBySlug("jogos-embarcados");
+
+    expect(project).toBeDefined();
+
+    const metadata = buildProjectMetadata(project!);
+    const openGraphImages = metadata.openGraph?.images;
+    const twitterImages = metadata.twitter?.images;
+
+    expect(openGraphImages).toEqual([
+      expect.objectContaining({
+        url: expect.stringContaining("/images/projetos/jogos-embarcados.png"),
+        alt: project?.alt,
+      }),
+    ]);
+    expect(twitterImages).toEqual([
+      expect.stringContaining("/images/projetos/jogos-embarcados.png"),
+    ]);
   });
 });

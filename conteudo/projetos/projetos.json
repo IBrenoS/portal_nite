@@ -62,6 +62,7 @@
     "lastUpdated": "2026-05-11",
     "nextStep": "Organizar registros, oficinas e protótipos que possam ser publicados com contexto validado.",
     "coverImage": "/images/projetos/jogos-embarcados.png",
+    "coverImagePublic": true,
     "alt": "Jogo embarcado de pedra, papel e tesoura com três comandos iluminados sobre uma bancada.",
     "illustration": {
       "src": "/images/projetos/jogos-embarcados.png",

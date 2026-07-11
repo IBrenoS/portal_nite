@@ -87,7 +87,8 @@ export function buildProjectMetadata(project: Project): Metadata {
   const description = project.seo?.description ?? project.summary;
   const canonical = absoluteUrl(`/projetos/${project.slug}`);
   const isPlaceholder = project.status === "placeholder";
-  const hasPublicCoverImage = project.contentState === "real";
+  const hasPublicCoverImage =
+    project.contentState === "real" || project.coverImagePublic;
   const image = absoluteUrl(
     hasPublicCoverImage ? project.coverImage : socialImage,
   );
