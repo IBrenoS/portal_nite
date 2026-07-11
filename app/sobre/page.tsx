@@ -117,11 +117,11 @@ export default function AboutPage() {
             size="xl"
             className="grid gap-12 px-0 lg:grid-cols-[minmax(0,0.9fr)_minmax(18rem,0.64fr)] lg:items-end"
           >
-            <div className="max-w-[48rem]">
+            <div className="min-w-0 max-w-[48rem]">
               <p className="font-mono text-xs uppercase tracking-[0.18em] text-nite-brand-accent">
                 Sobre o NITE
               </p>
-              <h1 className="mt-5 text-balance font-heading text-[clamp(2.75rem,7vw,5.45rem)] font-semibold leading-[1.02] tracking-normal text-foreground">
+              <h1 className="mt-5 text-balance font-heading text-[2.25rem] font-semibold leading-[1.02] tracking-normal text-foreground min-[390px]:text-[clamp(2.75rem,7vw,5.45rem)]">
                 NITE é a interface entre aprendizagem, tecnologia e aplicação
                 pública.
               </h1>
