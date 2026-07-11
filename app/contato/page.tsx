@@ -59,10 +59,10 @@ export default function ContactPage() {
         <section className="min-h-[calc(100svh-3.625rem)]">
           <Container
             size="xl"
-            className="flex max-w-4xl flex-col px-6 py-16 sm:flex-row sm:gap-8 sm:px-6 sm:py-48 md:max-w-7xl md:gap-36 lg:px-6 lg:gap-72"
+            className="flex max-w-4xl flex-col px-6 py-16 sm:flex-row sm:gap-8 sm:px-6 sm:py-48 md:max-w-7xl md:gap-36 lg:px-6 xl:gap-72"
           >
             <div className="w-full max-w-[35rem] animate-nite-rise">
-              <h1 className="nite-gradient-text mb-2 mt-2 pb-3 font-heading text-[4rem] font-normal leading-none tracking-normal text-balance md:text-[4.8rem] lg:w-max lg:max-w-[calc(100vw-3rem)] lg:whitespace-nowrap">
+              <h1 className="nite-gradient-text mb-2 mt-2 text-balance pb-3 font-heading text-[4rem] font-normal leading-none tracking-normal md:text-[4.8rem] xl:w-max xl:max-w-[calc(100vw-3rem)] xl:whitespace-nowrap">
                 Fale com o NITE
               </h1>
 
