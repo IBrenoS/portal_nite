@@ -124,10 +124,13 @@ export function PersonProfileShell({ person }: PersonProfileShellProps) {
 
   return (
     <div
-      className="mb-10 grid w-full gap-12 font-resend lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-24"
+      className="mb-10 grid w-full gap-12 font-resend md:grid-cols-[16rem_minmax(0,1fr)] md:gap-24"
       data-person-profile-shell=""
     >
-      <aside className="group/person relative flex h-fit w-full flex-col lg:sticky lg:top-[4.5rem]">
+      <aside
+        className="group/person relative flex h-fit w-full flex-col md:sticky md:top-28 md:self-start"
+        data-person-profile-sidebar=""
+      >
         <Link
           href={"/pessoas" as Route}
           className="relative inline-flex w-fit items-center gap-1 text-sm font-normal text-muted-foreground transition-colors duration-nite-micro ease-nite-out hover:text-foreground"
@@ -138,7 +141,7 @@ export function PersonProfileShell({ person }: PersonProfileShellProps) {
 
         <PersonAvatar
           person={person}
-          className="mt-[1.0625rem] size-24 text-3xl lg:size-[7.375rem]"
+          className="mt-[1.0625rem] size-24 text-3xl md:size-[7.375rem]"
           imageSizes="7.375rem"
         />
 
@@ -218,7 +221,7 @@ export function PersonProfileShell({ person }: PersonProfileShellProps) {
       </aside>
 
       <section
-        className="flex min-w-0 flex-col lg:pt-10"
+        className="flex min-w-0 flex-col md:pt-10"
         aria-labelledby="registros-pessoa"
       >
         <h2 id="registros-pessoa" className="sr-only">

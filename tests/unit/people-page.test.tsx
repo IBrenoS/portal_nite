@@ -454,8 +454,21 @@ describe("PersonPage", () => {
 
     const profileMeta = container.querySelector("[data-person-profile-meta]");
     const profileShell = container.querySelector("[data-person-profile-shell]");
+    const profileSidebar = container.querySelector(
+      "[data-person-profile-sidebar]",
+    );
 
-    expect(profileShell).toHaveClass("font-resend");
+    expect(profileShell).toHaveClass(
+      "font-resend",
+      "md:grid-cols-[16rem_minmax(0,1fr)]",
+      "md:gap-24",
+    );
+    expect(profileSidebar).toHaveClass(
+      "md:sticky",
+      "md:top-28",
+      "md:self-start",
+    );
+    expect(profileSidebar).not.toHaveClass("lg:sticky", "lg:top-[4.5rem]");
     expect(profileMeta?.querySelector(".lucide-link")).not.toBeInTheDocument();
 
     const traitsBlock = screen.getByText("Clubes e interesses").parentElement;
