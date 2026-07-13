@@ -15,6 +15,14 @@ type PeopleSearchDialogProps = {
   className?: string;
 };
 
+function normalizeSearch(value: string) {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLocaleLowerCase("pt-BR")
+    .trim();
+}
+
 export function PeopleSearchDialog({
   people,
   className,
@@ -56,17 +64,32 @@ export function PeopleSearchDialog({
   }, [isOpen]);
 
   const filteredPeople = useMemo(() => {
-    const normalizedQuery = query.trim().toLocaleLowerCase("pt-BR");
+    const normalizedQuery = normalizeSearch(query);
 
     if (!normalizedQuery) {
       return people;
     }
 
+    const firstNameMatches = people.filter((person) =>
+      normalizeSearch(person.name).split(/\s+/)[0]?.startsWith(normalizedQuery),
+    );
+
+    if (firstNameMatches.length > 0) {
+      return firstNameMatches;
+    }
+
+    const fullNameMatches = people.filter((person) =>
+      normalizeSearch(person.name).includes(normalizedQuery),
+    );
+
+    if (fullNameMatches.length > 0) {
+      return fullNameMatches;
+    }
+
     return people.filter((person) =>
-      [person.name, person.role, person.location ?? "", person.summary]
-        .join(" ")
-        .toLocaleLowerCase("pt-BR")
-        .includes(normalizedQuery),
+      normalizeSearch(
+        [person.role, person.location ?? "", person.summary].join(" "),
+      ).includes(normalizedQuery),
     );
   }, [people, query]);
 

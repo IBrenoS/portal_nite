@@ -253,6 +253,75 @@ describe("PeoplePage", () => {
     ).toBeInTheDocument();
   });
 
+  it("prioriza correspondencias de nome sobre os demais campos", async () => {
+    const user = userEvent.setup();
+
+    await renderPeoplePage();
+    await user.click(screen.getByRole("button", { name: /Buscar pessoas/i }));
+    await user.type(screen.getByPlaceholderText("Procurando pessoas..."), "br");
+
+    const results = within(
+      screen.getByRole("dialog", { name: "Buscar pessoas" }),
+    );
+
+    expect(
+      results.getByRole("link", { name: /Breno Cerqueira/i }),
+    ).toBeInTheDocument();
+    expect(
+      results.queryByRole("link", { name: /Raquel Santana/i }),
+    ).not.toBeInTheDocument();
+    expect(
+      results.queryByRole("link", { name: /Cecília Brito/i }),
+    ).not.toBeInTheDocument();
+    expect(results.getAllByRole("link")).toHaveLength(1);
+  });
+
+  it("ignora acentos ao buscar uma pessoa pelo nome", async () => {
+    const user = userEvent.setup();
+
+    await renderPeoplePage();
+    await user.click(screen.getByRole("button", { name: /Buscar pessoas/i }));
+    await user.type(
+      screen.getByPlaceholderText("Procurando pessoas..."),
+      "joao",
+    );
+
+    const results = within(
+      screen.getByRole("dialog", { name: "Buscar pessoas" }),
+    );
+
+    expect(
+      results.getByRole("link", { name: /João Victor Dórea/i }),
+    ).toBeInTheDocument();
+    expect(
+      results.getByRole("link", { name: /João Gilberto de Lima Freitas/i }),
+    ).toBeInTheDocument();
+  });
+
+  it("busca por titulo e localizacao quando nenhum nome corresponde", async () => {
+    const user = userEvent.setup();
+
+    await renderPeoplePage();
+    await user.click(screen.getByRole("button", { name: /Buscar pessoas/i }));
+    const input = screen.getByPlaceholderText("Procurando pessoas...");
+    const dialog = within(
+      screen.getByRole("dialog", { name: "Buscar pessoas" }),
+    );
+
+    await user.type(input, "software");
+    expect(
+      dialog.getByRole("link", { name: /Breno Cerqueira/i }),
+    ).toBeInTheDocument();
+    expect(dialog.getAllByRole("link")).toHaveLength(1);
+
+    await user.clear(input);
+    await user.type(input, "salvador");
+    expect(
+      dialog.getByRole("link", { name: /Raquel Santana/i }),
+    ).toBeInTheDocument();
+    expect(dialog.getAllByRole("link").length).toBeGreaterThan(1);
+  });
+
   it("renderiza a busca aberta no padrão visual de command palette", async () => {
     const user = userEvent.setup();
     const { container } = await renderPeoplePage();
