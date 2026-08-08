@@ -152,6 +152,126 @@ test.describe("mobile design system snapshots", () => {
     await page.getByRole("button", { name: "Fechar menu" }).click();
     await expect(menu).toBeHidden();
   });
+
+  for (const theme of themes) {
+    test(`mobile menu layers match the clean navigation hierarchy in ${theme} mode`, async ({
+      page,
+    }) => {
+      await openStablePage(page, "/", theme);
+      await openExpandable(
+        page.getByRole("button", { name: "Menu", exact: true }),
+      );
+
+      const menu = page.locator("[data-mobile-layered-menu]");
+      const rootLayer = page.locator("[data-mobile-layer-root]");
+
+      await expect(rootLayer).toHaveCSS("opacity", "1");
+
+      await expect(page).toHaveScreenshot(`mobile-menu-root-${theme}.png`, {
+        animations: "disabled",
+      });
+
+      await page.getByRole("button", { name: "Projetos", exact: true }).click();
+      const projectsLayer = page.locator(
+        '[data-mobile-layer-detail="projetos"]',
+      );
+
+      await expect(projectsLayer).toHaveCSS("opacity", "1");
+      await expect(
+        page.getByRole("heading", {
+          name: "Projetos",
+          exact: true,
+          level: 2,
+        }),
+      ).toBeVisible();
+      await expect(
+        projectsLayer.getByText("NITE", { exact: true }),
+      ).toBeVisible();
+      await expect(
+        projectsLayer.getByRole("button", { name: "Fechar menu" }),
+      ).toBeVisible();
+      await expect(page).toHaveScreenshot(`mobile-menu-projects-${theme}.png`, {
+        animations: "disabled",
+      });
+
+      await page
+        .getByRole("button", { name: "Voltar ao menu principal" })
+        .click();
+      await expect(rootLayer).toHaveCSS("opacity", "1");
+      await page.getByRole("button", { name: "Aparência" }).click();
+      const appearanceLayer = page.locator(
+        '[data-mobile-layer-detail="appearance"]',
+      );
+
+      await expect(appearanceLayer).toHaveCSS("opacity", "1");
+      await expect(
+        page.getByRole("heading", {
+          name: "Aparência",
+          exact: true,
+          level: 2,
+        }),
+      ).toBeVisible();
+      await expect(
+        appearanceLayer.getByText("NITE", { exact: true }),
+      ).toBeVisible();
+      await expect(
+        appearanceLayer.getByRole("button", { name: "Fechar menu" }),
+      ).toBeVisible();
+      expect(
+        await appearanceLayer
+          .getByRole("heading", { name: "Aparência", exact: true, level: 2 })
+          .boundingBox(),
+      ).toMatchObject({ y: 144 });
+      await expect(menu.getByRole("radio")).toHaveCount(3);
+      await expect(page).toHaveScreenshot(
+        `mobile-menu-appearance-${theme}.png`,
+        { animations: "disabled" },
+      );
+    });
+  }
+
+  test("mobile menu preserves Resend-derived geometry at 414px", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 414, height: 896 });
+    await openStablePage(page, "/", "dark");
+    await openExpandable(
+      page.getByRole("button", { name: "Menu", exact: true }),
+    );
+
+    const firstRow = page.locator("[data-mobile-menu-row]").first();
+    const arrow = firstRow.locator("[data-mobile-menu-arrow]");
+    const rowBox = await firstRow.boundingBox();
+    const arrowBox = await arrow.boundingBox();
+    const rowStyle = await firstRow.evaluate((element) => {
+      const style = getComputedStyle(element);
+
+      return {
+        backgroundColor: style.backgroundColor,
+        borderBottomWidth: style.borderBottomWidth,
+        borderRadius: style.borderRadius,
+        fontSize: style.fontSize,
+        fontWeight: style.fontWeight,
+      };
+    });
+
+    expect(rowBox).toMatchObject({ x: 24, width: 366, height: 57 });
+    expect(arrowBox).toMatchObject({ width: 20, height: 20 });
+    expect(rowStyle).toEqual({
+      backgroundColor: "rgba(0, 0, 0, 0)",
+      borderBottomWidth: "1px",
+      borderRadius: "0px",
+      fontSize: "16px",
+      fontWeight: "600",
+    });
+    expect(
+      await page.evaluate(
+        () =>
+          document.documentElement.scrollWidth <=
+          document.documentElement.clientWidth,
+      ),
+    ).toBe(true);
+  });
 });
 
 test.describe("resend-inspired footer layout", () => {

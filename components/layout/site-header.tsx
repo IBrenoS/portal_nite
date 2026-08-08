@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState } from "react";
 import {
-  ArrowLeftIcon,
-  ChevronDownIcon,
-  ChevronRightIcon,
-  XIcon,
-} from "lucide-react";
+  type RefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { ChevronDownIcon } from "lucide-react";
 import {
   AnimatePresence,
   motion,
@@ -49,11 +50,8 @@ const mobileControlClassName = cn(
   buttonVariants({ variant: "secondary", size: "md" }),
   "min-h-11 rounded-md border-border bg-card px-3 py-2",
 );
-const mobileIconControlClassName = cn(
-  buttonVariants({ variant: "secondary", size: "icon" }),
-  "size-11 rounded-md border-border bg-card",
-);
 type HeaderGroupId = SiteNavigationGroup["id"];
+type MobilePanelId = HeaderGroupId | "appearance";
 type HeaderMotionTransition = {
   duration: number;
   ease?: typeof HEADER_MOTION_EASE;
@@ -97,17 +95,18 @@ export function SiteHeader() {
     useState<HeaderGroupId | null>(null);
   const [desktopDirection, setDesktopDirection] = useState(1);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeMobileGroup, setActiveMobileGroup] =
-    useState<HeaderGroupId | null>(null);
+  const [activeMobilePanel, setActiveMobilePanel] =
+    useState<MobilePanelId | null>(null);
   const [isThemePopoverOpen, setIsThemePopoverOpen] = useState(false);
 
   const activeDesktopNavigationGroup = headerNavigationGroups.find(
     (group) => group.id === activeDesktopGroup,
   );
   const activeMobileNavigationGroup = headerNavigationGroups.find(
-    (group) => group.id === activeMobileGroup,
+    (group) => group.id === activeMobilePanel,
   );
-  const activeMobileLayer = activeMobileNavigationGroup ? "detail" : "root";
+  const isMobileAppearancePanel = activeMobilePanel === "appearance";
+  const activeMobileLayer = activeMobilePanel ? "detail" : "root";
   const menuTransition = reduceMotion
     ? { duration: 0 }
     : { duration: 0.16, ease: HEADER_MOTION_EASE };
@@ -188,11 +187,11 @@ export function SiteHeader() {
     setIsThemePopoverOpen(false);
     setActiveDesktopGroup(null);
     setIsMobileMenuOpen(false);
-    setActiveMobileGroup(null);
+    setActiveMobilePanel(null);
   }, [
     cancelDesktopClose,
     setActiveDesktopGroup,
-    setActiveMobileGroup,
+    setActiveMobilePanel,
     setIsMobileMenuOpen,
     setIsThemePopoverOpen,
   ]);
@@ -216,7 +215,7 @@ export function SiteHeader() {
       cancelDesktopClose();
       setActiveDesktopGroup(null);
       setIsMobileMenuOpen(false);
-      setActiveMobileGroup(null);
+      setActiveMobilePanel(null);
     };
     const closeOnOutsidePointerMove = (event: PointerEvent) => {
       if (
@@ -375,7 +374,7 @@ export function SiteHeader() {
     setIsThemePopoverOpen(false);
     setActiveDesktopGroup(groupId);
     setIsMobileMenuOpen(false);
-    setActiveMobileGroup(null);
+    setActiveMobilePanel(null);
   };
 
   const toggleMobileMenu = () => {
@@ -383,7 +382,7 @@ export function SiteHeader() {
 
     setIsMobileMenuOpen((isOpen) => {
       if (isOpen) {
-        setActiveMobileGroup(null);
+        setActiveMobilePanel(null);
       } else {
         setActiveDesktopGroup(null);
         setIsThemePopoverOpen(false);
@@ -393,8 +392,8 @@ export function SiteHeader() {
     });
   };
 
-  const openMobileGroup = (groupId: HeaderGroupId) => {
-    setActiveMobileGroup(groupId);
+  const openMobilePanel = (panelId: MobilePanelId) => {
+    setActiveMobilePanel(panelId);
   };
 
   return (
@@ -572,7 +571,7 @@ export function SiteHeader() {
           <motion.div
             ref={mobileMenuRef}
             id="site-mobile-navigation"
-            className="fixed inset-x-0 top-0 z-50 min-h-dvh overflow-y-auto border-b border-border bg-background/98 backdrop-blur-xl lg:hidden"
+            className="fixed inset-x-0 top-0 z-50 h-dvh overflow-y-auto bg-background lg:hidden"
             data-mobile-layered-menu=""
             role="dialog"
             aria-modal="true"
@@ -583,13 +582,24 @@ export function SiteHeader() {
             exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
             transition={menuTransition}
           >
-            <Container className="grid min-h-dvh max-w-[480px] grid-rows-[auto_1fr] gap-4 py-4">
+            <Container
+              className="grid min-h-dvh max-w-[480px] grid-rows-[auto_1fr] gap-0 px-6 py-4 sm:px-6 lg:px-6"
+              data-mobile-menu-container=""
+            >
               <AnimatePresence mode="wait" initial={false}>
                 {activeMobileLayer === "root" ? (
                   <MobileNavigationRoot
                     key="mobile-root"
                     onClose={closeAllMenus}
-                    onOpenGroup={openMobileGroup}
+                    onOpenPanel={openMobilePanel}
+                    reduceMotion={reduceMotion}
+                    transition={contentTransition}
+                  />
+                ) : isMobileAppearancePanel ? (
+                  <MobileAppearanceDetail
+                    key="appearance"
+                    onBack={() => setActiveMobilePanel(null)}
+                    onClose={closeAllMenus}
                     reduceMotion={reduceMotion}
                     transition={contentTransition}
                   />
@@ -597,7 +607,7 @@ export function SiteHeader() {
                   <MobileNavigationDetail
                     key={activeMobileNavigationGroup.id}
                     group={activeMobileNavigationGroup}
-                    onBack={() => setActiveMobileGroup(null)}
+                    onBack={() => setActiveMobilePanel(null)}
                     onClose={closeAllMenus}
                     reduceMotion={reduceMotion}
                     transition={contentTransition}
@@ -662,15 +672,14 @@ function HeaderNavigationItemLink({
   }
 
   const className = cn(
-    "group relative flex items-center justify-between gap-3 rounded-lg px-3 text-sm text-foreground transition-colors focus-visible:border-ring focus-visible:ring-3",
-    "min-h-11 py-2.5 hover:bg-card focus-visible:bg-card focus-visible:ring-ring/50",
-    item.status === "planned" && "text-muted-foreground",
+    "group relative flex min-h-[57px] items-center justify-between gap-3 rounded-none border-0 border-b border-nite-border-subtle bg-transparent px-0 py-4 text-base font-semibold leading-6 text-nite-text-secondary outline-none transition-colors hover:bg-nite-surface-subtle hover:text-nite-text-primary focus-visible:bg-nite-surface-subtle focus-visible:text-nite-text-primary focus-visible:ring-3 focus-visible:ring-inset focus-visible:ring-ring/50",
+    item.status === "planned" && "text-nite-text-muted",
   );
 
   const content = (
     <>
       <span className="flex min-w-0 items-center gap-2">
-        <span className="truncate font-medium">{item.label}</span>
+        <span className="truncate">{item.label}</span>
         {item.status === "planned" ? (
           <span className="shrink-0 rounded-full border border-border px-1.5 py-0.5 text-[0.62rem] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
             Planejado
@@ -679,14 +688,7 @@ function HeaderNavigationItemLink({
       </span>
       {item.status === "planned" ? (
         <span className="sr-only">Item planejado, sem rota futura pronta.</span>
-      ) : (
-        <ChevronRightIcon
-          aria-hidden="true"
-          className={cn(
-            "size-4 shrink-0 text-muted-foreground transition-[color,transform] group-hover:translate-x-0.5",
-          )}
-        />
-      )}
+      ) : null}
     </>
   );
 
@@ -697,6 +699,7 @@ function HeaderNavigationItemLink({
         target="_blank"
         rel="noreferrer"
         className={className}
+        data-mobile-menu-row=""
         onClick={onNavigate}
       >
         {content}
@@ -706,14 +709,19 @@ function HeaderNavigationItemLink({
 
   if (item.status === "planned") {
     return (
-      <span className={className} aria-disabled="true">
+      <span className={className} aria-disabled="true" data-mobile-menu-row="">
         {content}
       </span>
     );
   }
 
   return (
-    <a href={item.href} className={className} onClick={onNavigate}>
+    <a
+      href={item.href}
+      className={className}
+      data-mobile-menu-row=""
+      onClick={onNavigate}
+    >
       {content}
     </a>
   );
@@ -772,12 +780,12 @@ function DesktopNavigationItemLink({
 
 function MobileNavigationRoot({
   onClose,
-  onOpenGroup,
+  onOpenPanel,
   reduceMotion,
   transition,
 }: {
   onClose: () => void;
-  onOpenGroup: (groupId: HeaderGroupId) => void;
+  onOpenPanel: (panelId: MobilePanelId) => void;
   reduceMotion: boolean;
   transition: HeaderMotionTransition;
 }) {
@@ -789,51 +797,30 @@ function MobileNavigationRoot({
 
   return (
     <motion.div
-      className="grid gap-4"
+      className="grid gap-0"
       data-mobile-layer-root=""
       initial={reduceMotion ? false : { opacity: 0, x: -18 }}
       animate={{ opacity: 1, x: 0 }}
       exit={reduceMotion ? { opacity: 0 } : { opacity: 0, x: -14 }}
       transition={transition}
     >
-      <div className="flex min-h-12 items-center justify-between gap-4">
-        <div>
-          <p className="font-heading text-base font-bold text-foreground">
-            NITE
-          </p>
-          <UnijorgeBrandText className="text-xs font-bold uppercase tracking-[0.14em]" />
-        </div>
-        <button
-          ref={closeButtonRef}
-          type="button"
-          className={mobileIconControlClassName}
-          aria-label="Fechar menu"
-          onClick={onClose}
-        >
-          <XIcon aria-hidden="true" className="size-4" />
-        </button>
-      </div>
+      <MobileMenuHeader closeButtonRef={closeButtonRef} onClose={onClose} />
 
-      <nav aria-label="Navegação principal mobile" className="grid gap-1.5">
+      <nav aria-label="Navegação principal mobile" className="mt-8 grid">
         {headerNavigationGroups.map((group) => (
-          <button
+          <MobileMenuPanelButton
             key={group.id}
-            type="button"
-            className={cn(
-              buttonVariants({ variant: "secondary", size: "lg" }),
-              "min-h-14 w-full justify-between whitespace-normal rounded-xl border-border/90 bg-card/80 px-4 py-3 text-left text-base",
-            )}
-            aria-controls={`site-mobile-group-${group.id}`}
-            aria-expanded="false"
-            onClick={() => onOpenGroup(group.id)}
-          >
-            <span>{group.label}</span>
-            <ChevronRightIcon aria-hidden="true" className="size-4" />
-          </button>
+            label={group.label}
+            controls={`site-mobile-group-${group.id}`}
+            onClick={() => onOpenPanel(group.id)}
+          />
         ))}
+        <MobileMenuPanelButton
+          label="Aparência"
+          controls="site-mobile-appearance"
+          onClick={() => onOpenPanel("appearance")}
+        />
       </nav>
-
-      <ThemeTogglePanel id="theme-toggle-mobile" className="mt-1" />
     </motion.div>
   );
 }
@@ -860,41 +847,21 @@ function MobileNavigationDetail({
   return (
     <motion.div
       id={`site-mobile-group-${group.id}`}
-      className="grid gap-4"
+      className="grid gap-0"
       data-mobile-layer-detail={group.id}
       initial={reduceMotion ? false : { opacity: 0, x: 18 }}
       animate={{ opacity: 1, x: 0 }}
       exit={reduceMotion ? { opacity: 0 } : { opacity: 0, x: 14 }}
       transition={transition}
     >
-      <div className="flex min-h-12 items-center justify-between gap-3">
-        <button
-          ref={backButtonRef}
-          type="button"
-          className={mobileControlClassName}
-          onClick={onBack}
-        >
-          <ArrowLeftIcon aria-hidden="true" className="size-4" />
-          Voltar
-        </button>
+      <MobileMenuDetailIntro
+        title={group.label}
+        backButtonRef={backButtonRef}
+        onBack={onBack}
+        onClose={onClose}
+      />
 
-        <button
-          type="button"
-          className={mobileIconControlClassName}
-          aria-label="Fechar menu"
-          onClick={onClose}
-        >
-          <XIcon aria-hidden="true" className="size-4" />
-        </button>
-      </div>
-
-      <div className="px-1">
-        <p className="font-heading text-2xl font-semibold text-foreground">
-          {group.label}
-        </p>
-      </div>
-
-      <nav aria-label={`Links de ${group.label}`} className="grid gap-1.5">
+      <nav aria-label={`Links de ${group.label}`} className="mt-4 grid">
         {group.items.map((item) => (
           <HeaderNavigationItemLink
             key={item.label}
@@ -904,5 +871,178 @@ function MobileNavigationDetail({
         ))}
       </nav>
     </motion.div>
+  );
+}
+
+function MobileAppearanceDetail({
+  onBack,
+  onClose,
+  reduceMotion,
+  transition,
+}: {
+  onBack: () => void;
+  onClose: () => void;
+  reduceMotion: boolean;
+  transition: HeaderMotionTransition;
+}) {
+  const backButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  useEffect(() => {
+    backButtonRef.current?.focus();
+  }, []);
+
+  return (
+    <motion.div
+      id="site-mobile-appearance"
+      className="grid gap-0"
+      data-mobile-layer-detail="appearance"
+      initial={reduceMotion ? false : { opacity: 0, x: 18 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={reduceMotion ? { opacity: 0 } : { opacity: 0, x: 14 }}
+      transition={transition}
+    >
+      <MobileMenuDetailIntro
+        title="Aparência"
+        backButtonRef={backButtonRef}
+        onBack={onBack}
+        onClose={onClose}
+      />
+      <ThemeTogglePanel
+        id="theme-toggle-mobile"
+        className="mt-4"
+        variant="flat"
+      />
+    </motion.div>
+  );
+}
+
+function MobileMenuHeader({
+  closeButtonRef,
+  onClose,
+}: {
+  closeButtonRef?: RefObject<HTMLButtonElement | null>;
+  onClose: () => void;
+}) {
+  return (
+    <div className="flex h-10 items-center justify-between gap-4">
+      <div className="leading-none">
+        <p className="font-heading text-base font-bold leading-5 text-foreground">
+          NITE
+        </p>
+        <UnijorgeBrandText className="mt-0.5 text-[0.6875rem] font-bold uppercase leading-4 tracking-[0.14em]" />
+      </div>
+      <button
+        ref={closeButtonRef}
+        type="button"
+        className="inline-flex size-10 items-center justify-center rounded-md border-0 bg-transparent p-1 text-nite-text-secondary outline-none transition-colors hover:text-nite-text-primary focus-visible:ring-3 focus-visible:ring-ring/50"
+        aria-label="Fechar menu"
+        onClick={onClose}
+      >
+        <MobileMenuCloseIcon className="size-8" />
+      </button>
+    </div>
+  );
+}
+
+function MobileMenuDetailIntro({
+  title,
+  backButtonRef,
+  onBack,
+  onClose,
+}: {
+  title: string;
+  backButtonRef: RefObject<HTMLButtonElement | null>;
+  onBack: () => void;
+  onClose: () => void;
+}) {
+  return (
+    <>
+      <MobileMenuHeader onClose={onClose} />
+      <button
+        ref={backButtonRef}
+        type="button"
+        className="mt-8 inline-flex size-10 items-center justify-start rounded-md border-0 bg-transparent text-nite-text-secondary outline-none transition-colors hover:text-nite-text-primary focus-visible:ring-3 focus-visible:ring-ring/50"
+        aria-label="Voltar ao menu principal"
+        onClick={onBack}
+      >
+        <MobileMenuBackIcon className="size-5" />
+      </button>
+      <h2 className="mt-4 font-heading text-2xl font-semibold leading-8 text-foreground">
+        {title}
+      </h2>
+    </>
+  );
+}
+
+function MobileMenuPanelButton({
+  label,
+  controls,
+  onClick,
+}: {
+  label: string;
+  controls: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      className="flex min-h-[57px] w-full items-center justify-between rounded-none border-0 border-b border-nite-border-subtle bg-transparent px-0 py-4 text-left text-base font-semibold leading-6 text-nite-text-secondary outline-none transition-colors hover:bg-nite-surface-subtle hover:text-nite-text-primary focus-visible:bg-nite-surface-subtle focus-visible:text-nite-text-primary focus-visible:ring-3 focus-visible:ring-inset focus-visible:ring-ring/50"
+      aria-controls={controls}
+      aria-expanded="false"
+      data-mobile-menu-row=""
+      onClick={onClick}
+    >
+      <span>{label}</span>
+      <MobileMenuArrowIcon className="size-5 shrink-0" />
+    </button>
+  );
+}
+
+function MobileMenuArrowIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      className={className}
+      data-mobile-menu-arrow=""
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <path
+        fill="currentColor"
+        d="M14.707 19.707a1 1 0 1 1-1.414-1.414l2.732-2.732c.945-.945.276-2.56-1.06-2.56H3a1 1 0 1 1 0-2h11.965c1.336 0 2.005-1.617 1.06-2.562l-2.732-2.732a1 1 0 1 1 1.414-1.414l7 7a1 1 0 0 1 0 1.414z"
+      />
+    </svg>
+  );
+}
+
+function MobileMenuBackIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <path
+        fill="currentColor"
+        d="M9.293 4.293a1 1 0 0 1 1.414 1.414L7.975 8.439C7.03 9.384 7.699 11 9.035 11H21a1 1 0 1 1 0 2H9.035c-1.336 0-2.005 1.615-1.06 2.56l2.732 2.733a1 1 0 0 1-1.414 1.414l-7-7a1 1 0 0 1 0-1.414z"
+      />
+    </svg>
+  );
+}
+
+function MobileMenuCloseIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <path
+        fill="currentColor"
+        d="M16.793 5.793a1 1 0 0 1 1.414 1.414l-3.379 3.379a2 2 0 0 0 0 2.828l3.379 3.379a1 1 0 0 1-1.414 1.414l-3.379-3.379a2 2 0 0 0-2.828 0l-3.379 3.379a1 1 0 0 1-1.414-1.414l3.379-3.379a2 2 0 0 0 0-2.828L5.793 7.207a1 1 0 0 1 1.414-1.414l3.379 3.379a2 2 0 0 0 2.828 0z"
+      />
+    </svg>
   );
 }

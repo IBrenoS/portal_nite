@@ -32,7 +32,11 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { Textarea } from "@/components/ui/textarea";
-import { ThemeToggle, ThemeToggleButton } from "@/components/ui/theme-toggle";
+import {
+  ThemeToggle,
+  ThemeToggleButton,
+  ThemeTogglePanel,
+} from "@/components/ui/theme-toggle";
 
 afterEach(() => {
   cleanup();
@@ -409,6 +413,26 @@ describe("design system base", () => {
       "system",
     );
     expect(document.documentElement).toHaveClass("dark");
+  });
+
+  it("oferece o seletor de tema como lista plana sem alterar o padrao", () => {
+    const { rerender } = render(
+      <ThemeTogglePanel id="theme-toggle-flat-test" variant="flat" />,
+    );
+
+    const flatGroup = screen.getByRole("group", {
+      name: "Tema da interface",
+    });
+
+    expect(flatGroup).toHaveAttribute("data-theme-toggle-variant", "flat");
+    expect(flatGroup).toHaveClass("border-0", "bg-transparent", "p-0");
+    expect(within(flatGroup).getAllByRole("radio")).toHaveLength(3);
+
+    rerender(<ThemeTogglePanel id="theme-toggle-card-test" />);
+
+    expect(
+      screen.getByRole("group", { name: "Tema da interface" }),
+    ).toHaveAttribute("data-theme-toggle-variant", "card");
   });
 
   it("abre o seletor compacto de tema sem expor as opcoes na barra", async () => {

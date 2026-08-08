@@ -457,8 +457,8 @@ describe("HomePage", { timeout: 15_000 }, () => {
       projectsSection.querySelectorAll(
         "[data-slot='status-badge'][data-status='draft']",
       ),
-    ).toHaveLength(3);
-    expect(projects.getAllByText("Em estruturação")).toHaveLength(3);
+    ).toHaveLength(0);
+    expect(projects.queryByText("Em estruturação")).not.toBeInTheDocument();
     expect(
       projectsSection.querySelector("[data-project-code-grid]"),
     ).not.toBeInTheDocument();
@@ -1204,15 +1204,18 @@ describe("HomePage", { timeout: 15_000 }, () => {
     const closeButton = within(mobileMenu).getByRole("button", {
       name: "Fechar menu",
     });
-    const darkThemeOption = within(mobileMenu).getByRole("radio", {
-      name: "Escuro",
+    const appearanceButton = within(mobileMenu).getByRole("button", {
+      name: "Aparência",
     });
 
     await waitFor(() => expect(closeButton).toHaveFocus());
+    expect(
+      within(mobileMenu).queryByRole("radio", { name: "Escuro" }),
+    ).not.toBeInTheDocument();
 
     await user.tab({ shift: true });
 
-    expect(darkThemeOption).toHaveFocus();
+    expect(appearanceButton).toHaveFocus();
 
     await user.tab();
 
@@ -1222,8 +1225,18 @@ describe("HomePage", { timeout: 15_000 }, () => {
       within(mobileMenu).getByRole("button", { name: "Projetos" }),
     );
 
+    expect(
+      await within(mobileMenu).findByRole("heading", {
+        name: "Projetos",
+        level: 2,
+      }),
+    ).toBeInTheDocument();
+    expect(
+      within(mobileMenu).getByRole("link", { name: "Todos os projetos" }),
+    ).toBeInTheDocument();
+
     const backButton = await within(mobileMenu).findByRole("button", {
-      name: /Voltar/i,
+      name: "Voltar ao menu principal",
     });
 
     await waitFor(() => expect(backButton).toHaveFocus());
@@ -1235,6 +1248,17 @@ describe("HomePage", { timeout: 15_000 }, () => {
         within(mobileMenu).getByRole("button", { name: "Fechar menu" }),
       ).toHaveFocus(),
     );
+
+    await user.click(
+      within(mobileMenu).getByRole("button", { name: "Aparência" }),
+    );
+
+    expect(
+      await within(mobileMenu).findByRole("heading", {
+        name: "Aparência",
+        level: 2,
+      }),
+    ).toBeInTheDocument();
 
     const lightThemeOption = within(mobileMenu).getByRole("radio", {
       name: "Claro",

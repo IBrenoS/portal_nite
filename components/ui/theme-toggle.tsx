@@ -24,6 +24,7 @@ type ThemeToggleProps = {
 
 type ThemeTogglePanelProps = ThemeToggleProps & {
   onPreferenceChange?: (preference: ThemePreference) => void;
+  variant?: "card" | "flat";
 };
 
 type ThemeToggleButtonProps = ThemeToggleProps & {
@@ -37,6 +38,7 @@ type ThemePreferenceOptionProps = {
   name: string;
   preference: ThemePreference;
   onSelect: (preference: ThemePreference) => void;
+  variant: "card" | "flat";
 };
 
 const themePreferenceIcons = {
@@ -94,6 +96,7 @@ function ThemePreferenceOption({
   name,
   preference,
   onSelect,
+  variant,
 }: ThemePreferenceOptionProps) {
   const Icon = themePreferenceIcons[preference];
 
@@ -110,10 +113,15 @@ function ThemePreferenceOption({
       />
       <span
         className={cn(
-          "flex min-h-10 items-center justify-between gap-3 rounded-md border border-transparent px-3 py-2 text-sm transition-colors peer-focus-visible:border-ring peer-focus-visible:ring-3 peer-focus-visible:ring-ring/50",
-          isSelected
-            ? "bg-primary text-[var(--primary-foreground)]"
-            : "text-muted-foreground hover:bg-secondary hover:text-foreground",
+          "flex items-center justify-between gap-3 transition-colors peer-focus-visible:ring-3 peer-focus-visible:ring-ring/50",
+          variant === "flat"
+            ? "min-h-[57px] rounded-none border-0 border-b border-nite-border-subtle bg-transparent px-0 py-4 text-base font-semibold text-nite-text-secondary hover:bg-nite-surface-subtle hover:text-nite-text-primary peer-focus-visible:bg-nite-surface-subtle"
+            : "min-h-10 rounded-md border border-transparent px-3 py-2 text-sm peer-focus-visible:border-ring",
+          variant === "flat"
+            ? isSelected && "text-nite-text-primary"
+            : isSelected
+              ? "bg-primary text-[var(--primary-foreground)]"
+              : "text-muted-foreground hover:bg-secondary hover:text-foreground",
         )}
       >
         <span className="flex min-w-0 items-center gap-2">
@@ -132,6 +140,7 @@ export function ThemeTogglePanel({
   id,
   className,
   onPreferenceChange,
+  variant = "card",
 }: ThemeTogglePanelProps) {
   const { preference, updatePreference } = useThemePreference();
   const selectPreference = (nextPreference: ThemePreference) => {
@@ -143,13 +152,17 @@ export function ThemeTogglePanel({
     <fieldset
       aria-label="Tema da interface"
       className={cn(
-        "min-w-0 rounded-xl border border-border/80 bg-card/80 p-2",
+        "min-w-0",
+        variant === "flat"
+          ? "rounded-none border-0 bg-transparent p-0"
+          : "rounded-xl border border-border/80 bg-card/80 p-2",
         className,
       )}
       data-theme-toggle=""
+      data-theme-toggle-variant={variant}
       data-theme-preference={preference}
     >
-      <div className="grid gap-1">
+      <div className={cn("grid", variant === "flat" ? "gap-0" : "gap-1")}>
         {themePreferences.map((themePreference) => {
           const inputId = `${id}-${themePreference}`;
 
@@ -161,6 +174,7 @@ export function ThemeTogglePanel({
               preference={themePreference}
               isSelected={preference === themePreference}
               onSelect={selectPreference}
+              variant={variant}
             />
           );
         })}
