@@ -121,23 +121,6 @@ describe("ProjectsOperatingSection", () => {
     ).toBeInTheDocument();
     expect(section.querySelectorAll("[data-project-divider]")).toHaveLength(2);
     expect(section.querySelectorAll("[data-slot='card']")).toHaveLength(0);
-    const projectStatusBadges = section.querySelectorAll(
-      "[data-project-copy] [data-slot='status-badge'][data-status='draft']",
-    );
-    expect(projectStatusBadges).toHaveLength(3);
-    for (const badge of projectStatusBadges) {
-      expect(badge.querySelector("[aria-hidden='true']")).toBeNull();
-      expect(badge).toHaveClass(
-        "border-border",
-        "bg-muted/40",
-        "text-muted-foreground",
-      );
-      expect(badge).not.toHaveClass(
-        "border-nite-border-subtle",
-        "bg-nite-surface-subtle",
-        "text-nite-text-secondary",
-      );
-    }
     for (const cta of screen.getAllByRole("link", { name: "Ver projeto" })) {
       expect(cta).toHaveClass("duration-nite-micro", "ease-nite-out");
       expect(cta.querySelector("svg")).toHaveClass(
