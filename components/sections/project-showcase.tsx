@@ -4,7 +4,6 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 import type { Project } from "@/biblioteca/esquemas";
-import { StatusBadge } from "@/components/ui/status-badge";
 import { cn } from "@/lib/utils";
 
 type ProjectVisual = "code-workbench" | "robotics-lab" | "analytics-dashboard";
@@ -53,13 +52,6 @@ function ProjectCopy({
         className,
       )}
     >
-      <StatusBadge
-        status="draft"
-        tone="quiet"
-        size="sm"
-        showIndicator={false}
-        className="hidden lg:inline-flex"
-      />
       <div className="grid max-w-[31rem] gap-4">
         <h3 className="font-heading text-[clamp(2rem,4vw,2.75rem)] leading-[1.06] font-semibold tracking-normal text-nite-text-primary">
           {project.title}
