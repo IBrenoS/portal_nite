@@ -1,52 +1,36 @@
 {
-  "name": "portal_nite",
+  "name": "portal-nite",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint .",
-    "typecheck": "tsc --noEmit",
-    "test": "vitest run",
-    "test:visual": "playwright test",
-    "test:visual:update": "playwright test --update-snapshots",
-    "playwright:install": "playwright install chromium",
-    "format": "prettier --write .",
-    "format:check": "prettier --check ."
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "packageManager": "npm@11.6.2",
+  "engines": {
+    "node": ">=20.9.0"
   },
-  "dependencies": {
-    "@base-ui/react": "^1.4.1",
-    "@gsap/react": "^2.1.2",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "gsap": "^3.15.0",
-    "lucide-react": "^1.9.0",
-    "motion": "^12.38.0",
-    "next": "16.2.4",
-    "react": "19.2.4",
-    "react-dom": "19.2.4",
-    "tailwind-merge": "^3.5.0",
-    "tw-animate-css": "^1.4.0",
-    "zod": "^4.3.6"
+  "scripts": {
+    "dev": "turbo run dev --filter=@nite/web",
+    "build": "turbo run build",
+    "start": "npm run start --workspace=@nite/web",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "test:affected": "turbo run test --affected",
+    "test:visual": "npm run test:visual --workspace=@nite/web --",
+    "test:visual:update": "npm run test:visual:update --workspace=@nite/web --",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check:deadcode": "knip",
+    "check": "npm run format:check && npm run check:deadcode && turbo run lint typecheck && turbo run test && turbo run build"
   },
   "devDependencies": {
-    "@playwright/test": "^1.60.0",
-    "@tailwindcss/postcss": "^4",
-    "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^16.3.2",
-    "@testing-library/user-event": "^14.6.1",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@vitejs/plugin-react": "^6.0.1",
     "eslint": "^9",
     "eslint-config-next": "16.2.4",
-    "jsdom": "^29.0.2",
+    "knip": "6.32.0",
     "prettier": "^3.8.3",
-    "shadcn": "^4.4.0",
-    "tailwindcss": "^4",
-    "typescript": "^5",
-    "vitest": "^4.1.5"
+    "turbo": "2.10.9",
+    "typescript": "^5"
   }
 }
