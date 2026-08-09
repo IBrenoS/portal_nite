@@ -35,7 +35,7 @@ describe("conteudo estruturado", () => {
     expect(getProjectBySlug("data-center")?.title).toBe("Data Center");
   });
 
-  it("mantem projetos atuais como placeholders operacionais e nao indexaveis", () => {
+  it("mantem a maturidade editorial separada do status operacional", () => {
     const projects = getProjects();
 
     expect(projectStatusValues).toEqual([
@@ -52,8 +52,8 @@ describe("conteudo estruturado", () => {
       "em-estruturacao",
     ]);
     expect(projects.map((project) => project.status)).toEqual([
-      "placeholder",
-      "placeholder",
+      "ativo",
+      "ativo",
       "placeholder",
     ]);
     expect(projects.map((project) => project.contentState)).toEqual([
@@ -110,7 +110,10 @@ describe("conteudo estruturado", () => {
     expect(projects.every((project) => project.changelog.length === 0)).toBe(
       true,
     );
-    expect(getIndexableProjects()).toEqual([]);
+    expect(getIndexableProjects().map((project) => project.slug)).toEqual([
+      "data-center",
+      "jogos-embarcados",
+    ]);
   });
 
   it("ordena eventos da timeline por ano e sequencia editorial", () => {
@@ -136,7 +139,10 @@ describe("conteudo estruturado", () => {
   });
 
   it("remove placeholders do conjunto indexavel para sitemap", () => {
-    expect(getIndexableProjects()).toEqual([]);
+    expect(getIndexableProjects().map((project) => project.slug)).toEqual([
+      "data-center",
+      "jogos-embarcados",
+    ]);
   });
 
   it("carrega colecao de pessoas autorizadas e indexaveis", () => {

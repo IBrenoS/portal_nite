@@ -260,7 +260,12 @@ describe("ProjectsPage", { timeout: 10_000 }, () => {
       document.querySelectorAll(
         "[data-slot='status-badge'][data-status='draft']",
       ).length,
-    ).toBe(3);
+    ).toBe(1);
+    expect(
+      document.querySelectorAll(
+        "[data-slot='status-badge'][data-status='in_progress']",
+      ).length,
+    ).toBe(2);
 
     expect(
       main.getByPlaceholderText("Pesquisar projetos..."),
@@ -331,11 +336,12 @@ describe("ProjectsPage", { timeout: 10_000 }, () => {
     await user.clear(search);
     await chooseFilter(user, "Status", /Em andamento/);
 
-    expect(explorerCards()).toHaveLength(0);
+    expect(explorerCards()).toHaveLength(2);
     expect(
-      main.getByText("Nenhum projeto corresponde aos filtros atuais.", {
-        exact: false,
-      }),
+      main.getByRole("link", { name: /Data Center/i }),
+    ).toBeInTheDocument();
+    expect(
+      main.getByRole("link", { name: /Jogos Embarcados/i }),
     ).toBeInTheDocument();
 
     await chooseFilter(user, "Status", /^Todos$/);

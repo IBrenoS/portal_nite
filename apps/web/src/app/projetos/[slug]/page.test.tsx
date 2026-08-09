@@ -104,6 +104,33 @@ const realProjectFixture = {
 } satisfies Project;
 
 describe("ProjectPage", () => {
+  it("renderiza Jogos Embarcados como frente em evolução contínua", async () => {
+    await renderProjectPage("jogos-embarcados");
+
+    expect(
+      screen.getByRole("heading", {
+        level: 1,
+        name: "Jogos Embarcados",
+      }),
+    ).toBeInTheDocument();
+    const projectHero = screen
+      .getByRole("heading", { level: 1, name: "Jogos Embarcados" })
+      .closest("section");
+
+    expect(
+      projectHero?.querySelectorAll("[data-slot='status-badge']"),
+    ).toHaveLength(0);
+    const trackingPanel = screen.getByRole("complementary", {
+      name: "Painel de acompanhamento do projeto",
+    });
+    expect(
+      trackingPanel.querySelectorAll(
+        "[data-slot='status-badge'][data-status='in_progress']",
+      ),
+    ).toHaveLength(1);
+    expect(screen.getByText("Em evolução contínua")).toBeInTheDocument();
+  });
+
   it("renderiza frente em estruturação como acompanhamento público honesto", async () => {
     await renderProjectPage("data-center");
 
@@ -167,14 +194,23 @@ describe("ProjectPage", () => {
     expect(
       screen.getByRole("heading", { level: 3, name: "Objetivo atual" }),
     ).toBeInTheDocument();
+    const projectHero = screen
+      .getByRole("heading", { level: 1, name: "Data Center" })
+      .closest("section");
+
+    expect(projectHero).toBeInTheDocument();
     expect(
-      document.querySelectorAll(
-        "[data-slot='status-badge'][data-status='draft']",
-      ).length,
-    ).toBeGreaterThanOrEqual(2);
+      projectHero?.querySelectorAll("[data-slot='status-badge']"),
+    ).toHaveLength(0);
+    const trackingPanel = screen.getByRole("complementary", {
+      name: "Painel de acompanhamento do projeto",
+    });
     expect(
-      screen.getAllByText("Em estruturação").length,
-    ).toBeGreaterThanOrEqual(2);
+      trackingPanel.querySelectorAll(
+        "[data-slot='status-badge'][data-status='in_progress']",
+      ),
+    ).toHaveLength(1);
+    expect(screen.getByText("Em evolução contínua")).toBeInTheDocument();
     expect(
       screen.getByAltText(/Racks de servidores, rede e console de operação/i),
     ).toBeInTheDocument();

@@ -79,12 +79,6 @@ const projectStatusBadgeByProjectStatus = {
   concluido: "done",
 } satisfies Record<Project["status"], ProjectStatusBadge>;
 
-const projectContentStateLabels = {
-  real: "Real",
-  demonstrativo: "Demonstrativo",
-  "em-estruturacao": "Em estruturação",
-} satisfies Record<Project["contentState"], string>;
-
 const projectDateFormatter = new Intl.DateTimeFormat("pt-BR", {
   day: "2-digit",
   month: "2-digit",
@@ -179,8 +173,10 @@ function ProjectDetailMediaPanel({
   );
 }
 
-function getProjectContentStateLabel(contentState: Project["contentState"]) {
-  return projectContentStateLabels[contentState];
+function getProjectStatusLabel(project: Project) {
+  return project.slug === "data-center" || project.slug === "jogos-embarcados"
+    ? "Em evolução contínua"
+    : statusBadgeLabels[projectStatusBadgeByProjectStatus[project.status]];
 }
 
 function getProjectPrimaryDeliverable(project: Project) {
@@ -387,13 +383,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 </ol>
               </nav>
 
-              <div className="flex flex-wrap gap-2">
-                <StatusBadge status={status} size="sm" />
-                <Chip variant="metal">
-                  {getProjectContentStateLabel(project.contentState)}
-                </Chip>
-              </div>
-
               <div className="flex flex-col gap-5">
                 <p className="font-mono text-xs uppercase tracking-[0.18em] text-nite-brand-accent">
                   {siteConfig.name} / Acompanhamento público
@@ -482,7 +471,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 <div>
                   <dt className="text-muted-foreground">Status</dt>
                   <dd className="mt-1">
-                    <StatusBadge status={status} variant="outline" size="sm" />
+                    <StatusBadge
+                      status={status}
+                      label={getProjectStatusLabel(project)}
+                      variant="outline"
+                      size="sm"
+                    />
                   </dd>
                 </div>
                 <div>
