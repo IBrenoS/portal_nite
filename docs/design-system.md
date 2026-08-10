@@ -237,6 +237,18 @@ Explorer e diferencia contexto por densidade, nunca por uma linguagem paralela.
 - **Accessibility:** foco visivel, conteudo completo sem hover e transicoes
   desativadas quando `prefers-reduced-motion` estiver ativo.
 
+### Nite News
+
+O Nite News adapta a composição editorial aprovada aos tokens e estruturas do portal, sem criar um tema paralelo.
+
+- **Estrutura:** hero compacto, filtros em pill, destaque `lead`, grade `standard`, agenda `compact` e página de leitura dedicada.
+- **Tema:** modo claro preserva a leveza da referência; modo escuro mapeia fundo, superfície, borda, texto e acento exclusivamente para `--nite-*`.
+- **Cards:** o card inteiro é um link semântico, com imagem estável, categoria, título, resumo quando aplicável e metadata. O destaque usa `h2`; cards dentro de seções usam `h3`.
+- **Leitura:** um único `h1`, coluna editorial controlada, parágrafos arejados, subtítulos e citação opcional. A capa pode ocupar largura ampla, mas o corpo mantém medida confortável.
+- **Shell:** sempre reutiliza `SiteHeader` sticky e `SiteFooter` institucional no fluxo padrão. Header e footer desenhados na referência não são componentes do Nite News.
+- **Motion:** não há canvas, banner ou animação autônoma. A resposta visual se limita a foco, borda e zoom discreto de imagem, removido com `prefers-reduced-motion`.
+- **Conteúdo:** imagens locais usam `next/image`, dimensões estáveis e texto alternativo significativo. Estado demonstrativo afeta indexação, não introduz badge ou aviso visual.
+
 ### Inputs / Fields
 
 - **Style:** altura `40px`, raio `12px`, superfície tokenizada e borda soft.

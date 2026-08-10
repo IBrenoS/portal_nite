@@ -51,6 +51,10 @@ const responsiveRoutes = [
   { name: "projects", path: "/projetos" },
   { name: "project-detail", path: "/projetos/data-center" },
   { name: "updates", path: "/atualizacoes" },
+  {
+    name: "update-detail",
+    path: "/atualizacoes/novas-conexoes-transformam-experiencia-campus",
+  },
   { name: "people", path: "/pessoas" },
   { name: "person-profile", path: "/pessoas/breno-cerqueira" },
   { name: "opportunities", path: "/oportunidades" },

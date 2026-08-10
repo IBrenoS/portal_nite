@@ -1,0 +1,286 @@
+[
+  {
+    "slug": "novas-conexoes-transformam-experiencia-campus",
+    "title": "Novas conexões transformam a experiência no campus",
+    "summary": "Uma visão sobre iniciativas, encontros e histórias que aproximam pessoas e ampliam as possibilidades de colaboração.",
+    "category": "comunidade",
+    "publishedAt": "2026-08-10",
+    "readTimeMinutes": 4,
+    "byline": "Redação Nite News",
+    "cover": {
+      "src": "/images/atualizacoes/comunidade-campus.webp",
+      "alt": "Estudantes conversam em um espaço universitário contemporâneo."
+    },
+    "featured": true,
+    "contentState": "demonstrativo",
+    "public": true,
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "Notícias ganham valor quando o que acontece na universidade encontra uma forma clara de chegar à comunidade. No Nite News, cada matéria reúne o essencial, explica o contexto e oferece uma leitura contínua."
+      },
+      {
+        "type": "paragraph",
+        "text": "A proposta editorial aproxima projetos, eventos e iniciativas da rotina de quem acompanha o portal. Em vez de fragmentar a informação, a página reúne contexto e abre caminhos para descobrir outras histórias relacionadas."
+      },
+      {
+        "type": "quote",
+        "text": "Informar também é desenhar uma experiência de descoberta, continuidade e pertencimento.",
+        "attribution": "Princípio editorial / Nite News"
+      },
+      {
+        "type": "heading",
+        "text": "Contexto para acompanhar"
+      },
+      {
+        "type": "paragraph",
+        "text": "A leitura dedicada mantém o foco no conteúdo, mas não termina nele. Ao final, a navegação apresenta matérias relacionadas e agendas próximas, transformando uma publicação em ponto de partida para explorar o portal."
+      },
+      {
+        "type": "paragraph",
+        "text": "Títulos objetivos, metadados previsíveis, resumos curtos e uma coluna confortável permitem tanto percorrer rapidamente quanto permanecer na matéria."
+      }
+    ]
+  },
+  {
+    "slug": "semana-cultura-ideias-encontros",
+    "title": "Uma semana dedicada à cultura, ideias e encontros",
+    "summary": "Programação em destaque para acompanhar experiências criativas e compartilhar novas perspectivas dentro da comunidade.",
+    "category": "agenda",
+    "publishedAt": "2026-08-10",
+    "readTimeMinutes": 3,
+    "byline": "Redação Nite News",
+    "cover": {
+      "src": "/images/atualizacoes/cultura-campus.webp",
+      "alt": "Apresentação cultural reúne estudantes em um espaço do campus."
+    },
+    "featured": false,
+    "contentState": "demonstrativo",
+    "public": true,
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "Uma agenda universitária ganha força quando diferentes linguagens dividem o mesmo espaço. Cultura, conversa e experimentação criam oportunidades para circular ideias além da sala de aula."
+      },
+      {
+        "type": "heading",
+        "text": "Encontros que ampliam repertórios"
+      },
+      {
+        "type": "paragraph",
+        "text": "A programação editorial reúne atividades em uma sequência fácil de acompanhar, com informações essenciais e acesso direto aos detalhes de cada encontro."
+      },
+      {
+        "type": "paragraph",
+        "text": "O objetivo é facilitar a descoberta e permitir que cada pessoa encontre assuntos próximos de seus interesses, mantendo a agenda conectada às demais histórias do portal."
+      }
+    ]
+  },
+  {
+    "slug": "projetos-estudantis-compartilham-descobertas",
+    "title": "Projetos estudantis ganham espaço para compartilhar descobertas",
+    "summary": "Iniciativas que aproximam pesquisa, prática e comunidade por meio de relatos claros sobre processos e aprendizados.",
+    "category": "projetos",
+    "publishedAt": "2026-08-09",
+    "readTimeMinutes": 5,
+    "byline": "Redação Nite News",
+    "cover": {
+      "src": "/images/atualizacoes/laboratorio-tecnologia.webp",
+      "alt": "Estudantes colaboram em uma bancada de laboratório tecnológico."
+    },
+    "featured": false,
+    "contentState": "demonstrativo",
+    "public": true,
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "Projetos estudantis podem ser acompanhados não apenas pelo resultado final, mas também pelas perguntas, escolhas e aprendizados construídos ao longo do processo."
+      },
+      {
+        "type": "heading",
+        "text": "Da prática para a comunidade"
+      },
+      {
+        "type": "paragraph",
+        "text": "Ao organizar descobertas em uma narrativa acessível, a experiência de laboratório deixa de ficar restrita ao grupo responsável e passa a inspirar novas explorações."
+      },
+      {
+        "type": "paragraph",
+        "text": "A matéria reúne contexto, objetivo e próximos caminhos em blocos curtos, preservando o rigor sem transformar a leitura em um relatório técnico."
+      }
+    ]
+  },
+  {
+    "slug": "conversas-tecnologia-novos-caminhos",
+    "title": "Conversas sobre tecnologia apontam novos caminhos",
+    "summary": "Ideias que conectam pesquisa, prática e comunidade em torno de possibilidades para experiências digitais mais úteis.",
+    "category": "inovacao",
+    "publishedAt": "2026-08-08",
+    "readTimeMinutes": 4,
+    "byline": "Redação Nite News",
+    "cover": {
+      "src": "/images/atualizacoes/comunidade-campus.webp",
+      "alt": "Grupo conversa diante de uma instalação digital no campus."
+    },
+    "featured": false,
+    "contentState": "demonstrativo",
+    "public": true,
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "Conversar sobre tecnologia também significa observar necessidades, formular perguntas melhores e aproximar diferentes áreas de conhecimento."
+      },
+      {
+        "type": "heading",
+        "text": "Possibilidades compartilhadas"
+      },
+      {
+        "type": "paragraph",
+        "text": "Quando experiências e referências circulam, novas conexões aparecem entre pesquisa aplicada, rotina acadêmica e desafios percebidos pela comunidade."
+      },
+      {
+        "type": "paragraph",
+        "text": "O Nite News organiza essas conversas como pontos de partida, oferecendo contexto suficiente para acompanhar o tema e descobrir iniciativas relacionadas."
+      }
+    ]
+  },
+  {
+    "slug": "bastidores-iniciativa-colaboracao",
+    "title": "Bastidores de uma iniciativa construída em colaboração",
+    "summary": "Pessoas, decisões e processos por trás de uma experiência que toma forma a partir do trabalho coletivo.",
+    "category": "comunidade",
+    "publishedAt": "2026-08-07",
+    "readTimeMinutes": 6,
+    "byline": "Redação Nite News",
+    "cover": {
+      "src": "/images/atualizacoes/cultura-campus.webp",
+      "alt": "Pessoas organizam materiais durante uma atividade colaborativa."
+    },
+    "featured": false,
+    "contentState": "demonstrativo",
+    "public": true,
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "Toda iniciativa colaborativa reúne etapas pouco visíveis: escuta, organização, testes e ajustes que ajudam uma ideia a encontrar sua forma."
+      },
+      {
+        "type": "heading",
+        "text": "O processo também conta a história"
+      },
+      {
+        "type": "paragraph",
+        "text": "Registrar bastidores permite compreender como diferentes contribuições se conectam e por que algumas decisões mudam durante o desenvolvimento."
+      },
+      {
+        "type": "paragraph",
+        "text": "A narrativa editorial valoriza esse percurso sem transformar pessoas em personagens isolados, mantendo o foco no aprendizado construído em conjunto."
+      }
+    ]
+  },
+  {
+    "slug": "encontros-criativos-novos-espacos",
+    "title": "Encontros criativos ocupam novos espaços",
+    "summary": "Atividades culturais e conversas abertas criam novos pontos de encontro para a comunidade universitária.",
+    "category": "cultura",
+    "publishedAt": "2026-08-06",
+    "eventDate": "2026-08-12",
+    "readTimeMinutes": 3,
+    "byline": "Redação Nite News",
+    "cover": {
+      "src": "/images/atualizacoes/cultura-campus.webp",
+      "alt": "Espaço universitário preparado para um encontro cultural."
+    },
+    "featured": false,
+    "contentState": "demonstrativo",
+    "public": true,
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "Espaços de passagem podem ganhar outros significados quando recebem atividades que convidam à permanência, à conversa e à criação coletiva."
+      },
+      {
+        "type": "heading",
+        "text": "Uma agenda para descobrir"
+      },
+      {
+        "type": "paragraph",
+        "text": "A proposta aproxima linguagens e interesses diversos em encontros de formato aberto, organizados para facilitar a participação da comunidade."
+      },
+      {
+        "type": "paragraph",
+        "text": "No portal, cada atividade aparece com contexto e continuidade, permitindo acompanhar o que vem antes e descobrir outras pautas depois do encontro."
+      }
+    ]
+  },
+  {
+    "slug": "roda-conversa-futuros-possiveis",
+    "title": "Roda de conversa explora futuros possíveis",
+    "summary": "Um encontro para observar mudanças, formular perguntas e aproximar diferentes perspectivas sobre tecnologia.",
+    "category": "tecnologia",
+    "publishedAt": "2026-08-05",
+    "eventDate": "2026-08-14",
+    "readTimeMinutes": 4,
+    "byline": "Redação Nite News",
+    "cover": {
+      "src": "/images/atualizacoes/comunidade-campus.webp",
+      "alt": "Participantes conversam em círculo em um ambiente universitário."
+    },
+    "featured": false,
+    "contentState": "demonstrativo",
+    "public": true,
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "Falar sobre futuros possíveis exige combinar imaginação e análise crítica, observando como escolhas tecnológicas influenciam experiências cotidianas."
+      },
+      {
+        "type": "heading",
+        "text": "Perguntas antes de respostas"
+      },
+      {
+        "type": "paragraph",
+        "text": "A roda de conversa propõe um espaço para reunir perspectivas e reconhecer que um mesmo tema pode ser visto por diferentes áreas e trajetórias."
+      },
+      {
+        "type": "paragraph",
+        "text": "A cobertura editorial preserva os principais eixos do encontro e oferece conexões para quem deseja continuar explorando o assunto."
+      }
+    ]
+  },
+  {
+    "slug": "atividade-aberta-convida-colaboracao",
+    "title": "Atividade aberta convida à colaboração",
+    "summary": "Uma experiência participativa aproxima repertórios e cria espaço para contribuições de diferentes áreas da comunidade.",
+    "category": "comunidade",
+    "publishedAt": "2026-08-04",
+    "eventDate": "2026-08-16",
+    "readTimeMinutes": 3,
+    "byline": "Redação Nite News",
+    "cover": {
+      "src": "/images/atualizacoes/laboratorio-tecnologia.webp",
+      "alt": "Grupo trabalha em conjunto ao redor de uma mesa de laboratório."
+    },
+    "featured": false,
+    "contentState": "demonstrativo",
+    "public": true,
+    "body": [
+      {
+        "type": "paragraph",
+        "text": "Atividades abertas criam oportunidades para reunir conhecimentos diferentes em torno de uma proposta comum, sem exigir uma trajetória única de participação."
+      },
+      {
+        "type": "heading",
+        "text": "Colaboração como método"
+      },
+      {
+        "type": "paragraph",
+        "text": "O encontro organiza momentos de observação, troca e construção para que cada contribuição encontre espaço dentro do processo coletivo."
+      },
+      {
+        "type": "paragraph",
+        "text": "A matéria apresenta o contexto da atividade, seus temas centrais e caminhos relacionados para acompanhar outras iniciativas no portal."
+      }
+    ]
+  }
+]

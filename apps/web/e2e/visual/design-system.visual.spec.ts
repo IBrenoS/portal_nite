@@ -9,6 +9,10 @@ const desktopRoutes = [
   { name: "projects", path: "/projetos" },
   { name: "project-detail", path: "/projetos/data-center" },
   { name: "updates", path: "/atualizacoes" },
+  {
+    name: "update-detail",
+    path: "/atualizacoes/novas-conexoes-transformam-experiencia-campus",
+  },
   { name: "people", path: "/pessoas" },
   { name: "opportunities", path: "/oportunidades" },
   { name: "contact", path: "/contato" },
@@ -16,6 +20,11 @@ const desktopRoutes = [
 
 const mobileRoutes = [
   { name: "home", path: "/" },
+  { name: "updates", path: "/atualizacoes" },
+  {
+    name: "update-detail",
+    path: "/atualizacoes/novas-conexoes-transformam-experiencia-campus",
+  },
   { name: "people", path: "/pessoas" },
   { name: "opportunities", path: "/oportunidades" },
   { name: "contact", path: "/contato" },

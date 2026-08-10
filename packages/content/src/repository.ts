@@ -1,10 +1,15 @@
 import projectsJson from "../data/projects.json";
 import timelineJson from "../data/timeline.json";
 import peopleJson from "../data/people.json";
+import newsJson from "../data/news.json";
 import {
+  newsCollectionSchema,
+  newsFilterValues,
   peopleCollectionSchema,
   projectCollectionSchema,
   timelineCollectionSchema,
+  type NewsArticle,
+  type NewsFilter,
   type Person,
   type Project,
   type TimelineEvent,
@@ -94,5 +99,116 @@ export function getTimelineEvents(): TimelineEvent[] {
   ).toSorted(
     (current, next) =>
       current.year - next.year || current.sequence - next.sequence,
+  );
+}
+
+function compareNewsByPublication(
+  current: NewsArticle,
+  next: NewsArticle,
+): number {
+  return (
+    next.publishedAt.localeCompare(current.publishedAt) ||
+    Number(next.featured) - Number(current.featured) ||
+    current.slug.localeCompare(next.slug)
+  );
+}
+
+export function getNewsArticles(): NewsArticle[] {
+  return parseContent(
+    "conteudo/atualizacoes/news.json",
+    newsCollectionSchema,
+    newsJson,
+  );
+}
+
+export function getPublishedNewsArticles(): NewsArticle[] {
+  return getNewsArticles()
+    .filter((article) => article.public)
+    .toSorted(compareNewsByPublication);
+}
+
+export function getNewsArticleBySlug(slug: string): NewsArticle | undefined {
+  return getPublishedNewsArticles().find((article) => article.slug === slug);
+}
+
+export function getNewsArticleSlugs() {
+  return getPublishedNewsArticles().map((article) => ({ slug: article.slug }));
+}
+
+export function getFeaturedNewsArticle(): NewsArticle | undefined {
+  return getPublishedNewsArticles().find((article) => article.featured);
+}
+
+export function getLatestNewsArticles(
+  limit = 4,
+  excludeSlug?: string,
+): NewsArticle[] {
+  return getPublishedNewsArticles()
+    .filter((article) => article.slug !== excludeSlug)
+    .slice(0, Math.max(0, limit));
+}
+
+export function getAgendaNewsArticles(limit = 3): NewsArticle[] {
+  return getPublishedNewsArticles()
+    .filter((article): article is NewsArticle & { eventDate: string } =>
+      Boolean(article.eventDate),
+    )
+    .toSorted(
+      (current, next) =>
+        current.eventDate.localeCompare(next.eventDate) ||
+        compareNewsByPublication(current, next),
+    )
+    .slice(0, Math.max(0, limit));
+}
+
+export function normalizeNewsFilter(
+  filter: string | string[] | undefined,
+): NewsFilter {
+  const candidate = Array.isArray(filter) ? filter[0] : filter;
+
+  return newsFilterValues.includes(candidate as NewsFilter)
+    ? (candidate as NewsFilter)
+    : "destaques";
+}
+
+export function getFilteredNewsArticles(filter: NewsFilter): NewsArticle[] {
+  const articles = getPublishedNewsArticles();
+
+  switch (filter) {
+    case "todas":
+      return articles;
+    case "agenda":
+      return articles.filter((article) => article.eventDate);
+    case "comunidade":
+      return articles.filter((article) => article.category === "comunidade");
+    case "destaques":
+      return articles.filter((article) => article.featured);
+  }
+}
+
+export function getRelatedNewsArticles(slug: string, limit = 3): NewsArticle[] {
+  const article = getNewsArticleBySlug(slug);
+
+  if (!article) {
+    return [];
+  }
+
+  return getPublishedNewsArticles()
+    .filter((candidate) => candidate.slug !== article.slug)
+    .toSorted((current, next) => {
+      const currentMatches = current.category === article.category;
+      const nextMatches = next.category === article.category;
+
+      return (
+        Number(nextMatches) - Number(currentMatches) ||
+        compareNewsByPublication(current, next)
+      );
+    })
+    .slice(0, Math.max(0, limit));
+}
+
+export function getIndexableNewsArticles(): NewsArticle[] {
+  return getPublishedNewsArticles().filter(
+    (article) => article.contentState === "real",
   );
 }

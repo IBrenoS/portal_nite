@@ -7,87 +7,93 @@ afterEach(() => {
   cleanup();
 });
 
-describe("UpdatesPage", () => {
-  it("renderiza base de Atualizações com estado vazio honesto", () => {
-    render(<UpdatesPage />);
+async function renderUpdatesPage(filtro?: string | string[]) {
+  render(
+    await UpdatesPage({
+      searchParams: Promise.resolve({ filtro }),
+    }),
+  );
+}
 
-    expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
+describe("UpdatesPage", () => {
+  it("renderiza o portal editorial completo com header e footer padrão", async () => {
+    await renderUpdatesPage();
+
     expect(
       screen.getByRole("heading", { level: 1, name: "Nite News" }),
     ).toBeInTheDocument();
-
-    const main = within(screen.getByRole("main"));
-    const emptyState = document.querySelector(
-      "[data-component='updates-empty-state']",
+    expect(screen.getByRole("banner")).toHaveAttribute("data-site-header");
+    expect(screen.getByRole("contentinfo")).toHaveAttribute(
+      "data-footer-variant",
+      "plain",
     );
 
-    expect(main.getByText("Atualizações")).toBeInTheDocument();
+    const main = within(screen.getByRole("main"));
     expect(
-      main.getByText("Registros, novidades e bastidores das ações do núcleo."),
+      main.getByRole("heading", { level: 2, name: "Últimas notícias" }),
     ).toBeInTheDocument();
-    expect(emptyState).toHaveAttribute("data-slot", "card");
-    expect(emptyState).toHaveAttribute("data-status", "empty");
+    expect(
+      main.getByRole("heading", { level: 2, name: "Na agenda" }),
+    ).toBeInTheDocument();
     expect(
       main.getByRole("heading", {
         level: 2,
-        name: "No momento, ainda não há atualizações publicadas.",
+        name: "Novas conexões transformam a experiência no campus",
       }),
     ).toBeInTheDocument();
+
+    const articleLinks = screen
+      .getByRole("main")
+      .querySelectorAll("a[href^='/atualizacoes/']");
+
+    expect(articleLinks).toHaveLength(8);
     expect(
-      main.getByText(
-        "Esta seção será usada para organizar atualizações validadas do NITE.",
-        { exact: false },
-      ),
-    ).toBeInTheDocument();
-    expect(
-      main.getByText(
-        "Conteúdos reais serão adicionados após validação/autorização.",
-        { exact: false },
-      ),
-    ).toBeInTheDocument();
+      main.getByRole("link", {
+        name: /Novas conexões transformam a experiência no campus/i,
+      }),
+    ).toHaveAttribute(
+      "href",
+      "/atualizacoes/novas-conexoes-transformam-experiencia-campus",
+    );
+    expect(document.querySelector("canvas")).toBeNull();
   });
 
-  it("mantém conteúdo fictício e rotas futuras fora da página", () => {
-    render(<UpdatesPage />);
+  it("expõe filtros compartilháveis e marca a seleção atual", async () => {
+    await renderUpdatesPage("comunidade");
 
-    const main = within(screen.getByRole("main"));
-    const instagramLink = main.getByRole("link", {
-      name: "Acompanhar o NITE no Instagram",
+    const filters = screen.getByRole("navigation", {
+      name: "Filtros de notícias",
+    });
+    const activeFilter = within(filters).getByRole("link", {
+      name: "Comunidade",
     });
 
-    expect(instagramLink).toHaveAttribute(
-      "href",
-      "https://www.instagram.com/nite.uj?igsh=c3JzbHRxdWZnNzN2",
-    );
-    expect(instagramLink).toHaveAttribute("target", "_blank");
+    expect(activeFilter).toHaveAttribute("aria-current", "page");
     expect(
-      screen.getByText(
-        "Nenhuma atualização, evento, foto, depoimento, autor, data ou métrica será exibida sem validação/autorização.",
-      ),
-    ).toBeInTheDocument();
-
-    for (const forbidden of [
-      "notícias",
-      "Publicado em",
-      "Autor:",
-      "Evento confirmado",
-      "Oficina confirmada",
-      "/noticias",
-      "/atualizacoes/",
-    ]) {
-      expect(
-        screen.queryByText(forbidden, { exact: false }),
-      ).not.toBeInTheDocument();
-    }
-
-    expect(document.querySelector("a[href='/noticias']")).toBeNull();
-    expect(document.querySelector("a[href^='/atualizacoes/']")).toBeNull();
+      within(filters).getByRole("link", { name: "Agenda" }),
+    ).toHaveAttribute("href", "/atualizacoes?filtro=agenda");
+    expect(screen.getByRole("main").querySelectorAll("article")).toHaveLength(
+      3,
+    );
   });
 
-  it("declara metadata institucional de atualizações", () => {
-    expect(metadata.title).toBe("Atualizações | NITE");
+  it("trata filtro desconhecido como destaques", async () => {
+    await renderUpdatesPage("desconhecido");
+
+    expect(
+      within(
+        screen.getByRole("navigation", { name: "Filtros de notícias" }),
+      ).getByRole("link", { name: "Destaques" }),
+    ).toHaveAttribute("aria-current", "page");
+    expect(
+      screen.getByRole("heading", { level: 2, name: "Últimas notícias" }),
+    ).toBeInTheDocument();
+  });
+
+  it("declara metadata editorial do Nite News", () => {
+    expect(metadata.title).toBe("Nite News | NITE");
     expect(metadata.description).toBe(
-      "Registros, novidades e bastidores das ações do núcleo.",
+      "Notícias, eventos e histórias da comunidade universitária reunidos pelo Nite News.",
     );
     expect(metadata.alternates?.canonical?.toString()).toContain(
       "/atualizacoes",

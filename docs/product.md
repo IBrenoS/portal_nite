@@ -42,6 +42,14 @@ Direção visual local: “Tech institucional de circuito metálico”, com fund
 4. Fonte tipada e autorização explícita. Conteúdo público vem de `@nite/content`, passa pelos schemas Zod do package e respeita estados editoriais e autorização.
 5. Movimento como orientação. Animações guiam leitura, transição e foco; conteúdo e navegação continuam compreensíveis com movimento reduzido ou sem animação.
 
+## Nite News
+
+`/atualizacoes` é o portal editorial público do NITE. A home organiza uma matéria principal, últimas notícias e agenda; os filtros `destaques`, `todas`, `agenda` e `comunidade` são compartilháveis pela URL. Cada card aponta para uma página dedicada em `/atualizacoes/[slug]`, com leitura editorial, compartilhamento e matérias relacionadas.
+
+O domínio começa com oito registros locais demonstrativos. Eles permitem validar estrutura, navegação e responsividade, mas não representam comunicação oficial: usam `contentState: "demonstrativo"`, permanecem com `noindex`, não entram no sitemap e não exibem aviso visual por decisão de produto. A publicação indexável exige conteúdo aprovado migrado para `contentState: "real"`; isso não altera a UI nem as rotas.
+
+O Nite News usa o header e o footer institucionais do portal. Sua experiência é estática e focada em leitura: não inclui canvas, banner promocional ou animação autônoma.
+
 ## Accessibility & Inclusion
 
 WCAG 2.2 é a referência do projeto, com WCAG AA como mínimo para contraste: 4.5:1 em texto normal e 3:1 em texto grande. Acessibilidade não é modo opcional; legibilidade, foco visível, semântica, navegação por teclado e estados compreensíveis fazem parte do baseline.

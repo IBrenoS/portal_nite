@@ -38,9 +38,10 @@ Contém os JSONs canônicos, schemas Zod, tipos derivados e consultas de leitura
 
 A entrada `@nite/content` expõe:
 
-- `Project`, `Person`, `PersonEntryCategory` e `TimelineEvent`;
+- `Project`, `Person`, `PersonEntryCategory`, `TimelineEvent`, `NewsArticle`, `NewsCategory`, `NewsContentState` e blocos editoriais tipados;
 - schemas e valores compartilhados;
-- consultas de projetos, pessoas e linha do tempo.
+- consultas de projetos, pessoas e linha do tempo;
+- consultas editoriais `getPublishedNewsArticles`, `getNewsArticleBySlug`, `getNewsArticleSlugs`, `getFeaturedNewsArticle`, `getRelatedNewsArticles` e `getIndexableNewsArticles`.
 
 `src/index.ts` é a única API pública. Imports como `@nite/content/*` e caminhos físicos entre `apps/` e `packages/` são proibidos pelo ESLint. Uma mudança nessa API exige typecheck e testes dos dois workspaces.
 
@@ -57,6 +58,12 @@ apps/web/src/app e components
 ```
 
 Filtragem editorial, autorização de perfis, ordenação e resolução por slug permanecem no package de conteúdo. Componentes web recebem dados já tipados e não acessam JSONs diretamente.
+
+### Fluxo do Nite News
+
+`packages/content/data/news.json` é o conteúdo canônico das matérias. O repository valida slugs únicos, visibilidade e estado editorial; também concentra filtros, ordenação cronológica, agenda crescente e relacionadas com prioridade para a mesma categoria. `apps/web` consome apenas a API pública para renderizar `/atualizacoes`, `/atualizacoes/[slug]`, metadata e sitemap.
+
+Registros `demonstrativo` podem ser públicos para validação da interface, mas são devolvidos por `getIndexableNewsArticles()` somente após migrarem para `contentState: "real"`. A home `/atualizacoes` entra no sitemap; slugs demonstrativos usam `robots.index = false`. Breadcrumb JSON-LD existe em todas as matérias, enquanto Article JSON-LD fica restrito ao conteúdo real e indexável.
 
 ## Estratégia de testes
 

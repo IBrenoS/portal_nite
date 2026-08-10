@@ -1,12 +1,18 @@
-import {
-  ArchiveIcon,
-  ArrowUpRightIcon,
-  Clock3Icon,
-  ShieldCheckIcon,
-} from "lucide-react";
-import type { Metadata } from "next";
+import type { Metadata, Route } from "next";
+import Link from "next/link";
 
-import { siteConfig } from "@/lib/site-config";
+import {
+  getAgendaNewsArticles,
+  getFeaturedNewsArticle,
+  getFilteredNewsArticles,
+  getLatestNewsArticles,
+  normalizeNewsFilter,
+} from "@nite/content";
+import { Container } from "@/components/layout/container";
+import { SiteFooter } from "@/components/layout/site-footer";
+import { SiteHeader } from "@/components/layout/site-header";
+import { NewsCard } from "@/components/news/news-card";
+import { NewsFilters } from "@/components/news/news-filters";
 import {
   absoluteUrl,
   buildBreadcrumbJsonLd,
@@ -14,35 +20,16 @@ import {
   defaultMetadata,
   serializeJsonLd,
 } from "@/lib/seo";
-import { Container } from "@/components/layout/container";
-import { SiteFooter } from "@/components/layout/site-footer";
-import { SiteHeader } from "@/components/layout/site-header";
-import { SectionHeader } from "@/components/sections/section-header";
-import { buttonVariants } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
 
-const pageTitle = "Atualizações";
+const pageTitle = "Nite News";
 const pageDescription =
-  "Registros, novidades e bastidores das ações do núcleo.";
+  "Notícias, eventos e histórias da comunidade universitária reunidos pelo Nite News.";
 
-const institutionalUses = [
-  {
-    title: "Registros validados",
-    description:
-      "Atualizações reais serão publicadas somente após validação de conteúdo, contexto e autorização quando necessário.",
-  },
-  {
-    title: "Arquivo organizado",
-    description:
-      "O portal funcionará como referência institucional para registros relevantes do núcleo, sem substituir o alcance social.",
-  },
-  {
-    title: "Bastidores autorizados",
-    description:
-      "Fotos, relatos e registros de pessoas ficarão ausentes até que exista autorização e contexto de uso.",
-  },
-];
+type UpdatesPageProps = {
+  searchParams?: Promise<{
+    filtro?: string | string[];
+  }>;
+};
 
 export const metadata: Metadata = {
   ...defaultMetadata,
@@ -58,19 +45,54 @@ export const metadata: Metadata = {
     type: "website",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: buildPageTitle(pageTitle),
     description: pageDescription,
   },
 };
 
-export default function UpdatesPage() {
-  const instagramChannel = siteConfig.publicChannels.find(
-    (channel) => channel.label === "Instagram",
+function NewsSectionHeader({
+  id,
+  title,
+  action,
+  href,
+}: {
+  id: string;
+  title: string;
+  action: string;
+  href: string;
+}) {
+  return (
+    <div className="flex items-center justify-between gap-6">
+      <h2
+        id={id}
+        className="font-heading text-xl font-semibold text-nite-text-primary sm:text-2xl"
+      >
+        {title}
+      </h2>
+      <Link
+        href={href as Route}
+        className="shrink-0 rounded-md font-mono text-xs font-medium uppercase tracking-[0.14em] text-nite-brand-accent outline-none hover:text-nite-text-primary focus-visible:ring-2 focus-visible:ring-ring"
+      >
+        {action} <span aria-hidden="true">→</span>
+      </Link>
+    </div>
   );
+}
+
+export default async function UpdatesPage({
+  searchParams = Promise.resolve({}),
+}: UpdatesPageProps = {}) {
+  const { filtro } = await searchParams;
+  const activeFilter = normalizeNewsFilter(filtro);
+  const featured = getFeaturedNewsArticle();
+  const latest = getLatestNewsArticles(4, featured?.slug);
+  const agenda = getAgendaNewsArticles(3);
+  const filteredArticles = getFilteredNewsArticles(activeFilter);
+  const showCuratedHome = activeFilter === "destaques";
   const breadcrumbJsonLd = buildBreadcrumbJsonLd([
     { name: "Início", path: "/" },
-    { name: "Atualizações", path: "/atualizacoes" },
+    { name: "Nite News", path: "/atualizacoes" },
   ]);
 
   return (
@@ -81,141 +103,93 @@ export default function UpdatesPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbJsonLd) }}
       />
-      <main id="conteudo-principal">
-        <section className="py-14 sm:py-16 lg:py-20">
+      <main
+        id="conteudo-principal"
+        className="overflow-hidden bg-nite-background text-nite-text-primary"
+      >
+        <section className="pt-12 sm:pt-16 lg:pt-20">
           <Container size="xl" className="grid gap-6">
-            <SectionHeader
-              as="h1"
-              eyebrow="Atualizações"
-              title="Nite News"
-              description={pageDescription}
-            />
-            <p className="max-w-3xl text-sm leading-7 text-muted-foreground">
-              Esta seção será usada para organizar atualizações validadas do
-              NITE. Conteúdos reais serão adicionados após
-              validação/autorização.
-            </p>
+            <div className="rounded-xl border border-nite-border-subtle bg-nite-section px-5 py-9 text-center sm:px-10 sm:py-12">
+              <p className="font-mono text-xs font-medium uppercase tracking-[0.14em] text-nite-text-secondary">
+                Bem-vindo ao Nite News
+              </p>
+              <h1 className="mt-3 text-balance font-heading text-[clamp(2rem,4vw,3rem)] font-semibold leading-[1.1] text-nite-text-primary">
+                Nite News
+              </h1>
+              <p className="mx-auto mt-4 max-w-3xl text-pretty text-base leading-7 text-nite-text-secondary sm:text-lg">
+                Informação para acompanhar a universidade, descobrir eventos e
+                participar da comunidade.
+              </p>
+            </div>
+            <NewsFilters activeFilter={activeFilter} />
           </Container>
         </section>
 
-        <section
-          className="py-16 sm:py-24"
-          aria-labelledby="estado-atualizacoes"
-        >
-          <Container size="xl" className="grid gap-8 lg:grid-cols-[1fr_0.8fr]">
-            <Card data-component="updates-empty-state" data-status="empty">
-              <CardHeader className="gap-4 p-6 sm:p-8">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
-                  <span
-                    className="inline-flex size-11 shrink-0 items-center justify-center rounded-md border border-nite-brand-accent/30 bg-nite-brand-accent/10 text-nite-brand-accent"
-                    aria-hidden="true"
-                  >
-                    <Clock3Icon />
-                  </span>
+        {showCuratedHome ? (
+          <Container size="xl" className="grid gap-16 py-12 sm:py-16 lg:py-20">
+            {featured ? <NewsCard article={featured} layout="lead" /> : null}
 
-                  <div className="grid gap-3">
-                    <span className="w-fit rounded-full border border-border bg-muted/40 px-3 py-1 font-mono text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
-                      Em preparação
-                    </span>
-                    <div className="grid gap-2">
-                      <CardTitle>
-                        <h2
-                          id="estado-atualizacoes"
-                          className="font-heading text-2xl font-semibold text-foreground"
-                        >
-                          No momento, ainda não há atualizações publicadas.
-                        </h2>
-                      </CardTitle>
-                      <p className="text-base leading-7 text-muted-foreground">
-                        O portal vai reunir registros, novidades e bastidores
-                        validados do núcleo, sem publicar conteúdo pendente como
-                        se fosse registro real.
-                      </p>
-                    </div>
-                  </div>
+            <section className="grid gap-8" aria-labelledby="latest-news">
+              <NewsSectionHeader
+                id="latest-news"
+                title="Últimas notícias"
+                action="Ver todas"
+                href="/atualizacoes?filtro=todas"
+              />
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                {latest.map((article) => (
+                  <NewsCard key={article.slug} article={article} />
+                ))}
+              </div>
+            </section>
+
+            <section className="grid gap-8" aria-labelledby="news-agenda">
+              <NewsSectionHeader
+                id="news-agenda"
+                title="Na agenda"
+                action="Acompanhar"
+                href="/atualizacoes?filtro=agenda"
+              />
+              <div className="grid gap-6 lg:grid-cols-3">
+                {agenda.map((article) => (
+                  <NewsCard
+                    key={article.slug}
+                    article={article}
+                    layout="compact"
+                  />
+                ))}
+              </div>
+            </section>
+          </Container>
+        ) : (
+          <Container size="xl" className="py-12 sm:py-16 lg:py-20">
+            <section className="grid gap-8" aria-labelledby="filtered-news">
+              <h2
+                id="filtered-news"
+                className="font-heading text-2xl font-semibold text-nite-text-primary"
+              >
+                Notícias em {activeFilter}
+              </h2>
+              {filteredArticles.length > 0 ? (
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                  {filteredArticles.map((article) => (
+                    <NewsCard key={article.slug} article={article} />
+                  ))}
                 </div>
-              </CardHeader>
-
-              <CardContent className="grid gap-5 px-6 pb-6 sm:px-8 sm:pb-8">
-                <p className="rounded-lg border border-border bg-muted/40 p-4 text-sm leading-7 text-muted-foreground">
-                  Nenhuma atualização, evento, foto, depoimento, autor, data ou
-                  métrica será exibida sem validação/autorização.
-                </p>
-
-                {instagramChannel ? (
-                  <div>
-                    <a
-                      href={instagramChannel.href}
-                      aria-label={instagramChannel.ariaLabel}
-                      target="_blank"
-                      rel="noreferrer"
-                      className={cn(
-                        buttonVariants({ variant: "outline", size: "lg" }),
-                        "rounded-md",
-                      )}
-                    >
-                      Acompanhar no Instagram
-                      <ArrowUpRightIcon
-                        data-icon="inline-end"
-                        aria-hidden="true"
-                      />
-                    </a>
-                  </div>
-                ) : null}
-              </CardContent>
-            </Card>
-
-            <aside className="grid gap-4" aria-labelledby="uso-atualizacoes">
-              <Card>
-                <CardHeader className="p-5">
-                  <span className="inline-flex size-10 items-center justify-center rounded-md border border-border text-nite-brand-accent">
-                    <ArchiveIcon aria-hidden="true" />
-                  </span>
-                  <CardTitle>
-                    <h2
-                      id="uso-atualizacoes"
-                      className="font-heading text-xl font-semibold text-foreground"
-                    >
-                      Arquivo institucional
-                    </h2>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="grid gap-4 px-5 pb-5">
-                  <p className="text-sm leading-7 text-muted-foreground">
-                    O Instagram permanece como canal complementar de alcance
-                    social. O portal deve organizar registros relevantes com
-                    mais contexto, rastreabilidade e cuidado institucional.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="p-5">
-                  <span className="inline-flex size-10 items-center justify-center rounded-md border border-border text-nite-brand-accent">
-                    <ShieldCheckIcon aria-hidden="true" />
-                  </span>
-                  <CardTitle>
-                    <h2 className="font-heading text-xl font-semibold text-foreground">
-                      Conteúdo autorizado
-                    </h2>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="px-5 pb-5">
-                  <ul className="grid gap-4 text-sm leading-7 text-muted-foreground">
-                    {institutionalUses.map((item) => (
-                      <li key={item.title} className="grid gap-1">
-                        <span className="font-heading font-semibold text-foreground">
-                          {item.title}
-                        </span>
-                        <span>{item.description}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-            </aside>
+              ) : (
+                <div className="rounded-xl border border-nite-border-subtle bg-nite-surface p-8 text-nite-text-secondary">
+                  <p>Nenhuma notícia encontrada neste filtro.</p>
+                  <Link
+                    href="/atualizacoes?filtro=todas"
+                    className="mt-4 inline-flex min-h-11 items-center text-nite-brand-accent outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    Ver todas as notícias
+                  </Link>
+                </div>
+              )}
+            </section>
           </Container>
-        </section>
+        )}
       </main>
       <SiteFooter />
     </>
