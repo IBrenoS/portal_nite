@@ -1,5 +1,7 @@
 # Nite News Figma Prototype Implementation Plan
 
+> **Status:** superado pela direção Radar de Sinais NITE aprovada em 2026-08-10. Este plano preserva o registro da proposta estática, mas não deve ser executado como especificação atual.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Criar e validar no Figma um protótipo navegável desktop e mobile do Nite News, com home editorial clara, fotográfica e matéria dedicada.

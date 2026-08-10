@@ -2,7 +2,7 @@
 
 Data: 2026-08-10
 
-Status: aprovado para prototipação no Figma
+Status: revisado; a fidelidade geométrica à Resend substitui os presets anteriores do Radar de Sinais
 
 Escopo: experiência editorial desktop e mobile; nenhuma implementação no portal
 
@@ -26,7 +26,7 @@ O arquivo do Figma incluirá:
 - home editorial mobile em 390 px;
 - matéria dedicada mobile em 390 px;
 - componentes reutilizáveis necessários ao protótipo;
-- composição editorial estática, clara e orientada por fotografia;
+- composição editorial cinematográfica na home e leitura orientada por fotografia;
 - navegação entre a home editorial e uma matéria representativa.
 
 O trabalho não inclui código, schemas, dados canônicos, CMS, busca funcional,
@@ -35,39 +35,67 @@ qualquer integração externa.
 
 ## 3. Direção visual
 
-A direção revisada é **portal editorial claro e fotográfico**, com composição
-fortemente orientada pela referência aprovada.
+A direção revisada é **portal editorial com Radar de Sinais**, com composição
+cinematográfica na home e leitura fotográfica na página dedicada.
 
-O Nite News usa fundo claro, cartões brancos, bordas discretas, imagens em
-proporções jornalísticas e hierarquia tipográfica de alto contraste. Sora
-permanece nos títulos, Geist na leitura e Geist Mono em categorias, datas e
-metadados, preservando a identidade do Portal NITE sem reproduzir a marca ou o
+O Nite News adapta fundo, superfícies, bordas e sinais luminosos aos temas dark
+e light. Imagens em proporções jornalísticas e hierarquia tipográfica de alto
+contraste preservam a leitura. Sora permanece nos títulos, Geist na leitura e
+Geist Mono em categorias, datas e metadados, sem reproduzir a marca ou o
 conteúdo da referência.
 
-O conceito “Rede de transmissão editorial”, o canvas e o motion autônomo de
-quatro segundos foram removidos do escopo. A experiência não depende de
-elemento cenográfico animado; a prioridade é a leitura das notícias.
+O Radar de Sinais usa canvas 2D, órbitas e pulsos como identidade estritamente
+decorativa. A matéria principal invade a base da cena e dá função editorial à
+profundidade visual. O canvas não comunica métricas ou transmissão real, e a
+experiência permanece completa sem movimento.
 
-## 4. Composição editorial estática
+### Refinamento aprovado do Radar
 
-A abertura da home usa um bloco introdutório curto, categorias e uma matéria
-principal em duas colunas no desktop. Imagens editoriais demonstrativas
-organizam o ritmo visual da manchete, da grade de últimas notícias e da agenda.
+O renderer mantém dez órbitas circulares em todos os breakpoints, calculadas no
+canvas lógico da viewport. O centro fica em `(viewportWidth / 2,
+viewportHeight × 1.25)`; o raio inicial é `150px`, o incremento começa em
+`127.5px` e cresce `1.1×` após cada órbita. O recorte do stage deixa cinco
+ápices principais antes do card em `1920×958`, enquanto órbitas internas e
+externas são encobertas ou cortadas como na referência.
 
-Na matéria dedicada, uma capa fotográfica ampla substitui qualquer canvas. A
-imagem introduz o conteúdo e conduz diretamente à coluna de leitura. Não haverá
-animação autônoma; somente as transições funcionais do protótipo entre home e
-matéria permanecem.
+A luz azul/ciano nasce no centro inferior pelo asset local
+`projects-hero-light.png`, posicionado a `80px` da base, deslocado verticalmente
+em `33.333%` e rotacionado em `235deg`. No dark, um campo azul com blend
+`color` e máscara radial colore a luminância do halo e dos traços sem alterar
+os cantos pretos. No light, o tingimento a `18%` é recortado diretamente pelo
+alpha do PNG, sem campo retangular visível.
+
+O stage usa `90vh` com teto de `42rem` no mobile e
+`calc(100vh - 3.75rem)` no desktop. O destaque mede `90%`, limitado a `72rem`,
+e sobrepõe a cena em `96px` no mobile e `140px` no desktop.
+
+Cada pulso alterna suavemente entre velocidades lentas, neutras e rápidas em
+intervalos independentes, sem associar permanentemente uma velocidade a uma
+órbita. A poeira mantém a mesma quantidade de pontos, mas cada estrela pode
+desaparecer, mudar de posição somente quando invisível e reaparecer de forma
+gradual. `prefers-reduced-motion` congela órbitas, pulsos e poeira em um único
+frame estático.
+
+## 4. Composição editorial e cena de sinais
+
+A abertura da home usa uma cena em tela cheia com título, descrição, categorias
+e a matéria principal sobreposta em duas colunas no desktop. Imagens editoriais
+demonstrativas organizam o ritmo visual da manchete, da grade de últimas
+notícias e da agenda.
+
+Na matéria dedicada, a capa fotográfica ampla introduz o conteúdo e conduz
+diretamente à coluna de leitura. O Radar de Sinais pertence somente à home; a
+página de matéria mantém transições funcionais curtas e não repete a cena.
 
 ## 5. Home editorial
 
 ### Hero
 
 - header institucional existente;
-- bloco introdutório claro e compacto;
+- Radar de Sinais em tela cheia, adaptável aos temas dark e light;
 - eyebrow “Bem-vindo ao Nite News”;
 - descrição curta sobre notícias, eventos e comunidade universitária;
-- chips de categoria discretos após a apresentação.
+- composição central limpa, sem barra visual de filtros dentro do hero; os filtros editoriais permanecem acessíveis apenas por URLs compartilháveis.
 
 Não haverá banner, badge ou aviso de conteúdo demonstrativo dentro da interface.
 Essa condição será registrada apenas em notas externas aos frames e na
@@ -179,7 +207,8 @@ simular uma navegação completa.
 - foco visível documentado nos componentes interativos;
 - áreas de toque adequadas;
 - informação nunca dependente apenas de cor;
-- ausência de animação decorativa ou reprodução automática;
+- canvas decorativo oculto da árvore de acessibilidade;
+- frame estático com `prefers-reduced-motion` e pausa fora da viewport;
 - transições de navegação curtas, não bloqueantes e sem flashes;
 - fonte do produto verificada no Figma antes da entrega.
 
@@ -192,7 +221,10 @@ Antes da entrega, serão verificados:
 - ausência de textos cortados, sobreposições e placeholders esquecidos;
 - consistência entre desktop e mobile;
 - navegação Home → matéria → Home;
-- ausência do canvas e de motion autônomo;
+- presença do Radar de Sinais, fallback estático e sobreposição editorial;
+- dez órbitas circulares lógicas e cinco ápices principais antes do card em `1920×958`;
+- halo azul/ciano localizado, com cantos intactos no dark e máscara por alpha no light;
+- variação orgânica de velocidade e poeira sem flicker ou teleporte visível;
 - aderência às fontes, cores e linguagem visual do Portal NITE;
 - ausência de funcionalidades ou fatos institucionais inventados.
 

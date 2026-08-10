@@ -279,6 +279,145 @@ test.describe("projects hero compact desktop clearance", () => {
   }
 });
 
+const newsSignalViewports = [
+  {
+    name: "news-mobile",
+    width: 390,
+    height: 844,
+    stageHeight: 672,
+    titleOffset: 128,
+    leadOverlap: 96,
+    leadWidth: 351,
+    haloWidth: 390,
+  },
+  {
+    name: "news-very-short-desktop",
+    width: 1280,
+    height: 600,
+    stageHeight: 540,
+    titleOffset: 35,
+    leadOverlap: 140,
+    leadWidth: 1152,
+    haloWidth: 868,
+  },
+  {
+    name: "news-university-desktop",
+    width: 1366,
+    height: 768,
+    stageHeight: 708,
+    titleOffset: 119,
+    leadOverlap: 140,
+    leadWidth: 1152,
+    haloWidth: 868,
+  },
+  {
+    name: "news-standard-desktop",
+    width: 1440,
+    height: 1000,
+    stageHeight: 940,
+    titleOffset: 235,
+    leadOverlap: 140,
+    leadWidth: 1152,
+    haloWidth: 868,
+  },
+  {
+    name: "news-reference-desktop",
+    width: 1920,
+    height: 958,
+    stageHeight: 898,
+    titleOffset: 214,
+    leadOverlap: 140,
+    leadWidth: 1152,
+    haloWidth: 868,
+  },
+] as const;
+
+test.describe("news signal hero clearance", () => {
+  for (const viewport of newsSignalViewports) {
+    test(viewport.name, async ({ page }) => {
+      const { browserErrors, response } = await openResponsivePage(
+        page,
+        "/atualizacoes",
+        viewport,
+      );
+      await expect(page.getByTestId("news-signal-canvas")).toHaveAttribute(
+        "data-news-signal-orbit-count",
+        "10",
+        { timeout: 15_000 },
+      );
+
+      const measurements = await page.evaluate(() => {
+        const copy = document.querySelector<HTMLElement>(
+          '[data-testid="news-hero-copy"]',
+        );
+        const lead = document.querySelector<HTMLElement>(
+          '[data-testid="news-hero-lead"]',
+        );
+        const halo = document.querySelector<HTMLElement>(
+          '[data-testid="news-hero-light-bloom"]',
+        );
+        const stage = document.querySelector<HTMLElement>(
+          '[data-testid="news-hero-stage"]',
+        );
+        const signal = document.querySelector<HTMLElement>(
+          '[data-testid="news-signal-canvas"]',
+        );
+
+        if (!copy || !halo || !lead || !signal || !stage) {
+          throw new Error("News signal responsive contract not found.");
+        }
+
+        const copyRect = copy.getBoundingClientRect();
+        const leadRect = lead.getBoundingClientRect();
+        const stageRect = stage.getBoundingClientRect();
+        const haloStyle = getComputedStyle(halo);
+        const title = copy.querySelector("h1");
+
+        if (!title) {
+          throw new Error("News signal title not found.");
+        }
+
+        return {
+          copyLeadClearance: leadRect.top - copyRect.bottom,
+          documentOverflow:
+            document.documentElement.scrollWidth -
+            document.documentElement.clientWidth,
+          haloAspectRatio:
+            Number.parseFloat(haloStyle.height) /
+            Number.parseFloat(haloStyle.width),
+          haloWidth: Number.parseFloat(haloStyle.width),
+          leadLeft: leadRect.left,
+          leadOverlapsStage: leadRect.top < stageRect.bottom,
+          leadRight: leadRect.right,
+          leadWidth: leadRect.width,
+          overlap: stageRect.bottom - leadRect.top,
+          orbitCount: Number(signal.dataset.newsSignalOrbitCount),
+          stageHeight: stageRect.height,
+          titleOffset: title.getBoundingClientRect().top - stageRect.top,
+          viewportWidth: document.documentElement.clientWidth,
+        };
+      });
+
+      expect(response?.status(), "route response").toBeLessThan(400);
+      expect(browserErrors, "browser errors").toEqual([]);
+      expect(measurements.copyLeadClearance).toBeGreaterThanOrEqual(24);
+      expect(measurements.documentOverflow).toBeLessThanOrEqual(1);
+      expect(measurements.haloWidth).toBeCloseTo(viewport.haloWidth, 0);
+      expect(measurements.haloAspectRatio).toBeCloseTo(1019 / 963, 3);
+      expect(measurements.leadLeft).toBeGreaterThanOrEqual(0);
+      expect(measurements.leadRight).toBeLessThanOrEqual(
+        measurements.viewportWidth,
+      );
+      expect(measurements.leadOverlapsStage).toBe(true);
+      expect(measurements.orbitCount).toBe(10);
+      expect(measurements.stageHeight).toBeCloseTo(viewport.stageHeight, 0);
+      expect(measurements.titleOffset).toBeCloseTo(viewport.titleOffset, 0);
+      expect(measurements.overlap).toBeCloseTo(viewport.leadOverlap, 0);
+      expect(measurements.leadWidth).toBeCloseTo(viewport.leadWidth, 0);
+    });
+  }
+});
+
 const visualCases = [
   {
     route: "/sobre",

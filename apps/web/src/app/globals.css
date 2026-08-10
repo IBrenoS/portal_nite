@@ -447,6 +447,84 @@ body {
     --projects-visual-accent-secondary: var(--nite-brand-primary);
   }
 
+  .newsPage {
+    --news-hero-canvas-background: #000;
+    --news-hero-halo-color: #2563eb;
+    --news-hero-orbit-color: rgba(255, 255, 255, 0.1);
+    --news-hero-pulse-color: rgba(255, 255, 255, 0.94);
+    --news-hero-node-color: rgba(255, 255, 255, 1);
+    --news-hero-dust-color: rgba(255, 255, 255, 0.72);
+  }
+
+  :root[data-theme="light"] .newsPage {
+    --news-hero-canvas-background: var(--nite-background);
+    --news-hero-halo-color: var(--nite-brand-primary);
+    --news-hero-orbit-color: rgba(15, 23, 42, 0.12);
+    --news-hero-pulse-color: rgba(15, 23, 42, 0.76);
+    --news-hero-node-color: rgba(15, 23, 42, 0.92);
+    --news-hero-dust-color: rgba(15, 23, 42, 0.56);
+  }
+
+  .newsHeroCopy {
+    top: 6rem;
+  }
+
+  .newsHeroHaloPlacement {
+    pointer-events: none;
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    width: 868px;
+    height: auto;
+    max-width: 100%;
+    aspect-ratio: 963 / 1019;
+    transform: translate(-50%, 33.333333%) rotate(235deg);
+    transform-origin: center;
+  }
+
+  .newsHeroSignalField {
+    background: var(--news-hero-halo-color);
+    mix-blend-mode: color;
+    -webkit-mask-image: radial-gradient(
+      circle,
+      rgb(0 0 0) 20%,
+      transparent 90%
+    );
+    mask-image: radial-gradient(circle, rgb(0 0 0) 20%, transparent 90%);
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+  }
+
+  .newsHeroNoise {
+    background-image: url("/images/projetos/news-hero-noise.png");
+    background-position: center;
+    background-size: cover;
+    opacity: 0.3;
+  }
+
+  .newsHeroLightMask {
+    background: var(--news-hero-halo-color);
+    opacity: 0.18;
+    -webkit-mask-image: url("/images/projetos/projects-hero-light.png");
+    mask-image: url("/images/projetos/projects-hero-light.png");
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+  }
+
+  @media (min-width: 48rem) {
+    .newsHeroCopy {
+      top: calc(50% - 16.6875rem);
+    }
+  }
+
   .projectsPage {
     --projects-hero-accent: #2dcfbf;
     --projects-hero-canvas-background: var(--nite-background);

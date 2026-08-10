@@ -521,6 +521,207 @@ test.describe("resend-inspired footer layout", () => {
     expect(mobileOverflow).toBe(false);
   });
 
+  test("news signal hero localizes light, animates and overlaps the lead story", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1920, height: 958 });
+    await openStablePage(page, "/atualizacoes", "dark");
+
+    const signal = page.getByTestId("news-signal-canvas");
+    const canvas = page.getByTestId("news-signal-canvas-element");
+
+    await expect(signal).toHaveAttribute("data-news-signal-motion", "reduced");
+    const reducedFrame = await canvas.evaluate((element) =>
+      (element as HTMLCanvasElement).toDataURL(),
+    );
+    await page.waitForTimeout(180);
+    expect(
+      await canvas.evaluate((element) =>
+        (element as HTMLCanvasElement).toDataURL(),
+      ),
+    ).toBe(reducedFrame);
+
+    const desktop = await page.evaluate(() => {
+      const stage = document.querySelector<HTMLElement>(
+        "[data-testid='news-hero-stage']",
+      );
+      const lead = document.querySelector<HTMLElement>(
+        "[data-testid='news-hero-lead']",
+      );
+      const field = document.querySelector(
+        "[data-testid='news-hero-signal-field']",
+      );
+      const bloom = document.querySelector<HTMLImageElement>(
+        "[data-testid='news-hero-light-bloom']",
+      );
+      const lightMask = document.querySelector<HTMLElement>(
+        "[data-testid='news-hero-light-mask']",
+      );
+      const noise = document.querySelector<HTMLElement>(
+        "[data-testid='news-hero-noise']",
+      );
+      const signal = document.querySelector<HTMLElement>(
+        "[data-testid='news-signal-canvas']",
+      );
+      const signalCanvas = document.querySelector<HTMLCanvasElement>(
+        "[data-testid='news-signal-canvas-element']",
+      );
+
+      if (
+        !stage ||
+        !lead ||
+        !signal ||
+        !signalCanvas ||
+        !field ||
+        !bloom ||
+        !lightMask ||
+        !noise
+      ) {
+        throw new Error("News signal hero contract not found.");
+      }
+
+      const stageRect = stage.getBoundingClientRect();
+      const leadRect = lead.getBoundingClientRect();
+      const fieldStyle = getComputedStyle(field);
+      const noiseStyle = getComputedStyle(noise);
+      const signalContext = signalCanvas.getContext("2d");
+
+      if (!signalContext) {
+        throw new Error("News signal canvas context not found.");
+      }
+
+      return {
+        canvasCornerPixel: Array.from(
+          signalContext.getImageData(0, 0, 1, 1).data,
+        ),
+        canvasHeight: signalCanvas.height,
+        canvasWidth: signalCanvas.width,
+        bloomDisplay: getComputedStyle(bloom).display,
+        bloomSource: bloom.getAttribute("src"),
+        fieldColor: fieldStyle.backgroundColor,
+        fieldDisplay: fieldStyle.display,
+        fieldMask: fieldStyle.maskImage,
+        fieldMixBlendMode: fieldStyle.mixBlendMode,
+        hasHorizontalOverflow:
+          document.documentElement.scrollWidth >
+          document.documentElement.clientWidth,
+        leadEndsAfterStage: leadRect.bottom > stageRect.bottom,
+        leadOverlapsStage: leadRect.top < stageRect.bottom,
+        lightMaskDisplay: getComputedStyle(lightMask).display,
+        noiseBackgroundImage: noiseStyle.backgroundImage,
+        noiseBackgroundPosition: noiseStyle.backgroundPosition,
+        noiseBackgroundSize: noiseStyle.backgroundSize,
+        noiseDisplay: noiseStyle.display,
+        noiseOpacity: noiseStyle.opacity,
+        orbitCount: signal.dataset.newsSignalOrbitCount,
+      };
+    });
+
+    expect(desktop.canvasCornerPixel).toEqual([0, 0, 0, 255]);
+    expect(desktop.canvasHeight).toBe(958);
+    expect(desktop.canvasWidth).toBe(1920);
+    expect(desktop.bloomDisplay).not.toBe("none");
+    expect(desktop.bloomSource).toContain("projects-hero-light.png");
+    expect(desktop.fieldColor).toBe("rgb(37, 99, 235)");
+    expect(desktop.fieldDisplay).not.toBe("none");
+    expect(desktop.fieldMask).toContain("radial-gradient");
+    expect(desktop.fieldMixBlendMode).toBe("color");
+    expect(desktop.hasHorizontalOverflow).toBe(false);
+    expect(desktop.leadEndsAfterStage).toBe(true);
+    expect(desktop.leadOverlapsStage).toBe(true);
+    expect(desktop.lightMaskDisplay).toBe("none");
+    expect(desktop.noiseBackgroundImage).toContain("news-hero-noise.png");
+    expect(desktop.noiseBackgroundPosition).toBe("50% 50%");
+    expect(desktop.noiseBackgroundSize).toBe("cover");
+    expect(desktop.noiseDisplay).not.toBe("none");
+    expect(desktop.noiseOpacity).toBe("0.3");
+    expect(desktop.orbitCount).toBe("10");
+    expect(desktop.canvasHeight).toBeGreaterThan(0);
+    expect(desktop.canvasWidth).toBeGreaterThan(0);
+
+    await page.emulateMedia({
+      colorScheme: "dark",
+      reducedMotion: "no-preference",
+    });
+    await page.reload({ waitUntil: "domcontentloaded" });
+    await expect(signal).toHaveAttribute("data-news-signal-motion", "running");
+
+    const firstFrame = await canvas.evaluate((element) =>
+      (element as HTMLCanvasElement).toDataURL(),
+    );
+    await page.waitForTimeout(240);
+    const secondFrame = await canvas.evaluate((element) =>
+      (element as HTMLCanvasElement).toDataURL(),
+    );
+
+    expect(secondFrame).not.toBe(firstFrame);
+
+    await page.locator("#news-agenda").scrollIntoViewIfNeeded();
+    await expect(signal).toHaveAttribute("data-news-signal-motion", "paused");
+    const pausedFrame = await canvas.evaluate((element) =>
+      (element as HTMLCanvasElement).toDataURL(),
+    );
+    await page.waitForTimeout(180);
+    expect(
+      await canvas.evaluate((element) =>
+        (element as HTMLCanvasElement).toDataURL(),
+      ),
+    ).toBe(pausedFrame);
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.reload({ waitUntil: "domcontentloaded" });
+    await page.locator("body").waitFor();
+    await expect(signal).toHaveAttribute("data-news-signal-orbit-count", "10");
+
+    expect(
+      await page.evaluate(
+        () =>
+          document.documentElement.scrollWidth >
+          document.documentElement.clientWidth,
+      ),
+    ).toBe(false);
+
+    await openStablePage(page, "/atualizacoes", "light");
+    const lightComposition = await page.evaluate(() => {
+      const bloom = document.querySelector<HTMLElement>(
+        "[data-testid='news-hero-light-bloom']",
+      );
+      const field = document.querySelector<HTMLElement>(
+        "[data-testid='news-hero-signal-field']",
+      );
+      const lightMask = document.querySelector<HTMLElement>(
+        "[data-testid='news-hero-light-mask']",
+      );
+      const noise = document.querySelector<HTMLElement>(
+        "[data-testid='news-hero-noise']",
+      );
+
+      if (!bloom || !field || !lightMask || !noise) {
+        throw new Error("News signal light composition not found.");
+      }
+
+      const maskStyle = getComputedStyle(lightMask);
+
+      return {
+        bloomDisplay: getComputedStyle(bloom).display,
+        fieldDisplay: getComputedStyle(field).display,
+        lightMaskDisplay: maskStyle.display,
+        lightMaskImage: maskStyle.maskImage,
+        lightMaskOpacity: maskStyle.opacity,
+        noiseDisplay: getComputedStyle(noise).display,
+      };
+    });
+
+    expect(lightComposition.bloomDisplay).toBe("none");
+    expect(lightComposition.fieldDisplay).toBe("none");
+    expect(lightComposition.lightMaskDisplay).not.toBe("none");
+    expect(lightComposition.lightMaskImage).toContain(
+      "projects-hero-light.png",
+    );
+    expect(lightComposition.lightMaskOpacity).toBe("0.18");
+    expect(lightComposition.noiseDisplay).toBe("none");
+  });
+
   test("internal route footer remains clean", async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 958 });
     await openStablePage(page, "/projetos", "dark");

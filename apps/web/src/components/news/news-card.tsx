@@ -82,7 +82,7 @@ export function NewsCard({
             src={article.cover.src}
             alt={article.cover.alt}
             fill
-            priority={isLead}
+            preload={isLead}
             sizes={
               isLead
                 ? "(min-width: 1024px) 56vw, 100vw"

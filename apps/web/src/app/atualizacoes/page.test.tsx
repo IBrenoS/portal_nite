@@ -55,23 +55,48 @@ describe("UpdatesPage", () => {
       "href",
       "/atualizacoes/novas-conexoes-transformam-experiencia-campus",
     );
-    expect(document.querySelector("canvas")).toBeNull();
+
+    const signalLayer = screen.getByTestId("news-signal-canvas");
+    const signalCanvas = screen.getByTestId("news-signal-canvas-element");
+    const heroLead = screen.getByTestId("news-hero-lead");
+    const halo = screen.getByTestId("news-hero-light-bloom");
+    const signalField = screen.getByTestId("news-hero-signal-field");
+    const lightMask = screen.getByTestId("news-hero-light-mask");
+    expect(signalLayer).toHaveAttribute("aria-hidden", "true");
+    expect(signalCanvas.tagName).toBe("CANVAS");
+    expect(halo).toHaveAttribute("aria-hidden", "true");
+    expect(halo).toHaveAttribute("alt", "");
+    expect(halo).toHaveAttribute(
+      "src",
+      expect.stringContaining("projects-hero-light.png"),
+    );
+    expect(signalField).toHaveAttribute("aria-hidden", "true");
+    expect(lightMask).toHaveAttribute("aria-hidden", "true");
+    expect(
+      document.querySelector("[data-testid^='news-hero-'][src^='http']"),
+    ).toBeNull();
+    expect(
+      screen.queryByRole("navigation", { name: "Filtros de notícias" }),
+    ).toBeNull();
+    expect(heroLead).toContainElement(
+      main.getByRole("link", {
+        name: /Novas conexões transformam a experiência no campus/i,
+      }),
+    );
   });
 
-  it("expõe filtros compartilháveis e marca a seleção atual", async () => {
+  it("aplica filtro compartilhado pela URL sem exibir navegação no hero", async () => {
     await renderUpdatesPage("comunidade");
 
-    const filters = screen.getByRole("navigation", {
-      name: "Filtros de notícias",
-    });
-    const activeFilter = within(filters).getByRole("link", {
-      name: "Comunidade",
-    });
-
-    expect(activeFilter).toHaveAttribute("aria-current", "page");
     expect(
-      within(filters).getByRole("link", { name: "Agenda" }),
-    ).toHaveAttribute("href", "/atualizacoes?filtro=agenda");
+      screen.queryByRole("navigation", { name: "Filtros de notícias" }),
+    ).toBeNull();
+    expect(
+      screen.getByRole("heading", {
+        level: 2,
+        name: "Novas conexões transformam a experiência no campus",
+      }),
+    ).toBeInTheDocument();
     expect(screen.getByRole("main").querySelectorAll("article")).toHaveLength(
       3,
     );
@@ -81,14 +106,39 @@ describe("UpdatesPage", () => {
     await renderUpdatesPage("desconhecido");
 
     expect(
-      within(
-        screen.getByRole("navigation", { name: "Filtros de notícias" }),
-      ).getByRole("link", { name: "Destaques" }),
-    ).toHaveAttribute("aria-current", "page");
+      screen.queryByRole("navigation", { name: "Filtros de notícias" }),
+    ).toBeNull();
     expect(
       screen.getByRole("heading", { level: 2, name: "Últimas notícias" }),
     ).toBeInTheDocument();
   });
+
+  it.each([
+    ["todas", 8],
+    ["agenda", 3],
+    ["comunidade", 3],
+  ] as const)(
+    "promove o primeiro resultado de %s sem duplicar materias",
+    async (filter, expectedArticleCount) => {
+      await renderUpdatesPage(filter);
+
+      const main = screen.getByRole("main");
+      const heroLead = screen.getByTestId("news-hero-lead");
+      const leadLink = heroLead.querySelector<HTMLAnchorElement>(
+        "a[href^='/atualizacoes/']",
+      );
+      const articleLinks = Array.from(
+        main.querySelectorAll<HTMLAnchorElement>("a[href^='/atualizacoes/']"),
+      );
+      const articleHrefs = articleLinks.map((link) =>
+        link.getAttribute("href"),
+      );
+
+      expect(leadLink).toHaveAttribute("data-news-layout", "lead");
+      expect(articleLinks).toHaveLength(expectedArticleCount);
+      expect(new Set(articleHrefs)).toHaveLength(expectedArticleCount);
+    },
+  );
 
   it("declara metadata editorial do Nite News", () => {
     expect(metadata.title).toBe("Nite News | NITE");

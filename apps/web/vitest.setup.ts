@@ -23,6 +23,7 @@ const nextImageOnlyProps = [
   "onLoadingComplete",
   "overrideSrc",
   "placeholder",
+  "preload",
   "priority",
   "quality",
   "unoptimized",

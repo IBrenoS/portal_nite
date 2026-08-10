@@ -48,7 +48,11 @@ Direção visual local: “Tech institucional de circuito metálico”, com fund
 
 O domínio começa com oito registros locais demonstrativos. Eles permitem validar estrutura, navegação e responsividade, mas não representam comunicação oficial: usam `contentState: "demonstrativo"`, permanecem com `noindex`, não entram no sitemap e não exibem aviso visual por decisão de produto. A publicação indexável exige conteúdo aprovado migrado para `contentState: "real"`; isso não altera a UI nem as rotas.
 
-O Nite News usa o header e o footer institucionais do portal. Sua experiência é estática e focada em leitura: não inclui canvas, banner promocional ou animação autônoma.
+O Nite News usa o header e o footer institucionais do portal. A home abre com o **Radar de Sinais NITE**, uma cena editorial decorativa em canvas com dez órbitas circulares calculadas nas dimensões lógicas da viewport; o recorte do stage revela cinco linhas principais no desktop de referência. A cena preserva o fundo e ilumina órbitas e pulsos por uma composição azul/ciano localizada, com a matéria principal sobreposta em `90%` da largura e limitada a `1152px`. Ela aparece em todos os filtros; fora de `destaques`, o primeiro resultado na ordenação canônica assume o card principal sem ser repetido na grade seguinte.
+
+O halo reutiliza exclusivamente o asset local `projects-hero-light.png`. No dark, a imagem recebe um campo azul com blend `color` e máscara radial, que colore a luminosidade e os traços sem criar uma placa azul nos cantos; no light, o azul a `18%` é recortado diretamente pelo alpha do PNG. O stage usa `90vh` com teto de `672px` no mobile e `calc(100vh - 3.75rem)` no desktop; o card cruza sua base em `96px` e `140px`, respectivamente.
+
+O canvas não representa transmissão, métricas ou estado operacional. Os cometas variam de velocidade de forma controlada e a poeira pode desaparecer e reaparecer em outra posição, sempre sem teleporte visível. Texto e matérias permanecem completos sem animação; os filtros continuam compartilháveis pela URL, mas não são exibidos dentro do hero. `prefers-reduced-motion` produz um frame estático, e o renderer pausa quando sai da viewport ou a página fica oculta. A página dedicada da matéria continua fotográfica e focada em leitura, sem repetir a cena.
 
 ## Accessibility & Inclusion
 
