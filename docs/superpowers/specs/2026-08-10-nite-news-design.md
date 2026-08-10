@@ -26,7 +26,7 @@ O arquivo do Figma incluirá:
 - home editorial mobile em 390 px;
 - matéria dedicada mobile em 390 px;
 - componentes reutilizáveis necessários ao protótipo;
-- estados animáveis do hero e estado equivalente sem movimento;
+- composição editorial estática, clara e orientada por fotografia;
 - navegação entre a home editorial e uma matéria representativa.
 
 O trabalho não inclui código, schemas, dados canônicos, CMS, busca funcional,
@@ -35,46 +35,38 @@ qualquer integração externa.
 
 ## 3. Direção visual
 
-A direção aprovada é **Rede de transmissão editorial**.
+A direção revisada é **portal editorial claro e fotográfico**, com composição
+fortemente orientada pela referência aprovada.
 
-O Nite News mantém a personalidade “tech institucional de circuito metálico”:
-fundo dark-first, superfícies técnicas discretas, bordas sutis, azul elétrico
-raro e tipografia sólida. Sora será usada em títulos e Geist na leitura. Geist
-Mono será restrita a categorias, datas e metadados.
+O Nite News usa fundo claro, cartões brancos, bordas discretas, imagens em
+proporções jornalísticas e hierarquia tipográfica de alto contraste. Sora
+permanece nos títulos, Geist na leitura e Geist Mono em categorias, datas e
+metadados, preservando a identidade do Portal NITE sem reproduzir a marca ou o
+conteúdo da referência.
 
-A página não adotará serifas editoriais, texto em gradiente, neon permanente,
-cards brancos genéricos ou estética de dashboard. A referência serve para
-hierarquia e ritmo editorial, não como identidade a ser clonada.
+O conceito “Rede de transmissão editorial”, o canvas e o motion autônomo de
+quatro segundos foram removidos do escopo. A experiência não depende de
+elemento cenográfico animado; a prioridade é a leitura das notícias.
 
-## 4. Canvas Rede de transmissão
+## 4. Composição editorial estática
 
-O hero apresenta a circulação de informação como uma rede em atividade.
-Linhas curvas e ortogonais atravessam o campo escuro enquanto pequenos pacotes
-editoriais percorrem trajetos entre pontos. Os pacotes podem conter categoria,
-horário ou fragmentos tipográficos curtos. Ao alcançar um ponto, ocorre um
-pulso ciano breve, sem glow dominante.
+A abertura da home usa um bloco introdutório curto, categorias e uma matéria
+principal em duas colunas no desktop. Imagens editoriais demonstrativas
+organizam o ritmo visual da manchete, da grade de últimas notícias e da agenda.
 
-O canvas será visualmente diferente da trilha sobre grid usada em Projetos:
-
-- não haverá cobrinha contínua;
-- não haverá grade cartesiana dominante;
-- múltiplos pacotes independentes sugerirão distribuição de informação;
-- o movimento será horizontal e convergente, com pausas e pulsos pontuais;
-- o título e a descrição permanecerão legíveis sem depender da animação.
-
-No protótipo, o movimento será representado por estados de um componente
-interativo com Smart Animate. Um estado estático documentará o comportamento
-esperado com `prefers-reduced-motion`.
+Na matéria dedicada, uma capa fotográfica ampla substitui qualquer canvas. A
+imagem introduz o conteúdo e conduz diretamente à coluna de leitura. Não haverá
+animação autônoma; somente as transições funcionais do protótipo entre home e
+matéria permanecem.
 
 ## 5. Home editorial
 
 ### Hero
 
 - header institucional existente;
-- canvas Rede de transmissão em largura total;
-- eyebrow “Atualizações”;
-- título “Nite News”;
-- descrição curta sobre notícias, eventos e comunicados institucionais;
+- bloco introdutório claro e compacto;
+- eyebrow “Bem-vindo ao Nite News”;
+- descrição curta sobre notícias, eventos e comunidade universitária;
 - chips de categoria discretos após a apresentação.
 
 Não haverá banner, badge ou aviso de conteúdo demonstrativo dentro da interface.
@@ -150,8 +142,7 @@ O arquivo deverá conter componentes reutilizáveis para:
 - metadados da matéria;
 - cabeçalho de seção;
 - link de retorno;
-- bloco de matérias relacionadas;
-- hero Rede de transmissão e seus estados de movimento.
+- bloco de matérias relacionadas.
 
 Header, footer, botões, tokens, variáveis e estilos existentes deverão ser
 reutilizados quando estiverem disponíveis em bibliotecas acessíveis. Novos
@@ -181,15 +172,15 @@ O fluxo existirá em desktop e mobile. Somente elementos com destino configurado
 serão apresentados como interativos. Cards sem tela de destino não deverão
 simular uma navegação completa.
 
-## 11. Acessibilidade e movimento
+## 11. Acessibilidade e interação
 
 - contraste mínimo WCAG AA;
 - hierarquia de títulos coerente;
 - foco visível documentado nos componentes interativos;
 - áreas de toque adequadas;
-- informação nunca dependente apenas de cor ou movimento;
-- conteúdo completo disponível no estado estático;
-- animação curta, não bloqueante e sem flashes;
+- informação nunca dependente apenas de cor;
+- ausência de animação decorativa ou reprodução automática;
+- transições de navegação curtas, não bloqueantes e sem flashes;
 - fonte do produto verificada no Figma antes da entrega.
 
 ## 12. Validação do arquivo
@@ -201,7 +192,7 @@ Antes da entrega, serão verificados:
 - ausência de textos cortados, sobreposições e placeholders esquecidos;
 - consistência entre desktop e mobile;
 - navegação Home → matéria → Home;
-- estados do hero animado e estático;
+- ausência do canvas e de motion autônomo;
 - aderência às fontes, cores e linguagem visual do Portal NITE;
 - ausência de funcionalidades ou fatos institucionais inventados.
 
@@ -211,8 +202,8 @@ O protótipo estará pronto para avaliação quando:
 
 - as quatro telas principais estiverem completas;
 - o fluxo editorial estiver navegável em desktop e mobile;
-- a home preservar a hierarquia da referência sem copiá-la;
-- o canvas comunicar distribuição de notícias e não repetir Projetos;
+- a home preservar a hierarquia editorial da referência sem copiar sua marca;
+- a composição clara e fotográfica priorizar notícias e leitura;
 - a página de matéria sustentar leitura longa com clareza;
 - o arquivo estiver componentizado e visualmente validado;
 - notas externas identificarem o conteúdo como demonstrativo sem inserir aviso

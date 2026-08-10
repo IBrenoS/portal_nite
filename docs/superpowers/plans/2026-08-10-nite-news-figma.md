@@ -2,23 +2,23 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Criar e validar no Figma um protótipo navegável desktop e mobile do Nite News, com home editorial, matéria dedicada e hero animado “Rede de transmissão editorial”.
+**Goal:** Criar e validar no Figma um protótipo navegável desktop e mobile do Nite News, com home editorial clara, fotográfica e matéria dedicada.
 
-**Architecture:** O arquivo será construído em fases: descoberta, foundations tokenizadas, documentação, componentes locais, composição das quatro telas e prototipagem. As telas usarão instâncias dos componentes e variáveis locais vinculadas aos tokens `--nite-*`; o movimento ficará isolado no hero e terá estado estático equivalente.
+**Architecture:** O arquivo será construído em fases: descoberta, foundations tokenizadas, documentação, componentes locais, composição das quatro telas e prototipagem. As telas usarão instâncias dos componentes e variáveis locais vinculadas aos tokens `--nite-*`; não haverá motion autônomo ou canvas decorativo.
 
-**Tech Stack:** Figma Design, Figma Plugin API via `use_figma`, variables e styles locais, Auto Layout, components/variants, prototyping reactions, manual motion keyframes quando disponíveis.
+**Tech Stack:** Figma Design, Figma Plugin API via `use_figma`, variables e styles locais, Auto Layout, components/variants e prototyping reactions.
 
 ## Global Constraints
 
 - Usar Sora em títulos, Geist em corpo e Geist Mono em labels e metadados; verificar os nomes disponíveis no Figma antes de criar texto.
-- Manter dark-first com `#09090A`, superfícies técnicas, bordas sutis e azul/ciano pontual.
+- Usar o modo claro do design system, cartões brancos, bordas sutis e azul pontual.
 - Não inserir banner, badge ou aviso de conteúdo demonstrativo dentro das telas.
 - Registrar o caráter demonstrativo somente em notas externas e nomes de páginas/frames.
 - Não inventar pessoas, autores, métricas, vagas, eventos confirmados, datas institucionais ou resultados.
 - Criar home e matéria em 1440 px e 390 px.
 - O fluxo navegável obrigatório é `Home Nite News → matéria → voltar para Nite News` em desktop e mobile.
-- O canvas não pode repetir a cobrinha ou o grid cartesiano da página Projetos.
-- Preservar WCAG AA, áreas de toque de 44 px, foco visível e estado sem movimento.
+- Não criar canvas, animação decorativa ou reprodução automática.
+- Preservar WCAG AA, áreas de toque de 44 px e foco visível.
 - Reutilizar bibliotecas compatíveis quando existirem; reconstruir localmente quando o contrato visual ou de propriedades for incompatível.
 
 ---
@@ -41,7 +41,7 @@
 - [ ] **Step 3:** Inspecionar o arquivo vazio com `use_figma` read-only e `get_libraries`.
 - [ ] **Step 4:** Confirmar que não existem Code Connect files para `Card`, `SectionHeader`, `SiteHeader` e `SiteFooter` com `rg --files apps/web | rg '\\.figma\\.(ts|tsx|js)$'`.
 - [ ] **Step 5:** Pesquisar bibliotecas por `card`, `chip`, `header`, `navigation`, `background`, `text`, `spacing` e `radius` após registrar que a inspeção de telas existentes é N/A para arquivo vazio.
-- [ ] **Step 6:** Registrar o gap analysis e o escopo v1: Foundations, Editorial Card, Category Chip, Metadata Row, Section Heading, Back Link, Related Story e Transmission Hero.
+- [ ] **Step 6:** Registrar o gap analysis e o escopo v1: Foundations, Editorial Card, Category Chip, Metadata Row, Section Heading, Back Link e Related Story.
 
 ### Task 2: Criar foundations tokenizadas
 
@@ -84,7 +84,7 @@
 
 **Figma objects:**
 
-- Create component sets: `Editorial Card`, `Category Chip`, `Metadata Row`, `Section Heading`, `Back Link`, `Related Story`, `Transmission Hero`
+- Create component sets: `Editorial Card`, `Category Chip`, `Metadata Row`, `Section Heading`, `Back Link`, `Related Story`
 
 **Interfaces:**
 
@@ -97,8 +97,7 @@
 - [ ] **Step 4:** Criar `Back Link` com TEXT `Label`, área mínima de 44 px e estados Default/Focus.
 - [ ] **Step 5:** Criar `Editorial Card` com variantes `Layout=Feature|Grid|List`, `State=Default|Focus`, propriedades TEXT e slot de imagem.
 - [ ] **Step 6:** Criar `Related Story` com imagem, categoria, título e metadados.
-- [ ] **Step 7:** Criar `Transmission Hero` com variantes `Motion=Rest|Signal A|Signal B|Reduced`, título, descrição, linhas de transmissão e pacotes editoriais.
-- [ ] **Step 8:** Validar cada família individualmente com metadata e screenshot antes de seguir.
+- [ ] **Step 7:** Validar cada família individualmente com metadata e screenshot antes de seguir.
 
 ### Task 5: Compor as telas desktop
 
@@ -135,23 +134,21 @@
 - [ ] **Step 4:** Compor a matéria com capa, leitura, contexto e relacionadas empilhadas.
 - [ ] **Step 5:** Validar cada seção e as telas completas em screenshots legíveis.
 
-### Task 7: Configurar movimento e navegação
+### Task 7: Configurar navegação
 
 **Figma objects:**
 
-- Mutate: `Transmission Hero`, `Desktop / Nite News`, `Desktop / Article`, `Mobile / Nite News`, `Mobile / Article`
+- Mutate: `Desktop / Nite News`, `Desktop / Article`, `Mobile / Nite News`, `Mobile / Article`
 
 **Interfaces:**
 
-- Consumes: quatro telas completas e component set do hero
-- Produces: protótipo navegável e estados de movimento verificáveis
+- Consumes: quatro telas completas e destinos do fluxo editorial
+- Produces: protótipo navegável sem motion autônomo
 
-- [ ] **Step 1:** Testar a disponibilidade das APIs `metronome`; se indisponíveis, manter Smart Animate entre variantes e registrar a limitação.
-- [ ] **Step 2:** Animar apenas descendentes do hero: pacotes percorrem linhas, pulsos aparecem e desaparecem, título permanece estático.
-- [ ] **Step 3:** Configurar `After delay` entre estados do hero sem criar loop que bloqueie cliques.
-- [ ] **Step 4:** Ligar matéria principal desktop à matéria desktop e `Back Link` à home desktop.
-- [ ] **Step 5:** Repetir o fluxo no mobile.
-- [ ] **Step 6:** Validar resting state por screenshot, reactions por metadata e movimento por vídeo de baixa resolução somente se as APIs estiverem disponíveis.
+- [ ] **Step 1:** Remover manual keyframes, animation styles, componentes e instâncias do canvas.
+- [ ] **Step 2:** Ligar matéria principal desktop à matéria desktop e `Back Link` à home desktop.
+- [ ] **Step 3:** Repetir o fluxo no mobile.
+- [ ] **Step 4:** Validar screenshots e reactions; confirmar ausência de motion autônomo.
 
 ### Task 8: Executar QA final e entregar
 
@@ -165,7 +162,7 @@
 - Produces: URL final, inventário e relatório de validação
 
 - [ ] **Step 1:** Auditar nomes, duplicatas, placeholders, bindings, font families e node hierarchy.
-- [ ] **Step 2:** Auditar contraste, foco, toque mínimo, reduced motion e ausência de informação dependente de animação.
+- [ ] **Step 2:** Auditar contraste, foco, toque mínimo e ausência de animação decorativa.
 - [ ] **Step 3:** Capturar screenshots finais das quatro telas e comparar hierarquia desktop/mobile.
 - [ ] **Step 4:** Verificar o fluxo Home → Article → Home nos dois breakpoints.
 - [ ] **Step 5:** Salvar versão de histórico `Nite News prototype v1` e entregar a URL do arquivo com riscos reais remanescentes.
