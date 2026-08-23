@@ -2,7 +2,7 @@
   {
     "slug": "breno-cerqueira",
     "name": "Breno Cerqueira",
-    "role": "Software Engineer",
+    "role": "Eng. Software & Dev. Sistemas",
     "location": "Salvador, Brasil",
     "summary": "Just do it",
     "public": true,
@@ -13,8 +13,14 @@
       "alt": "Foto de perfil autorizada de Breno Cerqueira."
     },
     "initials": "BC",
-    "interests": ["IA", "Programação"],
-    "clubs": ["Café", "Leitura"],
+    "interests": [
+      "IA",
+      "Programação"
+    ],
+    "clubs": [
+      "Café",
+      "Leitura"
+    ],
     "links": [
       {
         "label": "GitHub",
@@ -41,16 +47,22 @@
       "alt": "Foto de perfil autorizada de Raquel Santana."
     },
     "initials": "RS",
-    "interests": ["IA", "Programação"],
-    "clubs": ["Café", "Leitura"],
+    "interests": [
+      "IA",
+      "Programação"
+    ],
+    "clubs": [
+      "Café",
+      "Leitura"
+    ],
     "links": [
-      {
-        "label": "LinkedIn",
-        "href": "https://www.linkedin.com/in/raquelsps"
-      },
       {
         "label": "GitHub",
         "href": "https://github.com/rachelsps"
+      },
+      {
+        "label": "LinkedIn",
+        "href": "https://www.linkedin.com/in/raquelsps"
       }
     ],
     "entries": []
@@ -70,8 +82,14 @@
       "alt": "Foto de perfil autorizada de João Victor Dórea."
     },
     "initials": "JV",
-    "interests": ["IA", "Programação"],
-    "clubs": ["Café", "Leitura"],
+    "interests": [
+      "IA",
+      "Programação"
+    ],
+    "clubs": [
+      "Café",
+      "Leitura"
+    ],
     "links": [
       {
         "label": "GitHub",
@@ -88,6 +106,7 @@
     "slug": "aiza-barretto",
     "name": "Aíza Barretto",
     "role": "Ciência da Computação & Gestão",
+    "location": "Salvador, Brasil",
     "summary": "Perfil autorizado para publicação no Portal NITE.",
     "public": true,
     "authorized": true,
@@ -97,12 +116,53 @@
       "alt": "Foto de perfil autorizada de Aíza Barretto."
     },
     "initials": "AB",
-    "interests": ["IA", "Programação"],
-    "clubs": ["Café", "Leitura"],
+    "interests": [
+      "IA",
+      "Programação"
+    ],
+    "clubs": [
+      "Café",
+      "Leitura"
+    ],
     "links": [
       {
         "label": "LinkedIn",
         "href": "https://www.linkedin.com/in/a%C3%ADza-barretto"
+      }
+    ],
+    "entries": []
+  },
+  {
+    "slug": "camila-ellen-silva-paixao",
+    "name": "Camila Ellen Silva Paixão",
+    "listName": "Camila Ellen",
+    "role": "Ciência da Computação",
+    "location": "Salvador, Brasil",
+    "summary": "Perfil autorizado para publicação no Portal NITE.",
+    "public": true,
+    "authorized": true,
+    "contentState": "real",
+    "avatar": {
+      "src": "/images/pessoas/camila-ellen-silva-paixao.webp",
+      "alt": "Foto de perfil autorizada de Camila Ellen Silva Paixão."
+    },
+    "initials": "CP",
+    "interests": [
+      "IA",
+      "Programação"
+    ],
+    "clubs": [
+      "Café",
+      "Leitura"
+    ],
+    "links": [
+      {
+        "label": "GitHub",
+        "href": "https://github.com/CamilaEllenn"
+      },
+      {
+        "label": "LinkedIn",
+        "href": "https://www.linkedin.com/in/camila-ellen-paixão/"
       }
     ],
     "entries": []
@@ -121,8 +181,14 @@
       "alt": "Foto de perfil autorizada de Igor Jerônimo."
     },
     "initials": "IJ",
-    "interests": ["IA", "Programação"],
-    "clubs": ["Café", "Leitura"],
+    "interests": [
+      "IA",
+      "Programação"
+    ],
+    "clubs": [
+      "Café",
+      "Leitura"
+    ],
     "links": [
       {
         "label": "GitHub",
@@ -150,8 +216,14 @@
       "alt": "Foto de perfil autorizada de Marcus Vinícius da Silva Santos."
     },
     "initials": "MV",
-    "interests": ["IA", "Programação"],
-    "clubs": ["Café", "Leitura"],
+    "interests": [
+      "IA",
+      "Programação"
+    ],
+    "clubs": [
+      "Café",
+      "Leitura"
+    ],
     "links": [
       {
         "label": "GitHub",
@@ -174,8 +246,14 @@
       "alt": "Foto de perfil autorizada de Cecília Brito."
     },
     "initials": "CB",
-    "interests": ["IA", "Programação"],
-    "clubs": ["Café", "Leitura"],
+    "interests": [
+      "IA",
+      "Programação"
+    ],
+    "clubs": [
+      "Café",
+      "Leitura"
+    ],
     "links": [
       {
         "label": "LinkedIn",
@@ -198,8 +276,14 @@
       "alt": "Foto de perfil autorizada de Cauã Oliveira."
     },
     "initials": "CO",
-    "interests": ["IA", "Programação"],
-    "clubs": ["Café", "Leitura"],
+    "interests": [
+      "IA",
+      "Programação"
+    ],
+    "clubs": [
+      "Café",
+      "Leitura"
+    ],
     "links": [
       {
         "label": "GitHub",
@@ -227,8 +311,14 @@
       "alt": "Foto de perfil autorizada de Paulo Henrique Espírito Santo de Almeida."
     },
     "initials": "PH",
-    "interests": ["IA", "Programação"],
-    "clubs": ["Café", "Leitura"],
+    "interests": [
+      "IA",
+      "Programação"
+    ],
+    "clubs": [
+      "Café",
+      "Leitura"
+    ],
     "links": [
       {
         "label": "LinkedIn",
@@ -251,8 +341,14 @@
       "alt": "Foto de perfil autorizada de Guilherme Machado Duarte."
     },
     "initials": "GM",
-    "interests": ["IA", "Programação"],
-    "clubs": ["Café", "Leitura"],
+    "interests": [
+      "IA",
+      "Programação"
+    ],
+    "clubs": [
+      "Café",
+      "Leitura"
+    ],
     "links": [
       {
         "label": "LinkedIn",
@@ -275,8 +371,14 @@
       "alt": "Foto de perfil autorizada de Renan Pires Andrade."
     },
     "initials": "RA",
-    "interests": ["IA", "Programação"],
-    "clubs": ["Café", "Leitura"],
+    "interests": [
+      "IA",
+      "Programação"
+    ],
+    "clubs": [
+      "Café",
+      "Leitura"
+    ],
     "links": [
       {
         "label": "GitHub",
@@ -302,8 +404,14 @@
       "alt": "Foto de perfil autorizada de Vitor dos Anjos Silva de Araujo."
     },
     "initials": "VA",
-    "interests": ["IA", "Programação"],
-    "clubs": ["Café", "Leitura"],
+    "interests": [
+      "IA",
+      "Programação"
+    ],
+    "clubs": [
+      "Café",
+      "Leitura"
+    ],
     "links": [
       {
         "label": "LinkedIn",
@@ -326,16 +434,22 @@
       "alt": "Foto de perfil autorizada de Santhiago Santos."
     },
     "initials": "SS",
-    "interests": ["IA", "Programação"],
-    "clubs": ["Café", "Leitura"],
+    "interests": [
+      "IA",
+      "Programação"
+    ],
+    "clubs": [
+      "Café",
+      "Leitura"
+    ],
     "links": [
-      {
-        "label": "LinkedIn",
-        "href": "https://www.linkedin.com/in/santhiago-santos-657580358"
-      },
       {
         "label": "GitHub",
         "href": "https://github.com/santhiago125"
+      },
+      {
+        "label": "LinkedIn",
+        "href": "https://www.linkedin.com/in/santhiago-santos-657580358"
       }
     ],
     "entries": []
@@ -354,8 +468,14 @@
       "alt": "Foto de perfil autorizada de William Silva Lago."
     },
     "initials": "WS",
-    "interests": ["IA", "Programação"],
-    "clubs": ["Café", "Leitura"],
+    "interests": [
+      "IA",
+      "Programação"
+    ],
+    "clubs": [
+      "Café",
+      "Leitura"
+    ],
     "links": [
       {
         "label": "GitHub",
@@ -383,16 +503,22 @@
       "alt": "Foto de perfil autorizada de Caio Guilherme Viterbo."
     },
     "initials": "CV",
-    "interests": ["IA", "Programação"],
-    "clubs": ["Café", "Leitura"],
+    "interests": [
+      "IA",
+      "Programação"
+    ],
+    "clubs": [
+      "Café",
+      "Leitura"
+    ],
     "links": [
-      {
-        "label": "LinkedIn",
-        "href": "https://www.linkedin.com/in/caioviterbo/"
-      },
       {
         "label": "GitHub",
         "href": "https://github.com/caioviterbo"
+      },
+      {
+        "label": "LinkedIn",
+        "href": "https://www.linkedin.com/in/caioviterbo/"
       }
     ],
     "entries": []
@@ -412,8 +538,14 @@
       "alt": "Foto de perfil autorizada de João Gilberto de Lima Freitas."
     },
     "initials": "JF",
-    "interests": ["IA", "Programação"],
-    "clubs": ["Café", "Leitura"],
+    "interests": [
+      "IA",
+      "Programação"
+    ],
+    "clubs": [
+      "Café",
+      "Leitura"
+    ],
     "links": [
       {
         "label": "GitHub",
