@@ -39,7 +39,7 @@ Direção visual local: “Tech institucional de circuito metálico”, com fund
 1. Conteúdo honesto antes de impacto visual. O portal nunca parece mais maduro, validado ou operacional do que os dados públicos permitem.
 2. Institucionalidade tecnológica. O visual comunica inovação aplicada com seriedade acadêmica, sem perder energia de laboratório e construção.
 3. Caminhos públicos claros. Projetos, oportunidades, pessoas, atualizações e contato mantêm funções próprias e permanecem acessíveis em até duas interações.
-4. Fonte tipada e autorização explícita. Dados institucionais vêm de `@nite/content`; notícias públicas chegam pela API versionada do CMS, passam pelo schema Zod local de `@nite/news` e respeitam o contrato editorial público.
+4. Fonte tipada e autorização explícita. Dados institucionais vêm de `@nite/content`; notícias públicas chegam por uma API versionada, passam pelo schema Zod local de `@nite/news` e respeitam o contrato editorial público.
 5. Movimento como orientação. Animações guiam leitura, transição e foco; conteúdo e navegação continuam compreensíveis com movimento reduzido ou sem animação.
 
 ## Nite News
@@ -47,20 +47,6 @@ Direção visual local: “Tech institucional de circuito metálico”, com fund
 `/atualizacoes` é o portal editorial público do NITE. A home organiza uma matéria principal, últimas notícias e agenda; os filtros `destaques`, `todas`, `agenda` e `comunidade` são compartilháveis pela URL. Cada bloco editorial aponta para uma página dedicada em `/atualizacoes/[slug]`, com leitura editorial, compartilhamento e matérias relacionadas.
 
 O domínio começa com oito registros locais demonstrativos. Eles permitem validar estrutura, navegação e responsividade, mas não representam comunicação oficial: usam `contentState: "demonstrativo"`, permanecem com `noindex`, não entram no sitemap e não exibem aviso visual por decisão de produto. A publicação indexável exige conteúdo aprovado migrado para `contentState: "real"`; isso não altera a UI nem as rotas.
-
-### CMS editorial
-
-O CMS próprio é uma aplicação administrativa e um repositório independentes do portal público. Ele pertence ao ecossistema NITE, mas não compartilha workspaces, packages, lockfile ou imports com o Portal. Rascunhos, histórico, permissões, auditoria e operação editorial não são capacidades nem dados do `apps/web`.
-
-O MVP editorial possui três papéis (`admin`, `editor` e `author`) e três estados de artigo (`draft`, `published` e `archived`). Cada salvamento explícito cria uma revisão imutável; publicar fixa uma revisão específica. `author` edita apenas matérias próprias e não publica; `editor` e `admin` podem publicar. Conflitos preservam o texto local e exigem recarga antes de novo salvamento.
-
-O acesso usa Microsoft Entra ID e membership por `tid + oid`; e-mail nunca concede permissão. O primeiro admin depende de um `oid` explicitamente configurado. O editor cobre título, resumo, slug, categoria, assinatura, tempo de leitura, evento, destaque, capa, SEO e blocos de parágrafo, subtítulo e citação. O slug pode mudar enquanto a matéria é rascunho e fica estável após a primeira publicação. O histórico abre previews autenticados com um renderer próprio do CMS, compatível com o mesmo formato HTTP consumido pelo Portal.
-
-A mídia entra por upload direto ao R2, permanece privada em `incoming/` durante a validação e só ganha chave pública após processamento WebP. Agendamento, revisão formal, autosave, exclusão permanente, recuperação visual de versões e colaboração simultânea continuam fora do MVP.
-
-Os oito registros demonstrativos continuam apenas como suporte explícito para testes, desenvolvimento local e rollback. Eles não serão importados como comunicação oficial. O Portal usa a API pública versionada do CMS quando `NITE_NEWS_SOURCE=api`; o corte em produção só ocorre depois que API, autenticação, conteúdo aprovado, rollback e operação editorial forem validados em homologação.
-
-A publicação pública é assíncrona após o commit editorial: a confirmação do CMS significa que artigo, revisão publicada, auditoria e evento durável foram persistidos. A atualização do portal normalmente é disparada logo após a resposta e tem uma varredura agendada como recuperação; indisponibilidade temporária do portal não desfaz a publicação nem perde o evento.
 
 O Nite News usa o header e o footer institucionais do portal. A home abre com o **Radar de Sinais NITE**, uma cena editorial decorativa em canvas com dez órbitas circulares calculadas nas dimensões lógicas da viewport; o recorte do stage revela cinco linhas principais no desktop de referência. A cena preserva o fundo e ilumina órbitas e pulsos por uma composição azul/ciano localizada, com a matéria principal sobreposta em `90%` da largura e limitada a `1152px`. Ela aparece em todos os filtros; fora de `destaques`, o primeiro resultado na ordenação canônica assume o bloco principal sem ser repetido na grade seguinte.
 
@@ -73,5 +59,3 @@ O canvas não representa transmissão, métricas ou estado operacional. Os comet
 WCAG 2.2 é a referência do projeto, com WCAG AA como mínimo para contraste: 4.5:1 em texto normal e 3:1 em texto grande. Acessibilidade não é modo opcional; legibilidade, foco visível, semântica, navegação por teclado e estados compreensíveis fazem parte do baseline.
 
 Header, MegaMenu, menu mobile, diálogos, CTAs, cards, filtros, formulários e links preservam foco visível, ordem lógica, áreas de toque confortáveis e suporte a `prefers-reduced-motion`. Status, erros, filtros e disponibilidade nunca dependem apenas de cor, ícone ou animação. Imagens usam texto alternativo significativo; nomes, perfis e fotos reais exigem autorização antes de aparecer publicamente.
-
-No painel, labels persistentes, mensagens de erro, confirmação explícita de publicação e estado de salvamento textual são obrigatórios. Permissão negada e conflito de versão devem ser estados compreensíveis; esconder controles no cliente não substitui autorização no servidor.

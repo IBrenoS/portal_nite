@@ -18,10 +18,12 @@ npm ci
 ```text
 apps/web/          aplicação Next.js, UI, assets e testes de navegador
 packages/content/  dados públicos, schemas Zod, tipos e consultas
+packages/news/     contrato consumidor, client HTTP e fixture de notícias
+packages/ui/       tokens, primitives e renderer exclusivos do Portal
 docs/              produto, design system, arquitetura e specs ativas
 ```
 
-`@nite/content` é a única entrada pública do package de conteúdo. A aplicação não deve usar imports profundos do package nem caminhos físicos entre workspaces.
+`@nite/content`, `@nite/news` e `@nite/ui` são as entradas públicas dos packages do Portal. A aplicação não deve usar imports profundos nem caminhos físicos entre workspaces.
 
 ## Comandos
 
@@ -61,4 +63,4 @@ Durante a implementação, comece pelo teste ou workspace afetado. Execute `npm 
 - [Arquitetura](docs/architecture.md)
 - [Produto](docs/product.md)
 - [Design system](docs/design-system.md)
-- [Specs ativas](docs/specs/)
+- [Specs de referência](docs/superpowers/specs/)

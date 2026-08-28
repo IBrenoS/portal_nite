@@ -29,7 +29,7 @@ O arquivo do Figma incluirá:
 - composição editorial cinematográfica na home e leitura orientada por fotografia;
 - navegação entre a home editorial e uma matéria representativa.
 
-O trabalho não inclui código, schemas, dados canônicos, CMS, busca funcional,
+O trabalho não inclui código, schemas, dados canônicos, administração editorial, busca funcional,
 comentários, reações, autenticação, compartilhamento, autores, publicação ou
 qualquer integração externa.
 

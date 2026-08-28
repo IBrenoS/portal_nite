@@ -2,35 +2,34 @@
 
 ## Limite do repositório
 
-O Portal NITE é um monorepo npm, responsável exclusivamente pela experiência institucional pública. O CMS NITE é outro repositório, com banco, migrations, autenticação, editor, mídia e API próprios. A pasta `cms/` será um Git submodule opcional quando o repositório privado `nite-unijorge/nite-cms` estiver publicado; ela não integra este workspace, lockfile, build, testes ou imports.
+O Portal NITE é um monorepo npm responsável exclusivamente pela experiência institucional pública. O workspace não contém aplicação administrativa, banco de dados editorial, autenticação editorial, migrations, credenciais de escrita ou implementação da fonte de notícias.
 
 ```text
 portal_nite
 ├── apps/web
 ├── packages/content       # dados institucionais
-├── packages/news          # client e contrato HTTP do consumidor
+├── packages/news          # client e contrato HTTP das notícias
 ├── packages/ui            # UI do Portal
-├── cms/                   # submodule opcional, fora do workspace
 └── docs
 ```
 
-O npm e o Turbo executam apenas `apps/*` e `packages/*`. Clone, instalação, CI e deploy do Portal funcionam sem inicializar `cms/`.
+O npm e o Turbo executam somente `apps/*` e `packages/*`. Instalação, CI, testes e deploy do Portal não dependem de outro repositório.
 
-## Fronteira editorial
+## Fronteira editorial pública
 
-O Portal não possui acesso PostgreSQL, schema Drizzle, migrations, roles, Better Auth, Entra ID ou credenciais de escrita no R2. Notícias chegam exclusivamente pela API pública versionada do CMS:
+As notícias chegam por uma API HTTPS versionada. O Portal consulta somente conteúdo publicado e mídia pública; ações privadas, dados de persistência e regras operacionais permanecem fora deste repositório.
 
 ```text
-Portal apps/web ── HTTPS GET /v1/news ──> CMS apps/api ──> published_articles
-CMS apps/admin ── HMAC POST /api/revalidate/news ──> Portal apps/web
-Portal apps/web ── mídia pública ──> R2/CDN
+apps/web ── HTTPS GET /v1/news ──> fonte editorial pública
+fonte editorial pública ── HMAC POST /api/revalidate/news ──> apps/web
+apps/web ── mídia pública ──> CDN
 ```
 
-`@nite/news` é propriedade do Portal: define o schema Zod esperado pelo consumidor, valida as respostas em runtime, fornece o client HTTP, cache e a fixture estática explícita. Ele não importa código, tipos ou arquivos do CMS. A fonte é escolhida por `NITE_NEWS_SOURCE=api|static`; `api` requer `CMS_PUBLIC_API_URL`. O modo `static` é um fallback operacional explícito, nunca automático.
+`@nite/news` define o schema Zod esperado pelo consumidor, valida as respostas em runtime, fornece o client HTTP, cache e uma fixture estática explícita. Não importa código, tipos ou arquivos da fonte editorial. A fonte é escolhida por `NITE_NEWS_SOURCE=api|static`; o modo `static` é um fallback operacional explícito, nunca automático.
 
-A API `/v1` retorna somente artigos publicados e mídia pronta, além de `version: 1`, `ETag` e `Cache-Control: public, s-maxage=300, stale-while-revalidate=86400`. Campos existentes não mudam de tipo ou semântica em `/v1`; mudanças incompatíveis exigem `/v2`. O Portal mantém schema e fixtures próprios para detectar incompatibilidade antes da renderização.
+A API retorna `version: 1`, `ETag` e `Cache-Control`. Campos existentes não mudam de tipo ou semântica em `/v1`; mudanças incompatíveis exigem uma nova versão. O Portal mantém schemas e fixtures próprios para detectar incompatibilidade antes da renderização.
 
-O webhook de publicação usa um corpo JSON versionado assinado com HMAC-SHA256. CMS e Portal implementam localmente a mesma regra de protocolo, com timestamp, limite de tamanho e proteção contra adulteração. Não há biblioteca compartilhada: a compatibilidade é validada em homologação contra a API e o webhook reais.
+O webhook de publicação usa um corpo JSON versionado assinado com HMAC-SHA256, timestamp, limite de tamanho e proteção contra adulteração. A compatibilidade é validada em homologação pela API e pelo webhook reais, sem biblioteca compartilhada.
 
 ## Workspaces do Portal
 
@@ -40,26 +39,20 @@ Rotas, metadata, sitemap, robots, layout, componentes, tema, assets e testes da 
 
 ### `@nite/content`
 
-Dados e consultas institucionais de pessoas, projetos e linha do tempo. Não contém domínio editorial, banco, autenticação ou implementação CMS.
+Dados e consultas institucionais de pessoas, projetos e linha do tempo. Não contém domínio editorial nem integrações privadas.
 
 ### `@nite/news`
 
-Contrato consumidor de notícias, client HTTP, repository assíncrono, filtros, ordenação, relacionadas, cache, revalidação e fixture estática. É independente de Drizzle, Neon e R2 administrativo.
+Contrato consumidor de notícias, client HTTP, repository assíncrono, filtros, ordenação, relacionadas, cache, revalidação e fixture estática. É independente de implementações de persistência e de mídia administrativa.
 
 ### `@nite/ui`
 
-Tokens, primitives e renderer de notícia do Portal. O CMS tem renderer e UI próprios; paridade visual é uma decisão de produto, não um acoplamento de código.
-
-## Contrato operacional
-
-O Portal recebe apenas `CMS_PUBLIC_API_URL`, `NITE_NEWS_SOURCE`, `NITE_NEWS_MEDIA_URL` e `REVALIDATION_SECRET`. O CMS é proprietário de `DATABASE_MIGRATION_URL`, `DATABASE_ADMIN_URL`, `DATABASE_PUBLIC_URL`, credenciais R2 e credenciais de autenticação.
-
-O CMS é implantado a partir do seu próprio repositório: Admin e API são projetos separados. O deploy do Portal não inicializa nem implanta o submodule. Uma atualização do Gitlink registra apenas um commit CMS já validado e publicado; nunca acompanha branch remotamente.
+Tokens, primitives e renderer de notícia do Portal. Componentes e estilos pertencem à vitrine pública e não pressupõem outro workspace consumidor.
 
 ## Validação e evolução
 
 - Testes do Portal cobrem schema HTTP inválido, filtros, slug, SEO, sitemap e revalidação.
-- Homologação cobre Portal consumindo API real e publicação CMS acionando o webhook real.
+- Homologação cobre o consumo da API real e o webhook de revalidação.
 - Toda versão `/v1` precisa continuar compatível até o Portal em produção migrar para uma nova versão.
-- Não criar registry ou package compartilhado sem uma necessidade recorrente comprovada. Um registry privado só será reavaliado se mais consumidores ou drift de contrato tornarem os testes de compatibilidade insuficientes.
-- Imports físicos entre workspaces e referências a `cms/` são bloqueados por ESLint e CI.
+- Não criar packages compartilhados sem necessidade recorrente comprovada.
+- Imports físicos entre workspaces são bloqueados por ESLint e CI.
