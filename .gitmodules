@@ -1,0 +1,4 @@
+[submodule "cms"]
+	path = cms
+	url = https://github.com/nite-unijorge/nite-cms.git
+	update = checkout

@@ -2,7 +2,7 @@ import type { Route } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-import type { NewsArticle } from "@nite/content";
+import type { NewsArticle } from "@nite/news";
 import { cn } from "@/lib/utils";
 
 const categoryLabels: Record<NewsArticle["category"], string> = {

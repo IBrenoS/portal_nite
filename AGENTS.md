@@ -4,7 +4,9 @@
 
 - Monorepo npm workspaces orquestrado por Turbo.
 - `apps/web`: aplicação Next.js 16, React 19, UI, assets e testes Vitest/Playwright.
-- `packages/content`: dados JSON canônicos, schemas Zod, tipos e consultas.
+- `packages/content`: dados institucionais canônicos.
+- `packages/news`: contrato consumidor, client HTTP e consultas públicas de notícias.
+- `packages/ui`: UI exclusiva do Portal.
 - `docs`: arquitetura, produto, design system e specs ativas.
 - Execute os comandos públicos a partir da raiz do repositório.
 
@@ -12,10 +14,11 @@ Antes de alterar código, leia os arquivos relacionados, os testes próximos e a
 
 ## Limites obrigatórios
 
-- Consuma conteúdo somente por `@nite/content`; não use imports profundos nem caminhos físicos entre workspaces.
-- Mantenha filtragem editorial, autorização, ordenação e resolução por slug em `packages/content`.
+- Consuma dados institucionais por `@nite/content` e notícias por `@nite/news`; não use imports profundos nem caminhos físicos entre workspaces.
+- O CMS é um repositório separado. O Portal só o alcança pela API HTTP pública e pelo webhook HMAC; nunca por imports, paths, banco, migrations ou credenciais editoriais.
+- Mantenha filtros, ordenação e resolução por slug do consumidor em `packages/news`.
 - Mantenha rotas, componentes, tema, SEO, navegação e integrações de UI em `apps/web`.
-- Ao mudar a API pública de `@nite/content`, valide os dois workspaces e preserve retrocompatibilidade quando aplicável.
+- Ao mudar as APIs públicas de `@nite/content` ou `@nite/news`, valide os workspaces consumidores e preserve retrocompatibilidade quando aplicável.
 - Não invente dados institucionais, métricas, pessoas, autorizações, vagas, datas ou funcionalidades. Use apenas conteúdo público aprovado.
 - Preserve TypeScript estrito, acessibilidade WCAG AA, navegação por teclado e `prefers-reduced-motion`.
 - Reutilize tokens e componentes existentes; não crie dependências ou abstrações sem necessidade comprovada.
@@ -35,6 +38,7 @@ Não execute toda a bateria após cada edição ou comando. Use a menor verifica
 1. Durante a implementação, execute o arquivo de teste diretamente relacionado.
    - Web: `npm run test --workspace=@nite/web -- <arquivo.test.tsx>`
    - Conteúdo: `npm run test --workspace=@nite/content -- <arquivo.test.ts>`
+   - Notícias: `npm run test --workspace=@nite/news -- <arquivo.test.ts>`
 2. Se vários arquivos do mesmo workspace forem afetados, execute `npm run test --workspace=<workspace>`.
 3. Se a mudança cruzar workspaces, use `npm run test:affected` e os typechecks envolvidos.
 4. Execute `npm run check` uma única vez no encerramento de uma alteração de código, após agrupar as correções. Repita-o somente se uma mudança posterior puder invalidar seu resultado.

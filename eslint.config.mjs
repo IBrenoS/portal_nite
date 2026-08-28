@@ -16,8 +16,48 @@ const eslintConfig = defineConfig([
         {
           patterns: [
             {
-              group: ["@nite/content/*"],
-              message: "Use somente a entrada pública @nite/content.",
+              group: ["@nite/content/*/*", "@nite/news/*/*"],
+              message:
+                "Use somente as entradas oficiais dos packages do Portal.",
+            },
+            {
+              group: [
+                "apps/*",
+                "apps/**",
+                "packages/*",
+                "packages/**",
+                "../apps/**",
+                "../../apps/**",
+                "../packages/**",
+                "../../packages/**",
+              ],
+              message: "Não importe arquivos físicos entre workspaces.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ["apps/web/**/*.{js,jsx,ts,tsx}"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: [
+                "@nite/cms-*",
+                "@nite/editorial",
+                "@nite/cms-db",
+                "@nite/content/admin",
+              ],
+              message: "O Portal não pode importar código proprietário do CMS.",
+            },
+            {
+              group: ["@nite/content/*/*", "@nite/news/*/*"],
+              message:
+                "Use somente as entradas oficiais dos packages do Portal.",
             },
             {
               group: [
@@ -50,6 +90,7 @@ const eslintConfig = defineConfig([
     ".codex_artifacts/**",
     ".codex-artifacts/**",
     "output/**",
+    "cms/**",
   ]),
 ]);
 

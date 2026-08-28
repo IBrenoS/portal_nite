@@ -151,6 +151,7 @@ describe("conteudo estruturado", () => {
       "raquel-santana",
       "joao-victor-dorea",
       "aiza-barretto",
+      "camila-ellen-silva-paixao",
       "igor-jeronimo",
       "marcus-vinicius-da-silva-santos",
       "cecilia-brito",
@@ -181,7 +182,7 @@ describe("conteudo estruturado", () => {
       role: "Ciência da Computação",
       location: "Feira de Santana, Brasil",
     });
-    expect(getPersonBySlug("aiza-barretto")?.location).toBeUndefined();
+    expect(getPersonBySlug("aiza-barretto")?.location).toBe("Salvador, Brasil");
     expect(
       getPersonBySlug("vitor-dos-anjos-silva-de-araujo")?.location,
     ).toBeUndefined();

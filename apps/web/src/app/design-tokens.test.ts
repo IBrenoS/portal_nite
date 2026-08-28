@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
 
@@ -7,16 +8,20 @@ const globalStyles = readFileSync(
   join(process.cwd(), "src", "app", "globals.css"),
   "utf8",
 );
+const sharedThemeStyles = readFileSync(
+  fileURLToPath(import.meta.resolve("@nite/ui/theme.css")),
+  "utf8",
+);
 
 describe("design tokens", () => {
   it("expõe as superfícies semânticas globais", () => {
-    expect(globalStyles).toContain(
+    expect(sharedThemeStyles).toContain(
       "--color-nite-section: var(--nite-section);",
     );
-    expect(globalStyles).toContain(
+    expect(sharedThemeStyles).toContain(
       "--color-nite-surface-elevated: var(--nite-surface-elevated);",
     );
-    expect(globalStyles).toContain(
+    expect(sharedThemeStyles).toContain(
       "--color-nite-brand-primary: var(--nite-brand-primary);",
     );
   });

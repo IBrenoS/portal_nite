@@ -1,13 +1,7 @@
 import type { Metadata, Route } from "next";
 import Link from "next/link";
 
-import {
-  getAgendaNewsArticles,
-  getFeaturedNewsArticle,
-  getFilteredNewsArticles,
-  getLatestNewsArticles,
-  normalizeNewsFilter,
-} from "@nite/content";
+import { normalizeNewsFilter } from "@nite/news";
 import { Container } from "@/components/layout/container";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
@@ -21,6 +15,14 @@ import {
   defaultMetadata,
   serializeJsonLd,
 } from "@/lib/seo";
+import {
+  getAgendaNewsArticles,
+  getFeaturedNewsArticle,
+  getFilteredNewsArticles,
+  getLatestNewsArticles,
+} from "@/lib/news";
+
+export const dynamic = "force-dynamic";
 
 const pageTitle = "Nite News";
 const pageDescription =
@@ -86,14 +88,18 @@ export default async function UpdatesPage({
 }: UpdatesPageProps = {}) {
   const { filtro } = await searchParams;
   const activeFilter = normalizeNewsFilter(filtro);
-  const featured = getFeaturedNewsArticle();
-  const filteredArticles = getFilteredNewsArticles(activeFilter);
+  const [featured, filteredArticles] = await Promise.all([
+    getFeaturedNewsArticle(),
+    getFilteredNewsArticles(activeFilter),
+  ]);
   const showCuratedHome = activeFilter === "destaques";
   const leadArticle = showCuratedHome
-    ? (featured ?? getLatestNewsArticles(1)[0])
+    ? (featured ?? (await getLatestNewsArticles(1))[0])
     : filteredArticles[0];
-  const latest = getLatestNewsArticles(4, leadArticle?.slug);
-  const agenda = getAgendaNewsArticles(3);
+  const [latest, agenda] = await Promise.all([
+    getLatestNewsArticles(4, leadArticle?.slug),
+    getAgendaNewsArticles(3),
+  ]);
   const remainingFilteredArticles = showCuratedHome
     ? []
     : filteredArticles.slice(1);

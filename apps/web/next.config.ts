@@ -1,12 +1,25 @@
 import type { NextConfig } from "next";
 
+const publicMediaUrl = process.env.NITE_NEWS_MEDIA_URL;
+let mediaRemotePattern: URL | undefined;
+try {
+  const candidate = publicMediaUrl ? new URL(publicMediaUrl) : undefined;
+  mediaRemotePattern =
+    candidate && ["https:", "http:"].includes(candidate.protocol)
+      ? candidate
+      : undefined;
+} catch {
+  mediaRemotePattern = undefined;
+}
+
 const nextConfig: NextConfig = {
   poweredByHeader: false,
-  transpilePackages: ["@nite/content"],
+  transpilePackages: ["@nite/content", "@nite/news", "@nite/ui"],
   typedRoutes: true,
   images: {
     formats: ["image/avif", "image/webp"],
     qualities: [75, 100],
+    remotePatterns: mediaRemotePattern ? [mediaRemotePattern] : [],
   },
   async redirects() {
     return [
