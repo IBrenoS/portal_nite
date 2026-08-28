@@ -1,4 +1,4 @@
-import type { NewsArticle, NewsFilter } from "@nite/content/public";
+import type { NewsArticle, NewsFilter } from "@nite/news";
 import Image from "next/image";
 
 import { NewsCard } from "@/components/news/news-card";

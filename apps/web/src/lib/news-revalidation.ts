@@ -1,8 +1,8 @@
-import type { NewsRevalidationPayload } from "@nite/content/revalidation";
+import type { NewsRevalidationPayload } from "@nite/news/revalidation";
 import {
   newsRevalidationPayloadSchema,
   verifyRevalidationSignature,
-} from "@nite/content/revalidation";
+} from "@nite/news/revalidation";
 
 const maximumBodyBytes = 4_096;
 

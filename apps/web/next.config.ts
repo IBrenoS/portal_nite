@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 
-const publicMediaUrl = process.env.R2_PUBLIC_BASE_URL;
+const publicMediaUrl = process.env.NITE_NEWS_MEDIA_URL;
 let mediaRemotePattern: URL | undefined;
 try {
   const candidate = publicMediaUrl ? new URL(publicMediaUrl) : undefined;
@@ -14,7 +14,7 @@ try {
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
-  transpilePackages: ["@nite/content", "@nite/ui"],
+  transpilePackages: ["@nite/content", "@nite/news", "@nite/ui"],
   typedRoutes: true,
   images: {
     formats: ["image/avif", "image/webp"],

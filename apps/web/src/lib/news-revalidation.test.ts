@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { createRevalidationSignature } from "@nite/content/revalidation";
+import { createRevalidationSignature } from "@nite/news/revalidation";
 import { handleNewsRevalidationRequest } from "./news-revalidation";
 
 const secret = "segredo-de-revalidacao-com-32-caracteres";

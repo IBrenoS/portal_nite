@@ -1,4 +1,4 @@
-import type { NewsBodyBlock } from "@nite/content/public";
+import type { NewsBodyBlock } from "@nite/news";
 
 type NewsArticleBodyProps = {
   blocks: readonly NewsBodyBlock[];

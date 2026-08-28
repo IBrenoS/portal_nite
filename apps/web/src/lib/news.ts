@@ -3,12 +3,12 @@ import "server-only";
 import { unstable_cache } from "next/cache";
 
 import {
-  createNeonNewsPublicDataSource,
+  createNewsApiClient,
   createNewsPublicRepository,
   createStaticNewsPublicDataSource,
   type NewsPublicRepository,
-} from "@nite/content/public";
-import { readPublicNewsConfiguration } from "./news-configuration";
+  readPublicNewsConfiguration,
+} from "@nite/news";
 
 export const NITE_NEWS_CACHE_TAG = "nite-news:published";
 
@@ -25,12 +25,11 @@ function createRepository() {
     return createNewsPublicRepository(createStaticNewsPublicDataSource());
   }
 
-  const databaseSource = createNeonNewsPublicDataSource({
-    databaseUrl: result.configuration.databaseUrl,
-    mediaBaseUrl: result.configuration.mediaBaseUrl,
+  const apiSource = createNewsApiClient({
+    baseUrl: result.configuration.apiUrl,
   });
   const listPublishedArticles = unstable_cache(
-    () => databaseSource.listPublishedArticles(),
+    () => apiSource.listPublishedArticles(),
     ["nite-news-published-articles"],
     { tags: [NITE_NEWS_CACHE_TAG], revalidate: 300 },
   );

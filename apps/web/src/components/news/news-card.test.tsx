@@ -1,7 +1,7 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, beforeAll, describe, expect, it } from "vitest";
 
-import { getFeaturedNewsArticle, type NewsArticle } from "@nite/content/public";
+import { getFeaturedNewsArticle, type NewsArticle } from "@nite/news";
 import { NewsCard } from "@/components/news/news-card";
 
 let article: NewsArticle;

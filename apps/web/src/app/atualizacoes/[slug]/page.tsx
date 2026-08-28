@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-import { type NewsArticle } from "@nite/content/public";
+import { type NewsArticle } from "@nite/news";
 import { NewsArticleBody } from "@nite/ui";
 import { Container } from "@/components/layout/container";
 import { SiteFooter } from "@/components/layout/site-footer";
