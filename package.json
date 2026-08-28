@@ -12,6 +12,8 @@
   },
   "scripts": {
     "dev": "turbo run dev --filter=@nite/web",
+    "dev:admin": "turbo run dev --filter=@nite/admin",
+    "db:migrate": "npm run db:migrate --workspace=@nite/content",
     "build": "turbo run build",
     "start": "npm run start --workspace=@nite/web",
     "lint": "turbo run lint",

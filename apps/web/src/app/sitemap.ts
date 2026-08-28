@@ -1,15 +1,15 @@
 import type { MetadataRoute } from "next";
 
-import {
-  getIndexableNewsArticles,
-  getIndexablePeople,
-  getIndexableProjects,
-} from "@nite/content";
+import { getIndexablePeople, getIndexableProjects } from "@nite/content";
+import { getIndexableNewsArticles } from "@/lib/news";
 import { absoluteUrl } from "@/lib/seo";
 import { siteConfig } from "@/lib/site-config";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export const dynamic = "force-dynamic";
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const lastModified = new Date(siteConfig.lastUpdated);
+  const indexableNewsArticles = await getIndexableNewsArticles();
 
   return [
     {
@@ -32,7 +32,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: absoluteUrl(`/pessoas/${person.slug}`),
       lastModified,
     })),
-    ...getIndexableNewsArticles().map((article) => ({
+    ...indexableNewsArticles.map((article) => ({
       url: absoluteUrl(`/atualizacoes/${article.slug}`),
       lastModified: new Date(`${article.publishedAt}T00:00:00Z`),
     })),

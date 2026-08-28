@@ -3,7 +3,6 @@ import { afterEach, describe, expect, it } from "vitest";
 
 import NewsArticlePage, {
   generateMetadata,
-  generateStaticParams,
 } from "@/app/atualizacoes/[slug]/page";
 
 afterEach(() => {
@@ -21,11 +20,6 @@ async function renderArticle(slug = featuredSlug) {
 }
 
 describe("NewsArticlePage", () => {
-  it("gera uma rota estática para cada matéria pública", () => {
-    expect(generateStaticParams()).toHaveLength(8);
-    expect(generateStaticParams()).toContainEqual({ slug: featuredSlug });
-  });
-
   it("renderiza a matéria dedicada com estrutura editorial completa", async () => {
     await renderArticle();
 

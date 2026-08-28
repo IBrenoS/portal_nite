@@ -1,8 +1,14 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
   "workspaces": {
+    "apps/admin": {
+      "project": ["src/**/*.{ts,tsx,css}", "*.ts"]
+    },
     "apps/web": {
       "project": ["src/**/*.{ts,tsx,css}", "e2e/**/*.ts", "*.ts"]
+    },
+    "packages/ui": {
+      "project": ["src/**/*.{ts,tsx,css}", "*.ts"]
     }
   }
 }

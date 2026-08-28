@@ -1,14 +1,20 @@
 import { cleanup, render, screen } from "@testing-library/react";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, describe, expect, it } from "vitest";
 
-import { getFeaturedNewsArticle } from "@nite/content";
+import { getFeaturedNewsArticle, type NewsArticle } from "@nite/content/public";
 import { NewsCard } from "@/components/news/news-card";
 
-const article = getFeaturedNewsArticle();
+let article: NewsArticle;
 
-if (!article) {
-  throw new Error("News card fixture not found.");
-}
+beforeAll(async () => {
+  const featuredArticle = await getFeaturedNewsArticle();
+
+  if (!featuredArticle) {
+    throw new Error("News card fixture not found.");
+  }
+
+  article = featuredArticle;
+});
 
 afterEach(() => {
   cleanup();

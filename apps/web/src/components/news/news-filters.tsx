@@ -1,4 +1,4 @@
-import type { NewsFilter } from "@nite/content";
+import type { NewsFilter } from "@nite/content/public";
 
 export const newsFilterLabels = {
   agenda: "Agenda",

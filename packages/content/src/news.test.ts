@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  createNewsPublicRepository,
   getAgendaNewsArticles,
   getFeaturedNewsArticle,
   getFilteredNewsArticles,
@@ -10,10 +11,10 @@ import {
   getNewsArticleSlugs,
   getPublishedNewsArticles,
   getRelatedNewsArticles,
-  newsCollectionSchema,
   normalizeNewsFilter,
-  type NewsArticle,
-} from "@nite/content";
+  type NewsPublicDataSource,
+} from "@nite/content/public";
+import { newsCollectionSchema, type NewsArticle } from "@nite/content";
 
 const expectedNewsSlugs = [
   "novas-conexoes-transformam-experiencia-campus",
@@ -27,27 +28,32 @@ const expectedNewsSlugs = [
 ] as const;
 
 describe("Nite News", () => {
-  it("carrega oito materias publicas e resolve cada slug", () => {
-    const articles = getPublishedNewsArticles();
+  it("carrega oito materias publicas e resolve cada slug", async () => {
+    const articles = await getPublishedNewsArticles();
 
     expect(articles.map((article) => article.slug)).toEqual(expectedNewsSlugs);
-    expect(getNewsArticleSlugs()).toEqual(
+    await expect(getNewsArticleSlugs()).resolves.toEqual(
       expectedNewsSlugs.map((slug) => ({ slug })),
     );
     expect(
-      getNewsArticleBySlug("novas-conexoes-transformam-experiencia-campus")
-        ?.title,
+      (
+        await getNewsArticleBySlug(
+          "novas-conexoes-transformam-experiencia-campus",
+        )
+      )?.title,
     ).toBe("Novas conexões transformam a experiência no campus");
   });
 
-  it("separa destaque, ultimas noticias e agenda na ordem editorial", () => {
-    const featured = getFeaturedNewsArticle();
+  it("separa destaque, ultimas noticias e agenda na ordem editorial", async () => {
+    const featured = await getFeaturedNewsArticle();
 
     expect(featured?.slug).toBe(
       "novas-conexoes-transformam-experiencia-campus",
     );
     expect(
-      getLatestNewsArticles(4, featured?.slug).map((article) => article.slug),
+      (await getLatestNewsArticles(4, featured?.slug)).map(
+        (article) => article.slug,
+      ),
     ).toEqual([
       "semana-cultura-ideias-encontros",
       "projetos-estudantis-compartilham-descobertas",
@@ -55,30 +61,34 @@ describe("Nite News", () => {
       "bastidores-iniciativa-colaboracao",
     ]);
     expect(
-      getAgendaNewsArticles(3).map((article) => article.eventDate),
+      (await getAgendaNewsArticles(3)).map((article) => article.eventDate),
     ).toEqual(["2026-08-12", "2026-08-14", "2026-08-16"]);
   });
 
-  it("normaliza filtros e retorna apenas o conjunto solicitado", () => {
+  it("normaliza filtros e retorna apenas o conjunto solicitado", async () => {
     expect(normalizeNewsFilter(undefined)).toBe("destaques");
     expect(normalizeNewsFilter(["agenda", "comunidade"])).toBe("agenda");
     expect(normalizeNewsFilter("desconhecido")).toBe("destaques");
     expect(
-      getFilteredNewsArticles("agenda").every((article) => article.eventDate),
+      (await getFilteredNewsArticles("agenda")).every(
+        (article) => article.eventDate,
+      ),
     ).toBe(true);
     expect(
-      getFilteredNewsArticles("comunidade").every(
+      (await getFilteredNewsArticles("comunidade")).every(
         (article) => article.category === "comunidade",
       ),
     ).toBe(true);
-    expect(getFilteredNewsArticles("todas")).toHaveLength(8);
+    await expect(getFilteredNewsArticles("todas")).resolves.toHaveLength(8);
     expect(
-      getFilteredNewsArticles("destaques").map(({ featured }) => featured),
+      (await getFilteredNewsArticles("destaques")).map(
+        ({ featured }) => featured,
+      ),
     ).toEqual([true]);
   });
 
-  it("prioriza materias relacionadas da mesma categoria", () => {
-    const related = getRelatedNewsArticles(
+  it("prioriza materias relacionadas da mesma categoria", async () => {
+    const related = await getRelatedNewsArticles(
       "novas-conexoes-transformam-experiencia-campus",
       3,
     );
@@ -95,13 +105,33 @@ describe("Nite News", () => {
     ).toBe(false);
   });
 
-  it("mantem materias demonstrativas fora do conjunto indexavel", () => {
-    expect(getIndexableNewsArticles()).toEqual([]);
+  it("mantem materias demonstrativas fora do conjunto indexavel", async () => {
+    await expect(getIndexableNewsArticles()).resolves.toEqual([]);
     expect(
-      getPublishedNewsArticles().every(
+      (await getPublishedNewsArticles()).every(
         (article) => article.contentState === "demonstrativo" && article.public,
       ),
     ).toBe(true);
+  });
+
+  it("mantem regras editoriais ao trocar a fonte publica", async () => {
+    const articles = (await getPublishedNewsArticles()).slice(0, 3);
+    const dataSource: NewsPublicDataSource = {
+      async listPublishedArticles() {
+        return articles.toReversed();
+      },
+    };
+    const repository = createNewsPublicRepository(dataSource);
+
+    await expect(repository.getPublishedNewsArticles()).resolves.toEqual(
+      articles,
+    );
+    await expect(
+      repository.getNewsArticleBySlug(articles[1].slug),
+    ).resolves.toEqual(articles[1]);
+    await expect(repository.getLatestNewsArticles(1)).resolves.toEqual([
+      articles[0],
+    ]);
   });
 
   it("rejeita slugs duplicados", () => {

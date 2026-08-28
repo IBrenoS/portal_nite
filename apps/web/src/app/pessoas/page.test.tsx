@@ -97,7 +97,7 @@ describe("PeoplePage", () => {
     ).not.toBeInTheDocument();
 
     const brenoCard = main.getByRole("link", {
-      name: /Breno Cerqueira Software Engineer Salvador, Brasil/i,
+      name: /Breno Cerqueira Eng\. Software & Dev\. Sistemas Salvador, Brasil/i,
     });
 
     expect(brenoCard).toHaveAttribute("href", "/pessoas/breno-cerqueira");
@@ -505,7 +505,9 @@ describe("PersonPage", () => {
     expect(
       screen.getByRole("heading", { level: 1, name: "Breno Cerqueira" }),
     ).not.toHaveClass("font-heading");
-    expect(screen.getByText("Software Engineer")).toBeInTheDocument();
+    expect(
+      screen.getByText("Eng. Software & Dev. Sistemas"),
+    ).toBeInTheDocument();
     expect(screen.getByText("Salvador, Brasil")).toBeInTheDocument();
     expect(breno?.summary).toBe("Just do it");
     expect(screen.queryByText("Just do it")).not.toBeInTheDocument();
