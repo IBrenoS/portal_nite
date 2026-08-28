@@ -2,12 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-import {
-  getNewsArticleBySlug,
-  getNewsArticleSlugs,
-  getRelatedNewsArticles,
-  type NewsArticle,
-} from "@nite/content";
+import { type NewsArticle } from "@nite/news";
+import { NewsArticleBody } from "@nite/ui";
 import { Container } from "@/components/layout/container";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
@@ -24,21 +20,20 @@ import {
   defaultMetadata,
   serializeJsonLd,
 } from "@/lib/seo";
+import { getNewsArticleBySlug, getRelatedNewsArticles } from "@/lib/news";
 import NewsArticleNotFound from "./not-found";
+
+export const dynamic = "force-dynamic";
 
 type NewsArticlePageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export function generateStaticParams() {
-  return getNewsArticleSlugs();
-}
-
 export async function generateMetadata({
   params,
 }: NewsArticlePageProps): Promise<Metadata> {
   const { slug } = await params;
-  const article = getNewsArticleBySlug(slug);
+  const article = await getNewsArticleBySlug(slug);
 
   if (!article) {
     return {
@@ -105,13 +100,13 @@ export default async function NewsArticlePage({
   params,
 }: NewsArticlePageProps) {
   const { slug } = await params;
-  const article = getNewsArticleBySlug(slug);
+  const article = await getNewsArticleBySlug(slug);
 
   if (!article) {
     return <NewsArticleNotFound />;
   }
 
-  const related = getRelatedNewsArticles(article.slug, 3);
+  const related = await getRelatedNewsArticles(article.slug, 3);
   const canonical = absoluteUrl(`/atualizacoes/${article.slug}`);
   const breadcrumbJsonLd = buildBreadcrumbJsonLd([
     { name: "Início", path: "/" },
@@ -183,38 +178,7 @@ export default async function NewsArticlePage({
           </Container>
 
           <Container size="sm" className="py-14 sm:py-20">
-            <div className="grid gap-7 text-[1.0625rem] leading-8 text-nite-text-secondary sm:text-lg sm:leading-9">
-              {article.body.map((block, index) => {
-                if (block.type === "heading") {
-                  return (
-                    <h2
-                      key={`${block.type}-${index}`}
-                      className="pt-5 font-heading text-2xl font-semibold leading-tight text-nite-text-primary sm:text-3xl"
-                    >
-                      {block.text}
-                    </h2>
-                  );
-                }
-
-                if (block.type === "quote") {
-                  return (
-                    <blockquote
-                      key={`${block.type}-${index}`}
-                      className="my-3 border-l-2 border-nite-brand-accent py-2 pl-6 font-heading text-xl font-medium leading-8 text-nite-text-primary sm:pl-8 sm:text-2xl sm:leading-9"
-                    >
-                      <p>“{block.text}”</p>
-                      {block.attribution ? (
-                        <cite className="mt-4 block font-mono text-xs font-medium not-italic uppercase tracking-[0.14em] text-nite-text-muted">
-                          {block.attribution}
-                        </cite>
-                      ) : null}
-                    </blockquote>
-                  );
-                }
-
-                return <p key={`${block.type}-${index}`}>{block.text}</p>;
-              })}
-            </div>
+            <NewsArticleBody blocks={article.body} />
           </Container>
         </article>
 

@@ -1,87 +1,65 @@
 # Arquitetura do Portal NITE
 
-## Visão geral
+## Limite do repositório
 
-O Portal NITE é um monorepo npm com uma aplicação Next.js responsiva e um package source-only de conteúdo. Desktop e mobile compartilham a mesma aplicação e os mesmos contratos; não há um app mobile separado.
+O Portal NITE é um monorepo npm, responsável exclusivamente pela experiência institucional pública. O CMS NITE é outro repositório, com banco, migrations, autenticação, editor, mídia e API próprios. A pasta `cms/` será um Git submodule opcional quando o repositório privado `nite-unijorge/nite-cms` estiver publicado; ela não integra este workspace, lockfile, build, testes ou imports.
 
 ```text
-portal-nite
-├── apps
-│   └── web
-│       ├── e2e/visual
-│       ├── public
-│       └── src
-│           ├── app
-│           ├── components
-│           └── lib
-├── packages
-│   └── content
-│       ├── data
-│       └── src
+portal_nite
+├── apps/web
+├── packages/content       # dados institucionais
+├── packages/news          # client e contrato HTTP do consumidor
+├── packages/ui            # UI do Portal
+├── cms/                   # submodule opcional, fora do workspace
 └── docs
-    └── specs
 ```
 
-Turbo executa tarefas por workspace e reutiliza resultados quando entradas e configuração não mudam. O npm mantém um único `package-lock.json` na raiz.
+O npm e o Turbo executam apenas `apps/*` e `packages/*`. Clone, instalação, CI e deploy do Portal funcionam sem inicializar `cms/`.
 
-## Limites dos workspaces
+## Fronteira editorial
+
+O Portal não possui acesso PostgreSQL, schema Drizzle, migrations, roles, Better Auth, Entra ID ou credenciais de escrita no R2. Notícias chegam exclusivamente pela API pública versionada do CMS:
+
+```text
+Portal apps/web ── HTTPS GET /v1/news ──> CMS apps/api ──> published_articles
+CMS apps/admin ── HMAC POST /api/revalidate/news ──> Portal apps/web
+Portal apps/web ── mídia pública ──> R2/CDN
+```
+
+`@nite/news` é propriedade do Portal: define o schema Zod esperado pelo consumidor, valida as respostas em runtime, fornece o client HTTP, cache e a fixture estática explícita. Ele não importa código, tipos ou arquivos do CMS. A fonte é escolhida por `NITE_NEWS_SOURCE=api|static`; `api` requer `CMS_PUBLIC_API_URL`. O modo `static` é um fallback operacional explícito, nunca automático.
+
+A API `/v1` retorna somente artigos publicados e mídia pronta, além de `version: 1`, `ETag` e `Cache-Control: public, s-maxage=300, stale-while-revalidate=86400`. Campos existentes não mudam de tipo ou semântica em `/v1`; mudanças incompatíveis exigem `/v2`. O Portal mantém schema e fixtures próprios para detectar incompatibilidade antes da renderização.
+
+O webhook de publicação usa um corpo JSON versionado assinado com HMAC-SHA256. CMS e Portal implementam localmente a mesma regra de protocolo, com timestamp, limite de tamanho e proteção contra adulteração. Não há biblioteca compartilhada: a compatibilidade é validada em homologação contra a API e o webhook reais.
+
+## Workspaces do Portal
 
 ### `@nite/web`
 
-Contém rotas, metadata, redirects, headers, componentes, tema, SEO, navegação, assets públicos e testes visuais. O alias `@/*` aponta exclusivamente para `apps/web/src/*`.
-
-Configurações de Next.js, PostCSS, shadcn, Vitest e Playwright pertencem ao workspace web porque não têm consumidores fora da aplicação.
+Rotas, metadata, sitemap, robots, layout, componentes, tema, assets e testes da vitrine pública. O alias `@/*` aponta apenas para `apps/web/src/*`. A aplicação consome `@nite/content`, `@nite/news` e `@nite/ui` pelas entradas públicas.
 
 ### `@nite/content`
 
-Contém os JSONs canônicos, schemas Zod, tipos derivados e consultas de leitura. É um package privado e source-only, transpilado pelo Next.js, sem etapa própria de publicação ou build.
+Dados e consultas institucionais de pessoas, projetos e linha do tempo. Não contém domínio editorial, banco, autenticação ou implementação CMS.
 
-A entrada `@nite/content` expõe:
+### `@nite/news`
 
-- `Project`, `Person`, `PersonEntryCategory`, `TimelineEvent`, `NewsArticle`, `NewsCategory`, `NewsContentState` e blocos editoriais tipados;
-- schemas e valores compartilhados;
-- consultas de projetos, pessoas e linha do tempo;
-- consultas editoriais `getPublishedNewsArticles`, `getNewsArticleBySlug`, `getNewsArticleSlugs`, `getFeaturedNewsArticle`, `getRelatedNewsArticles` e `getIndexableNewsArticles`.
+Contrato consumidor de notícias, client HTTP, repository assíncrono, filtros, ordenação, relacionadas, cache, revalidação e fixture estática. É independente de Drizzle, Neon e R2 administrativo.
 
-`src/index.ts` é a única API pública. Imports como `@nite/content/*` e caminhos físicos entre `apps/` e `packages/` são proibidos pelo ESLint. Uma mudança nessa API exige typecheck e testes dos dois workspaces.
+### `@nite/ui`
 
-## Fluxo de conteúdo
+Tokens, primitives e renderer de notícia do Portal. O CMS tem renderer e UI próprios; paridade visual é uma decisão de produto, não um acoplamento de código.
 
-```text
-packages/content/data/*.json
-        ↓ validação Zod
-packages/content/src/repository.ts
-        ↓ API pública
-        @nite/content
-        ↓
-apps/web/src/app e components
-```
+## Contrato operacional
 
-Filtragem editorial, autorização de perfis, ordenação e resolução por slug permanecem no package de conteúdo. Componentes web recebem dados já tipados e não acessam JSONs diretamente.
+O Portal recebe apenas `CMS_PUBLIC_API_URL`, `NITE_NEWS_SOURCE`, `NITE_NEWS_MEDIA_URL` e `REVALIDATION_SECRET`. O CMS é proprietário de `DATABASE_MIGRATION_URL`, `DATABASE_ADMIN_URL`, `DATABASE_PUBLIC_URL`, credenciais R2 e credenciais de autenticação.
 
-### Fluxo do Nite News
+O CMS é implantado a partir do seu próprio repositório: Admin e API são projetos separados. O deploy do Portal não inicializa nem implanta o submodule. Uma atualização do Gitlink registra apenas um commit CMS já validado e publicado; nunca acompanha branch remotamente.
 
-`packages/content/data/news.json` é o conteúdo canônico das matérias. O repository valida slugs únicos, visibilidade e estado editorial; também concentra filtros, ordenação cronológica, agenda crescente e relacionadas com prioridade para a mesma categoria. `apps/web` consome apenas a API pública para renderizar `/atualizacoes`, `/atualizacoes/[slug]`, metadata e sitemap.
+## Validação e evolução
 
-Registros `demonstrativo` podem ser públicos para validação da interface, mas são devolvidos por `getIndexableNewsArticles()` somente após migrarem para `contentState: "real"`. A home `/atualizacoes` entra no sitemap; slugs demonstrativos usam `robots.index = false`. Breadcrumb JSON-LD existe em todas as matérias, enquanto Article JSON-LD fica restrito ao conteúdo real e indexável.
-
-## Estratégia de testes
-
-- Testes unitários ficam ao lado da página, componente ou módulo que validam.
-- Testes do conteúdo usam ambiente Node em `packages/content`.
-- Vitest permite paralelismo entre arquivos com no máximo quatro workers.
-- Playwright e snapshots ficam em `apps/web/e2e/visual` e são executados manualmente.
-- `npm run test:affected` usa o grafo do Turbo para limitar testes aos workspaces afetados.
-- `npm run check:deadcode` impede que arquivos, exports ou dependências sem uso permaneçam no monorepo.
-
-O fluxo normal usa testes dirigidos durante a implementação e `npm run check` no encerramento. A suíte visual completa deve ser reservada para checkpoints que possam alterar renderização ou para a validação final.
-
-## Regras de evolução
-
-- Criar um novo package somente quando houver um limite de domínio estável ou mais de um consumidor real.
-- Manter UI, configurações e integrações específicas dentro do workspace consumidor.
-- Não criar `packages/ui`, `packages/config` ou um app mobile apenas para antecipar reutilização.
-- Preservar URLs públicas e contratos de conteúdo ao reorganizar diretórios.
-- Manter specs ainda não implementadas em `docs/specs/`; decisões duráveis devem ser incorporadas à documentação viva depois da entrega.
-
-Docker, CI/CD, healthcheck e deploy não fazem parte desta arquitetura. Esses contratos devem ser definidos separadamente quando o ambiente do data center universitário estiver estabelecido.
+- Testes do Portal cobrem schema HTTP inválido, filtros, slug, SEO, sitemap e revalidação.
+- Homologação cobre Portal consumindo API real e publicação CMS acionando o webhook real.
+- Toda versão `/v1` precisa continuar compatível até o Portal em produção migrar para uma nova versão.
+- Não criar registry ou package compartilhado sem uma necessidade recorrente comprovada. Um registry privado só será reavaliado se mais consumidores ou drift de contrato tornarem os testes de compatibilidade insuficientes.
+- Imports físicos entre workspaces e referências a `cms/` são bloqueados por ESLint e CI.

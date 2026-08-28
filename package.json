@@ -32,5 +32,10 @@
     "prettier": "^3.8.3",
     "turbo": "2.10.9",
     "typescript": "^5"
+  },
+  "optionalDependencies": {
+    "@rolldown/binding-linux-x64-gnu": "1.2.3",
+    "@tailwindcss/oxide-linux-x64-gnu": "4.2.4",
+    "lightningcss-linux-x64-gnu": "1.32.0"
   }
 }

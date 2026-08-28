@@ -3,6 +3,10 @@ import { createElement } from "react";
 import type { ImageProps } from "next/image";
 import { vi } from "vitest";
 
+process.env.NITE_NEWS_SOURCE = "static";
+
+vi.mock("server-only", () => ({}));
+
 const createFontMock = (name: string) => () => ({
   className: `${name}-font`,
   style: { fontFamily: name },

@@ -3,6 +3,9 @@
   "workspaces": {
     "apps/web": {
       "project": ["src/**/*.{ts,tsx,css}", "e2e/**/*.ts", "*.ts"]
+    },
+    "packages/ui": {
+      "project": ["src/**/*.{ts,tsx,css}", "*.ts"]
     }
   }
 }
