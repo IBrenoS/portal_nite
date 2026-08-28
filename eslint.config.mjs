@@ -5,7 +5,7 @@ import nextTs from "eslint-config-next/typescript";
 const eslintConfig = defineConfig([
   ...nextVitals.map((config) => ({
     ...config,
-    files: ["apps/{web,admin}/**/*.{js,jsx,ts,tsx}"],
+    files: ["apps/web/**/*.{js,jsx,ts,tsx}"],
   })),
   ...nextTs,
   {
@@ -16,8 +16,9 @@ const eslintConfig = defineConfig([
         {
           patterns: [
             {
-              group: ["@nite/content/*/*"],
-              message: "Use somente as entradas oficiais de @nite/content.",
+              group: ["@nite/content/*/*", "@nite/news/*/*"],
+              message:
+                "Use somente as entradas oficiais dos packages do Portal.",
             },
             {
               group: [
@@ -45,13 +46,18 @@ const eslintConfig = defineConfig([
         {
           patterns: [
             {
-              group: ["@nite/content/admin"],
-              message:
-                "O portal público não pode importar contratos administrativos.",
+              group: [
+                "@nite/cms-*",
+                "@nite/editorial",
+                "@nite/cms-db",
+                "@nite/content/admin",
+              ],
+              message: "O Portal não pode importar código proprietário do CMS.",
             },
             {
-              group: ["@nite/content/*/*"],
-              message: "Use somente as entradas oficiais de @nite/content.",
+              group: ["@nite/content/*/*", "@nite/news/*/*"],
+              message:
+                "Use somente as entradas oficiais dos packages do Portal.",
             },
             {
               group: [
@@ -84,6 +90,7 @@ const eslintConfig = defineConfig([
     ".codex_artifacts/**",
     ".codex-artifacts/**",
     "output/**",
+    "cms/**",
   ]),
 ]);
 

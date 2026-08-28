@@ -261,9 +261,9 @@ O Nite News adapta a composição editorial aprovada aos tokens e estruturas do 
 
 ### CMS / Admin
 
-O painel administrativo reutiliza tokens, tipografia, primitives e padrões de acessibilidade do Portal NITE, mas privilegia densidade operacional e clareza de estado. Ele não replica o hero, as cenas cinematográficas ou os cards editoriais da vitrine pública.
+O painel administrativo mantém tokens, tipografia, primitives e padrões de acessibilidade próprios no repositório CMS. Ele privilegia densidade operacional e clareza de estado e não depende do design system, do hero, das cenas cinematográficas ou dos cards editoriais da vitrine pública.
 
-Os tokens e primitives estáveis ficam em `@nite/ui`; `Button`, campos, cards, chips, badges, estados vazios e `NewsArticleBody` têm uma única implementação. Elementos específicos do editor, shell e upload permanecem em `apps/admin`.
+No Portal, tokens e primitives estáveis ficam em `@nite/ui`. O CMS mantém sua implementação independente em `@nite/cms-ui`; não existe package de UI compartilhado entre repositórios. Elementos específicos do editor, shell e upload permanecem em `apps/admin` no repositório CMS.
 
 - **Shell:** navegação lateral ou superior persistente, área de trabalho neutra e hierarquia baseada em título, contexto e ações; superfícies usam os mesmos tokens `--nite-*`.
 - **Formulários:** label sempre visível, descrição apenas quando necessária, erro associado ao campo e resumo de erros no envio. Placeholder nunca substitui label.
@@ -271,7 +271,7 @@ Os tokens e primitives estáveis ficam em `@nite/ui`; `Button`, campos, cards, c
 - **Ações:** salvar rascunho e publicar não compartilham o mesmo peso. Publicar exige confirmação com título/slug da matéria e consequência pública explícita.
 - **Concorrência:** conflito de versão preserva o conteúdo digitado e oferece recarregar/comparar; nunca sobrescreve silenciosamente.
 - **Feedback:** salvando, salvo, falha, permissão negada e processamento de mídia usam mensagens textuais e regiões `aria-live` apropriadas.
-- **Editor:** a área de conteúdo mantém largura de leitura confortável e toolbar acessível por teclado. O preview público usa o renderer real do portal, não uma aproximação visual do admin.
+- **Editor:** a área de conteúdo mantém largura de leitura confortável e toolbar acessível por teclado. O preview usa o renderer local do CMS e valida o mesmo shape versionado que a API pública expõe; paridade visual não depende de imports do Portal.
 - **Tabelas/listas:** cabeçalhos semânticos, filtros rotulados, estado vazio honesto e ações acessíveis sem depender de hover.
 - **Movimento:** transições são funcionais e curtas; o painel permanece completo com `prefers-reduced-motion`.
 

@@ -39,7 +39,7 @@ Direção visual local: “Tech institucional de circuito metálico”, com fund
 1. Conteúdo honesto antes de impacto visual. O portal nunca parece mais maduro, validado ou operacional do que os dados públicos permitem.
 2. Institucionalidade tecnológica. O visual comunica inovação aplicada com seriedade acadêmica, sem perder energia de laboratório e construção.
 3. Caminhos públicos claros. Projetos, oportunidades, pessoas, atualizações e contato mantêm funções próprias e permanecem acessíveis em até duas interações.
-4. Fonte tipada e autorização explícita. Conteúdo público vem de `@nite/content`, passa pelos schemas Zod do package e respeita estados editoriais e autorização.
+4. Fonte tipada e autorização explícita. Dados institucionais vêm de `@nite/content`; notícias públicas chegam pela API versionada do CMS, passam pelo schema Zod local de `@nite/news` e respeitam o contrato editorial público.
 5. Movimento como orientação. Animações guiam leitura, transição e foco; conteúdo e navegação continuam compreensíveis com movimento reduzido ou sem animação.
 
 ## Nite News
@@ -50,15 +50,15 @@ O domínio começa com oito registros locais demonstrativos. Eles permitem valid
 
 ### CMS editorial
 
-O CMS próprio é uma aplicação administrativa separada do portal público. Ele pertence ao ecossistema NITE e compartilha contratos de domínio e primitives pelo monorepo, mas rascunhos, histórico, permissões, auditoria e operação editorial não são capacidades nem dados do `apps/web`.
+O CMS próprio é uma aplicação administrativa e um repositório independentes do portal público. Ele pertence ao ecossistema NITE, mas não compartilha workspaces, packages, lockfile ou imports com o Portal. Rascunhos, histórico, permissões, auditoria e operação editorial não são capacidades nem dados do `apps/web`.
 
 O MVP editorial possui três papéis (`admin`, `editor` e `author`) e três estados de artigo (`draft`, `published` e `archived`). Cada salvamento explícito cria uma revisão imutável; publicar fixa uma revisão específica. `author` edita apenas matérias próprias e não publica; `editor` e `admin` podem publicar. Conflitos preservam o texto local e exigem recarga antes de novo salvamento.
 
-O acesso usa Microsoft Entra ID e membership por `tid + oid`; e-mail nunca concede permissão. O primeiro admin depende de um `oid` explicitamente configurado. O editor cobre título, resumo, slug, categoria, assinatura, tempo de leitura, evento, destaque, capa, SEO e blocos de parágrafo, subtítulo e citação. O slug pode mudar enquanto a matéria é rascunho e fica estável após a primeira publicação. O histórico abre previews autenticados de qualquer revisão pelo mesmo renderer de corpo usado no portal.
+O acesso usa Microsoft Entra ID e membership por `tid + oid`; e-mail nunca concede permissão. O primeiro admin depende de um `oid` explicitamente configurado. O editor cobre título, resumo, slug, categoria, assinatura, tempo de leitura, evento, destaque, capa, SEO e blocos de parágrafo, subtítulo e citação. O slug pode mudar enquanto a matéria é rascunho e fica estável após a primeira publicação. O histórico abre previews autenticados com um renderer próprio do CMS, compatível com o mesmo formato HTTP consumido pelo Portal.
 
 A mídia entra por upload direto ao R2, permanece privada em `incoming/` durante a validação e só ganha chave pública após processamento WebP. Agendamento, revisão formal, autosave, exclusão permanente, recuperação visual de versões e colaboração simultânea continuam fora do MVP.
 
-Os oito registros demonstrativos continuam apenas como suporte explícito para testes, desenvolvimento local e rollback. Eles não serão importados como comunicação oficial. A implementação do portal já adota a view publicada como fonte padrão, mas o corte em produção só ocorre depois que banco, autenticação, conteúdo aprovado, rollback e operação editorial forem validados em homologação.
+Os oito registros demonstrativos continuam apenas como suporte explícito para testes, desenvolvimento local e rollback. Eles não serão importados como comunicação oficial. O Portal usa a API pública versionada do CMS quando `NITE_NEWS_SOURCE=api`; o corte em produção só ocorre depois que API, autenticação, conteúdo aprovado, rollback e operação editorial forem validados em homologação.
 
 A publicação pública é assíncrona após o commit editorial: a confirmação do CMS significa que artigo, revisão publicada, auditoria e evento durável foram persistidos. A atualização do portal normalmente é disparada logo após a resposta e tem uma varredura agendada como recuperação; indisponibilidade temporária do portal não desfaz a publicação nem perde o evento.
 

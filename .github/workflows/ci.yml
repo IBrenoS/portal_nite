@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - name: Reject physical CMS coupling
+        shell: bash
+        run: |
+          if rg 'from ["'"'](?:\.\./)+cms/' apps packages; then
+            echo "Imports físicos do submodule não são permitidos."
+            exit 1
+          fi
