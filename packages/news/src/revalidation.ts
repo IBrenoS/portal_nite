@@ -2,6 +2,7 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 import { z } from "zod";
 
 import { newsArticleSchema } from "./schema";
+import { newsCategoryValues } from "./schema";
 
 const signatureSchema = z.string().regex(/^[a-f0-9]{64}$/);
 const timestampSchema = z.string().regex(/^\d{10}$/);
@@ -9,10 +10,15 @@ const secretSchema = z.string().min(32);
 
 export const newsRevalidationPayloadSchema = z.object({
   eventId: z.uuid(),
-  topic: z.literal("news.article.published"),
+  topic: z.enum([
+    "news.article.published",
+    "news.article.unpublished",
+    "news.article.archived",
+  ]),
   articleId: z.uuid(),
   revisionId: z.uuid(),
   slug: newsArticleSchema.shape.slug,
+  category: z.enum(newsCategoryValues),
 });
 
 export type NewsRevalidationPayload = z.infer<

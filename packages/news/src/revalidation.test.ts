@@ -14,6 +14,7 @@ const payload = {
   articleId: "10000000-0000-4000-8000-000000000001",
   revisionId: "20000000-0000-4000-8000-000000000001",
   slug: "materia-publicada",
+  category: "inovacao" as const,
 };
 
 function atTimestamp(offsetSeconds = 0) {
@@ -21,6 +22,17 @@ function atTimestamp(offsetSeconds = 0) {
 }
 
 describe("revalidação do News", () => {
+  it.each([
+    "news.article.published",
+    "news.article.unpublished",
+    "news.article.archived",
+  ] as const)("aceita o evento atual %s", (topic) => {
+    expect(newsRevalidationPayloadSchema.parse({ ...payload, topic })).toEqual({
+      ...payload,
+      topic,
+    });
+  });
+
   it("assina e valida o payload versionado", () => {
     const body = JSON.stringify(payload);
     const signature = createRevalidationSignature({

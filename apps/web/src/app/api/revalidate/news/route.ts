@@ -21,7 +21,8 @@ export async function POST(request: Request) {
     secret,
     async invalidate(payload) {
       revalidateTag(NITE_NEWS_CACHE_TAG, { expire: 0 });
-      revalidatePath("/atualizacoes");
+      // Todos os filtros editoriais são renderizados pela mesma rota de página.
+      revalidatePath("/atualizacoes", "page");
       revalidatePath(`/atualizacoes/${payload.slug}`);
       revalidatePath("/sitemap.xml");
     },

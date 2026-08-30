@@ -20,16 +20,19 @@ O npm e o Turbo executam somente `apps/*` e `packages/*`. Instalação, CI, test
 As notícias chegam por uma API HTTPS versionada. O Portal consulta somente conteúdo publicado e mídia pública; ações privadas, dados de persistência e regras operacionais permanecem fora deste repositório.
 
 ```text
-apps/web ── HTTPS GET /v1/news ──> fonte editorial pública
+apps/web ── HTTPS GET /v2/news ──> fonte editorial pública
 fonte editorial pública ── HMAC POST /api/revalidate/news ──> apps/web
+apps/web ── HTTPS POST /api/preview/resolve ──> Admin editorial
 apps/web ── mídia pública ──> CDN
 ```
 
 `@nite/news` define o schema Zod esperado pelo consumidor, valida as respostas em runtime, fornece o client HTTP, cache e uma fixture estática explícita. Não importa código, tipos ou arquivos da fonte editorial. A fonte é escolhida por `NITE_NEWS_SOURCE=api|static`; o modo `static` é um fallback operacional explícito, nunca automático.
 
-A API retorna `version: 1`, `ETag` e `Cache-Control`. Campos existentes não mudam de tipo ou semântica em `/v1`; mudanças incompatíveis exigem uma nova versão. O Portal mantém schemas e fixtures próprios para detectar incompatibilidade antes da renderização.
+A API retorna envelopes `version: 2`, `ETag` e `Cache-Control`. O corpo da matéria é exclusivamente `EditorialDocumentV1`, validado de forma estrita pelo consumidor antes da renderização. Mudanças incompatíveis exigem uma nova versão. O Portal mantém schemas e fixtures próprios para detectar incompatibilidade antes da renderização.
 
-O webhook de publicação usa um corpo JSON versionado assinado com HMAC-SHA256, timestamp, limite de tamanho e proteção contra adulteração. A compatibilidade é validada em homologação pela API e pelo webhook reais, sem biblioteca compartilhada.
+O webhook editorial aceita publicação, despublicação e arquivamento em um corpo JSON assinado com HMAC-SHA256, timestamp, limite de tamanho e proteção contra adulteração; ele invalida o cache de dados, lista/filtros, artigo e sitemap. A compatibilidade é validada em homologação pela API e pelo webhook reais, sem biblioteca compartilhada.
+
+A prévia privada é resolvida exclusivamente pelo Admin via HTTPS server-to-server. Após a validação remota, o Portal habilita Draft Mode e grava um cookie HttpOnly, Secure e curto, limitado à revisão e ao slug retornados. Prévia não produz canonical nem JSON-LD indexável, usa `noindex,nofollow` e não altera a cache pública.
 
 ## Workspaces do Portal
 
@@ -53,6 +56,6 @@ Tokens, primitives e renderer de notícia do Portal. Componentes e estilos perte
 
 - Testes do Portal cobrem schema HTTP inválido, filtros, slug, SEO, sitemap e revalidação.
 - Homologação cobre o consumo da API real e o webhook de revalidação.
-- Toda versão `/v1` precisa continuar compatível até o Portal em produção migrar para uma nova versão.
+- Toda versão publicada precisa continuar compatível até o Portal em produção migrar para uma nova versão.
 - Não criar packages compartilhados sem necessidade recorrente comprovada.
 - Imports físicos entre workspaces são bloqueados por ESLint e CI.

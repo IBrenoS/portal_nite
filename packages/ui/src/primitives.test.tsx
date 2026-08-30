@@ -59,27 +59,106 @@ describe("@nite/ui", () => {
     expect(screen.getByText("Em estruturação")).toBeVisible();
   });
 
-  it("renderiza blocos editoriais como estrutura, nunca como HTML bruto", () => {
+  it("renderiza o documento editorial rico com semântica e links seguros", () => {
     render(
       <NewsArticleBody
-        blocks={[
-          {
-            type: "paragraph",
-            text: "Um parágrafo editorial com conteúdo suficiente para leitura.",
-          },
-          { type: "heading", text: "Contexto acadêmico" },
-          {
-            type: "quote",
-            text: "Uma citação editorial renderizada como texto seguro e estruturado.",
-            attribution: "Equipe NITE",
-          },
-        ]}
+        document={{
+          schemaVersion: 1,
+          type: "doc",
+          content: [
+            {
+              type: "paragraph",
+              content: [
+                {
+                  type: "text",
+                  text: "Um parágrafo editorial com ",
+                },
+                { type: "text", text: "ênfase", marks: [{ type: "bold" }] },
+                {
+                  type: "text",
+                  text: " e um link seguro.",
+                  marks: [
+                    {
+                      type: "link",
+                      attrs: { href: "https://nite.tec.br/atualizacoes" },
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              type: "heading",
+              attrs: { level: 2 },
+              content: [{ type: "text", text: "Contexto acadêmico" }],
+            },
+            {
+              type: "blockquote",
+              content: [
+                {
+                  type: "paragraph",
+                  content: [
+                    {
+                      type: "text",
+                      text: "Uma citação editorial estruturada e acessível.",
+                      marks: [{ type: "italic" }],
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              type: "bulletList",
+              content: [
+                {
+                  type: "listItem",
+                  content: [
+                    {
+                      type: "paragraph",
+                      content: [{ type: "text", text: "Item principal" }],
+                    },
+                    {
+                      type: "orderedList",
+                      content: [
+                        {
+                          type: "listItem",
+                          content: [
+                            {
+                              type: "paragraph",
+                              content: [
+                                { type: "text", text: "Item aninhado" },
+                              ],
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              type: "image",
+              attrs: {
+                mediaId: "30000000-0000-4000-8000-000000000001",
+                src: "https://images.nite.test/editorial.webp",
+                width: 1200,
+                height: 800,
+                alt: "Estudantes conversam diante de uma instalação tecnológica.",
+              },
+            },
+          ],
+        }}
       />,
     );
 
     expect(
       screen.getByRole("heading", { name: "Contexto acadêmico" }),
     ).toBeVisible();
-    expect(screen.getByText("Equipe NITE")).toHaveProperty("tagName", "CITE");
+    expect(screen.getByRole("blockquote")).toBeVisible();
+    expect(screen.getAllByRole("list")).toHaveLength(2);
+    expect(screen.getByRole("img")).toHaveAttribute("width", "1200");
+    expect(
+      screen.getByRole("link", { name: "e um link seguro." }),
+    ).toHaveAttribute("rel", "noopener noreferrer");
   });
 });

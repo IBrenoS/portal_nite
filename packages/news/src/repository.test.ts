@@ -151,12 +151,21 @@ describe("Nite News", () => {
       featured: false,
       contentState: "demonstrativo",
       public: true,
-      body: [
-        {
-          type: "paragraph",
-          text: "Texto editorial usado somente para validar o contrato de conteúdo da matéria.",
-        },
-      ],
+      body: {
+        schemaVersion: 1,
+        type: "doc",
+        content: [
+          {
+            type: "paragraph",
+            content: [
+              {
+                type: "text",
+                text: "Texto editorial usado somente para validar o contrato de conteúdo da matéria.",
+              },
+            ],
+          },
+        ],
+      },
     } satisfies Omit<NewsArticle, "eventDate">;
 
     expect(() =>

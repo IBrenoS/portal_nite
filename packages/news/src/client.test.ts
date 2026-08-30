@@ -7,7 +7,7 @@ describe("client HTTP público de News", () => {
   it("valida a resposta versionada antes de expor artigos", async () => {
     const fetchImplementation = vi
       .fn<typeof fetch>()
-      .mockResolvedValue(Response.json({ version: 1, articles: newsJson }));
+      .mockResolvedValue(Response.json({ version: 2, articles: newsJson }));
     const client = createNewsApiClient({
       baseUrl: "https://cms-api.nite.test/",
       fetch: fetchImplementation,
@@ -15,7 +15,7 @@ describe("client HTTP público de News", () => {
 
     await expect(client.listPublishedArticles()).resolves.toHaveLength(8);
     expect(fetchImplementation).toHaveBeenCalledWith(
-      "https://cms-api.nite.test/v1/news",
+      "https://cms-api.nite.test/v2/news",
       expect.objectContaining({ method: "GET" }),
     );
   });
@@ -25,7 +25,7 @@ describe("client HTTP público de News", () => {
       baseUrl: "https://cms-api.nite.test",
       fetch: vi
         .fn<typeof fetch>()
-        .mockResolvedValue(Response.json({ version: 2, articles: [] })),
+        .mockResolvedValue(Response.json({ version: 1, articles: [] })),
     });
 
     await expect(client.listPublishedArticles()).rejects.toThrow(

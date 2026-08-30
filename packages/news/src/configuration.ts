@@ -28,7 +28,7 @@ export function readPublicNewsConfiguration(
   }
 
   const missing: string[] = [];
-  if (!hasProtocol(environment.CMS_PUBLIC_API_URL, ["https:", "http:"])) {
+  if (!hasProtocol(environment.CMS_PUBLIC_API_URL, ["https:"])) {
     missing.push("CMS_PUBLIC_API_URL");
   }
   if (missing.length > 0) return { configured: false, missing };

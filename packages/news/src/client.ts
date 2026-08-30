@@ -18,8 +18,8 @@ export interface NewsApiClient extends NewsPublicDataSource {
 
 function normalizeBaseUrl(value: string) {
   const url = new URL(value.endsWith("/") ? value : `${value}/`);
-  if (url.protocol !== "https:" && url.protocol !== "http:") {
-    throw new Error("A URL da API pública de News deve usar HTTP ou HTTPS.");
+  if (url.protocol !== "https:") {
+    throw new Error("A URL da API pública de News deve usar HTTPS.");
   }
   return url;
 }
@@ -57,7 +57,7 @@ export function createNewsApiClient(options: {
   return {
     async listPublishedArticles() {
       const response = await fetchImplementation(
-        new URL("v1/news", baseUrl).toString(),
+        new URL("v2/news", baseUrl).toString(),
         {
           method: "GET",
           headers: { accept: "application/json" },
@@ -76,7 +76,7 @@ export function createNewsApiClient(options: {
         .parse(slug);
       const response = await fetchImplementation(
         new URL(
-          `v1/news/${encodeURIComponent(parsedSlug)}`,
+          `v2/news/${encodeURIComponent(parsedSlug)}`,
           baseUrl,
         ).toString(),
         { method: "GET", headers: { accept: "application/json" } },

@@ -1,5 +1,10 @@
 import { cleanup, render, screen, within } from "@testing-library/react";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+vi.mock("next/headers", () => ({
+  draftMode: async () => ({ isEnabled: false }),
+  cookies: async () => ({ get: () => undefined }),
+}));
 
 import NewsArticlePage, {
   generateMetadata,

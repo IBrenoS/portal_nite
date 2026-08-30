@@ -10,6 +10,7 @@ const payload = {
   articleId: "10000000-0000-4000-8000-000000000001",
   revisionId: "20000000-0000-4000-8000-000000000001",
   slug: "materia-publicada",
+  category: "inovacao" as const,
 };
 
 function createSignedRequest(body = JSON.stringify(payload)) {
@@ -30,6 +31,27 @@ function createSignedRequest(body = JSON.stringify(payload)) {
 }
 
 describe("endpoint de revalidação do News", () => {
+  it.each([
+    "news.article.published",
+    "news.article.unpublished",
+    "news.article.archived",
+  ] as const)("invalida o evento editorial atual %s", async (topic) => {
+    const invalidated: string[] = [];
+    const response = await handleNewsRevalidationRequest(
+      createSignedRequest(JSON.stringify({ ...payload, topic })),
+      {
+        secret,
+        now: new Date("2026-08-27T20:00:30.000Z"),
+        async invalidate(event) {
+          invalidated.push(event.topic);
+        },
+      },
+    );
+
+    expect(response.status).toBe(204);
+    expect(invalidated).toEqual([topic]);
+  });
+
   it("invalida somente um evento assinado e validado", async () => {
     const invalidated: string[] = [];
     const response = await handleNewsRevalidationRequest(
