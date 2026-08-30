@@ -135,6 +135,11 @@ export default async function NewsArticlePage({
   const related = previewArticle
     ? []
     : await getRelatedNewsArticles(article.slug, 3);
+  const publicationDate = article.publishedAt
+    ? formatEditorialDate(
+        previewArticle ? article.publishedAt.slice(0, 10) : article.publishedAt,
+      )
+    : "Prévia — ainda não publicada";
   const canonical = absoluteUrl(`/atualizacoes/${article.slug}`);
   const breadcrumbJsonLd = buildBreadcrumbJsonLd([
     { name: "Início", path: "/" },
@@ -176,7 +181,9 @@ export default async function NewsArticlePage({
               role="status"
               className="border-b border-nite-brand-accent bg-nite-section px-4 py-3 text-center text-sm text-nite-text-primary"
             >
-              Prévia privada — ainda não publicada.
+              {previewArticle.publishedAt
+                ? "Prévia privada."
+                : "Prévia privada — ainda não publicada."}
               <form
                 action="/api/preview/exit"
                 method="post"
@@ -209,9 +216,7 @@ export default async function NewsArticlePage({
               </p>
               <div className="mt-8 flex flex-col gap-5 border-t border-nite-border-subtle pt-5 sm:flex-row sm:items-center sm:justify-between">
                 <p className="font-mono text-[0.6875rem] uppercase tracking-[0.055em] text-nite-text-muted">
-                  {article.publishedAt
-                    ? formatEditorialDate(article.publishedAt)
-                    : "Prévia — ainda não publicada"}{" "}
+                  {publicationDate}{" "}
                   · {article.readTimeMinutes} min de leitura · {article.byline}
                 </p>
                 {!previewArticle ? (

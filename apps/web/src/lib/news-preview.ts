@@ -1,6 +1,7 @@
 import "server-only";
 
 import { cookies, draftMode } from "next/headers";
+import { cache } from "react";
 import { z } from "zod";
 
 import { editorialDocumentV1Schema, newsCategoryValues } from "@nite/news";
@@ -137,7 +138,7 @@ export function createPreviewSession(input: {
   }
 }
 
-export async function getPreviewArticleForSlug(slug: string) {
+export const getPreviewArticleForSlug = cache(async (slug: string) => {
   const draft = await draftMode();
   if (!draft.isEnabled) return undefined;
   const token = (await cookies()).get(PREVIEW_COOKIE_NAME)?.value;
@@ -153,4 +154,4 @@ export async function getPreviewArticleForSlug(slug: string) {
   } catch {
     return undefined;
   }
-}
+});

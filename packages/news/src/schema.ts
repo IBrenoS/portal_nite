@@ -11,7 +11,7 @@ const allowedLinkProtocols = new Set(["http:", "https:", "mailto:"]);
 
 export function isAllowedEditorialLink(href: string) {
   if (href.startsWith("/")) {
-    return !href.startsWith("//") && !href.startsWith("/\\\\");
+    return !href.startsWith("//") && !href.includes("\\");
   }
   try {
     return allowedLinkProtocols.has(new URL(href).protocol);
@@ -39,6 +39,10 @@ export type EditorialTextNode = {
   text: string;
   marks?: EditorialMark[];
 };
+export type EditorialListItemNode = {
+  type: "listItem";
+  content: EditorialContentNode[];
+};
 export type EditorialContentNode =
   | { type: "paragraph"; content: EditorialTextNode[] }
   | { type: "heading"; attrs: { level: 2 | 3 }; content: EditorialTextNode[] }
@@ -52,14 +56,13 @@ export type EditorialContentNode =
         height: number;
       };
     }
-  | { type: "listItem"; content: EditorialContentNode[] }
   | {
       type: "bulletList";
-      content: Array<{ type: "listItem"; content: EditorialContentNode[] }>;
+      content: EditorialListItemNode[];
     }
   | {
       type: "orderedList";
-      content: Array<{ type: "listItem"; content: EditorialContentNode[] }>;
+      content: EditorialListItemNode[];
     }
   | { type: "blockquote"; content: EditorialContentNode[] };
 export type EditorialDocumentV1 = {
@@ -106,6 +109,12 @@ const imageNodeSchema: z.ZodType<
     attrs: imageAttrsSchema,
   })
   .strict();
+const listItemNodeSchema: z.ZodType<EditorialListItemNode> = z
+  .object({
+    type: z.literal("listItem"),
+    content: z.array(z.lazy(() => editorialContentNodeSchema)).min(1),
+  })
+  .strict();
 const editorialContentNodeSchema: z.ZodType<EditorialContentNode> = z.lazy(
   (): z.ZodType<EditorialContentNode> =>
     z.union([
@@ -114,38 +123,14 @@ const editorialContentNodeSchema: z.ZodType<EditorialContentNode> = z.lazy(
       imageNodeSchema,
       z
         .object({
-          type: z.literal("listItem"),
-          content: z.array(editorialContentNodeSchema).min(1),
-        })
-        .strict(),
-      z
-        .object({
           type: z.literal("bulletList"),
-          content: z
-            .array(
-              z
-                .object({
-                  type: z.literal("listItem"),
-                  content: z.array(editorialContentNodeSchema).min(1),
-                })
-                .strict(),
-            )
-            .min(1),
+          content: z.array(listItemNodeSchema).min(1),
         })
         .strict(),
       z
         .object({
           type: z.literal("orderedList"),
-          content: z
-            .array(
-              z
-                .object({
-                  type: z.literal("listItem"),
-                  content: z.array(editorialContentNodeSchema).min(1),
-                })
-                .strict(),
-            )
-            .min(1),
+          content: z.array(listItemNodeSchema).min(1),
         })
         .strict(),
       z

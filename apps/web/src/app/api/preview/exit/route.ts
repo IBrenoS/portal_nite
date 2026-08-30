@@ -3,11 +3,17 @@ import { NextResponse } from "next/server";
 
 import { PREVIEW_COOKIE_NAME } from "@/lib/news-preview";
 
-function internalReturnPath(value: string | null) {
-  if (!value || !value.startsWith("/") || value.startsWith("//")) {
+function internalReturnPath(requestUrl: URL, value: string | null) {
+  if (!value || !value.startsWith("/") || value.includes("\\")) {
     return "/atualizacoes";
   }
-  return value;
+  try {
+    const destination = new URL(value, requestUrl);
+    if (destination.origin !== requestUrl.origin) return "/atualizacoes";
+    return `${destination.pathname}${destination.search}${destination.hash}`;
+  } catch {
+    return "/atualizacoes";
+  }
 }
 
 export async function POST(request: Request) {
@@ -15,7 +21,7 @@ export async function POST(request: Request) {
   draft.disable();
   const url = new URL(request.url);
   const response = NextResponse.redirect(
-    new URL(internalReturnPath(url.searchParams.get("returnTo")), url),
+    new URL(internalReturnPath(url, url.searchParams.get("returnTo")), url),
     { status: 303 },
   );
   response.headers.set("Cache-Control", "private, no-store");

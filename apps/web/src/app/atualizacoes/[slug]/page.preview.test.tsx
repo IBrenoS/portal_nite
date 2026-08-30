@@ -1,7 +1,8 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import type { PreviewArticle } from "@/lib/news-preview";
 
-const preview = {
+const preview: PreviewArticle = {
   schemaVersion: 1,
   articleId: "10000000-0000-4000-8000-000000000001",
   revisionId: "20000000-0000-4000-8000-000000000001",
@@ -28,13 +29,18 @@ const preview = {
   },
 };
 
+let resolvedPreview: PreviewArticle = preview;
+
 vi.mock("@/lib/news-preview", () => ({
-  getPreviewArticleForSlug: async () => preview,
+  getPreviewArticleForSlug: async () => resolvedPreview,
 }));
 
 import NewsArticlePage, { generateMetadata } from "./page";
 
-afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  resolvedPreview = preview;
+});
 
 describe("NewsArticlePage em prévia", () => {
   it("renderiza somente a revisão autorizada, sem JSON-LD ou metadata indexável", async () => {
@@ -64,5 +70,23 @@ describe("NewsArticlePage em prévia", () => {
     expect(metadata.robots).toMatchObject({ index: false, follow: false });
     expect(metadata.alternates).toBeUndefined();
     expect(metadata.referrer).toBe("no-referrer");
+  });
+
+  it("não afirma que uma revisão de matéria publicada ainda não foi publicada", async () => {
+    resolvedPreview = {
+      ...preview,
+      publishedAt: "2026-08-28T12:00:00.000Z",
+    };
+
+    render(
+      await NewsArticlePage({
+        params: Promise.resolve({ slug: preview.slug }),
+      }),
+    );
+
+    expect(screen.getByRole("status")).toHaveTextContent("Prévia privada.");
+    expect(screen.getByRole("status")).not.toHaveTextContent(
+      "ainda não publicada",
+    );
   });
 });

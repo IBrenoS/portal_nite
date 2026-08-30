@@ -26,4 +26,20 @@ describe("POST /api/preview/exit", () => {
     expect(response.headers.get("set-cookie")).toContain("nite-news-preview=;");
     expect(controls.disable).toHaveBeenCalledTimes(1);
   });
+
+  it.each(["/%5Cevil.test/path", "//evil.test/path"])(
+    "rejeita retorno externo disfarçado: %s",
+    async (returnTo) => {
+      const response = await POST(
+        new Request(
+          `https://nite.test/api/preview/exit?returnTo=${returnTo}`,
+          { method: "POST" },
+        ),
+      );
+
+      expect(response.headers.get("location")).toBe(
+        "https://nite.test/atualizacoes",
+      );
+    },
+  );
 });
