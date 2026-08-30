@@ -1,14 +1,16 @@
 import { describe, expect, it, vi } from "vitest";
 
 const controls = vi.hoisted(() => {
-  const cache = vi.fn(<T extends (slug: string) => Promise<unknown>>(loader: T) => {
-    const values = new Map<string, Promise<unknown>>();
-    return (slug: string) => {
-      const value = values.get(slug) ?? loader(slug);
-      values.set(slug, value);
-      return value;
-    };
-  });
+  const cache = vi.fn(
+    <T extends (slug: string) => Promise<unknown>>(loader: T) => {
+      const values = new Map<string, Promise<unknown>>();
+      return (slug: string) => {
+        const value = values.get(slug) ?? loader(slug);
+        values.set(slug, value);
+        return value;
+      };
+    },
+  );
   return { cache };
 });
 

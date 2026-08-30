@@ -20,10 +20,10 @@ O npm e o Turbo executam somente `apps/*` e `packages/*`. Instalação, CI, test
 As notícias chegam por uma API HTTPS versionada. O Portal consulta somente conteúdo publicado e mídia pública; ações privadas, dados de persistência e regras operacionais permanecem fora deste repositório.
 
 ```text
-apps/web ── HTTPS GET /v2/news ──> fonte editorial pública
-fonte editorial pública ── HMAC POST /api/revalidate/news ──> apps/web
-apps/web ── HTTPS POST /api/preview/resolve ──> Admin editorial
-apps/web ── mídia pública ──> CDN
+apps/web ── HTTPS GET /v2/news ──> apps/api do CMS
+apps/admin do CMS ── HMAC POST /api/revalidate/news ──> apps/web
+GET /api/preview do Portal ── HTTPS POST /api/preview/resolve ──> apps/admin do CMS
+apps/web ── mídia pública imutável ──> CDN/R2 público
 ```
 
 `@nite/news` define o schema Zod esperado pelo consumidor, valida as respostas em runtime, fornece o client HTTP, cache e uma fixture estática explícita. Não importa código, tipos ou arquivos da fonte editorial. A fonte é escolhida por `NITE_NEWS_SOURCE=api|static`; o modo `static` é um fallback operacional explícito, nunca automático.
@@ -33,6 +33,8 @@ A API retorna envelopes `version: 2`, `ETag` e `Cache-Control`. O corpo da maté
 O webhook editorial aceita publicação, despublicação e arquivamento em um corpo JSON assinado com HMAC-SHA256, timestamp, limite de tamanho e proteção contra adulteração; ele invalida o cache de dados, lista/filtros, artigo e sitemap. A compatibilidade é validada em homologação pela API e pelo webhook reais, sem biblioteca compartilhada.
 
 A prévia privada é resolvida exclusivamente pelo Admin via HTTPS server-to-server. Após a validação remota, o Portal habilita Draft Mode e grava um cookie HttpOnly, Secure e curto, limitado à revisão e ao slug retornados. Prévia não produz canonical nem JSON-LD indexável, usa `noindex,nofollow` e não altera a cache pública.
+
+O Portal configura `CMS_PUBLIC_API_URL` para a API v2, `CMS_PREVIEW_RESOLVE_URL` para o Route Handler privado do Admin e `NITE_NEWS_MEDIA_URL` para autorizar o host público de imagens no Next.js. `PREVIEW_HMAC_SECRET`, credenciais de banco e credenciais R2 nunca pertencem ao Portal. A assinatura do token de prévia é verificada pelo Admin; o Portal só habilita Draft Mode depois que o mesmo token resolve uma revisão válida.
 
 ## Workspaces do Portal
 
@@ -55,7 +57,7 @@ Tokens, primitives e renderer de notícia do Portal. Componentes e estilos perte
 ## Validação e evolução
 
 - Testes do Portal cobrem schema HTTP inválido, filtros, slug, SEO, sitemap e revalidação.
-- Homologação cobre o consumo da API real e o webhook de revalidação.
+- Homologação cobre API v2, webhook de revalidação, Draft Mode entre os projetos e mídia pública real.
 - Toda versão publicada precisa continuar compatível até o Portal em produção migrar para uma nova versão.
 - Não criar packages compartilhados sem necessidade recorrente comprovada.
 - Imports físicos entre workspaces são bloqueados por ESLint e CI.

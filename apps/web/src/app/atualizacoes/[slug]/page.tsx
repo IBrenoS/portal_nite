@@ -216,8 +216,8 @@ export default async function NewsArticlePage({
               </p>
               <div className="mt-8 flex flex-col gap-5 border-t border-nite-border-subtle pt-5 sm:flex-row sm:items-center sm:justify-between">
                 <p className="font-mono text-[0.6875rem] uppercase tracking-[0.055em] text-nite-text-muted">
-                  {publicationDate}{" "}
-                  · {article.readTimeMinutes} min de leitura · {article.byline}
+                  {publicationDate} · {article.readTimeMinutes} min de leitura ·{" "}
+                  {article.byline}
                 </p>
                 {!previewArticle ? (
                   <ShareArticleButton title={article.title} url={canonical} />

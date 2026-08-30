@@ -111,4 +111,3 @@ somente por HTTP e HMAC.
   `npm run check` e `npm run test:visual` no Portal.
 - Não executar migration nem deploy. Registrar como pendente o smoke test de
   staging com contas Entra, Neon, R2 e domínios reais.
-

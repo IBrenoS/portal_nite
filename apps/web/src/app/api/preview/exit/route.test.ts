@@ -31,10 +31,9 @@ describe("POST /api/preview/exit", () => {
     "rejeita retorno externo disfarçado: %s",
     async (returnTo) => {
       const response = await POST(
-        new Request(
-          `https://nite.test/api/preview/exit?returnTo=${returnTo}`,
-          { method: "POST" },
-        ),
+        new Request(`https://nite.test/api/preview/exit?returnTo=${returnTo}`, {
+          method: "POST",
+        }),
       );
 
       expect(response.headers.get("location")).toBe(
