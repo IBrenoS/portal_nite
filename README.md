@@ -13,6 +13,16 @@ Instale as dependências na raiz:
 npm ci
 ```
 
+Para preparar os arquivos locais do Portal e do checkout do CMS, gerando
+somente os secrets internos e deixando credenciais externas vazias:
+
+```bash
+npm run env:setup
+```
+
+Consulte [Ambiente do Portal e CMS](docs/runbooks/cms-local-environment.md) para
+a matriz de variáveis, origem dos valores e comandos de validação.
+
 ## Workspaces
 
 ```text

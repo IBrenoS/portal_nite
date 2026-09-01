@@ -20,6 +20,9 @@ export default defineConfig({
   },
   webServer: {
     command: "npm run dev -- --hostname localhost --port 3000",
+    env: {
+      NITE_NEWS_SOURCE: process.env.NITE_NEWS_SOURCE ?? "static",
+    },
     reuseExistingServer: !process.env.CI,
     timeout: 120000,
     url: "http://localhost:3000",

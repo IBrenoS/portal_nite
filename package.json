@@ -12,18 +12,20 @@
   },
   "scripts": {
     "dev": "turbo run dev --filter=@nite/web",
+    "env:setup": "node scripts/setup-local-env.mjs",
     "build": "turbo run build",
     "start": "npm run start --workspace=@nite/web",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
+    "test:env": "node --test scripts/setup-local-env.test.mjs",
     "test:affected": "turbo run test --affected",
     "test:visual": "npm run test:visual --workspace=@nite/web --",
     "test:visual:update": "npm run test:visual:update --workspace=@nite/web --",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "check:deadcode": "knip",
-    "check": "npm run format:check && npm run check:deadcode && turbo run lint typecheck && turbo run test && turbo run build"
+    "check": "npm run format:check && npm run check:deadcode && npm run test:env && turbo run lint typecheck && turbo run test && turbo run build"
   },
   "devDependencies": {
     "eslint": "^9",

@@ -32,6 +32,9 @@ pnpm-debug.log*
 
 # local environment
 .env*
+!**/.env.example
+!**/.env.test.example
+!**/.env.e2e.example
 .vercel
 *.tsbuildinfo
 **/next-env.d.ts
