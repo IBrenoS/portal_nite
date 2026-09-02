@@ -1,9 +1,31 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
-import nextConfig from "./next.config";
+afterEach(() => {
+  vi.unstubAllEnvs();
+  vi.resetModules();
+});
+
+describe("preflight do deployment do Portal", () => {
+  it("interrompe o build de producao sem fonte de News explicita", async () => {
+    vi.stubEnv("VERCEL_ENV", "production");
+    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://portal-nite.vercel.app");
+    vi.stubEnv("NITE_NEWS_SOURCE", "");
+
+    await expect(import("./next.config")).rejects.toThrow("NITE_NEWS_SOURCE");
+  });
+
+  it("preserva builds locais sem aplicar regras da Vercel", async () => {
+    vi.stubEnv("VERCEL_ENV", "");
+    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "http://localhost:3000");
+    vi.stubEnv("NITE_NEWS_SOURCE", "static");
+
+    await expect(import("./next.config")).resolves.toBeDefined();
+  });
+});
 
 describe("redirecionamentos de Jogos Embarcados", () => {
   it("redireciona permanentemente as URLs anteriores", async () => {
+    const { default: nextConfig } = await import("./next.config");
     const redirects = await nextConfig.redirects?.();
 
     expect(redirects).toEqual(

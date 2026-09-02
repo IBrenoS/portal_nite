@@ -1,5 +1,11 @@
 import type { NextConfig } from "next";
 
+import { assertProductionDeploymentConfiguration } from "./src/lib/deployment-configuration";
+
+if (process.env.VERCEL_ENV === "production") {
+  assertProductionDeploymentConfiguration(process.env);
+}
+
 const publicMediaUrl = process.env.NITE_NEWS_MEDIA_URL;
 let mediaRemotePattern: URL | undefined;
 try {

@@ -7,6 +7,14 @@
     },
     "build": {
       "dependsOn": ["^build"],
+      "env": [
+        "VERCEL_ENV",
+        "NEXT_PUBLIC_SITE_URL",
+        "NITE_NEWS_SOURCE",
+        "CMS_PUBLIC_API_URL",
+        "NITE_NEWS_MEDIA_URL",
+        "CMS_PREVIEW_RESOLVE_URL"
+      ],
       "outputs": [".next/**", "!.next/cache/**"]
     },
     "lint": {
