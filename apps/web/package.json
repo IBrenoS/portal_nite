@@ -11,7 +11,13 @@
     "test": "vitest run",
     "test:visual": "playwright test",
     "test:visual:update": "playwright test --update-snapshots",
-    "playwright:install": "playwright install chromium"
+    "playwright:install": "playwright install chromium",
+    "cloudflare:build": "next build --webpack && opennextjs-cloudflare build --skipNextBuild",
+    "cloudflare:preview": "npm run cloudflare:build && opennextjs-cloudflare preview",
+    "cloudflare:deploy": "opennextjs-cloudflare deploy",
+    "cloudflare:upload": "opennextjs-cloudflare upload",
+    "cloudflare:typegen": "node -e \"require('node:fs').mkdirSync('.wrangler',{recursive:true})\" && wrangler types --env-interface CloudflareEnv --include-runtime false .wrangler/cloudflare-env.d.ts",
+    "cloudflare:dry-run": "wrangler deploy --dry-run --outdir .wrangler/dry-run"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",
@@ -23,7 +29,7 @@
     "gsap": "^3.15.0",
     "lucide-react": "^1.9.0",
     "motion": "^12.38.0",
-    "next": "16.3.0",
+    "next": "16.3.4",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "server-only": "^0.0.1",

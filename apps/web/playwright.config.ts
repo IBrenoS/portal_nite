@@ -1,5 +1,8 @@
 import { defineConfig, devices } from "@playwright/test";
 
+const externalBaseUrl = process.env.PORTAL_E2E_BASE_URL;
+const baseURL = externalBaseUrl ?? "http://localhost:3000";
+
 export default defineConfig({
   testDir: "./e2e/visual",
   fullyParallel: false,
@@ -13,20 +16,22 @@ export default defineConfig({
     },
   },
   use: {
-    baseURL: "http://localhost:3000",
+    baseURL,
     screenshot: "only-on-failure",
     trace: "retain-on-failure",
     video: "retain-on-failure",
   },
-  webServer: {
-    command: "npm run dev -- --hostname localhost --port 3000",
-    env: {
-      NITE_NEWS_SOURCE: process.env.NITE_NEWS_SOURCE ?? "static",
-    },
-    reuseExistingServer: !process.env.CI,
-    timeout: 120000,
-    url: "http://localhost:3000",
-  },
+  webServer: externalBaseUrl
+    ? undefined
+    : {
+        command: "npm run dev -- --hostname localhost --port 3000",
+        env: {
+          NITE_NEWS_SOURCE: process.env.NITE_NEWS_SOURCE ?? "static",
+        },
+        reuseExistingServer: !process.env.CI,
+        timeout: 120000,
+        url: baseURL,
+      },
   projects: [
     {
       name: "chromium",

@@ -8,7 +8,7 @@
   ],
   "packageManager": "npm@11.6.2",
   "engines": {
-    "node": ">=20.9.0"
+    "node": ">=22.0.0"
   },
   "scripts": {
     "dev": "turbo run dev --filter=@nite/web",
@@ -22,18 +22,27 @@
     "test:affected": "turbo run test --affected",
     "test:visual": "npm run test:visual --workspace=@nite/web --",
     "test:visual:update": "npm run test:visual:update --workspace=@nite/web --",
+    "cloudflare:build": "npm run cloudflare:build --workspace=@nite/web",
+    "cloudflare:preview": "npm run cloudflare:preview --workspace=@nite/web",
+    "cloudflare:deploy": "npm run cloudflare:deploy --workspace=@nite/web",
+    "cloudflare:upload": "npm run cloudflare:upload --workspace=@nite/web",
+    "cloudflare:typegen": "npm run cloudflare:typegen --workspace=@nite/web",
+    "cloudflare:dry-run": "npm run cloudflare:dry-run --workspace=@nite/web",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "check:deadcode": "knip",
     "check": "npm run format:check && npm run check:deadcode && npm run test:env && turbo run lint typecheck && turbo run test && turbo run build"
   },
   "devDependencies": {
+    "@opennextjs/cloudflare": "1.20.6",
+    "esbuild": "0.27.0",
     "eslint": "^9",
-    "eslint-config-next": "16.3.0",
+    "eslint-config-next": "16.3.4",
     "knip": "6.32.0",
     "prettier": "^3.8.3",
     "turbo": "2.10.9",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "4.129.0"
   },
   "optionalDependencies": {
     "@rolldown/binding-linux-x64-gnu": "1.2.3",

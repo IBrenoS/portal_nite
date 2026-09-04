@@ -21,6 +21,15 @@ describe("preflight do deployment do Portal", () => {
 
     await expect(import("./next.config")).resolves.toBeDefined();
   });
+
+  it("interrompe o build de producao do Cloudflare sem fonte de News explicita", async () => {
+    vi.stubEnv("VERCEL_ENV", "");
+    vi.stubEnv("PORTAL_DEPLOYMENT_ENV", "production");
+    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://nite.tec.br");
+    vi.stubEnv("NITE_NEWS_SOURCE", "");
+
+    await expect(import("./next.config")).rejects.toThrow("NITE_NEWS_SOURCE");
+  });
 });
 
 describe("redirecionamentos de Jogos Embarcados", () => {

@@ -1,8 +1,10 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
   "ignore": ["cms/**"],
+  "ignoreDependencies": ["esbuild"],
   "workspaces": {
     "apps/web": {
+      "entry": ["open-next.config.ts"],
       "project": ["src/**/*.{ts,tsx,css}", "e2e/**/*.ts", "*.ts"]
     },
     "packages/ui": {
