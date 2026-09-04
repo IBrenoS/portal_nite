@@ -4,6 +4,7 @@
   "main": "worker/index.ts",
   "keep_vars": true,
   "compatibility_date": "2026-09-04",
+  "routes": [{ "pattern": "nite.tec.br", "custom_domain": true }],
   "assets": {
     "directory": "out",
     "not_found_handling": "404-page",
