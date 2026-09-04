@@ -15,5 +15,4 @@ describe("wrangler configuration", () => {
     expect(configuration).toMatch(/"not_found_handling"\s*:\s*"404-page"/);
     expect(configuration).not.toMatch(/"binding"\s*:\s*"IMAGES"/);
   });
-
 });
