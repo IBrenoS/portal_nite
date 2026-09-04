@@ -11,5 +11,8 @@ describe("wrangler configuration", () => {
     );
 
     expect(configuration).toMatch(/"keep_vars"\s*:\s*true/);
+    expect(configuration).toMatch(/"directory"\s*:\s*"out"/);
+    expect(configuration).toMatch(/"not_found_handling"\s*:\s*"404-page"/);
+    expect(configuration).not.toMatch(/"binding"\s*:\s*"IMAGES"/);
   });
 });

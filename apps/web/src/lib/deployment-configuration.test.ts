@@ -16,39 +16,9 @@ describe("configuracao do deployment de producao", () => {
     ).not.toThrow();
   });
 
-  it("aceita a API somente com origens HTTPS completas", () => {
-    expect(() =>
-      assertProductionDeploymentConfiguration({
-        ...productionBase,
-        NITE_NEWS_SOURCE: "api",
-        CMS_PUBLIC_API_URL: "https://cms-api.nite.test/",
-        NITE_NEWS_MEDIA_URL: "https://media.nite.test/",
-        CMS_PREVIEW_RESOLVE_URL:
-          "https://cms-admin.nite.test/api/preview/resolve",
-      }),
-    ).not.toThrow();
-  });
-
   it.each([
     ["fonte ausente", {}, "NITE_NEWS_SOURCE"],
-    ["API ausente", { NITE_NEWS_SOURCE: "api" }, "CMS_PUBLIC_API_URL"],
-    [
-      "API sem HTTPS",
-      {
-        NITE_NEWS_SOURCE: "api",
-        CMS_PUBLIC_API_URL: "http://cms-api.nite.test/",
-        NITE_NEWS_MEDIA_URL: "https://media.nite.test/",
-      },
-      "CMS_PUBLIC_API_URL",
-    ],
-    [
-      "midia ausente",
-      {
-        NITE_NEWS_SOURCE: "api",
-        CMS_PUBLIC_API_URL: "https://cms-api.nite.test/",
-      },
-      "NITE_NEWS_MEDIA_URL",
-    ],
+    ["API indisponível", { NITE_NEWS_SOURCE: "api" }, "NITE_NEWS_SOURCE"],
     [
       "site local",
       {
@@ -56,15 +26,6 @@ describe("configuracao do deployment de producao", () => {
         NITE_NEWS_SOURCE: "static",
       },
       "NEXT_PUBLIC_SITE_URL",
-    ],
-    [
-      "preview sem HTTPS",
-      {
-        NITE_NEWS_SOURCE: "static",
-        CMS_PREVIEW_RESOLVE_URL:
-          "http://cms-admin.nite.test/api/preview/resolve",
-      },
-      "CMS_PREVIEW_RESOLVE_URL",
     ],
   ])("rejeita %s sem expor valores", (_name, overrides, expectedVariable) => {
     const environment = { ...productionBase, ...overrides };

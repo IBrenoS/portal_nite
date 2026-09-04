@@ -83,7 +83,7 @@ const eslintConfig = defineConfig([
     "**/.next/**",
     "**/.open-next/**",
     "**/.wrangler/**",
-    "out/**",
+    "**/out/**",
     "**/build/**",
     "**/next-env.d.ts",
     "**/coverage/**",
