@@ -1,4 +1,4 @@
 [submodule "cms"]
 	path = cms
 	url = https://github.com/IBrenoS/nite-cms.git
-	update = checkout
+	update = none
