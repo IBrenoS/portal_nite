@@ -26,3 +26,22 @@ jobs:
             echo "Imports físicos do submodule não são permitidos."
             exit 1
           fi
+
+  cloudflare-build:
+    runs-on: ubuntu-latest
+    env:
+      PORTAL_DEPLOYMENT_ENV: production
+      NEXT_PUBLIC_SITE_URL: https://nite.tec.br
+      NITE_NEWS_SOURCE: static
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.12.0
+          cache: npm
+      - run: npm install --global npm@11.6.2
+      - run: npm ci
+      - run: npm run cloudflare:build
+      - run: npm run cloudflare:dry-run

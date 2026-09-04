@@ -1,8 +1,12 @@
 import type { NextConfig } from "next";
+import { fileURLToPath } from "node:url";
 
 import { assertProductionDeploymentConfiguration } from "./src/lib/deployment-configuration";
 
-if (process.env.VERCEL_ENV === "production") {
+const isCloudflareDeployment =
+  process.env.PORTAL_DEPLOYMENT_ENV === "production";
+
+if (process.env.VERCEL_ENV === "production" || isCloudflareDeployment) {
   assertProductionDeploymentConfiguration(process.env);
 }
 
@@ -19,6 +23,10 @@ try {
 }
 
 const nextConfig: NextConfig = {
+  output: isCloudflareDeployment ? "standalone" : undefined,
+  outputFileTracingRoot: isCloudflareDeployment
+    ? fileURLToPath(new URL("../..", import.meta.url))
+    : undefined,
   poweredByHeader: false,
   transpilePackages: ["@nite/content", "@nite/news", "@nite/ui"],
   typedRoutes: true,

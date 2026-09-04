@@ -8,6 +8,7 @@
     "build": {
       "dependsOn": ["^build"],
       "env": [
+        "PORTAL_DEPLOYMENT_ENV",
         "VERCEL_ENV",
         "NEXT_PUBLIC_SITE_URL",
         "NITE_NEWS_SOURCE",

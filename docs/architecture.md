@@ -61,3 +61,17 @@ Tokens, primitives e renderer de notícia do Portal. Componentes e estilos perte
 - Toda versão publicada precisa continuar compatível até o Portal em produção migrar para uma nova versão.
 - Não criar packages compartilhados sem necessidade recorrente comprovada.
 - Imports físicos entre workspaces são bloqueados por ESLint e CI.
+
+## Hospedagem pública
+
+O Portal possui dois destinos independentes durante a estabilização:
+
+- Cloudflare Workers é o destino canônico de `https://nite.tec.br`, empacotado
+  pelo OpenNext e publicado por Workers Builds a partir de commits na `main`.
+- O deployment existente na Vercel permanece como fallback operacional até uma
+  decisão explícita de desativação; ele não participa do roteamento do domínio.
+
+No Cloudflare, o modo inicial `NITE_NEWS_SOURCE=static` usa o cache incremental
+read-only em Workers Static Assets. Não existem bindings de R2, KV, D1 ou
+Durable Objects. Uma futura troca para `api` exige revisar essa estratégia antes
+do corte editorial, além de configurar os endpoints HTTPS e o HMAC do CMS.

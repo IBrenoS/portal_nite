@@ -85,7 +85,7 @@ function NewsSectionHeader({
 
 export default async function UpdatesPage({
   searchParams = Promise.resolve({}),
-}: UpdatesPageProps = {}) {
+}: UpdatesPageProps) {
   const { filtro } = await searchParams;
   const activeFilter = normalizeNewsFilter(filtro);
   const [featured, filteredArticles] = await Promise.all([
