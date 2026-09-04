@@ -84,6 +84,17 @@ HTTPS implantada.
 
 ### Cloudflare R2
 
+**Status: concluído em 01/09/2026 para desenvolvimento local.** Os buckets
+`nite-cms-staging` e `nite-cms-public` foram criados. O staging permanece
+privado e aceita CORS somente de `http://localhost:3001`, com método `PUT` e
+header `Content-Type`; o bucket público está disponível temporariamente pela
+URL de desenvolvimento `r2.dev`. Uma credencial Account S3 com permissão de
+leitura/gravação de objetos foi restringida aos dois buckets e preenchida nos
+arquivos locais necessários. O smoke test confirmou listagem nos dois buckets,
+`PUT`/`GET` no staging e `PUT`/HTTP 200 no público com cache immutable. Para
+staging/produção ainda será necessário substituir `r2.dev` por um domínio
+personalizado HTTPS.
+
 Crie dois buckets e uma credencial S3/R2 restrita, então preencha no CMS Admin:
 
 - `R2_ACCOUNT_ID`;
@@ -117,6 +128,43 @@ permitindo desenvolvimento e checks locais. Depois de preencher e validar a CMS
 API HTTPS, altere para `NITE_NEWS_SOURCE=api`; esse é o modo da integração real.
 O valor `static` permanece como fallback explícito e fonte determinística da
 regressão visual.
+
+### Preview temporário pelo Portal na Vercel
+
+Antes do deploy do CMS Admin, o Preview no Portal pode usar exclusivamente
+`https://portal-nite.vercel.app` com um Cloudflare Quick Tunnel. No Admin local,
+defina:
+
+```text
+PORTAL_PREVIEW_URL=https://portal-nite.vercel.app/api/preview
+```
+
+Reinicie o Admin e, em terminais separados na raiz de `cms`, execute:
+
+```text
+npm run dev
+npm run dev:preview-proxy
+cloudflared tunnel --url http://127.0.0.1:3011
+```
+
+O proxy local publica somente `POST /api/preview/resolve`; login, workspace e
+demais rotas do Admin retornam `404` antes de alcançar a porta `3001`. Copie a
+origem HTTPS aleatória informada pelo `cloudflared` e configure no ambiente
+Production do projeto Vercel `portal-nite`:
+
+```text
+CMS_PREVIEW_RESOLVE_URL=https://<origem-gerada>.trycloudflare.com/api/preview/resolve
+```
+
+Faça redeploy do Portal depois da alteração. A URL `trycloudflare.com` muda a
+cada nova execução, portanto variável e deployment precisam ser atualizados a
+cada sessão. Nenhum domínio `nite.tec.br` participa deste fluxo, que é somente
+para desenvolvimento e depende do Admin, proxy e túnel permanecerem ativos.
+
+Antes de testar uma revisão, confirme `401` para um `POST` sem token no endpoint
+local e público e `404` para `/`, `/articles` e `/api/auth/session` pelo túnel.
+Para desativar, remova a variável da Vercel, redeploye o Portal, esvazie
+`PORTAL_PREVIEW_URL`, reinicie o Admin e encerre proxy e `cloudflared`.
 
 ## Valores necessários somente para testes
 

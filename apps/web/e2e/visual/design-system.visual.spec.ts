@@ -100,6 +100,27 @@ test.describe("desktop design system snapshots", () => {
     }
   }
 
+  for (const theme of themes) {
+    test(`news card titles preserve their editorial color on hover in ${theme} mode`, async ({
+      page,
+    }) => {
+      await openStablePage(page, "/atualizacoes", theme);
+
+      const leadTitle = page.locator('[data-news-layout="lead"] h2');
+      const colorBeforeHover = await leadTitle.evaluate(
+        (element) => getComputedStyle(element).color,
+      );
+
+      await leadTitle.hover();
+
+      await expect
+        .poll(() =>
+          leadTitle.evaluate((element) => getComputedStyle(element).color),
+        )
+        .toBe(colorBeforeHover);
+    });
+  }
+
   test("theme toggle and mega menu remain operable", async ({ page }) => {
     await openStablePage(page, "/", "dark");
 

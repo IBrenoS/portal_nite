@@ -111,7 +111,7 @@ export function NewsCard({
           </p>
           <Heading
             className={cn(
-              "text-balance font-heading font-semibold text-nite-text-primary group-hover:text-nite-brand-accent group-focus-visible:text-nite-brand-accent",
+              "text-balance font-heading font-semibold text-nite-text-primary",
               isLead
                 ? "text-[clamp(2rem,4vw,3rem)] leading-[1.1]"
                 : "text-xl leading-7",
