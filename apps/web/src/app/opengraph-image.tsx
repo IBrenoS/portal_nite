@@ -2,6 +2,8 @@ import { ImageResponse } from "next/og";
 
 import { siteConfig } from "@/lib/site-config";
 
+export const dynamic = "force-static";
+
 export const alt = "NITE UNIJORGE com visual tecnologico azul e fundo escuro.";
 export const size = {
   width: 1200,

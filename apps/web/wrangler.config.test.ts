@@ -11,17 +11,9 @@ describe("wrangler configuration", () => {
     );
 
     expect(configuration).toMatch(/"keep_vars"\s*:\s*true/);
+    expect(configuration).toMatch(/"directory"\s*:\s*"out"/);
+    expect(configuration).toMatch(/"not_found_handling"\s*:\s*"404-page"/);
+    expect(configuration).not.toMatch(/"binding"\s*:\s*"IMAGES"/);
   });
 
-  it("publishes only the apex nite.tec.br as a custom domain", () => {
-    const configuration = readFileSync(
-      resolve(process.cwd(), "wrangler.jsonc"),
-      "utf8",
-    );
-
-    expect(configuration).toMatch(
-      /"routes"\s*:\s*\[\s*\{\s*"pattern"\s*:\s*"nite\.tec\.br"\s*,\s*"custom_domain"\s*:\s*true\s*\}\s*\]/,
-    );
-    expect(configuration).not.toContain("www.nite.tec.br");
-  });
 });

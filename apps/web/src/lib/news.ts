@@ -1,39 +1,30 @@
 import "server-only";
 
-import { unstable_cache } from "next/cache";
-
 import {
-  createNewsApiClient,
   createNewsPublicRepository,
   createStaticNewsPublicDataSource,
   type NewsPublicRepository,
   readPublicNewsConfiguration,
 } from "@nite/news";
 
-export const NITE_NEWS_CACHE_TAG = "nite-news:published";
-
 let repository: NewsPublicRepository | undefined;
 
 function createRepository() {
-  const result = readPublicNewsConfiguration(process.env);
+  const environment = process.env.NITE_NEWS_SOURCE
+    ? process.env
+    : { ...process.env, NITE_NEWS_SOURCE: "static" };
+  const result = readPublicNewsConfiguration(environment);
   if (!result.configured) {
     throw new Error(
       `Fonte pública do News não configurada: ${result.missing.join(", ")}.`,
     );
   }
-  if (result.configuration.source === "static") {
-    return createNewsPublicRepository(createStaticNewsPublicDataSource());
+  if (result.configuration.source !== "static") {
+    throw new Error(
+      "O export estático do Portal exige NITE_NEWS_SOURCE=static.",
+    );
   }
-
-  const apiSource = createNewsApiClient({
-    baseUrl: result.configuration.apiUrl,
-  });
-  const listPublishedArticles = unstable_cache(
-    () => apiSource.listPublishedArticles(),
-    ["nite-news-published-articles"],
-    { tags: [NITE_NEWS_CACHE_TAG], revalidate: 300 },
-  );
-  return createNewsPublicRepository({ listPublishedArticles });
+  return createNewsPublicRepository(createStaticNewsPublicDataSource());
 }
 
 function getRepository() {
@@ -45,15 +36,12 @@ export async function getNewsArticleBySlug(slug: string) {
   return getRepository().getNewsArticleBySlug(slug);
 }
 
-export async function getFeaturedNewsArticle() {
-  return getRepository().getFeaturedNewsArticle();
+export async function getNewsArticleSlugs() {
+  return getRepository().getNewsArticleSlugs();
 }
 
-export async function getLatestNewsArticles(
-  limit?: number,
-  excludeSlug?: string,
-) {
-  return getRepository().getLatestNewsArticles(limit, excludeSlug);
+export async function getFeaturedNewsArticle() {
+  return getRepository().getFeaturedNewsArticle();
 }
 
 export async function getAgendaNewsArticles(limit?: number) {
