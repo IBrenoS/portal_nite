@@ -1,10 +1,5 @@
 import { cleanup, render, screen, within } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
-
-vi.mock("next/headers", () => ({
-  draftMode: async () => ({ isEnabled: false }),
-  cookies: async () => ({ get: () => undefined }),
-}));
+import { afterEach, describe, expect, it } from "vitest";
 
 import NewsArticlePage, {
   generateMetadata,
@@ -89,5 +84,12 @@ describe("NewsArticlePage", () => {
       screen.getByRole("heading", { name: "Matéria não encontrada" }),
     ).toBeInTheDocument();
     expect(metadata.robots).toMatchObject({ index: false, follow: false });
+  });
+
+  it("gera todos os slugs públicos no build", async () => {
+    const { generateStaticParams } =
+      await import("@/app/atualizacoes/[slug]/page");
+
+    expect(await generateStaticParams()).toContainEqual({ slug: featuredSlug });
   });
 });

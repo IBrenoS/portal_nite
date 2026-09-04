@@ -1,5 +1,3 @@
-import { readPublicNewsConfiguration } from "@nite/news";
-
 type EnvironmentSource = Readonly<Record<string, string | undefined>>;
 
 function usesHttps(value: string | undefined) {
@@ -21,23 +19,8 @@ export function assertProductionDeploymentConfiguration(
     issues.push("NEXT_PUBLIC_SITE_URL");
   }
 
-  if (source !== "static" && source !== "api") {
+  if (source !== "static") {
     issues.push("NITE_NEWS_SOURCE");
-  }
-
-  if (source === "api") {
-    const newsConfiguration = readPublicNewsConfiguration(environment);
-    if (!newsConfiguration.configured) {
-      issues.push(...newsConfiguration.missing);
-    }
-    if (!usesHttps(environment.NITE_NEWS_MEDIA_URL)) {
-      issues.push("NITE_NEWS_MEDIA_URL");
-    }
-  }
-
-  const previewEndpoint = environment.CMS_PREVIEW_RESOLVE_URL;
-  if (previewEndpoint && !usesHttps(previewEndpoint)) {
-    issues.push("CMS_PREVIEW_RESOLVE_URL");
   }
 
   const uniqueIssues = [...new Set(issues)];

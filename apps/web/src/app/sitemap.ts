@@ -5,7 +5,7 @@ import { getIndexableNewsArticles } from "@/lib/news";
 import { absoluteUrl } from "@/lib/seo";
 import { siteConfig } from "@/lib/site-config";
 
-export const dynamic = "force-dynamic";
+export const dynamic = "force-static";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const lastModified = new Date(siteConfig.lastUpdated);

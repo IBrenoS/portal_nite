@@ -20,25 +20,26 @@ import {
   defaultMetadata,
   serializeJsonLd,
 } from "@/lib/seo";
-import { getNewsArticleBySlug, getRelatedNewsArticles } from "@/lib/news";
 import {
-  getPreviewArticleForSlug,
-  type PreviewArticle,
-} from "@/lib/news-preview";
+  getNewsArticleBySlug,
+  getNewsArticleSlugs,
+  getRelatedNewsArticles,
+} from "@/lib/news";
 import NewsArticleNotFound from "./not-found";
 
-export const dynamic = "force-dynamic";
+type NewsArticlePageProps = { params: Promise<{ slug: string }> };
 
-type NewsArticlePageProps = {
-  params: Promise<{ slug: string }>;
-};
+export const dynamicParams = false;
+
+export async function generateStaticParams() {
+  return getNewsArticleSlugs();
+}
 
 export async function generateMetadata({
   params,
 }: NewsArticlePageProps): Promise<Metadata> {
   const { slug } = await params;
-  const previewArticle = await getPreviewArticleForSlug(slug);
-  const article = previewArticle ?? (await getNewsArticleBySlug(slug));
+  const article = await getNewsArticleBySlug(slug);
 
   if (!article) {
     return {
@@ -50,20 +51,6 @@ export async function generateMetadata({
 
   const title = buildPageTitle(article.seo?.title ?? article.title);
   const description = article.seo?.description ?? article.summary;
-  if (previewArticle) {
-    return {
-      ...defaultMetadata,
-      title,
-      description,
-      robots: { index: false, follow: false },
-      referrer: "no-referrer",
-    };
-  }
-
-  if (!("contentState" in article)) {
-    return { ...defaultMetadata, robots: { index: false, follow: false } };
-  }
-
   const canonical = absoluteUrl(`/atualizacoes/${article.slug}`);
   const shouldIndex = article.contentState === "real";
 
@@ -83,12 +70,7 @@ export async function generateMetadata({
       url: canonical,
       type: "article",
       publishedTime: article.publishedAt,
-      images: [
-        {
-          url: absoluteUrl(article.cover.src),
-          alt: article.cover.alt,
-        },
-      ],
+      images: [{ url: absoluteUrl(article.cover.src), alt: article.cover.alt }],
     },
     twitter: {
       card: "summary_large_image",
@@ -108,38 +90,19 @@ function buildNewsArticleJsonLd(article: NewsArticle) {
     datePublished: article.publishedAt,
     image: absoluteUrl(article.cover.src),
     mainEntityOfPage: absoluteUrl(`/atualizacoes/${article.slug}`),
-    author: {
-      "@type": "Organization",
-      name: article.byline,
-    },
+    author: { "@type": "Organization", name: article.byline },
   };
-}
-
-function isPublicNewsArticle(
-  article: NewsArticle | PreviewArticle,
-): article is NewsArticle {
-  return "contentState" in article;
 }
 
 export default async function NewsArticlePage({
   params,
 }: NewsArticlePageProps) {
   const { slug } = await params;
-  const previewArticle = await getPreviewArticleForSlug(slug);
-  const article = previewArticle ?? (await getNewsArticleBySlug(slug));
+  const article = await getNewsArticleBySlug(slug);
 
-  if (!article) {
-    return <NewsArticleNotFound />;
-  }
+  if (!article) return <NewsArticleNotFound />;
 
-  const related = previewArticle
-    ? []
-    : await getRelatedNewsArticles(article.slug, 3);
-  const publicationDate = article.publishedAt
-    ? formatEditorialDate(
-        previewArticle ? article.publishedAt.slice(0, 10) : article.publishedAt,
-      )
-    : "Prévia — ainda não publicada";
+  const related = await getRelatedNewsArticles(article.slug, 3);
   const canonical = absoluteUrl(`/atualizacoes/${article.slug}`);
   const breadcrumbJsonLd = buildBreadcrumbJsonLd([
     { name: "Início", path: "/" },
@@ -150,18 +113,12 @@ export default async function NewsArticlePage({
   return (
     <>
       <SiteHeader />
-      {!previewArticle ? (
-        <script
-          id="structured-data-news-breadcrumb"
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: serializeJsonLd(breadcrumbJsonLd),
-          }}
-        />
-      ) : null}
-      {!previewArticle &&
-      isPublicNewsArticle(article) &&
-      article.contentState === "real" ? (
+      <script
+        id="structured-data-news-breadcrumb"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbJsonLd) }}
+      />
+      {article.contentState === "real" ? (
         <script
           id="structured-data-news-article"
           type="application/ld+json"
@@ -170,31 +127,11 @@ export default async function NewsArticlePage({
           }}
         />
       ) : null}
-
       <main
         id="conteudo-principal"
         className="overflow-hidden bg-nite-background text-nite-text-primary"
       >
         <article>
-          {previewArticle ? (
-            <div
-              role="status"
-              className="border-b border-nite-brand-accent bg-nite-section px-4 py-3 text-center text-sm text-nite-text-primary"
-            >
-              {previewArticle.publishedAt
-                ? "Prévia privada."
-                : "Prévia privada — ainda não publicada."}
-              <form
-                action="/api/preview/exit"
-                method="post"
-                className="ml-4 inline"
-              >
-                <button type="submit" className="underline underline-offset-4">
-                  Sair da prévia
-                </button>
-              </form>
-            </div>
-          ) : null}
           <Container size="xl" className="pt-12 sm:pt-16 lg:pt-20">
             <Link
               href="/atualizacoes"
@@ -203,7 +140,6 @@ export default async function NewsArticlePage({
             >
               <span aria-hidden="true">←</span>&nbsp; Voltar para atualizações
             </Link>
-
             <div className="mt-7 max-w-5xl">
               <p className="font-mono text-xs font-medium uppercase tracking-[0.14em] text-nite-brand-accent">
                 {categoryLabels[article.category]}
@@ -216,34 +152,27 @@ export default async function NewsArticlePage({
               </p>
               <div className="mt-8 flex flex-col gap-5 border-t border-nite-border-subtle pt-5 sm:flex-row sm:items-center sm:justify-between">
                 <p className="font-mono text-[0.6875rem] uppercase tracking-[0.055em] text-nite-text-muted">
-                  {publicationDate} · {article.readTimeMinutes} min de leitura ·{" "}
-                  {article.byline}
+                  {formatEditorialDate(article.publishedAt)} ·{" "}
+                  {article.readTimeMinutes} min de leitura · {article.byline}
                 </p>
-                {!previewArticle ? (
-                  <ShareArticleButton title={article.title} url={canonical} />
-                ) : null}
+                <ShareArticleButton title={article.title} url={canonical} />
               </div>
             </div>
-
-            {"cover" in article && article.cover ? (
-              <div className="relative mt-10 aspect-[16/7] min-h-64 overflow-hidden rounded-xl border border-nite-border-subtle bg-nite-section sm:mt-12">
-                <Image
-                  src={article.cover.src}
-                  alt={article.cover.alt}
-                  fill
-                  priority
-                  sizes="(min-width: 1280px) 1280px, 100vw"
-                  className="object-cover"
-                />
-              </div>
-            ) : null}
+            <div className="relative mt-10 aspect-[16/7] min-h-64 overflow-hidden rounded-xl border border-nite-border-subtle bg-nite-section sm:mt-12">
+              <Image
+                src={article.cover.src}
+                alt={article.cover.alt}
+                fill
+                priority
+                sizes="(min-width: 1280px) 1280px, 100vw"
+                className="object-cover"
+              />
+            </div>
           </Container>
-
           <Container size="sm" className="py-14 sm:py-20">
             <NewsArticleBody document={article.body} />
           </Container>
         </article>
-
         {related.length > 0 ? (
           <section
             className="border-t border-nite-border-subtle py-14 sm:py-20"

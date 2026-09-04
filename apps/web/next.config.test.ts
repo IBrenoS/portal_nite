@@ -32,34 +32,13 @@ describe("preflight do deployment do Portal", () => {
   });
 });
 
-describe("redirecionamentos de Jogos Embarcados", () => {
-  it("redireciona permanentemente as URLs anteriores", async () => {
+describe("export estático", () => {
+  it("gera arquivos estáticos e desabilita o otimizador de imagens em runtime", async () => {
     const { default: nextConfig } = await import("./next.config");
-    const redirects = await nextConfig.redirects?.();
 
-    expect(redirects).toEqual(
-      expect.arrayContaining([
-        {
-          source: "/projetos/software-aplicado",
-          destination: "/projetos/data-center",
-          permanent: true,
-        },
-        {
-          source: "/projetos/software-aplicado-demonstrativo",
-          destination: "/projetos/data-center",
-          permanent: true,
-        },
-        {
-          source: "/projetos/robotica-educacional",
-          destination: "/projetos/jogos-embarcados",
-          permanent: true,
-        },
-        {
-          source: "/projetos/robotica-educacional-demonstrativo",
-          destination: "/projetos/jogos-embarcados",
-          permanent: true,
-        },
-      ]),
-    );
+    expect(nextConfig.output).toBe("export");
+    expect(nextConfig.images?.unoptimized).toBe(true);
+    expect(nextConfig.redirects).toBeUndefined();
+    expect(nextConfig.headers).toBeUndefined();
   });
 });
