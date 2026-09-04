@@ -44,6 +44,10 @@ variáveis abaixo tanto para o build quanto para o runtime:
 Configure também `NODE_VERSION=24.12.0` somente no build. O comando instala npm
 `11.6.2` explicitamente para manter o lockfile reproduzível.
 
+O `wrangler.jsonc` mantém `keep_vars: true` porque as variáveis de runtime são
+administradas no dashboard. Sem essa opção, cada `wrangler deploy` substituiria
+as variáveis do dashboard pelas variáveis declaradas no arquivo de configuração.
+
 Não configure nesta fase `CMS_PUBLIC_API_URL`, `NITE_NEWS_MEDIA_URL`,
 `CMS_PREVIEW_RESOLVE_URL` ou `REVALIDATION_SECRET`.
 
