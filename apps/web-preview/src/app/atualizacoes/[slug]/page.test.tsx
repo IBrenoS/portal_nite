@@ -1,3 +1,6 @@
+import { existsSync } from "node:fs";
+import { resolve } from "node:path";
+
 import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
@@ -40,6 +43,12 @@ import NewsArticlePage, { generateMetadata } from "./page";
 afterEach(cleanup);
 
 describe("matéria em prévia", () => {
+  it("não herda Open Graph de uma rota de imagem global", () => {
+    expect(
+      existsSync(resolve(process.cwd(), "src/app/opengraph-image.tsx")),
+    ).toBe(false);
+  });
+
   it("exibe faixa privada e omite compartilhamento e dados estruturados", async () => {
     render(
       await NewsArticlePage({
