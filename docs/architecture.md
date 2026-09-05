@@ -7,6 +7,7 @@ O Portal NITE é um monorepo npm responsável exclusivamente pela experiência i
 ```text
 portal_nite
 ├── apps/web
+├── apps/web-preview
 ├── packages/content       # dados institucionais
 ├── packages/news          # client e contrato HTTP das notícias
 ├── packages/ui            # UI do Portal
@@ -23,19 +24,27 @@ As notícias podem chegar por uma API HTTPS versionada, mas a implantação est�
 apps/web ── fixture estática ──> @nite/news
 Workers Static Assets ──> HTML, RSC, fontes, imagens e 404
 Worker mínimo ──> endpoints explicitamente indisponíveis e redirects legados
+
+apps/web-preview ── fixture pública estática ──> @nite/news
+                 └─ token curto ──> CMS Admin /api/preview/resolve
+Vercel Functions ──> Draft Mode, cookie privado e revisão editorial
 ```
 
 `@nite/news` define o schema Zod esperado pelo consumidor, valida as respostas em runtime, fornece o client HTTP, cache e uma fixture estática explícita. Não importa código, tipos ou arquivos da fonte editorial. A fonte é escolhida por `NITE_NEWS_SOURCE=api|static`; o modo `static` é um fallback operacional explícito, nunca automático.
 
 A API retorna envelopes `version: 2`, `ETag` e `Cache-Control`. O corpo da matéria é exclusivamente `EditorialDocumentV1`, validado de forma estrita pelo consumidor antes da renderização. Mudanças incompatíveis exigem uma nova versão. O Portal mantém schemas e fixtures próprios para detectar incompatibilidade antes da renderização.
 
-No modo estático, prévia editorial e revalidação não estão configuradas: `GET /api/preview` responde `401` e `POST /api/revalidate/news` responde `503`. `POST /api/preview/exit` apenas remove o cookie legado e retorna a `/atualizacoes`. Uma futura integração CMS/API exigirá um destino com runtime dinâmico, cache persistente conscientemente escolhido e a reintrodução de HTTPS e HMAC; ela não é ativada implicitamente pelo Portal.
+No app estático, prévia editorial e revalidação não estão configuradas: `GET /api/preview` responde `401` e `POST /api/revalidate/news` responde `503`. `POST /api/preview/exit` apenas remove o cookie legado e retorna a `/atualizacoes`. O runtime dinâmico de prévia existe exclusivamente em `apps/web-preview`: ele valida o token no CMS Admin por HTTPS, habilita Draft Mode e mantém a revisão em cookie seguro por no máximo dez minutos. O Portal nunca recebe `PREVIEW_HMAC_SECRET`, banco ou credenciais editoriais.
 
 ## Workspaces do Portal
 
 ### `@nite/web`
 
 Rotas, metadata, sitemap, robots, layout, componentes, tema, assets e testes da vitrine pública. O alias `@/*` aponta apenas para `apps/web/src/*`. A aplicação consome `@nite/content`, `@nite/news` e `@nite/ui` pelas entradas públicas.
+
+### `@nite/web-preview`
+
+Aplicação Next.js dinâmica implantada na Vercel. Mantém as mesmas páginas públicas e a mesma fonte estática do Portal, mas adiciona a rota dinâmica de matéria, `GET /api/preview` e `POST /api/preview/exit`. Todas as respostas recebem `X-Robots-Tag: noindex, nofollow, noarchive`; `robots.txt` bloqueia crawlers e páginas públicas apontam canonical para `https://nite.tec.br`. Uma revisão privada não emite canonical, Open Graph nem JSON-LD.
 
 ### `@nite/content`
 
@@ -47,7 +56,7 @@ Contrato consumidor de notícias, client HTTP, repository assíncrono, filtros, 
 
 ### `@nite/ui`
 
-Tokens, primitives e renderer de notícia do Portal. Componentes e estilos pertencem à vitrine pública e não pressupõem outro workspace consumidor.
+Tokens, primitives, shell compartilhado (header, footer e container) e views de notícias do Portal. `apps/web` mantém reexports retrocompatíveis para os imports internos existentes; os dois apps consomem a implementação canônica em `@nite/ui`. As rotas públicas determinísticas são expostas por `@nite/web` para garantir paridade sem duplicação; a rota dinâmica de matéria, a resolução privada, a metadata de preview e o Draft Mode pertencem exclusivamente a `apps/web-preview`.
 
 ## Validação e evolução
 
@@ -59,17 +68,20 @@ Tokens, primitives e renderer de notícia do Portal. Componentes e estilos perte
 
 ## Hospedagem pública
 
-O Portal possui dois destinos independentes durante a estabilização:
+O Portal possui dois destinos independentes e permanentes:
 
 - Cloudflare Workers é o destino canônico de `https://nite.tec.br`, publicado
   por Workers Builds a partir de commits na `main`. O `next build` gera `out/`
   e Workers Static Assets entrega o portal sem executar o Worker na navegação
   pública.
-- O deployment existente na Vercel permanece como fallback operacional até uma
-  decisão explícita de desativação; ele não participa do roteamento do domínio.
+- O projeto Vercel `portal-nite`, com Root Directory `apps/web-preview`, atende
+  `https://portal-nite.vercel.app` como ambiente dinâmico privado de testes.
+  Ele não participa do DNS ou do roteamento do domínio público.
 
-No Cloudflare, `NITE_NEWS_SOURCE=static` é obrigatório. O Worker executa apenas
+Nos dois destinos, `NITE_NEWS_SOURCE=static` é obrigatório nesta etapa. No Cloudflare, o Worker executa apenas
 os três endpoints mínimos e os cinco redirects legados; não há binding de R2,
 KV, D1, Durable Objects, Cloudflare Images ou cache incremental. Imagens são
 arquivos estáticos não otimizados em runtime. Uma futura troca para `api` exige
-uma arquitetura dinâmica separada antes do corte editorial.
+uma arquitetura dinâmica separada antes do corte editorial. Na Vercel, somente
+a resolução de revisões usa o CMS Admin publicado; Quick Tunnel não faz parte
+da operação normal.

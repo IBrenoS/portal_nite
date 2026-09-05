@@ -2,8 +2,8 @@
 
 import { motion, type MotionValue, useTransform } from "motion/react";
 
-import { cn } from "@/lib/utils";
-import { UnijorgeBrandText } from "@/components/ui/unijorge-brand-text";
+import { cn } from "../utils";
+import { UnijorgeBrandText } from "./unijorge-brand-text";
 
 type HeaderLogoMorphProps = {
   progress: MotionValue<number>;

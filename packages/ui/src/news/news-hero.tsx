@@ -1,8 +1,8 @@
 import type { NewsArticle, NewsFilter } from "@nite/news";
 import Image from "next/image";
 
-import { NewsCard } from "@/components/news/news-card";
-import { NewsSignalCanvas } from "@/components/news/news-signal-canvas";
+import { NewsCard } from "./news-card";
+import { NewsSignalCanvas } from "./news-signal-canvas";
 
 type NewsHeroProps = {
   activeFilter: NewsFilter;

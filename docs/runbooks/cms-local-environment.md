@@ -129,42 +129,29 @@ API HTTPS, altere para `NITE_NEWS_SOURCE=api`; esse é o modo da integração re
 O valor `static` permanece como fallback explícito e fonte determinística da
 regressão visual.
 
-### Preview temporário pelo Portal na Vercel
+### Preview dinâmico pelo Portal na Vercel
 
-Antes do deploy do CMS Admin, o Preview no Portal pode usar exclusivamente
-`https://portal-nite.vercel.app` com um Cloudflare Quick Tunnel. No Admin local,
-defina:
+O fluxo operacional usa exclusivamente o CMS Admin e o Portal de preview já
+publicados na Vercel. No Admin, configure:
 
 ```text
 PORTAL_PREVIEW_URL=https://portal-nite.vercel.app/api/preview
 ```
 
-Reinicie o Admin e, em terminais separados na raiz de `cms`, execute:
+No ambiente Production do projeto Vercel `portal-nite`, configure:
 
 ```text
-npm run dev
-npm run dev:preview-proxy
-cloudflared tunnel --url http://127.0.0.1:3011
+CMS_PREVIEW_RESOLVE_URL=https://nite-cms-admin.vercel.app/api/preview/resolve
 ```
 
-O proxy local publica somente `POST /api/preview/resolve`; login, workspace e
-demais rotas do Admin retornam `404` antes de alcançar a porta `3001`. Copie a
-origem HTTPS aleatória informada pelo `cloudflared` e configure no ambiente
-Production do projeto Vercel `portal-nite`:
+Faça redeploy do Portal depois da alteração. Nenhum domínio `trycloudflare.com`
+ou processo local participa desse fluxo. O domínio `nite.tec.br` continua sendo
+apenas o Portal público estático na Cloudflare.
 
-```text
-CMS_PREVIEW_RESOLVE_URL=https://<origem-gerada>.trycloudflare.com/api/preview/resolve
-```
-
-Faça redeploy do Portal depois da alteração. A URL `trycloudflare.com` muda a
-cada nova execução, portanto variável e deployment precisam ser atualizados a
-cada sessão. Nenhum domínio `nite.tec.br` participa deste fluxo, que é somente
-para desenvolvimento e depende do Admin, proxy e túnel permanecerem ativos.
-
-Antes de testar uma revisão, confirme `401` para um `POST` sem token no endpoint
-local e público e `404` para `/`, `/articles` e `/api/auth/session` pelo túnel.
-Para desativar, remova a variável da Vercel, redeploye o Portal, esvazie
-`PORTAL_PREVIEW_URL`, reinicie o Admin e encerre proxy e `cloudflared`.
+Antes de testar uma revisão, confirme `401` para um `POST` sem token no resolver
+público do Admin e `401` para um `GET` sem token em `/api/preview` no Portal.
+Quick Tunnel e `dev:preview-proxy` ficam documentados apenas como ferramentas
+históricas de contingência local, não como dependências operacionais.
 
 ## Valores necessários somente para testes
 

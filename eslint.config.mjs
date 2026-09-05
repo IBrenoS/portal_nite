@@ -5,7 +5,10 @@ import nextTs from "eslint-config-next/typescript";
 const eslintConfig = defineConfig([
   ...nextVitals.map((config) => ({
     ...config,
-    files: ["apps/web/**/*.{js,jsx,ts,tsx}"],
+    files: [
+      "apps/web/**/*.{js,jsx,ts,tsx}",
+      "apps/web-preview/**/*.{js,jsx,ts,tsx}",
+    ],
   })),
   ...nextTs,
   {
@@ -39,7 +42,10 @@ const eslintConfig = defineConfig([
     },
   },
   {
-    files: ["apps/web/**/*.{js,jsx,ts,tsx}"],
+    files: [
+      "apps/web/**/*.{js,jsx,ts,tsx}",
+      "apps/web-preview/**/*.{js,jsx,ts,tsx}",
+    ],
     rules: {
       "no-restricted-imports": [
         "error",

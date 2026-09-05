@@ -19,6 +19,7 @@ tmp/
 
 # Next.js and builds
 **/.next/
+apps/web-preview/public/
 .open-next/
 .wrangler/
 **/out/

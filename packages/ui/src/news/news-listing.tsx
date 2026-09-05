@@ -1,0 +1,186 @@
+"use client";
+
+import type { Route } from "next";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+
+import {
+  normalizeNewsFilter,
+  type NewsArticle,
+  type NewsFilter,
+} from "@nite/news";
+import { Container } from "../portal/container";
+import { NewsCard } from "./news-card";
+import { newsFilterLabels } from "./news-filters";
+import { NewsHero } from "./news-hero";
+
+type NewsListingProps = {
+  articles: NewsArticle[];
+  agenda: NewsArticle[];
+  featured?: NewsArticle;
+};
+
+function NewsSectionHeader({
+  id,
+  title,
+  action,
+  href,
+}: {
+  id: string;
+  title: string;
+  action: string;
+  href: string;
+}) {
+  return (
+    <div className="flex items-center justify-between gap-6">
+      <h2
+        id={id}
+        className="font-heading text-xl font-semibold text-nite-text-primary sm:text-2xl"
+      >
+        {title}
+      </h2>
+      <Link
+        href={href as Route}
+        className="shrink-0 rounded-md font-mono text-xs font-medium uppercase tracking-[0.14em] text-nite-brand-accent outline-none hover:text-nite-text-primary focus-visible:ring-2 focus-visible:ring-ring"
+      >
+        {action} <span aria-hidden="true">→</span>
+      </Link>
+    </div>
+  );
+}
+
+function getFilteredArticles(filter: NewsFilter, articles: NewsArticle[]) {
+  switch (filter) {
+    case "todas":
+      return articles;
+    case "agenda":
+      return articles.filter((article) => article.eventDate);
+    case "comunidade":
+      return articles.filter((article) => article.category === "comunidade");
+    case "destaques":
+      return articles.filter((article) => article.featured);
+  }
+}
+
+function NewsListingContent({
+  articles,
+  agenda,
+  featured,
+  activeFilter,
+}: NewsListingProps & { activeFilter: NewsFilter }) {
+  const filteredArticles = getFilteredArticles(activeFilter, articles);
+  const showCuratedHome = activeFilter === "destaques";
+  const leadArticle = showCuratedHome
+    ? (featured ?? articles[0])
+    : filteredArticles[0];
+  const latest = articles
+    .filter((article) => article.slug !== leadArticle?.slug)
+    .slice(0, 4);
+  const remainingFilteredArticles = showCuratedHome
+    ? []
+    : filteredArticles.slice(1);
+
+  return (
+    <>
+      <NewsHero activeFilter={activeFilter} leadArticle={leadArticle} />
+
+      {showCuratedHome ? (
+        <Container size="xl" className="grid gap-16 py-16 lg:py-20">
+          <section className="grid gap-8" aria-labelledby="latest-news">
+            <NewsSectionHeader
+              id="latest-news"
+              title="Últimas notícias"
+              action="Ver todas"
+              href="/atualizacoes?filtro=todas"
+            />
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {latest.map((article) => (
+                <NewsCard key={article.slug} article={article} />
+              ))}
+            </div>
+          </section>
+
+          <section className="grid gap-8" aria-labelledby="news-agenda">
+            <NewsSectionHeader
+              id="news-agenda"
+              title="Na agenda"
+              action="Acompanhar"
+              href="/atualizacoes?filtro=agenda"
+            />
+            <div className="grid gap-6 lg:grid-cols-3">
+              {agenda.map((article) => (
+                <NewsCard
+                  key={article.slug}
+                  article={article}
+                  layout="compact"
+                />
+              ))}
+            </div>
+          </section>
+        </Container>
+      ) : (
+        <Container size="xl" className="py-16 lg:py-20">
+          {remainingFilteredArticles.length > 0 ? (
+            <section className="grid gap-8" aria-labelledby="filtered-news">
+              <h2
+                id="filtered-news"
+                className="font-heading text-2xl font-semibold text-nite-text-primary"
+              >
+                Mais notícias em {newsFilterLabels[activeFilter]}
+              </h2>
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                {remainingFilteredArticles.map((article) => (
+                  <NewsCard key={article.slug} article={article} />
+                ))}
+              </div>
+            </section>
+          ) : leadArticle ? null : (
+            <section aria-labelledby="filtered-news">
+              <h2 id="filtered-news" className="sr-only">
+                Notícias em {newsFilterLabels[activeFilter]}
+              </h2>
+              <div className="rounded-xl border border-nite-border-subtle bg-nite-surface p-8 text-nite-text-secondary">
+                <p>Nenhuma notícia encontrada neste filtro.</p>
+                <Link
+                  href="/atualizacoes?filtro=todas"
+                  className="mt-4 inline-flex min-h-11 items-center text-nite-brand-accent outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  Ver todas as notícias
+                </Link>
+              </div>
+            </section>
+          )}
+        </Container>
+      )}
+    </>
+  );
+}
+
+export function NewsListingStatic({
+  articles,
+  agenda,
+  featured,
+}: NewsListingProps) {
+  return (
+    <NewsListingContent
+      articles={articles}
+      agenda={agenda}
+      featured={featured}
+      activeFilter="destaques"
+    />
+  );
+}
+
+export function NewsListing({ articles, agenda, featured }: NewsListingProps) {
+  const searchParams = useSearchParams();
+  const activeFilter = normalizeNewsFilter(searchParams?.getAll("filtro"));
+
+  return (
+    <NewsListingContent
+      articles={articles}
+      agenda={agenda}
+      featured={featured}
+      activeFilter={activeFilter}
+    />
+  );
+}

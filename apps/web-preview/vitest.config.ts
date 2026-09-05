@@ -1,0 +1,23 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+import react from "@vitejs/plugin-react";
+import { defineConfig } from "vitest/config";
+
+const rootDirectory = fileURLToPath(new URL(".", import.meta.url));
+
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      "@": path.resolve(rootDirectory, "../web/src"),
+      "~": path.resolve(rootDirectory, "src"),
+    },
+    tsconfigPaths: true,
+  },
+  test: {
+    environment: "jsdom",
+    setupFiles: ["./vitest.setup.ts"],
+    include: ["src/**/*.test.{ts,tsx}", "*.test.ts"],
+  },
+});

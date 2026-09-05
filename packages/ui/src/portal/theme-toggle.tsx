@@ -13,9 +13,9 @@ import {
   themePreferenceLabels,
   themePreferences,
   type ThemePreference,
-} from "@/lib/theme";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+} from "./theme";
+import { buttonVariants } from "../button";
+import { cn } from "../utils";
 
 type ThemeToggleProps = {
   id: string;

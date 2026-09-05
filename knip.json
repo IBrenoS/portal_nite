@@ -10,6 +10,9 @@
         "*.ts"
       ]
     },
+    "apps/web-preview": {
+      "project": ["src/**/*.{ts,tsx,css}", "scripts/**/*.mjs", "*.ts"]
+    },
     "packages/ui": {
       "project": ["src/**/*.{ts,tsx,css}", "*.ts"]
     }

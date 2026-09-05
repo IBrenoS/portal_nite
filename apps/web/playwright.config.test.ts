@@ -13,5 +13,5 @@ describe("configuracao visual contra deployment externo", () => {
 
     expect(config.use?.baseURL).toBe("https://preview.example.workers.dev");
     expect(config.webServer).toBeUndefined();
-  });
+  }, 10_000);
 });

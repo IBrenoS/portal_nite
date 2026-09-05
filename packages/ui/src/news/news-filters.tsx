@@ -6,3 +6,5 @@ export const newsFilterLabels = {
   destaques: "Destaques",
   todas: "Todas",
 } as const satisfies Record<NewsFilter, string>;
+
+export type NewsFilterLabel = (typeof newsFilterLabels)[NewsFilter];
