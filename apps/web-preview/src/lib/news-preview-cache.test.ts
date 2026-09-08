@@ -13,7 +13,7 @@ const controls = vi.hoisted(() => {
   );
   return { cache };
 });
-const token = `v1.${Buffer.from(JSON.stringify({ version: 1, articleId: "10000000-0000-4000-8000-000000000001", revisionId: "20000000-0000-4000-8000-000000000001", expiresAt: Date.now() + 120_000, nonce: "1234567890123456789012" })).toString("base64url")}.signature`;
+const token = `v2.${Buffer.from(JSON.stringify({ version: 2, articleId: "10000000-0000-4000-8000-000000000001", snapshotId: "40000000-0000-4000-8000-000000000001", expiresAt: Date.now() + 120_000, nonce: "1234567890123456789012" })).toString("base64url")}.signature`;
 
 vi.mock("react", () => ({ cache: controls.cache }));
 vi.mock("next/headers", () => ({
@@ -24,9 +24,10 @@ vi.mock("next/headers", () => ({
 import { getPreviewArticleForSlug } from "./news-preview";
 
 const preview = {
-  schemaVersion: 1,
+  schemaVersion: 2,
   articleId: "10000000-0000-4000-8000-000000000001",
-  revisionId: "20000000-0000-4000-8000-000000000001",
+  snapshotId: "40000000-0000-4000-8000-000000000001",
+  baseRevisionId: "20000000-0000-4000-8000-000000000001",
   slug: "materia-em-previa",
   publishedAt: null,
   title: "Matéria em prévia com título editorial válido",
@@ -49,7 +50,7 @@ const preview = {
 };
 
 describe("memoização da prévia editorial", () => {
-  it("compartilha uma única resolução entre metadata e corpo no request", async () => {
+  it("mantém o snapshot v2 no refresh e compartilha uma resolução no request", async () => {
     vi.stubEnv(
       "CMS_PREVIEW_RESOLVE_URL",
       "https://cms-admin.nite.test/api/preview/resolve",

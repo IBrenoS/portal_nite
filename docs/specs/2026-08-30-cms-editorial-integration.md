@@ -43,11 +43,13 @@ Capa e imagens inline exigem asset `ready` e alt.
 
 ## Preview e cache público
 
-O Admin emite um token HMAC de até dez minutos com `articleId`, `revisionId`,
-`expiresAt` e `nonce`. O Portal encaminha o token para
+O Admin emite um token HMAC v2 de até dez minutos com `articleId`, `snapshotId`,
+`expiresAt` e `nonce`; o snapshot contém as alterações atuais validadas sem
+criar nova revisão. Tokens v1 com `revisionId` permanecem aceitos durante a
+transição. O Portal encaminha o token para
 `CMS_PREVIEW_RESOLVE_URL`; só uma resposta válida habilita Draft Mode e o cookie
-temporário `HttpOnly`, `Secure` e `SameSite=Lax`. Apenas o slug e a revisão do
-token recebem dados privados. Preview usa `private, no-store`,
+temporário `HttpOnly`, `Secure` e `SameSite=Lax`. Apenas o slug e a
+revisão/snapshot do token recebem dados privados. Preview usa `private, no-store`,
 `noindex,nofollow`, `Referrer-Policy: no-referrer`, não gera canonical nem
 JSON-LD e possui saída explícita por POST.
 

@@ -1,5 +1,6 @@
 import "server-only";
 
+import { randomUUID } from "node:crypto";
 import { cookies, draftMode } from "next/headers";
 import { cache } from "react";
 import { z } from "zod";
@@ -8,7 +9,7 @@ import { editorialDocumentV1Schema, newsCategoryValues } from "@nite/news";
 
 export const PREVIEW_COOKIE_NAME = "nite-news-preview";
 const previewMaximumAgeSeconds = 10 * 60;
-const previewTokenSchema = z
+const previewRevisionTokenSchema = z
   .object({
     version: z.literal(1),
     articleId: z.uuid(),
@@ -17,53 +18,123 @@ const previewTokenSchema = z
     nonce: z.string().regex(/^[A-Za-z0-9_-]{22}$/),
   })
   .strict();
-
-const previewArticleSchema = z
+const previewSnapshotTokenSchema = z
   .object({
-    schemaVersion: z.literal(1),
+    version: z.literal(2),
     articleId: z.uuid(),
-    revisionId: z.uuid(),
-    slug: z
-      .string()
-      .min(3)
-      .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
-    publishedAt: z.iso.datetime().nullable(),
-    title: z.string().min(12).max(100),
-    summary: z.string().min(48).max(220),
-    category: z.enum(newsCategoryValues),
-    eventDate: z
-      .string()
-      .regex(/^\d{4}-\d{2}-\d{2}$/)
-      .optional(),
-    readTimeMinutes: z.number().int().min(1).max(30),
-    byline: z.string().min(3).max(80),
-    featured: z.boolean(),
-    cover: z
-      .object({
-        src: z.url(),
-        width: z.number().int().positive(),
-        height: z.number().int().positive(),
-        alt: z.string().min(12),
-      })
-      .optional(),
-    body: editorialDocumentV1Schema,
-    seo: z
-      .object({
-        title: z.string().min(20).max(60),
-        description: z.string().min(80).max(160),
-      })
-      .optional(),
+    snapshotId: z.uuid(),
+    expiresAt: z.number().int().positive(),
+    nonce: z.string().regex(/^[A-Za-z0-9_-]{22}$/),
   })
   .strict();
+const previewTokenSchema = z.discriminatedUnion("version", [
+  previewRevisionTokenSchema,
+  previewSnapshotTokenSchema,
+]);
+
+const previewArticleFields = {
+  articleId: z.uuid(),
+  slug: z
+    .string()
+    .min(3)
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+  publishedAt: z.iso.datetime().nullable(),
+  title: z.string().min(12).max(100),
+  summary: z.string().min(48).max(220),
+  category: z.enum(newsCategoryValues),
+  eventDate: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
+  readTimeMinutes: z.number().int().min(1).max(30),
+  byline: z.string().min(3).max(80),
+  featured: z.boolean(),
+  cover: z
+    .object({
+      src: z.url(),
+      width: z.number().int().positive(),
+      height: z.number().int().positive(),
+      alt: z.string().min(12),
+    })
+    .optional(),
+  body: editorialDocumentV1Schema,
+  seo: z
+    .object({
+      title: z.string().min(20).max(60),
+      description: z.string().min(80).max(160),
+    })
+    .optional(),
+};
+const previewRevisionArticleSchema = z
+  .object({
+    schemaVersion: z.literal(1),
+    revisionId: z.uuid(),
+    ...previewArticleFields,
+  })
+  .strict();
+const previewSnapshotArticleSchema = z
+  .object({
+    schemaVersion: z.literal(2),
+    snapshotId: z.uuid(),
+    baseRevisionId: z.uuid(),
+    ...previewArticleFields,
+  })
+  .strict();
+const previewArticleSchema = z.discriminatedUnion("schemaVersion", [
+  previewRevisionArticleSchema,
+  previewSnapshotArticleSchema,
+]);
 
 export type PreviewArticle = z.infer<typeof previewArticleSchema>;
-export type PreviewSession = {
+type PreviewSessionFields = {
   token: string;
   slug: string;
   articleId: string;
-  revisionId: string;
   maxAge: number;
 };
+export type PreviewSession = PreviewSessionFields &
+  (
+    | { version: 1; revisionId: string }
+    | { version: 2; snapshotId: string; baseRevisionId: string }
+  );
+
+export type PreviewFailureCause =
+  | "configuration"
+  | "invalid_payload"
+  | "invalid_session"
+  | "not_found"
+  | "timeout"
+  | "unauthorized"
+  | "upstream";
+
+export class PreviewResolutionError extends Error {
+  constructor(
+    public readonly causeCode: PreviewFailureCause,
+    public readonly upstreamStatus?: number,
+  ) {
+    super("Prévia indisponível.");
+    this.name = "PreviewResolutionError";
+  }
+}
+
+export function reportPreviewResolutionFailure(
+  error: unknown,
+  logger: typeof console.error = console.error,
+) {
+  const supportCode = randomUUID();
+  const failure =
+    error instanceof PreviewResolutionError
+      ? error
+      : new PreviewResolutionError("upstream");
+  logger("preview_resolution_failed", {
+    supportCode,
+    cause: failure.causeCode,
+    ...(failure.upstreamStatus === undefined
+      ? {}
+      : { upstreamStatus: failure.upstreamStatus }),
+  });
+  return supportCode;
+}
 
 export function readPreviewConfiguration(
   environment: Readonly<Record<string, string | undefined>>,
@@ -81,12 +152,19 @@ export async function resolvePreviewArticle(input: {
   endpointUrl: string;
   fetch?: typeof fetch;
 }) {
+  let endpointUrl: string;
   try {
-    const endpointUrl = z.url().parse(input.endpointUrl);
+    endpointUrl = z.url().parse(input.endpointUrl);
     if (new URL(endpointUrl).protocol !== "https:") {
       throw new Error();
     }
-    const response = await (input.fetch ?? fetch)(endpointUrl, {
+  } catch {
+    throw new PreviewResolutionError("configuration");
+  }
+
+  let response: Response;
+  try {
+    response = await (input.fetch ?? fetch)(endpointUrl, {
       method: "POST",
       cache: "no-store",
       redirect: "error",
@@ -96,12 +174,28 @@ export async function resolvePreviewArticle(input: {
         authorization: `Bearer ${input.token}`,
       },
     });
-    if (!response.ok) throw new Error();
+  } catch (error) {
+    throw new PreviewResolutionError(
+      error instanceof Error && error.name === "TimeoutError"
+        ? "timeout"
+        : "upstream",
+    );
+  }
+  if (!response.ok) {
+    const cause: PreviewFailureCause =
+      response.status === 401
+        ? "unauthorized"
+        : response.status === 404 || response.status === 409
+          ? "not_found"
+          : "upstream";
+    throw new PreviewResolutionError(cause, response.status);
+  }
+  try {
     const parsed = previewArticleSchema.safeParse(await response.json());
     if (!parsed.success) throw new Error();
     return parsed.data;
   } catch {
-    throw new Error("Prévia indisponível.");
+    throw new PreviewResolutionError("invalid_payload", response.status);
   }
 }
 
@@ -112,7 +206,12 @@ export function createPreviewSession(input: {
 }): PreviewSession | undefined {
   const now = input.now ?? new Date();
   const [version, payload, signature, ...rest] = input.token.split(".");
-  if (version !== "v1" || !payload || !signature || rest.length > 0) {
+  if (
+    (version !== "v1" && version !== "v2") ||
+    !payload ||
+    !signature ||
+    rest.length > 0
+  ) {
     return undefined;
   }
   try {
@@ -120,23 +219,36 @@ export function createPreviewSession(input: {
       JSON.parse(Buffer.from(payload, "base64url").toString("utf8")),
     );
     const millisecondsRemaining = claims.expiresAt - now.getTime();
-    if (
-      millisecondsRemaining <= 0 ||
-      claims.articleId !== input.article.articleId ||
-      claims.revisionId !== input.article.revisionId
-    ) {
+    const matchesArticle =
+      claims.articleId === input.article.articleId &&
+      ((claims.version === 1 &&
+        input.article.schemaVersion === 1 &&
+        claims.revisionId === input.article.revisionId) ||
+        (claims.version === 2 &&
+          input.article.schemaVersion === 2 &&
+          claims.snapshotId === input.article.snapshotId));
+    if (millisecondsRemaining <= 0 || !matchesArticle) {
       return undefined;
     }
-    return {
+    const common = {
       token: input.token,
       slug: input.article.slug,
       articleId: claims.articleId,
-      revisionId: claims.revisionId,
       maxAge: Math.min(
         previewMaximumAgeSeconds,
         Math.max(1, Math.floor(millisecondsRemaining / 1_000)),
       ),
     };
+    return claims.version === 1 && input.article.schemaVersion === 1
+      ? { ...common, version: 1, revisionId: claims.revisionId }
+      : claims.version === 2 && input.article.schemaVersion === 2
+        ? {
+            ...common,
+            version: 2,
+            snapshotId: claims.snapshotId,
+            baseRevisionId: input.article.baseRevisionId,
+          }
+        : undefined;
   } catch {
     return undefined;
   }
@@ -155,7 +267,8 @@ export const getPreviewArticleForSlug = cache(async (slug: string) => {
     });
     const session = createPreviewSession({ token, article });
     return session?.slug === slug ? article : undefined;
-  } catch {
+  } catch (error) {
+    reportPreviewResolutionFailure(error);
     return undefined;
   }
 });

@@ -5,7 +5,9 @@ import {
   createPreviewSession,
   PREVIEW_COOKIE_NAME,
   readPreviewConfiguration,
+  reportPreviewResolutionFailure,
   resolvePreviewArticle,
+  PreviewResolutionError,
 } from "~/lib/news-preview";
 
 const privateHeaders = {
@@ -31,7 +33,12 @@ export async function GET(request: Request) {
       endpointUrl: configuration.endpointUrl,
     });
     const session = createPreviewSession({ token, article });
-    if (!session) return unavailable();
+    if (!session) {
+      reportPreviewResolutionFailure(
+        new PreviewResolutionError("invalid_session"),
+      );
+      return unavailable();
+    }
 
     const draft = await draftMode();
     draft.enable();
@@ -48,7 +55,8 @@ export async function GET(request: Request) {
       maxAge: session.maxAge,
     });
     return response;
-  } catch {
+  } catch (error) {
+    reportPreviewResolutionFailure(error);
     return unavailable();
   }
 }

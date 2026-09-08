@@ -44,7 +44,7 @@ Rotas, metadata, sitemap, robots, layout, componentes, tema, assets e testes da 
 
 ### `@nite/web-preview`
 
-Aplicação Next.js dinâmica implantada na Vercel. Mantém as mesmas páginas públicas e a mesma fonte estática do Portal, mas adiciona a rota dinâmica de matéria, `GET /api/preview` e `POST /api/preview/exit`. Todas as respostas recebem `X-Robots-Tag: noindex, nofollow, noarchive`; `robots.txt` bloqueia crawlers e páginas públicas apontam canonical para `https://nite.tec.br`. Uma revisão privada não emite canonical, Open Graph nem JSON-LD.
+Aplicação Next.js dinâmica implantada na Vercel. Mantém as mesmas páginas públicas e a mesma fonte estática do Portal, mas adiciona a rota dinâmica de matéria, `GET /api/preview` e `POST /api/preview/exit`. Aceita os contratos v1 de revisão salva e v2 de snapshot temporário; no v2, o slug e o conteúdo vêm das alterações atuais do editor. Todas as respostas recebem `X-Robots-Tag: noindex, nofollow, noarchive`; `robots.txt` bloqueia crawlers e páginas públicas apontam canonical para `https://nite.tec.br`. Uma prévia privada não emite canonical, Open Graph nem JSON-LD.
 
 ### `@nite/content`
 

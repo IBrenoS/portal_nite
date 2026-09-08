@@ -16,6 +16,14 @@ const claims = {
   nonce: "1234567890123456789012",
 };
 const token = `v1.${Buffer.from(JSON.stringify(claims)).toString("base64url")}.signature`;
+const snapshotClaims = {
+  version: 2,
+  articleId: claims.articleId,
+  snapshotId: "40000000-0000-4000-8000-000000000001",
+  expiresAt: claims.expiresAt,
+  nonce: claims.nonce,
+};
+const snapshotToken = `v2.${Buffer.from(JSON.stringify(snapshotClaims)).toString("base64url")}.signature`;
 const preview: PreviewArticle = {
   schemaVersion: 1,
   articleId: claims.articleId,
@@ -39,6 +47,15 @@ const preview: PreviewArticle = {
       },
     ],
   },
+};
+const { revisionId: _revisionId, ...previewFields } = preview;
+const snapshotPreview: PreviewArticle = {
+  ...previewFields,
+  schemaVersion: 2,
+  snapshotId: snapshotClaims.snapshotId,
+  baseRevisionId: claims.revisionId,
+  slug: "slug-atual-ainda-nao-salvo",
+  title: "Título atual ainda não salvo no histórico editorial",
 };
 
 describe("configuração de prévia", () => {
@@ -78,6 +95,18 @@ describe("resolução da prévia editorial", () => {
         headers: expect.objectContaining({ authorization: `Bearer ${token}` }),
       }),
     );
+  });
+
+  it("aceita o DTO v2 que referencia explicitamente o snapshot", async () => {
+    await expect(
+      resolvePreviewArticle({
+        token: snapshotToken,
+        endpointUrl: "https://cms-admin.nite.test/api/preview/resolve",
+        fetch: vi
+          .fn<typeof fetch>()
+          .mockResolvedValue(Response.json(snapshotPreview)),
+      }),
+    ).resolves.toEqual(snapshotPreview);
   });
 
   it.each([
@@ -132,6 +161,44 @@ describe("sessão de prévia", () => {
     expect(
       createPreviewSession({ token: longToken, article: preview, now })?.maxAge,
     ).toBe(600);
+  });
+
+  it("cria uma sessão v2 vinculada ao snapshot e ao slug atual", () => {
+    expect(
+      createPreviewSession({
+        token: snapshotToken,
+        article: snapshotPreview,
+        now,
+      }),
+    ).toMatchObject({
+      articleId: snapshotClaims.articleId,
+      snapshotId: snapshotClaims.snapshotId,
+      slug: "slug-atual-ainda-nao-salvo",
+      maxAge: 120,
+    });
+  });
+
+  it("rejeita token v2 expirado ou vinculado a outro snapshot", () => {
+    const expiredToken = `v2.${Buffer.from(
+      JSON.stringify({ ...snapshotClaims, expiresAt: now.getTime() - 1 }),
+    ).toString("base64url")}.signature`;
+    expect(
+      createPreviewSession({
+        token: expiredToken,
+        article: snapshotPreview,
+        now,
+      }),
+    ).toBeUndefined();
+    expect(
+      createPreviewSession({
+        token: snapshotToken,
+        article: {
+          ...snapshotPreview,
+          snapshotId: "40000000-0000-4000-8000-000000000002",
+        },
+        now,
+      }),
+    ).toBeUndefined();
   });
 
   it("rejeita token ausente, adulterado, expirado ou de outra revisão", () => {

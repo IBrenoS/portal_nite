@@ -40,6 +40,22 @@ const article = {
     ],
   },
 };
+const snapshotClaims = {
+  version: 2,
+  articleId: claims.articleId,
+  snapshotId: "40000000-0000-4000-8000-000000000001",
+  expiresAt: now + 120_000,
+  nonce: claims.nonce,
+};
+const snapshotToken = `v2.${Buffer.from(JSON.stringify(snapshotClaims)).toString("base64url")}.signature`;
+const { revisionId: _revisionId, ...articleFields } = article;
+const snapshotArticle = {
+  ...articleFields,
+  schemaVersion: 2,
+  snapshotId: snapshotClaims.snapshotId,
+  baseRevisionId: claims.revisionId,
+  slug: "slug-atual-nao-salvo",
+};
 
 describe("GET /api/preview", () => {
   beforeEach(() => {
@@ -71,6 +87,58 @@ describe("GET /api/preview", () => {
     expect(response.headers.get("set-cookie")).toContain("Secure");
     expect(response.headers.get("set-cookie")).toContain("SameSite=lax");
     expect(controls.enable).toHaveBeenCalledTimes(1);
+  });
+
+  it("redireciona o token v2 para o slug contido no snapshot", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn<typeof fetch>().mockResolvedValue(Response.json(snapshotArticle)),
+    );
+
+    const response = await GET(
+      new Request(
+        `https://nite.test/api/preview?token=${encodeURIComponent(snapshotToken)}`,
+      ),
+    );
+
+    expect(response.status).toBe(307);
+    expect(response.headers.get("location")).toBe(
+      "https://nite.test/atualizacoes/slug-atual-nao-salvo",
+    );
+    expect(response.headers.get("set-cookie")).toContain("nite-news-preview=");
+  });
+
+  it("registra causa, status upstream e código sem expor token ou conteúdo", async () => {
+    const logger = vi.spyOn(console, "error").mockImplementation(() => {});
+    vi.stubGlobal(
+      "fetch",
+      vi
+        .fn<typeof fetch>()
+        .mockResolvedValue(
+          new Response("detalhe interno sensível", { status: 401 }),
+        ),
+    );
+
+    const response = await GET(
+      new Request(
+        `https://nite.test/api/preview?token=${encodeURIComponent(snapshotToken)}`,
+      ),
+    );
+
+    expect(response.status).toBe(401);
+    expect(await response.text()).toBe("Prévia indisponível.");
+    expect(logger).toHaveBeenCalledWith(
+      "preview_resolution_failed",
+      expect.objectContaining({
+        cause: "unauthorized",
+        upstreamStatus: 401,
+        supportCode: expect.stringMatching(/^[0-9a-f-]{36}$/),
+      }),
+    );
+    const log = JSON.stringify(logger.mock.calls);
+    expect(log).not.toContain(snapshotToken);
+    expect(log).not.toContain("detalhe interno sensível");
+    logger.mockRestore();
   });
 
   it.each(["", "token-invalido"])(
