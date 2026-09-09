@@ -1,13 +1,13 @@
 import type {
   EditorialContentNode,
-  EditorialDocumentV1,
+  EditorialDocument,
   EditorialTextNode,
 } from "@nite/news";
 import { isAllowedEditorialLink } from "@nite/news";
 import type { ReactNode } from "react";
 
 type NewsArticleBodyProps = {
-  document: EditorialDocumentV1;
+  document: EditorialDocument;
   className?: string;
 };
 
@@ -97,8 +97,20 @@ function renderNodes(
       );
     }
     if (node.type !== "image") return null;
+    const layout = "layout" in node.attrs ? node.attrs.layout : "normal";
+    const caption = "caption" in node.attrs ? node.attrs.caption : undefined;
+    const credit = "credit" in node.attrs ? node.attrs.credit : undefined;
+    const layoutClassName = {
+      normal: "w-full",
+      wide: "relative left-1/2 w-[min(calc(100vw-2rem),64rem)] -translate-x-1/2 sm:w-[min(calc(100vw-4rem),64rem)]",
+      full: "relative left-1/2 w-[min(calc(100vw-2rem),80rem)] -translate-x-1/2 sm:w-[min(calc(100vw-4rem),80rem)]",
+    }[layout];
     return (
-      <figure key={key} className="grid gap-3">
+      <figure
+        key={key}
+        data-editorial-layout={layout}
+        className={`grid gap-3 ${layoutClassName}`}
+      >
         <img
           src={node.attrs.src}
           alt={node.attrs.alt}
@@ -106,9 +118,12 @@ function renderNodes(
           height={node.attrs.height}
           className="h-auto w-full rounded-lg border border-nite-border-subtle"
         />
-        <figcaption className="font-mono text-xs text-nite-text-muted">
-          {node.attrs.alt}
-        </figcaption>
+        {caption || credit ? (
+          <figcaption className="flex flex-col gap-1 font-mono text-xs text-nite-text-muted sm:flex-row sm:justify-between">
+            {caption ? <span>{caption}</span> : null}
+            {credit ? <span>{credit}</span> : null}
+          </figcaption>
+        ) : null}
       </figure>
     );
   });

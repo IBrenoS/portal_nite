@@ -6,7 +6,7 @@ import { cache } from "react";
 import { z } from "zod";
 
 import {
-  editorialDocumentV1Schema,
+  editorialDocumentSchema,
   newsCategoryValues,
   type NewsArticle,
 } from "@nite/news";
@@ -59,9 +59,11 @@ const previewArticleFields = {
       width: z.number().int().positive(),
       height: z.number().int().positive(),
       alt: z.string().min(12),
+      caption: z.string().trim().min(1).max(280).optional(),
+      credit: z.string().trim().min(1).max(160).optional(),
     })
     .optional(),
-  body: editorialDocumentV1Schema,
+  body: editorialDocumentSchema,
   seo: z
     .object({
       title: z.string().min(20).max(60),
@@ -302,7 +304,12 @@ export function previewArticleToNewsArticle(
     readTimeMinutes: preview.readTimeMinutes,
     byline: preview.byline,
     cover: preview.cover
-      ? { src: preview.cover.src, alt: preview.cover.alt }
+      ? {
+          src: preview.cover.src,
+          alt: preview.cover.alt,
+          ...(preview.cover.caption ? { caption: preview.cover.caption } : {}),
+          ...(preview.cover.credit ? { credit: preview.cover.credit } : {}),
+        }
       : {
           src: "/images/atualizacoes/laboratorio-tecnologia.webp",
           alt: preview.title,

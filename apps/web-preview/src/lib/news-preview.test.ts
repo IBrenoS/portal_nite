@@ -100,15 +100,37 @@ describe("resolução da prévia editorial", () => {
   });
 
   it("aceita o DTO v2 que referencia explicitamente o snapshot", async () => {
+    const richSnapshotPreview = {
+      ...snapshotPreview,
+      body: {
+        schemaVersion: 2 as const,
+        type: "doc" as const,
+        content: [
+          {
+            type: "image" as const,
+            attrs: {
+              mediaId: "30000000-0000-4000-8000-000000000101",
+              src: "https://media.nite.test/news/oficina.webp",
+              width: 1600,
+              height: 900,
+              alt: "Pessoas participando de uma oficina",
+              caption: "Oficina da comunidade.",
+              credit: "Foto: NITE",
+              layout: "wide" as const,
+            },
+          },
+        ],
+      },
+    };
     await expect(
       resolvePreviewArticle({
         token: snapshotToken,
         endpointUrl: "https://cms-admin.nite.test/api/preview/resolve",
         fetch: vi
           .fn<typeof fetch>()
-          .mockResolvedValue(Response.json(snapshotPreview)),
+          .mockResolvedValue(Response.json(richSnapshotPreview)),
       }),
-    ).resolves.toEqual(snapshotPreview);
+    ).resolves.toEqual(richSnapshotPreview);
   });
 
   it.each([
@@ -288,12 +310,16 @@ describe("conversão e mesclagem de prévia na listagem", () => {
         width: 1200,
         height: 630,
         alt: "Capa do artigo em prévia editorial",
+        caption: "Equipe reunida no laboratório de inovação.",
+        credit: "Foto: Redação NITE",
       },
     });
     expect(withCoverAndDate.publishedAt).toBe("2026-09-01");
     expect(withCoverAndDate.cover).toEqual({
       src: "https://media.nite.test/capa.webp",
       alt: "Capa do artigo em prévia editorial",
+      caption: "Equipe reunida no laboratório de inovação.",
+      credit: "Foto: Redação NITE",
     });
   });
 

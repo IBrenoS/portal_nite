@@ -18,6 +18,14 @@ const controls = vi.hoisted(() => ({
     readTimeMinutes: 3,
     byline: "Redação NITE",
     featured: false,
+    cover: {
+      src: "https://media.nite.test/capa.webp",
+      width: 1600,
+      height: 900,
+      alt: "Estudantes participam de uma atividade no campus.",
+      caption: "Encontro realizado no laboratório de inovação.",
+      credit: "Foto: Redação NITE",
+    },
     body: {
       schemaVersion: 1 as const,
       type: "doc" as const,
@@ -68,6 +76,10 @@ describe("matéria em prévia", () => {
     expect(
       document.querySelector("script[type='application/ld+json']"),
     ).toBeNull();
+    expect(
+      screen.getByText("Encontro realizado no laboratório de inovação."),
+    ).toBeVisible();
+    expect(screen.getByText("Foto: Redação NITE")).toBeVisible();
   });
 
   it("não publica canonical, Open Graph ou Twitter na metadata privada", async () => {

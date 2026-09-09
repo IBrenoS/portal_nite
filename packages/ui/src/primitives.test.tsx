@@ -160,5 +160,42 @@ describe("@nite/ui", () => {
     expect(
       screen.getByRole("link", { name: "e um link seguro." }),
     ).toHaveAttribute("rel", "noopener noreferrer");
+    expect(screen.queryByText(/Estudantes conversam diante/)).toBeNull();
+  });
+
+  it("separa alt, legenda e crédito e aplica a largura editorial da imagem", () => {
+    render(
+      <NewsArticleBody
+        document={{
+          schemaVersion: 2,
+          type: "doc",
+          content: [
+            {
+              type: "image",
+              attrs: {
+                mediaId: "30000000-0000-4000-8000-000000000001",
+                src: "https://images.nite.test/editorial.webp",
+                width: 1600,
+                height: 900,
+                alt: "Estudantes acompanham uma apresentação no campus.",
+                caption: "A atividade reuniu estudantes de diferentes cursos.",
+                credit: "Foto: Redação NITE",
+                layout: "full",
+              },
+            },
+          ],
+        }}
+      />,
+    );
+
+    const image = screen.getByRole("img", {
+      name: "Estudantes acompanham uma apresentação no campus.",
+    });
+    expect(image.closest("figure")).toHaveAttribute(
+      "data-editorial-layout",
+      "full",
+    );
+    expect(screen.getByText(/A atividade reuniu/)).toBeVisible();
+    expect(screen.getByText(/Foto: Redação NITE/)).toBeVisible();
   });
 });

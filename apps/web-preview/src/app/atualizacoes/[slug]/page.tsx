@@ -211,16 +211,28 @@ export default async function NewsArticlePage({
               </div>
             </div>
             {"cover" in article && article.cover ? (
-              <div className="relative mt-10 aspect-[16/7] min-h-64 overflow-hidden rounded-xl border border-nite-border-subtle bg-nite-section sm:mt-12">
-                <Image
-                  src={article.cover.src}
-                  alt={article.cover.alt}
-                  fill
-                  priority
-                  sizes="(min-width: 1280px) 1280px, 100vw"
-                  className="object-cover"
-                />
-              </div>
+              <figure className="mt-10 grid gap-3 sm:mt-12">
+                <div className="relative aspect-[16/7] min-h-64 overflow-hidden rounded-xl border border-nite-border-subtle bg-nite-section">
+                  <Image
+                    src={article.cover.src}
+                    alt={article.cover.alt}
+                    fill
+                    priority
+                    sizes="(min-width: 1280px) 1280px, 100vw"
+                    className="object-cover"
+                  />
+                </div>
+                {article.cover.caption || article.cover.credit ? (
+                  <figcaption className="flex flex-col gap-1 font-mono text-xs text-nite-text-muted sm:flex-row sm:justify-between">
+                    {article.cover.caption ? (
+                      <span>{article.cover.caption}</span>
+                    ) : null}
+                    {article.cover.credit ? (
+                      <span>{article.cover.credit}</span>
+                    ) : null}
+                  </figcaption>
+                ) : null}
+              </figure>
             ) : null}
           </Container>
           <Container size="sm" className="py-14 sm:py-20">
