@@ -78,7 +78,7 @@ describe("GET /api/preview", () => {
     );
     expect(response.status).toBe(307);
     expect(response.headers.get("location")).toBe(
-      "https://nite.test/atualizacoes/materia-em-previa",
+      "https://nite.test/atualizacoes",
     );
     expect(response.headers.get("cache-control")).toBe("private, no-store");
     expect(response.headers.get("referrer-policy")).toBe("no-referrer");
@@ -89,7 +89,7 @@ describe("GET /api/preview", () => {
     expect(controls.enable).toHaveBeenCalledTimes(1);
   });
 
-  it("redireciona o token v2 para o slug contido no snapshot", async () => {
+  it("redireciona o token v2 para a listagem mantendo a sessão do snapshot", async () => {
     vi.stubGlobal(
       "fetch",
       vi.fn<typeof fetch>().mockResolvedValue(Response.json(snapshotArticle)),
@@ -103,7 +103,7 @@ describe("GET /api/preview", () => {
 
     expect(response.status).toBe(307);
     expect(response.headers.get("location")).toBe(
-      "https://nite.test/atualizacoes/slug-atual-nao-salvo",
+      "https://nite.test/atualizacoes",
     );
     expect(response.headers.get("set-cookie")).toContain("nite-news-preview=");
   });

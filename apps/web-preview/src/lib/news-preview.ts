@@ -5,7 +5,11 @@ import { cookies, draftMode } from "next/headers";
 import { cache } from "react";
 import { z } from "zod";
 
-import { editorialDocumentV1Schema, newsCategoryValues } from "@nite/news";
+import {
+  editorialDocumentV1Schema,
+  newsCategoryValues,
+  type NewsArticle,
+} from "@nite/news";
 
 export const PREVIEW_COOKIE_NAME = "nite-news-preview";
 const previewMaximumAgeSeconds = 10 * 60;
@@ -254,21 +258,117 @@ export function createPreviewSession(input: {
   }
 }
 
-export const getPreviewArticleForSlug = cache(async (slug: string) => {
-  const draft = await draftMode();
-  if (!draft.isEnabled) return undefined;
-  const token = (await cookies()).get(PREVIEW_COOKIE_NAME)?.value;
-  const configuration = readPreviewConfiguration(process.env);
-  if (!token || !configuration.configured) return undefined;
-  try {
-    const article = await resolvePreviewArticle({
-      token,
-      endpointUrl: configuration.endpointUrl,
-    });
-    const session = createPreviewSession({ token, article });
-    return session?.slug === slug ? article : undefined;
-  } catch (error) {
-    reportPreviewResolutionFailure(error);
-    return undefined;
+export const getPreviewArticle = cache(
+  async (): Promise<PreviewArticle | undefined> => {
+    const draft = await draftMode();
+    if (!draft.isEnabled) return undefined;
+    const token = (await cookies()).get(PREVIEW_COOKIE_NAME)?.value;
+    const configuration = readPreviewConfiguration(process.env);
+    if (!token || !configuration.configured) return undefined;
+    try {
+      const article = await resolvePreviewArticle({
+        token,
+        endpointUrl: configuration.endpointUrl,
+      });
+      const session = createPreviewSession({ token, article });
+      return session ? article : undefined;
+    } catch (error) {
+      reportPreviewResolutionFailure(error);
+      return undefined;
+    }
+  },
+);
+
+export const getPreviewArticleForSlug = cache(
+  async (slug: string): Promise<PreviewArticle | undefined> => {
+    const preview = await getPreviewArticle();
+    return preview?.slug === slug ? preview : undefined;
+  },
+);
+
+export function previewArticleToNewsArticle(
+  preview: PreviewArticle,
+): NewsArticle {
+  const publishedAt = preview.publishedAt
+    ? preview.publishedAt.slice(0, 10)
+    : new Date().toISOString().slice(0, 10);
+  return {
+    slug: preview.slug,
+    title: preview.title,
+    summary: preview.summary,
+    category: preview.category,
+    publishedAt,
+    ...(preview.eventDate ? { eventDate: preview.eventDate } : {}),
+    readTimeMinutes: preview.readTimeMinutes,
+    byline: preview.byline,
+    cover: preview.cover
+      ? { src: preview.cover.src, alt: preview.cover.alt }
+      : {
+          src: "/images/atualizacoes/laboratorio-tecnologia.webp",
+          alt: preview.title,
+        },
+    featured: preview.featured,
+    contentState: "real",
+    public: true,
+    body: preview.body,
+    ...(preview.seo ? { seo: preview.seo } : {}),
+  };
+}
+
+export function mergePreviewIntoNewsListings(input: {
+  preview?: PreviewArticle;
+  articles: NewsArticle[];
+  agenda: NewsArticle[];
+  featured?: NewsArticle;
+}): {
+  articles: NewsArticle[];
+  agenda: NewsArticle[];
+  featured?: NewsArticle;
+} {
+  const { preview, articles, agenda, featured } = input;
+  if (!preview) {
+    return { articles, agenda, featured };
   }
-});
+
+  const previewNewsArticle = previewArticleToNewsArticle(preview);
+  const existsInArticles = articles.some(
+    (article) => article.slug === preview.slug,
+  );
+  const updatedArticles = existsInArticles
+    ? articles.map((article) =>
+        article.slug === preview.slug ? previewNewsArticle : article,
+      )
+    : [previewNewsArticle, ...articles];
+
+  let updatedFeatured = featured;
+  if (preview.featured) {
+    updatedFeatured = previewNewsArticle;
+  } else if (featured?.slug === preview.slug) {
+    updatedFeatured = updatedArticles.find(
+      (article) => article.featured && article.slug !== preview.slug,
+    );
+  }
+
+  let updatedAgenda = agenda;
+  if (preview.eventDate) {
+    const existsInAgenda = agenda.some(
+      (article) => article.slug === preview.slug,
+    );
+    updatedAgenda = existsInAgenda
+      ? agenda.map((article) =>
+          article.slug === preview.slug ? previewNewsArticle : article,
+        )
+      : [
+          previewNewsArticle,
+          ...agenda.filter((article) => article.slug !== preview.slug),
+        ].slice(0, 3);
+  } else {
+    updatedAgenda = agenda.filter((article) => article.slug !== preview.slug);
+  }
+
+  return {
+    articles: updatedArticles,
+    agenda: updatedAgenda,
+    featured: updatedFeatured,
+  };
+}

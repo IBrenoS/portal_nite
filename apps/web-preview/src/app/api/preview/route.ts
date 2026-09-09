@@ -43,7 +43,7 @@ export async function GET(request: Request) {
     const draft = await draftMode();
     draft.enable();
     const response = NextResponse.redirect(
-      new URL(`/atualizacoes/${session.slug}`, request.url),
+      new URL("/atualizacoes", request.url),
     );
     response.headers.set("Cache-Control", privateHeaders["Cache-Control"]);
     response.headers.set("Referrer-Policy", privateHeaders["Referrer-Policy"]);

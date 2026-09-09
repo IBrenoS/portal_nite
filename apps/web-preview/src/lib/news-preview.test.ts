@@ -2,6 +2,8 @@ import { describe, expect, it, vi } from "vitest";
 
 import {
   createPreviewSession,
+  mergePreviewIntoNewsListings,
+  previewArticleToNewsArticle,
   readPreviewConfiguration,
   resolvePreviewArticle,
   type PreviewArticle,
@@ -235,5 +237,123 @@ describe("sessão de prévia", () => {
         now,
       }),
     ).toBeUndefined();
+  });
+});
+
+describe("conversão e mesclagem de prévia na listagem", () => {
+  const publicArticle = {
+    slug: "materia-publica-existente",
+    title: "Título de matéria pública existente no portal",
+    summary:
+      "Resumo da matéria pública para testes de mesclagem e substituição de preview editorial.",
+    category: "inovacao" as const,
+    publishedAt: "2026-08-15",
+    readTimeMinutes: 4,
+    byline: "Equipe NITE",
+    cover: {
+      src: "https://media.nite.test/publica.webp",
+      alt: "Capa da matéria pública existente",
+    },
+    featured: false,
+    contentState: "real" as const,
+    public: true as const,
+    body: {
+      schemaVersion: 1 as const,
+      type: "doc" as const,
+      content: [
+        {
+          type: "paragraph" as const,
+          content: [{ type: "text" as const, text: "Conteúdo público." }],
+        },
+      ],
+    },
+  };
+
+  it("converte PreviewArticle em NewsArticle com fallback de data e capa", () => {
+    const converted = previewArticleToNewsArticle(preview);
+    expect(converted.slug).toBe(preview.slug);
+    expect(converted.title).toBe(preview.title);
+    expect(converted.contentState).toBe("real");
+    expect(converted.public).toBe(true);
+    expect(converted.publishedAt).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    expect(converted.cover.src).toBe(
+      "/images/atualizacoes/laboratorio-tecnologia.webp",
+    );
+
+    const withCoverAndDate = previewArticleToNewsArticle({
+      ...preview,
+      publishedAt: "2026-09-01T10:00:00.000Z",
+      cover: {
+        src: "https://media.nite.test/capa.webp",
+        width: 1200,
+        height: 630,
+        alt: "Capa do artigo em prévia editorial",
+      },
+    });
+    expect(withCoverAndDate.publishedAt).toBe("2026-09-01");
+    expect(withCoverAndDate.cover).toEqual({
+      src: "https://media.nite.test/capa.webp",
+      alt: "Capa do artigo em prévia editorial",
+    });
+  });
+
+  it("retorna as coleções originais quando não há prévia ativa", () => {
+    const result = mergePreviewIntoNewsListings({
+      preview: undefined,
+      articles: [publicArticle],
+      agenda: [],
+      featured: undefined,
+    });
+    expect(result.articles).toEqual([publicArticle]);
+    expect(result.agenda).toEqual([]);
+    expect(result.featured).toBeUndefined();
+  });
+
+  it("insere novo draft no início de articles sem publicar", () => {
+    const result = mergePreviewIntoNewsListings({
+      preview,
+      articles: [publicArticle],
+      agenda: [],
+      featured: undefined,
+    });
+    expect(result.articles).toHaveLength(2);
+    expect(result.articles[0]?.slug).toBe(preview.slug);
+    expect(result.articles[1]?.slug).toBe(publicArticle.slug);
+  });
+
+  it("substitui matéria existente quando o slug coincide", () => {
+    const updatedDraft: PreviewArticle = {
+      ...preview,
+      slug: publicArticle.slug,
+      title: "Título atualizado da matéria pública em revisão",
+    };
+    const result = mergePreviewIntoNewsListings({
+      preview: updatedDraft,
+      articles: [publicArticle],
+      agenda: [],
+      featured: undefined,
+    });
+    expect(result.articles).toHaveLength(1);
+    expect(result.articles[0]?.slug).toBe(publicArticle.slug);
+    expect(result.articles[0]?.title).toBe(
+      "Título atualizado da matéria pública em revisão",
+    );
+  });
+
+  it("promove a destaque e inclui na agenda quando especificado", () => {
+    const featuredAgendaDraft: PreviewArticle = {
+      ...preview,
+      featured: true,
+      eventDate: "2026-09-20",
+    };
+    const result = mergePreviewIntoNewsListings({
+      preview: featuredAgendaDraft,
+      articles: [publicArticle],
+      agenda: [],
+      featured: publicArticle,
+    });
+    expect(result.featured?.slug).toBe(preview.slug);
+    expect(result.agenda).toHaveLength(1);
+    expect(result.agenda[0]?.slug).toBe(preview.slug);
   });
 });

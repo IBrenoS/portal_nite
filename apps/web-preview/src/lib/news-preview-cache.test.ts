@@ -2,11 +2,12 @@ import { describe, expect, it, vi } from "vitest";
 
 const controls = vi.hoisted(() => {
   const cache = vi.fn(
-    <T extends (slug: string) => Promise<unknown>>(loader: T) => {
+    <T extends (...args: unknown[]) => Promise<unknown>>(loader: T) => {
       const values = new Map<string, Promise<unknown>>();
-      return (slug: string) => {
-        const value = values.get(slug) ?? loader(slug);
-        values.set(slug, value);
+      return (...args: unknown[]) => {
+        const key = JSON.stringify(args);
+        const value = values.get(key) ?? loader(...args);
+        values.set(key, value);
         return value;
       };
     },
@@ -21,7 +22,7 @@ vi.mock("next/headers", () => ({
   cookies: async () => ({ get: () => ({ value: token }) }),
 }));
 
-import { getPreviewArticleForSlug } from "./news-preview";
+import { getPreviewArticle, getPreviewArticleForSlug } from "./news-preview";
 
 const preview = {
   schemaVersion: 2,
@@ -60,13 +61,16 @@ describe("memoização da prévia editorial", () => {
       .mockResolvedValue(Response.json(preview));
     vi.stubGlobal("fetch", fetcher);
 
-    const [metadataPreview, pagePreview] = await Promise.all([
+    const [listingPreview, metadataPreview, pagePreview] = await Promise.all([
+      getPreviewArticle(),
       getPreviewArticleForSlug(preview.slug),
       getPreviewArticleForSlug(preview.slug),
     ]);
 
-    expect(controls.cache).toHaveBeenCalledTimes(1);
+    expect(controls.cache).toHaveBeenCalledTimes(2);
     expect(fetcher).toHaveBeenCalledTimes(1);
+    expect(listingPreview).toBe(pagePreview);
     expect(metadataPreview).toBe(pagePreview);
+    expect(listingPreview).toEqual(preview);
   });
 });
