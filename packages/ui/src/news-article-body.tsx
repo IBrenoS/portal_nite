@@ -6,10 +6,18 @@ import type {
 import { isAllowedEditorialLink } from "@nite/news";
 import type { ReactNode } from "react";
 
+import { EditorialVideo } from "./editorial-video";
+
 type NewsArticleBodyProps = {
   document: EditorialDocument;
   className?: string;
 };
+
+const editorialLayoutClassNames = {
+  normal: "w-full",
+  wide: "relative left-1/2 w-[min(calc(100vw-2rem),64rem)] -translate-x-1/2 sm:w-[min(calc(100vw-4rem),64rem)]",
+  full: "relative left-1/2 w-[min(calc(100vw-2rem),80rem)] -translate-x-1/2 sm:w-[min(calc(100vw-4rem),80rem)]",
+} as const;
 
 function renderText(node: EditorialTextNode, key: string): ReactNode {
   let result: ReactNode = node.text;
@@ -96,15 +104,28 @@ function renderNodes(
         </ol>
       );
     }
+    if (node.type === "video") {
+      return (
+        <figure
+          key={key}
+          data-editorial-layout={node.attrs.layout}
+          className={`grid gap-3 ${editorialLayoutClassNames[node.attrs.layout]}`}
+        >
+          <EditorialVideo attrs={node.attrs} />
+          {node.attrs.caption || node.attrs.credit ? (
+            <figcaption className="flex flex-col gap-1 font-mono text-xs text-nite-text-muted sm:flex-row sm:justify-between">
+              {node.attrs.caption ? <span>{node.attrs.caption}</span> : null}
+              {node.attrs.credit ? <span>{node.attrs.credit}</span> : null}
+            </figcaption>
+          ) : null}
+        </figure>
+      );
+    }
     if (node.type !== "image") return null;
     const layout = "layout" in node.attrs ? node.attrs.layout : "normal";
     const caption = "caption" in node.attrs ? node.attrs.caption : undefined;
     const credit = "credit" in node.attrs ? node.attrs.credit : undefined;
-    const layoutClassName = {
-      normal: "w-full",
-      wide: "relative left-1/2 w-[min(calc(100vw-2rem),64rem)] -translate-x-1/2 sm:w-[min(calc(100vw-4rem),64rem)]",
-      full: "relative left-1/2 w-[min(calc(100vw-2rem),80rem)] -translate-x-1/2 sm:w-[min(calc(100vw-4rem),80rem)]",
-    }[layout];
+    const layoutClassName = editorialLayoutClassNames[layout];
     return (
       <figure
         key={key}

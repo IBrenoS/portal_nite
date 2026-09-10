@@ -7,6 +7,31 @@ import {
   newsArticleSchema,
 } from "./schema";
 
+const resolvedVideoAttrs = {
+  mediaId: "30000000-0000-4000-8000-000000000002",
+  captionsMediaId: "30000000-0000-4000-8000-000000000003",
+  playbackMode: "manual",
+  layout: "wide",
+  description: "Estudantes apresentam um projeto em um laboratório do campus.",
+  caption: "Apresentação do projeto interdisciplinar.",
+  credit: "Vídeo: Redação NITE",
+  src: "https://media.nite.test/editorial.mp4",
+  width: 1920,
+  height: 1080,
+  durationSeconds: 42.5,
+  mimeType: "video/mp4",
+  captions: {
+    src: "https://media.nite.test/editorial.vtt",
+    mimeType: "text/vtt",
+    srclang: "pt-BR",
+    label: "Português",
+  },
+} as const;
+
+function videoDocumentWith(content: unknown[]) {
+  return { schemaVersion: 3, type: "doc", content };
+}
+
 describe("links editoriais", () => {
   it("rejeita caminhos relativos que o navegador pode resolver para outra origem", () => {
     expect(isAllowedEditorialLink("/\\externo.test/materia")).toBe(false);
@@ -80,6 +105,121 @@ describe("links editoriais", () => {
         ],
       }),
     ).toMatchObject({ schemaVersion: 2 });
+  });
+
+  it("aceita documentos V3 com vídeo público resolvido sem invalidar V1 e V2", () => {
+    const videoDocument = editorialDocumentSchema.parse({
+      schemaVersion: 3,
+      type: "doc",
+      content: [
+        {
+          type: "video",
+          attrs: resolvedVideoAttrs,
+        },
+      ],
+    });
+
+    expect(videoDocument).toMatchObject({
+      schemaVersion: 3,
+      content: [
+        {
+          type: "video",
+          attrs: {
+            playbackMode: "manual",
+            mimeType: "video/mp4",
+            captions: { mimeType: "text/vtt", srclang: "pt-BR" },
+          },
+        },
+      ],
+    });
+    expect(
+      editorialDocumentSchema.safeParse({
+        schemaVersion: 1,
+        type: "doc",
+        content: [
+          {
+            type: "paragraph",
+            content: [{ type: "text", text: "Documento legado V1." }],
+          },
+        ],
+      }).success,
+    ).toBe(true);
+    expect(
+      editorialDocumentSchema.safeParse({
+        schemaVersion: 2,
+        type: "doc",
+        content: [
+          {
+            type: "paragraph",
+            content: [{ type: "text", text: "Documento legado V2." }],
+          },
+        ],
+      }).success,
+    ).toBe(true);
+  });
+
+  it("rejeita vídeo V3 dentro de listas e blockquotes", () => {
+    const video = { type: "video", attrs: resolvedVideoAttrs };
+    const nestedDocuments = [
+      videoDocumentWith([
+        {
+          type: "bulletList",
+          content: [{ type: "listItem", content: [video] }],
+        },
+      ]),
+      videoDocumentWith([
+        {
+          type: "blockquote",
+          content: [video],
+        },
+      ]),
+    ];
+
+    for (const document of nestedDocuments) {
+      expect(editorialDocumentSchema.safeParse(document).success).toBe(false);
+    }
+  });
+
+  it("rejeita atributos públicos de vídeo fora do contrato aprovado", () => {
+    const invalidAttrs = [
+      { ...resolvedVideoAttrs, mediaId: "media-invalida" },
+      { ...resolvedVideoAttrs, captionsMediaId: "legenda-invalida" },
+      { ...resolvedVideoAttrs, src: "/video-local.mp4" },
+      { ...resolvedVideoAttrs, width: 0 },
+      { ...resolvedVideoAttrs, height: -1 },
+      { ...resolvedVideoAttrs, durationSeconds: 0 },
+      { ...resolvedVideoAttrs, description: "x".repeat(501) },
+      { ...resolvedVideoAttrs, caption: "x".repeat(281) },
+      { ...resolvedVideoAttrs, credit: "x".repeat(161) },
+      { ...resolvedVideoAttrs, mimeType: "video/webm" },
+      {
+        ...resolvedVideoAttrs,
+        captions: { ...resolvedVideoAttrs.captions, src: "/legenda.vtt" },
+      },
+      {
+        ...resolvedVideoAttrs,
+        captions: {
+          ...resolvedVideoAttrs.captions,
+          mimeType: "text/plain",
+        },
+      },
+      {
+        ...resolvedVideoAttrs,
+        captions: { ...resolvedVideoAttrs.captions, srclang: "en-US" },
+      },
+      {
+        ...resolvedVideoAttrs,
+        captions: { ...resolvedVideoAttrs.captions, label: "Portuguese" },
+      },
+    ];
+
+    for (const attrs of invalidAttrs) {
+      expect(
+        editorialDocumentSchema.safeParse(
+          videoDocumentWith([{ type: "video", attrs }]),
+        ).success,
+      ).toBe(false);
+    }
   });
 
   it("mantém V1 estrito e exige layout em toda imagem V2", () => {

@@ -133,6 +133,51 @@ describe("resolução da prévia editorial", () => {
     ).resolves.toEqual(richSnapshotPreview);
   });
 
+  it("aceita documento editorial V3 com vídeo resolvido no snapshot", async () => {
+    const videoSnapshotPreview = {
+      ...snapshotPreview,
+      body: {
+        schemaVersion: 3 as const,
+        type: "doc" as const,
+        content: [
+          {
+            type: "video" as const,
+            attrs: {
+              mediaId: "30000000-0000-4000-8000-000000000102",
+              captionsMediaId: "30000000-0000-4000-8000-000000000103",
+              playbackMode: "manual" as const,
+              layout: "full" as const,
+              description: "Apresentação de um projeto no campus.",
+              caption: "Demonstração durante a mostra acadêmica.",
+              credit: "Vídeo: Redação NITE",
+              src: "https://media.nite.test/news/apresentacao.mp4",
+              width: 1920,
+              height: 1080,
+              durationSeconds: 48.5,
+              mimeType: "video/mp4" as const,
+              captions: {
+                src: "https://media.nite.test/news/apresentacao.vtt",
+                mimeType: "text/vtt" as const,
+                srclang: "pt-BR" as const,
+                label: "Português" as const,
+              },
+            },
+          },
+        ],
+      },
+    };
+
+    await expect(
+      resolvePreviewArticle({
+        token: snapshotToken,
+        endpointUrl: "https://cms-admin.nite.test/api/preview/resolve",
+        fetch: vi
+          .fn<typeof fetch>()
+          .mockResolvedValue(Response.json(videoSnapshotPreview)),
+      }),
+    ).resolves.toEqual(videoSnapshotPreview);
+  });
+
   it.each([
     new Response(null, { status: 401 }),
     new Response(null, { status: 503 }),

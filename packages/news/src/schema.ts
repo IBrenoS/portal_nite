@@ -41,7 +41,7 @@ export type EditorialTextNode = {
 };
 export type EditorialListItemNode = {
   type: "listItem";
-  content: EditorialContentNode[];
+  content: EditorialNestedContentNode[];
 };
 type EditorialImageBaseAttrs = {
   mediaId: string;
@@ -63,7 +63,32 @@ export type EditorialImageV2Node = {
     layout: EditorialImageLayout;
   };
 };
-export type EditorialContentNode =
+export type EditorialVideoPlaybackMode = "autoplay" | "manual";
+export type EditorialVideoCaptions = {
+  src: string;
+  mimeType: "text/vtt";
+  srclang: "pt-BR";
+  label: "Português";
+};
+export type EditorialVideoNode = {
+  type: "video";
+  attrs: {
+    mediaId: string;
+    captionsMediaId?: string;
+    playbackMode: EditorialVideoPlaybackMode;
+    layout: EditorialImageLayout;
+    description?: string;
+    caption?: string;
+    credit?: string;
+    src: string;
+    width: number;
+    height: number;
+    durationSeconds: number;
+    mimeType: "video/mp4";
+    captions?: EditorialVideoCaptions;
+  };
+};
+export type EditorialNestedContentNode =
   | { type: "paragraph"; content: EditorialTextNode[] }
   | { type: "heading"; attrs: { level: 2 | 3 }; content: EditorialTextNode[] }
   | EditorialImageV1Node
@@ -76,18 +101,29 @@ export type EditorialContentNode =
       type: "orderedList";
       content: EditorialListItemNode[];
     }
-  | { type: "blockquote"; content: EditorialContentNode[] };
+  | { type: "blockquote"; content: EditorialNestedContentNode[] };
+export type EditorialContentNode =
+  | EditorialNestedContentNode
+  | EditorialVideoNode;
 export type EditorialDocumentV1 = {
   schemaVersion: 1;
   type: "doc";
-  content: EditorialContentNode[];
+  content: EditorialNestedContentNode[];
 };
 export type EditorialDocumentV2 = {
   schemaVersion: 2;
   type: "doc";
+  content: EditorialNestedContentNode[];
+};
+export type EditorialDocumentV3 = {
+  schemaVersion: 3;
+  type: "doc";
   content: EditorialContentNode[];
 };
-export type EditorialDocument = EditorialDocumentV1 | EditorialDocumentV2;
+export type EditorialDocument =
+  | EditorialDocumentV1
+  | EditorialDocumentV2
+  | EditorialDocumentV3;
 
 const textNodeSchema: z.ZodType<EditorialTextNode> = z
   .object({
@@ -137,40 +173,73 @@ const imageV2NodeSchema: z.ZodType<EditorialImageV2Node> = z
       .strict(),
   })
   .strict();
+const videoNodeSchema: z.ZodType<EditorialVideoNode> = z
+  .object({
+    type: z.literal("video"),
+    attrs: z
+      .object({
+        mediaId: z.uuid(),
+        captionsMediaId: z.uuid().optional(),
+        playbackMode: z.enum(["autoplay", "manual"]),
+        layout: z.enum(["normal", "wide", "full"]),
+        description: z.string().trim().min(1).max(500).optional(),
+        caption: z.string().trim().min(1).max(280).optional(),
+        credit: z.string().trim().min(1).max(160).optional(),
+        src: z.url(),
+        width: z.number().int().positive(),
+        height: z.number().int().positive(),
+        durationSeconds: z.number().positive(),
+        mimeType: z.literal("video/mp4"),
+        captions: z
+          .object({
+            src: z.url(),
+            mimeType: z.literal("text/vtt"),
+            srclang: z.literal("pt-BR"),
+            label: z.literal("Português"),
+          })
+          .strict()
+          .optional(),
+      })
+      .strict(),
+  })
+  .strict();
 function createEditorialContentNodeSchema(
   imageNodeSchema: z.ZodType<EditorialImageV1Node | EditorialImageV2Node>,
-): z.ZodType<EditorialContentNode> {
-  const contentNodeSchema: z.ZodType<EditorialContentNode> = z.lazy(() => {
-    const listItemNodeSchema: z.ZodType<EditorialListItemNode> = z
-      .object({
-        type: z.literal("listItem"),
-        content: z.array(contentNodeSchema).min(1),
-      })
-      .strict();
-    return z.union([
-      paragraphNodeSchema,
-      headingNodeSchema,
-      imageNodeSchema,
-      z
+): z.ZodType<EditorialNestedContentNode> {
+  const contentNodeSchema: z.ZodType<EditorialNestedContentNode> = z.lazy(
+    () => {
+      const listItemNodeSchema: z.ZodType<EditorialListItemNode> = z
         .object({
-          type: z.literal("bulletList"),
-          content: z.array(listItemNodeSchema).min(1),
-        })
-        .strict(),
-      z
-        .object({
-          type: z.literal("orderedList"),
-          content: z.array(listItemNodeSchema).min(1),
-        })
-        .strict(),
-      z
-        .object({
-          type: z.literal("blockquote"),
+          type: z.literal("listItem"),
           content: z.array(contentNodeSchema).min(1),
         })
-        .strict(),
-    ]);
-  });
+        .strict();
+      const contentSchemas = [
+        paragraphNodeSchema,
+        headingNodeSchema,
+        imageNodeSchema,
+        z
+          .object({
+            type: z.literal("bulletList"),
+            content: z.array(listItemNodeSchema).min(1),
+          })
+          .strict(),
+        z
+          .object({
+            type: z.literal("orderedList"),
+            content: z.array(listItemNodeSchema).min(1),
+          })
+          .strict(),
+        z
+          .object({
+            type: z.literal("blockquote"),
+            content: z.array(contentNodeSchema).min(1),
+          })
+          .strict(),
+      ] as const;
+      return z.union(contentSchemas);
+    },
+  );
   return contentNodeSchema;
 }
 
@@ -178,6 +247,12 @@ const editorialContentNodeV1Schema =
   createEditorialContentNodeSchema(imageV1NodeSchema);
 const editorialContentNodeV2Schema =
   createEditorialContentNodeSchema(imageV2NodeSchema);
+const editorialNestedContentNodeV3Schema =
+  createEditorialContentNodeSchema(imageV2NodeSchema);
+const editorialContentNodeV3Schema: z.ZodType<EditorialContentNode> = z.union([
+  editorialNestedContentNodeV3Schema,
+  videoNodeSchema,
+]);
 
 export const editorialDocumentV1Schema: z.ZodType<EditorialDocumentV1> = z
   .object({
@@ -193,9 +268,17 @@ export const editorialDocumentV2Schema: z.ZodType<EditorialDocumentV2> = z
     content: z.array(editorialContentNodeV2Schema).min(1),
   })
   .strict();
+export const editorialDocumentV3Schema: z.ZodType<EditorialDocumentV3> = z
+  .object({
+    schemaVersion: z.literal(3),
+    type: z.literal("doc"),
+    content: z.array(editorialContentNodeV3Schema).min(1),
+  })
+  .strict();
 export const editorialDocumentSchema: z.ZodType<EditorialDocument> = z.union([
   editorialDocumentV1Schema,
   editorialDocumentV2Schema,
+  editorialDocumentV3Schema,
 ]);
 
 const imageSchema = z.object({
