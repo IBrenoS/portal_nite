@@ -133,6 +133,7 @@ describe("vídeo no corpo editorial", () => {
     const track = video.querySelector("track");
     const source = video.querySelector("source");
     expect(play).not.toHaveBeenCalled();
+    expect(video).toHaveAttribute("crossorigin", "anonymous");
     expect(video).toHaveAttribute("controls");
     expect(video).not.toHaveAttribute("autoplay");
     expect(video).not.toHaveAttribute("loop");
@@ -150,6 +151,38 @@ describe("vídeo no corpo editorial", () => {
     expect(track).toHaveAttribute("srclang", "pt-BR");
     expect(track).toHaveAttribute("label", "Português");
     expect(track).toHaveAttribute("default");
+  });
+
+  it("remonta a mídia quando src ou mediaId mudam na mesma posição", () => {
+    setReducedMotion(false);
+    const { container, rerender } = render(
+      <NewsArticleBody document={createVideoDocument(baseVideoAttrs)} />,
+    );
+    const initialVideo = getVideo(container);
+
+    const updatedSrc = "https://media.nite.test/editorial-atualizado.mp4";
+    rerender(
+      <NewsArticleBody
+        document={createVideoDocument({ ...baseVideoAttrs, src: updatedSrc })}
+      />,
+    );
+    const videoAfterSrcChange = getVideo(container);
+    expect(videoAfterSrcChange).not.toBe(initialVideo);
+    expect(videoAfterSrcChange.querySelector("source")).toHaveAttribute(
+      "src",
+      updatedSrc,
+    );
+
+    rerender(
+      <NewsArticleBody
+        document={createVideoDocument({
+          ...baseVideoAttrs,
+          mediaId: "30000000-0000-4000-8000-000000000005",
+          src: updatedSrc,
+        })}
+      />,
+    );
+    expect(getVideo(container)).not.toBe(videoAfterSrcChange);
   });
 
   it("informa quando o navegador rejeita a reprodução automática", async () => {

@@ -63,6 +63,7 @@ function EditorialVideo({ attrs }: EditorialVideoProps) {
     <>
       <video
         ref={videoRef}
+        crossOrigin="anonymous"
         width={attrs.width}
         height={attrs.height}
         autoPlay={isAutoplay && autoplayEnabled}

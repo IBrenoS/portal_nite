@@ -111,7 +111,10 @@ function renderNodes(
           data-editorial-layout={node.attrs.layout}
           className={`grid gap-3 ${editorialLayoutClassNames[node.attrs.layout]}`}
         >
-          <EditorialVideo attrs={node.attrs} />
+          <EditorialVideo
+            key={`${node.attrs.mediaId}:${node.attrs.src}`}
+            attrs={node.attrs}
+          />
           {node.attrs.caption || node.attrs.credit ? (
             <figcaption className="flex flex-col gap-1 font-mono text-xs text-nite-text-muted sm:flex-row sm:justify-between">
               {node.attrs.caption ? <span>{node.attrs.caption}</span> : null}
