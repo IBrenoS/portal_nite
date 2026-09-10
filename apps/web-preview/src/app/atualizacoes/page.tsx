@@ -15,7 +15,7 @@ import {
   getAgendaNewsArticles,
   getFeaturedNewsArticle,
   getFilteredNewsArticles,
-} from "@/lib/news";
+} from "~/lib/news";
 import {
   getPreviewArticle,
   mergePreviewIntoNewsListings,

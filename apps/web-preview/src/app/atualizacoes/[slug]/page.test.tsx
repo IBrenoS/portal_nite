@@ -39,6 +39,35 @@ const controls = vi.hoisted(() => ({
       ],
     },
   },
+  publicArticle: undefined as
+    | {
+        slug: string;
+        title: string;
+        summary: string;
+        category: "inovacao";
+        publishedAt: string;
+        readTimeMinutes: number;
+        byline: string;
+        cover: { src: string; alt: string };
+        featured: boolean;
+        contentState: "real";
+        public: true;
+        body: {
+          schemaVersion: 2;
+          type: "doc";
+          content: Array<{
+            type: "paragraph";
+            content: Array<{ type: "text"; text: string }>;
+          }>;
+        };
+      }
+    | undefined,
+}));
+
+vi.mock("~/lib/news", () => ({
+  getNewsArticleBySlug: async (slug: string) =>
+    controls.publicArticle?.slug === slug ? controls.publicArticle : undefined,
+  getRelatedNewsArticles: async () => [],
 }));
 
 vi.mock("~/lib/news-preview", () => ({
@@ -92,5 +121,46 @@ describe("matéria em prévia", () => {
     expect(metadata.openGraph).toBeUndefined();
     expect(metadata.twitter).toBeUndefined();
     expect(metadata.referrer).toBe("no-referrer");
+  });
+
+  it("renderiza a matéria publicada retornada pela API do CMS", async () => {
+    controls.publicArticle = {
+      slug: "materia-publicada-pelo-cms",
+      title: "Matéria publicada pelo CMS aparece no detalhe",
+      summary:
+        "Resumo editorial suficientemente descritivo para validar o detalhe público no Portal de preview.",
+      category: "inovacao",
+      publishedAt: "2026-09-10",
+      readTimeMinutes: 4,
+      byline: "Redação NITE",
+      cover: {
+        src: "https://media.nite.test/news/capa-detalhe.webp",
+        alt: "Equipe editorial revisa a matéria publicada pelo CMS",
+      },
+      featured: false,
+      contentState: "real",
+      public: true,
+      body: {
+        schemaVersion: 2,
+        type: "doc",
+        content: [
+          {
+            type: "paragraph",
+            content: [{ type: "text", text: "Conteúdo publicado pelo CMS." }],
+          },
+        ],
+      },
+    };
+
+    render(
+      await NewsArticlePage({
+        params: Promise.resolve({ slug: controls.publicArticle.slug }),
+      }),
+    );
+
+    expect(
+      screen.getByRole("heading", { name: controls.publicArticle.title }),
+    ).toBeVisible();
+    expect(screen.getByText("Conteúdo publicado pelo CMS.")).toBeVisible();
   });
 });

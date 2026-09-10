@@ -13,7 +13,7 @@ import {
   SiteFooter,
   SiteHeader,
 } from "@nite/ui";
-import { getNewsArticleBySlug, getRelatedNewsArticles } from "@/lib/news";
+import { getNewsArticleBySlug, getRelatedNewsArticles } from "~/lib/news";
 import {
   absoluteUrl,
   buildBreadcrumbJsonLd,

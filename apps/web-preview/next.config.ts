@@ -1,23 +1,9 @@
 import type { NextConfig } from "next";
 
-import { assertProductionDeploymentConfiguration } from "@nite/web/deployment-configuration";
+import { assertPreviewDeploymentConfiguration } from "./src/lib/deployment-configuration";
 
 if (process.env.VERCEL_ENV === "production") {
-  assertProductionDeploymentConfiguration(process.env);
-  const resolverUrl = process.env.CMS_PREVIEW_RESOLVE_URL;
-  let resolverUsesHttps = false;
-  try {
-    resolverUsesHttps = Boolean(
-      resolverUrl && new URL(resolverUrl).protocol === "https:",
-    );
-  } catch {
-    resolverUsesHttps = false;
-  }
-  if (!resolverUsesHttps) {
-    throw new Error(
-      "Configuracao de producao invalida: CMS_PREVIEW_RESOLVE_URL.",
-    );
-  }
+  assertPreviewDeploymentConfiguration(process.env);
 }
 
 function mediaRemotePatterns(value: string | undefined) {

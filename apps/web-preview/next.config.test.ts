@@ -9,7 +9,9 @@ describe("configuração do Portal de preview", () => {
   it("mantém runtime dinâmico e bloqueia indexação em todas as rotas", async () => {
     vi.stubEnv("VERCEL_ENV", "production");
     vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://nite.tec.br");
-    vi.stubEnv("NITE_NEWS_SOURCE", "static");
+    vi.stubEnv("NITE_NEWS_SOURCE", "api");
+    vi.stubEnv("CMS_PUBLIC_API_URL", "https://nite-cms-api.vercel.app/");
+    vi.stubEnv("NITE_NEWS_MEDIA_URL", "https://media.nite.test/news/");
     vi.stubEnv(
       "CMS_PREVIEW_RESOLVE_URL",
       "https://nite-cms-admin.vercel.app/api/preview/resolve",
@@ -35,11 +37,29 @@ describe("configuração do Portal de preview", () => {
   it("falha em produção quando o resolver privado não é HTTPS", async () => {
     vi.stubEnv("VERCEL_ENV", "production");
     vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://nite.tec.br");
-    vi.stubEnv("NITE_NEWS_SOURCE", "static");
+    vi.stubEnv("NITE_NEWS_SOURCE", "api");
+    vi.stubEnv("CMS_PUBLIC_API_URL", "https://nite-cms-api.vercel.app/");
+    vi.stubEnv("NITE_NEWS_MEDIA_URL", "https://media.nite.test/news/");
     vi.stubEnv("CMS_PREVIEW_RESOLVE_URL", "http://localhost:3001/resolve");
 
     await expect(import("./next.config")).rejects.toThrow(
       "CMS_PREVIEW_RESOLVE_URL",
+    );
+  });
+
+  it("falha em produção quando a fonte pública não é a API HTTPS do CMS", async () => {
+    vi.stubEnv("VERCEL_ENV", "production");
+    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://nite.tec.br");
+    vi.stubEnv("NITE_NEWS_SOURCE", "static");
+    vi.stubEnv("CMS_PUBLIC_API_URL", "http://nite-cms-api.local/");
+    vi.stubEnv("NITE_NEWS_MEDIA_URL", "https://media.nite.test/news/");
+    vi.stubEnv(
+      "CMS_PREVIEW_RESOLVE_URL",
+      "https://nite-cms-admin.vercel.app/api/preview/resolve",
+    );
+
+    await expect(import("./next.config")).rejects.toThrow(
+      /NITE_NEWS_SOURCE|CMS_PUBLIC_API_URL/u,
     );
   });
 
