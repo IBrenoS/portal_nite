@@ -1,5 +1,7 @@
-import sitemap from "@nite/web/sitemap";
+import type { MetadataRoute } from "next";
 
 export const dynamic = "force-static";
 
-export default sitemap;
+export default function sitemap(): MetadataRoute.Sitemap {
+  return [];
+}
