@@ -19,6 +19,12 @@ const editorialLayoutClassNames = {
   full: "relative left-1/2 w-[min(calc(100vw-2rem),80rem)] -translate-x-1/2 sm:w-[min(calc(100vw-4rem),80rem)]",
 } as const;
 
+const editorialVideoLayoutClassNames = {
+  ...editorialLayoutClassNames,
+  normal:
+    "relative left-1/2 w-[min(calc(100vw-2rem),50.4rem)] -translate-x-1/2 sm:w-[min(calc(100vw-4rem),50.4rem)]",
+} as const;
+
 function renderText(node: EditorialTextNode, key: string): ReactNode {
   let result: ReactNode = node.text;
   for (const [index, mark] of (node.marks ?? []).entries()) {
@@ -109,7 +115,7 @@ function renderNodes(
         <figure
           key={key}
           data-editorial-layout={node.attrs.layout}
-          className={`grid gap-3 ${editorialLayoutClassNames[node.attrs.layout]}`}
+          className={`grid gap-3 ${editorialVideoLayoutClassNames[node.attrs.layout]}`}
         >
           <EditorialVideo
             key={`${node.attrs.mediaId}:${node.attrs.src}`}

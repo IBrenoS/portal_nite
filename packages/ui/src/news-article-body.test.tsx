@@ -75,6 +75,23 @@ afterEach(() => {
 });
 
 describe("vídeo no corpo editorial", () => {
+  it("limita o layout normal ao padrão editorial de 806,4 px", () => {
+    setReducedMotion(false);
+    const { container } = render(
+      <NewsArticleBody
+        document={createVideoDocument({
+          ...baseVideoAttrs,
+          layout: "normal",
+        })}
+      />,
+    );
+
+    expect(container.querySelector("figure")).toHaveClass(
+      "w-[min(calc(100vw-2rem),50.4rem)]",
+      "sm:w-[min(calc(100vw-4rem),50.4rem)]",
+    );
+  });
+
   it("reproduz autoplay mudo em loop sem controles e preserva o layout de imagem", async () => {
     setReducedMotion(false);
     const play = vi
