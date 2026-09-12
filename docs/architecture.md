@@ -30,7 +30,7 @@ apps/web-preview ── API HTTPS v2 ──> CMS API pública
 Vercel Functions ──> Draft Mode, cookie privado e revisão editorial
 ```
 
-`@nite/news` define o schema Zod esperado pelo consumidor, valida as respostas em runtime, fornece o client HTTP, cache e uma fixture estática explícita. Não importa código, tipos ou arquivos da fonte editorial. A fonte é escolhida por `NITE_NEWS_SOURCE=api|static`; o modo `static` é um fallback operacional explícito, nunca automático.
+`@nite/news` define o schema Zod esperado pelo consumidor, valida as respostas em runtime, fornece o client HTTP, a autenticação dos eventos de revalidação e uma fixture estática explícita. Não importa código, tipos ou arquivos da fonte editorial. A fonte é escolhida por `NITE_NEWS_SOURCE=api|static`; o modo `static` é um fallback operacional explícito, nunca automático.
 
 A API retorna envelopes `version: 2`, `ETag` e `Cache-Control`. O corpo da matéria aceita `EditorialDocumentV1`, `EditorialDocumentV2` e `EditorialDocumentV3`, validados de forma estrita pelo consumidor antes da renderização. V3 adiciona vídeo MP4 resolvido somente no nível superior, com modo manual ou autoplay mudo, layout editorial e legenda WebVTT opcional em `pt-BR`; listas e citações continuam sem vídeo aninhado. Mudanças incompatíveis exigem uma nova versão da API. O Portal mantém schemas e fixtures próprios para detectar incompatibilidade antes da renderização.
 
@@ -44,7 +44,7 @@ Rotas, metadata, sitemap, robots, layout, componentes, tema, assets e testes da 
 
 ### `@nite/web-preview`
 
-Aplicação Next.js dinâmica implantada na Vercel. As rotas de Nite News usam exclusivamente a API HTTPS v2 do CMS para matérias publicadas; os fixtures permanecem exclusivos do Portal estático e dos testes determinísticos. O app também adiciona a rota dinâmica de matéria, `GET /api/preview` e `POST /api/preview/exit`. Aceita os contratos v1 de revisão salva e v2 de snapshot temporário; no v2, o slug e o conteúdo vêm das alterações atuais do editor. Todas as respostas recebem `X-Robots-Tag: noindex, nofollow, noarchive`; `robots.txt` bloqueia crawlers e páginas públicas apontam canonical para `https://nite.tec.br`. Uma prévia privada não emite canonical, Open Graph nem JSON-LD.
+Aplicação Next.js dinâmica implantada na Vercel. As rotas de Nite News usam exclusivamente a API HTTPS v2 do CMS para matérias publicadas; os fixtures permanecem exclusivos do Portal estático e dos testes determinísticos. O app também adiciona a rota dinâmica de matéria, `GET /api/preview`, `POST /api/preview/exit` e o webhook HMAC `POST /api/revalidate/news`. Aceita os contratos v1 de revisão salva e v2 de snapshot temporário; no v2, o slug e o conteúdo vêm das alterações atuais do editor. Todas as respostas recebem `X-Robots-Tag: noindex, nofollow, noarchive`; `robots.txt` bloqueia crawlers e páginas públicas apontam canonical para `https://nite.tec.br`. Uma prévia privada não emite canonical, Open Graph nem JSON-LD.
 
 ### `@nite/content`
 
@@ -61,7 +61,7 @@ Tokens, primitives, shell compartilhado (header, footer e container) e views de 
 ## Validação e evolução
 
 - Testes do Portal cobrem a fixture pública, filtros client-side, slug, SEO, sitemap, redirects e os contratos mínimos do Worker.
-- A homologação dinâmica deve cobrir API v2, Draft Mode entre os projetos e mídia pública real. A listagem publicada é consultada por request e não depende de webhook de revalidação.
+- A homologação dinâmica deve cobrir API v2, Draft Mode entre os projetos, mídia pública real e o webhook HMAC. A listagem publicada é consultada por request; o webhook conclui o outbox editorial e invalida listagem, matéria e sitemap caso qualquer cache de framework esteja ativo.
 - Toda versão publicada precisa continuar compatível até o Portal em produção migrar para uma nova versão.
 - Não criar packages compartilhados sem necessidade recorrente comprovada.
 - Imports físicos entre workspaces são bloqueados por ESLint e CI.
